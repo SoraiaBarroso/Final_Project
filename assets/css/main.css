@@ -1,0 +1,16 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+:root {
+    --ui-color-neutral-500: var(--color-old-neutral-500, oklch(55.6% 0 0));
+    --ui-text-muted: var(--ui-color-neutral-500);
+    --ui-border: var(oklch(92.9% 0.013 255.508));
+}
+
+.text-muted {
+    color: var(--ui-text-muted);
+}
+
+.border-border {
+    border-color: var(--ui-border);
+}
