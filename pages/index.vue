@@ -18,7 +18,8 @@ const signInWithOAuth = async () => {
         }
     })
     if (error) {
-        console.error("Authentication error:", error.message);
+        console.log("Authentication error:", error);
+        navigateTo('/?error=domain');
     } else {
         console.log("User signed in successfully (or will be redirected to confirm page)");
     }

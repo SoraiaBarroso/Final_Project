@@ -4,27 +4,25 @@ definePageMeta({
   layout: false,
 })
 
+const route = useRoute();
+
+if (route.query.error === 'server_error') {
+    console.log("Server error during authentication");
+    navigateTo('/?error=domain');
+    // Return early so nothing else runs
+}
+
 const user = useSupabaseUser()
 
 // Get redirect path from cookies
 const cookieName = useRuntimeConfig().public.supabase.cookieName
 
 const supabase = useSupabaseClient();
-const allowedDomains = ["elu.nl", "amsterdam.tech"];
-
-// let userRole = useState('role');
 
 watch(user, async () => {
     if (user.value) {
         const email = user.value.email?.toLowerCase() || "";
-        const valid = allowedDomains.some(domain => email.endsWith("@" + domain));
-        
-        // If email is not from university domain
-        if (!valid) {
-            await supabase.auth.signOut();
-            return navigateTo('/?error=domain');
-        }
-
+     
         // Check if user is in admin table
         const { data: adminData, error: adminError } = await supabase
             .from('admin')

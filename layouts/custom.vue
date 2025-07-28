@@ -46,7 +46,7 @@ const secondaryLinks: NavigationMenuItem[] = [
   {
     label: 'Issues',
     icon: 'i-simple-icons-github',
-    to: 'https://github.com/nuxt/ui',
+    to: 'https://github.com/SoraiaBarroso/Final_Project',
     target: '_blank',
     tooltip: {
       text: 'Write issue on GitHub',
