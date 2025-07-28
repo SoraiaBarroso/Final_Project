@@ -144,7 +144,7 @@ onMounted(async () => {
       </div>
       <UNavigationMenu v-model="active" :tooltip="isCollapsed" :collapsed="isCollapsed" orientation="vertical" :items="links[0]" :class="styleNav" class="cursor-pointer mt-2" />
       <UNavigationMenu v-model="active" :tooltip="isCollapsed" :collapsed="isCollapsed" orientation="vertical" :items="links[1]" :class="[styleNav, 'mt-auto']" class="cursor-pointer border-b-[1.5px] pb-2 border-border" />
-      <div @click="openDropdown" :class="styleUserContainer" class="w-full hover:bg-gray-100 rounded-md dark:border-neutral-700 py-1 cursor-pointer transition delay-100 flex items-center gap-[8px]">
+      <div :class="styleUserContainer" class="w-full relative hover:bg-gray-100 rounded-md dark:border-neutral-700 py-1 cursor-pointer transition delay-100 flex items-center gap-[8px]">
         <UDropdownMenu
           v-model:open="open"
           :items="items"
@@ -152,9 +152,9 @@ onMounted(async () => {
             content: 'w-48'
           }"
         >
+          <UIcon v-if="!isCollapsed" :class="userStyle" name="i-lucide-chevrons-up-down" class="size-4 text-currentColor ml-auto absolute right-2" />
           <UAvatar size="2xs" :src="userImg" />
           <p :class="userStyle" class="text-currentColor font-semibold text-sm">{{ userName }}</p>
-          <UIcon :class="userStyle" name="i-lucide-chevrons-up-down" class="size-4 text-currentColor ml-auto" />
         </UDropdownMenu>
       </div>
     </div>

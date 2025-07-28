@@ -48,10 +48,62 @@ const fetchStudents = async () => {
   loading.value = false
 }
 
+function getTimeRange(period = 'week') {
+  const now = new Date();
+  const timeMin = now.toISOString();
+
+  let timeMax = new Date();
+
+  if (period === 'week') {
+    timeMax.setDate(timeMax.getDate() + 7); // 7 days from now
+  } else if (period === 'month') {
+    timeMax.setMonth(timeMax.getMonth() + 1); // 1 month from now
+  }
+
+  return {
+    timeMin,
+    timeMax: timeMax.toISOString(),
+  };
+}
+
+// TODO DISPLAY EVENTS THIS WEEK
+async function fetchCalendarEvents(accessToken, period = 'week') {
+  const { timeMin, timeMax } = getTimeRange(period);
+
+  const res = await fetch(
+    `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(
+      timeMin
+    )}&timeMax=${encodeURIComponent(
+      timeMax
+    )}&singleEvents=true&orderBy=startTime`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+
+  const data = await res.json();
+  console.log("Fetched calendar events:", data.items)
+  return data.items || [];
+}
+
 onMounted(async () => {
   console.log("User role on mount:", userRole.value)
   setPageLayout('default');
   loadingPage.value = false;
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const accessToken = session?.provider_token;
+  const res = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  fetchCalendarEvents(accessToken)
   await fetchStudents();
 })
 
@@ -81,6 +133,6 @@ const columns = [
 <template>
    <div v-if="!loadingPage" class="flex flex-col items-center justify-center h-screen gap-4">
         <h1>secure page</h1>
-        <UTable sticky="" :loading="loading" loading-color="primary" loading-animation="carousel" :data="data" :columns="columns" class="flex-1 min-h-[400px] max-h-[400px]" />
+        <UTable sticky="" :loading="loading" loading-color="primary" loading-animation="carousel" :data="data" :columns="columns" class=" min-h-[400px] max-h-[400px]" />
     </div>
 </template>
