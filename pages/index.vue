@@ -14,7 +14,8 @@ const signInWithOAuth = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: 'http://localhost:3000/auth/confirm' // Redirect to confirm page after authentication
+          scopes: 'https://www.googleapis.com/auth/calendar.readonly',
+          redirectTo: 'http://localhost:3000/auth/confirm' // Redirect to confirm page after authentication
         }
     })
     if (error) {
