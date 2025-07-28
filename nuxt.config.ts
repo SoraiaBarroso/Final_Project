@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   supabase: {
     redirectOptions: {
       login: '/', // User will be redirected to this path if not authenticated or after logout.
-      callback: '/confirm', // This is the path the user will be redirect to after supabase login redirection.
+      callback: '/auth/confirm', // This is the path the user will be redirect to after supabase login redirection.
       include: undefined, // Routes to include in the redirect. ['/admin(/*)?'] will enable the redirect only for the admin page and all sub-pages.
       exclude: ['/'],
       cookieRedirect: false,

@@ -5,6 +5,6 @@ export default defineNuxtRouteMiddleware(() => {
     if (user.value) {
         console.log("User is logged in, redirecting to secures page.")
         console.log(user.value)
-        return navigateTo('/dashboard')
+        return navigateTo('/admin/dashboard')
     }
 })

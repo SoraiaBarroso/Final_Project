@@ -13,6 +13,7 @@ if (route.query.error === 'server_error') {
 }
 
 const user = useSupabaseUser()
+const userRole = useState('userRole', () => null)
 
 // Get redirect path from cookies
 const cookieName = useRuntimeConfig().public.supabase.cookieName
@@ -30,13 +31,13 @@ watch(user, async () => {
             .eq('email', email)
             .single();
         if (adminData && adminData.email) {
-            localStorage.setItem('userRole', 'admin');
+            userRole.value = 'admin'; // Set user role to admin
             useCookie(`${cookieName}-redirect-path`).value = null;
-            return navigateTo('/dashboard');
+            return navigateTo('/admin/dashboard');
         } else {
-            localStorage.setItem('userRole', 'student');
+            userRole.value = 'student'; // Set user role to student
             useCookie(`${cookieName}-redirect-path`).value = null;
-            return navigateTo('/dashboard');
+            return navigateTo('/admin/dashboard');
         }
     }
 }, { immediate: true })

@@ -14,7 +14,7 @@ const signInWithOAuth = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-            redirectTo: 'http://localhost:3000/confirm' // Redirect to confirm page after authentication
+            redirectTo: 'http://localhost:3000/auth/confirm' // Redirect to confirm page after authentication
         }
     })
     if (error) {
