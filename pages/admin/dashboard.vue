@@ -1,10 +1,12 @@
 <script setup>
 // Page that cannot be accessed without authentication  and has logic to log-out a user.
 import { onMounted, resolveComponent } from 'vue'
+import { getPaginationRowModel } from '@tanstack/vue-table'
 
 const supabase = useSupabaseClient()
 const UBadge = resolveComponent('UBadge')
 const UAvatar = resolveComponent('UAvatar')
+const UButton = resolveComponent('UButton')
 
 const data = ref([])
 const loading = ref(true)
@@ -39,16 +41,19 @@ const fetchStudents = async () => {
     return
   }
 
-  data.value = (students || []).map((s) => ({
-    status: s.status,
-    name: `${s.first_name} ${s.last_name}`,
-    email: s.email,
-    program: s.programs?.name || '',
-    username: s.username || '',
-    cohort: s.cohorts?.name || '',
-    isActive: s.is_active,
-    profileImgUrl: s.profile_image_url || ''
-  }))
+  // only show students which are active
+  data.value = (students || [])
+    .filter((s) => s.is_active)
+    .map((s) => ({
+      status: s.status,
+      name: `${s.first_name} ${s.last_name}`,
+      email: s.email,
+      program: s.programs?.name || '',
+      username: s.username || '',
+      cohort: s.cohorts?.name || '',
+      isActive: s.is_active,
+      profileImgUrl: s.profile_image_url || ''
+    }))
 
   loading.value = false
 }
@@ -116,7 +121,22 @@ onMounted(async () => {
 const columns = [
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted()
+
+      return h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label: 'Name',
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-chevron-up'
+            : 'i-lucide-chevron-down'
+          : 'i-lucide-chevron-up',
+        class: '-mx-2.5',
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc')
+      })
+    },
     cell: ({ row }) => {
       const imgUrl = row.original.profileImgUrl;
       console.log('Avatar URL:', row.original.profileImgUrl);
@@ -159,6 +179,18 @@ const columnFilters = ref([
   { id: 'status', value: '' }
 ])
 
+const pagination = ref({
+  pageIndex: 0,
+  pageSize: 5
+})
+
+const sorting = ref([
+  {
+    id: 'name',
+    desc: false
+  }
+])
+
 const statusFilter = ref('all')
 
 watch(() => statusFilter.value, (newVal) => {
@@ -176,40 +208,50 @@ watch(() => statusFilter.value, (newVal) => {
 </script>
 
 <template>
-   <div v-if="!loadingPage" class="flex-1 flex-col items-center justify-center h-screen gap-4 px-10">
-      <h1>secure page</h1>
-      <div class="flex justify-between items-center w-full mt-20">
-          <UInput
-            icon="i-lucide-search"
-            :model-value="table?.tableApi?.getColumn('name')?.getFilterValue()"
-            class="max-w-sm"
-            placeholder="Filter names..."
-            @update:model-value="table?.tableApi?.getColumn('name')?.setFilterValue($event)"
-          />
+   <div v-if="!loadingPage" class="flex flex-col justify-end h-full gap-4 px-10 my-8">
+      
+      <div class="flex flex-col min-h-[450px]">
+          <div class="flex justify-between items-center w-full">
+            <UInput
+              size="sm"
+              color="info"
+              icon="i-lucide-search"
+              :model-value="table?.tableApi?.getColumn('name')?.getFilterValue()"
+              class="max-w-sm"
+              placeholder="Filter names..."
+              @update:model-value="table?.tableApi?.getColumn('name')?.setFilterValue($event)"
+            />
 
-          <USelect
-            v-model="statusFilter"
-            :items="[
-              { label: 'All', value: 'all' },
-              { label: 'On Track', value: 'on track' },
-              { label: 'Behind', value: 'behind' },
-              { label: 'Ahead', value: 'ahead' }
-            ]"
-            :ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200' }"
-            placeholder="Filter status"
-            class="min-w-28"
-          />
-      </div>
+            <USelect
+              size="sm"
+              v-model="statusFilter"
+              :items="[
+                { label: 'All', value: 'all' },
+                { label: 'On Track', value: 'on track' },
+                { label: 'Behind', value: 'behind' },
+                { label: 'Ahead', value: 'ahead' }
+              ]"
+              :ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200' }"
+              placeholder="Filter status"
+              class="min-w-28"
+            />
+        </div>
+      
       <UTable 
         sticky 
         ref="table" 
         v-model:column-filters="columnFilters" 
+        v-model:pagination="pagination"
+        v-model:sorting="sorting"
+        :pagination-options="{
+          getPaginationRowModel: getPaginationRowModel()
+        }"
         :loading="loading" 
         loading-color="primary" 
         loading-animation="carousel" 
         :data="data" 
         :columns="columns" 
-        class="min-h-[400px] max-h-[400px] mt-4" 
+        class="flex-1 mt-4" 
         :ui="{
           base: 'table-fixed border-separate border-spacing-0',
           thead: '[&>tr]:bg-elevated/50 h-12 [&>tr]:after:content-none',
@@ -218,5 +260,18 @@ watch(() => statusFilter.value, (newVal) => {
           td: 'border-b border-default'
         }"
       />
+      <div class="flex justify-between items-center border-t border-default pt-4">
+        <p class="text-muted text-sm">{{ table?.tableApi?.getFilteredRowModel().rows.length }} total students</p>
+        <UPagination
+          size="sm"
+          color="neutral"
+          active-color="info"
+          :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
+          :items-per-page="table?.tableApi?.getState().pagination.pageSize"
+          :total="table?.tableApi?.getFilteredRowModel().rows.length"
+          @update:page="(p) => table?.tableApi?.setPageIndex(p - 1)"
+        />
+      </div>
+      </div>
     </div>
 </template>

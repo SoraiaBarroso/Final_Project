@@ -42,14 +42,6 @@ const styleContainer = computed(() => {
   return isCollapsed.value ? 'flex items-center' : 'flex items-end'
 })
 
-const userStyle = computed(() => {
-  return isCollapsed.value ? 'hidden' : 'flex'
-})
-
-const styleUserContainer = computed(() => {
-  return isCollapsed.value ? 'justify-center' : 'justify-start px-2'
-})
-
 const items = computed<DropdownMenuItem[][]>(() => [
   [
     {
@@ -135,30 +127,35 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-row min-h-screen">
-    <div :class="styleContainer" class="flex flex-col gap-2 py-4 px-2 border-r-[1.5px] border-border dark:border-neutral-700">
+    <div :class="styleContainer" class="flex flex-col gap-2 pt-4 pb-2 px-2 border-r-[1.5px] border-border dark:border-neutral-700 h-screen flex-shrink-0">
+      
       <div :class="isCollapsed ? 'justify-center' : 'justify-start'" class="flex items-center gap-2 w-full">
         <img v-if="!isCollapsed" src="../public/favicon.png" alt="Logo" class="w-5 h-5 ml-2" />
         <p v-if="!isCollapsed" class="text-currentColor font-semibold text-sm">Amsterdam Tech</p>
         <UIcon @click="isCollapsed = !isCollapsed" v-if="!isCollapsed" name="i-lucide-panel-left-close" class="size-5 cursor-pointer ml-auto"/>
         <UIcon v-else name="i-lucide-panel-left-open" class="size-5 cursor-pointer" @click="isCollapsed = !isCollapsed"/>
       </div>
-      <UNavigationMenu v-model="active" :tooltip="isCollapsed" :collapsed="isCollapsed" orientation="vertical" :items="links[0]" :class="styleNav" class="cursor-pointer mt-2" />
-      <UNavigationMenu v-model="active" :tooltip="isCollapsed" :collapsed="isCollapsed" orientation="vertical" :items="links[1]" :class="[styleNav, 'mt-auto']" class="cursor-pointer border-b-[1.5px] pb-2 border-border" />
-      <div :class="styleUserContainer" class="w-full hover:bg-gray-100 rounded-md dark:border-neutral-700 py-1 cursor-pointer transition delay-100 flex items-center gap-[8px]">
-        <UDropdownMenu
-          v-model:open="open"
-          :items="items"
-          :ui="{
-            content: 'w-48'
-          }"
-        >
-          <UIcon :class="userStyle" name="i-lucide-chevrons-up-down" class="size-4 text-currentColor ml-auto absolute right-" />
+      
+      <UNavigationMenu color="info" v-model="active" :tooltip="isCollapsed" :collapsed="isCollapsed" orientation="vertical" :items="links[0]" :class="styleNav" class="cursor-pointer mt-2" />
+      
+      <UNavigationMenu color="info" v-model="active" :tooltip="isCollapsed" :collapsed="isCollapsed" orientation="vertical" :items="links[1]" :class="[styleNav, 'mt-auto']" class="cursor-pointer border-b-[1.5px] pb-2 border-border" />
+      
+      <UDropdownMenu
+        v-model:open="open"
+        :items="items"
+        :ui="{
+          content: 'w-48'
+        }"
+      >
+        <div class="flex items-center justify-center cursor-pointer hover:bg-gray-100 gap-2 w-full py-1 rounded-md transition delay-100 px-2">
           <UAvatar size="2xs" :src="userImg" />
-          <p :class="userStyle" class="text-currentColor font-semibold text-sm">{{ userName }}</p>
-        </UDropdownMenu>
-      </div>
+          <p v-if="!isCollapsed" class="text-currentColor font-semibold text-sm">{{ userName }}</p>
+          <UIcon v-if="!isCollapsed" name="i-lucide-chevrons-up-down" class="size-4 text-currentColor ml-auto" />
+        </div>
+      </UDropdownMenu>
+
     </div>
-    <main class="flex-1">
+    <main class="flex-1 h-screen overflow-y-auto">
       <slot />
     </main>
   </div>
