@@ -208,12 +208,98 @@ watch(() => statusFilter.value, (newVal) => {
 </script>
 
 <template>
-   <div v-if="!loadingPage" class="flex flex-col justify-end h-full gap-4 px-10 my-8">
-      
+   <div v-if="!loadingPage" class="flex flex-col justify-center h-auto gap-6 px-10 my-6">    
+      <div class="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-2 lg:gap-4 lg:grid-cols-2 lg:grid-rows-2 xl:grid-cols-4 xl:grid-rows-1 gap-4 sm:gap-6 xl:gap-px">
+         <UCard 
+          variant="subtle"
+          :ui="{
+            root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none xl:rounded-l-lg hover:bg-elevated cursor-pointer',
+            body: 'border-none px-4 xl:!px-6 !py-0',
+            header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
+            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6',
+          }"
+         >
+            <template #header>
+              <div class="w-8 h-8 rounded-full bg-info/10 border border-info flex items-center justify-center">
+                <UIcon name="i-lucide-users" class="size-4 text-info text-currentColor" />
+              </div>
+            </template>
+
+            <p class="text-xs text-muted font-semibold">STUDENTS</p>
+
+            <template #footer>
+              <p class="text-black font-bold text-2xl m-0">{{ data.length }}</p>
+            </template>
+          </UCard>
+          <UCard 
+          variant="subtle"
+          :ui="{
+            root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none hover:bg-elevated cursor-pointer',
+            body: 'border-none px-4 xl:!px-6 !py-0',
+            header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
+            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6',
+          }"
+         >
+            <template #header>
+              <div class="w-8 h-8 rounded-full bg-success/10 border border-success flex items-center justify-center">
+                <UIcon name="i-lucide-check-circle" class="size-4 text-success text-currentColor" />
+              </div>
+            </template>
+
+            <p class="text-xs text-muted font-semibold">ON TRACK</p>
+
+            <template #footer>
+              <p class="text-black font-bold text-2xl m-0">{{ data.filter(item => item.status === 'On Track').length }}</p>
+            </template>
+          </UCard>
+          <UCard 
+          variant="subtle"
+          :ui="{
+            root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none hover:bg-elevated cursor-pointer',
+            body: 'border-none px-4 xl:!px-6 !py-0',
+            header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
+            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6',
+          }"
+         >
+            <template #header>
+              <div class="w-8 h-8 rounded-full bg-error/10 border border-error flex items-center justify-center">
+                <UIcon name="i-lucide-triangle-alert" class="size-4 text-error text-currentColor" />
+              </div>
+            </template>
+
+            <p class="text-xs text-muted font-semibold">BEHIND</p>
+
+            <template #footer>
+              <p class="text-black font-bold text-2xl m-0">{{ data.filter(item => item.status === 'Behind').length }}</p>
+            </template>
+          </UCard>
+          <UCard 
+          variant="subtle"
+          :ui="{
+            root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none xl:rounded-r-lg hover:bg-elevated cursor-pointer',
+            body: 'border-none px-4 xl:!px-6 !py-0',
+            header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
+            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6',
+          }"
+         >
+            <template #header>
+              <div class="w-8 h-8 rounded-full bg-info/10 border border-info flex items-center justify-center">
+                <UIcon name="i-lucide-party-popper" class="size-4 text-info text-currentColor" />
+              </div>
+            </template>
+
+            <p class="text-xs text-muted font-semibold">AHEAD</p>
+
+            <template #footer>
+              <p class="text-black font-bold text-2xl m-0">{{ data.filter(item => item.status === 'Ahead').length }}</p>
+            </template>
+          </UCard>
+      </div>
+
       <div class="flex flex-col min-h-[450px]">
           <div class="flex justify-between items-center w-full">
             <UInput
-              size="sm"
+              size="md"
               color="info"
               icon="i-lucide-search"
               :model-value="table?.tableApi?.getColumn('name')?.getFilterValue()"
@@ -223,7 +309,7 @@ watch(() => statusFilter.value, (newVal) => {
             />
 
             <USelect
-              size="sm"
+              size="md"
               v-model="statusFilter"
               :items="[
                 { label: 'All', value: 'all' },
@@ -254,14 +340,14 @@ watch(() => statusFilter.value, (newVal) => {
         class="flex-1 mt-4" 
         :ui="{
           base: 'table-fixed border-separate border-spacing-0',
-          thead: '[&>tr]:bg-elevated/50 h-12 [&>tr]:after:content-none',
+          thead: '[&>tr]:bg-elevated/50 h-10 [&>tr]:after:content-none',
           tbody: '[&>tr]:last:[&>td]:border-b-0',
           th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
           td: 'border-b border-default'
         }"
       />
       <div class="flex justify-between items-center border-t border-default pt-4">
-        <p class="text-muted text-sm">{{ table?.tableApi?.getFilteredRowModel().rows.length }} total students</p>
+        <p class="text-muted text-xs xl:text-sm">{{ table?.tableApi?.getFilteredRowModel().rows.length }} students</p>
         <UPagination
           size="sm"
           color="neutral"

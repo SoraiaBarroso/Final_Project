@@ -30,10 +30,6 @@ const userName = ref('')
 const userImg = ref('')
 const open = ref(false)
 
-const openDropdown = () => {
-  open.value = !open.value
-}
-
 const styleNav = computed(() => {
   return isCollapsed.value ? 'w-10 flex items-center mt-2' : 'w-48'
 })
@@ -127,7 +123,7 @@ onMounted(async () => {
 
 <template>
   <div class="flex flex-row min-h-screen">
-    <div :class="styleContainer" class="flex flex-col gap-2 pt-4 pb-2 px-2 border-r-[1.5px] border-border dark:border-neutral-700 h-screen flex-shrink-0">
+    <div :class="styleContainer" class="flex flex-col gap-2 pt-6 pb-2 px-2 border-r-[1.5px] border-border dark:border-neutral-700 h-screen flex-shrink-0">
       
       <div :class="isCollapsed ? 'justify-center' : 'justify-start'" class="flex items-center gap-2 w-full">
         <img v-if="!isCollapsed" src="../public/favicon.png" alt="Logo" class="w-5 h-5 ml-2" />
