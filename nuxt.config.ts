@@ -24,6 +24,13 @@ export default defineNuxtConfig({
     //   apiBase: '/api'
     // }
   },
+  app: {
+    head: {
+      link: [
+        { rel: 'preload', as: 'image', href: '/favicon.png' }
+      ]
+    }
+  }
 })
 
 // const runtimeConfig = useRuntimeConfig()
