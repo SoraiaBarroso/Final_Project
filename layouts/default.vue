@@ -65,6 +65,7 @@ const mainLinks: NavigationMenuItem[] = [
   {
     label: 'Dashboard',
     to: '/admin/dashboard',
+    ariaLabel: 'Dashboard',
     active: true,
     icon: 'i-lucide-house',
     tooltip: {
@@ -78,6 +79,7 @@ const mainLinks: NavigationMenuItem[] = [
     label: 'Analytics',
     to: '/',
     icon: 'i-lucide-chart-no-axes-combined',
+    ariaLabel: 'Analytics',
     tooltip: {
       text: 'Analytics',
     },
@@ -87,7 +89,8 @@ const mainLinks: NavigationMenuItem[] = [
   },
   {
     label: 'Messages',
-    icon: 'i-lucide-inbox',
+    icon: 'i-lucide-send',
+    ariaLabel: 'Messages',
     to: '/',
     tooltip: {
       text: 'Messages',
@@ -102,6 +105,7 @@ const secondaryLinks: NavigationMenuItem[] = [
   {
     label: 'Issues',
     icon: 'i-simple-icons-github',
+    ariaLabel: 'GitHub Issues',
     to: 'https://github.com/SoraiaBarroso/Final_Project',
     target: '_blank',
     tooltip: {
@@ -143,10 +147,10 @@ onMounted(async () => {
           content: 'w-48'
         }"
       >
-        <div class="flex items-center justify-center cursor-pointer hover:bg-gray-100 gap-2 w-full py-1 rounded-md transition delay-100 px-2">
-          <UAvatar size="2xs" :src="userImg" />
+        <div class="flex items-center justify-center cursor-pointer hover:bg-gray-100 gap-2 w-full py-1 rounded-md transition delay-100 pl-2 pr-1">
+          <UAvatar alt="User Avatar" size="2xs" :src="userImg" />
           <p v-if="!isCollapsed" class="text-currentColor font-semibold text-sm">{{ userName }}</p>
-          <UIcon v-if="!isCollapsed" name="i-lucide-chevrons-up-down" class="size-4 text-currentColor ml-auto" />
+          <UIcon v-if="!isCollapsed" name="i-lucide-chevrons-up-down" class="size-4 text-muted ml-auto" />
         </div>
       </UDropdownMenu>
 

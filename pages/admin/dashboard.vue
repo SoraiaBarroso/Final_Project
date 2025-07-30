@@ -13,6 +13,14 @@ const loading = ref(true)
 const loadingPage = ref(true)
 const userRole = useState('userRole')
 
+const snapshotChange = ref(null)
+const getSnapshotChange = async () => {
+  const { data } = await useFetch('/api/snapshot');
+  snapshotChange.value = data.value;
+  console.log("Snapshot change data:", snapshotChange.value);
+  return snapshotChange.value;
+};
+
 definePageMeta({
   layout: false,
 });
@@ -99,22 +107,12 @@ async function fetchCalendarEvents(accessToken, period = 'week') {
 }
 
 onMounted(async () => {
-  console.log("User role on mount:", userRole.value)
   setPageLayout('default');
   loadingPage.value = false;
-  
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
+  const { data: { session } } = await supabase.auth.getSession();
   const accessToken = session?.provider_token;
-  const res = await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-
   fetchCalendarEvents(accessToken)
+  await getSnapshotChange();
   await fetchStudents();
 })
 
@@ -143,7 +141,8 @@ const columns = [
       return h('div', { class: 'flex items-center gap-3' }, [
         h(UAvatar, {
           src: imgUrl,
-          size: 'lg'
+          size: 'lg',
+          alt: 'User Avatar'
         }),
         h('div', undefined, [
           h('p', { class: 'font-medium text-highlighted' }, row.original.name),
@@ -228,7 +227,12 @@ watch(() => statusFilter.value, (newVal) => {
             <p class="text-xs text-muted font-semibold">STUDENTS</p>
 
             <template #footer>
-              <p class="text-black font-bold text-2xl m-0">{{ data.length }}</p>
+              <p class="text-black font-bold text-2xl m-0 flex items-center">
+                {{ data.length }}
+                <UBadge variant="outline" v-if="snapshotChange && snapshotChange.total_change !== undefined" :color="snapshotChange.total_change > 0 ? 'success' : snapshotChange.total_change < 0 ? 'error' : 'neutral'" class="ml-3 mt-[2px]">
+                  {{ snapshotChange.total_change > 0 ? '+' : '' }}{{ snapshotChange.total_change }}
+                </UBadge>
+              </p>
             </template>
           </UCard>
           <UCard 
@@ -237,7 +241,7 @@ watch(() => statusFilter.value, (newVal) => {
             root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none hover:bg-elevated cursor-pointer',
             body: 'border-none px-4 xl:!px-6 !py-0',
             header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
-            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6',
+            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6 flex items-center justify-start gap-2',
           }"
          >
             <template #header>
@@ -249,7 +253,14 @@ watch(() => statusFilter.value, (newVal) => {
             <p class="text-xs text-muted font-semibold">ON TRACK</p>
 
             <template #footer>
-              <p class="text-black font-bold text-2xl m-0">{{ data.filter(item => item.status === 'On Track').length }}</p>
+              <p class="text-black font-bold text-2xl m-0 flex items-center">
+                {{ data.filter(item => item.status === 'On Track').length }}
+                <UBadge :class="snapshotChange && snapshotChange.on_track_change !== undefined ? (snapshotChange.on_track_change > 0 ? 'bg-success/10 border-success' : snapshotChange.on_track_change < 0 ? 'bg-error/10 border-error' : 'bg-neutral/10 border-neutral') : ''" variant="outline" v-if="snapshotChange && snapshotChange.on_track_change !== undefined" :color="snapshotChange.on_track_change > 0 ? 'success' : snapshotChange.on_track_change < 0 ? 'error' : 'neutral'" class="ml-3 mt-[2px]">
+                  {{ snapshotChange.on_track_change > 0 ? '+' : '' }}{{ snapshotChange.on_track_change }}
+                  <span v-if="snapshotChange.on_track_pct_change !== null"> ({{ Math.abs(snapshotChange.on_track_pct_change).toFixed(1) }}%)</span>
+                  <span v-else> (new)</span>
+                </UBadge>
+              </p>
             </template>
           </UCard>
           <UCard 
@@ -258,7 +269,7 @@ watch(() => statusFilter.value, (newVal) => {
             root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none hover:bg-elevated cursor-pointer',
             body: 'border-none px-4 xl:!px-6 !py-0',
             header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
-            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6',
+            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6 flex items-center justify-start gap-2',
           }"
          >
             <template #header>
@@ -270,7 +281,14 @@ watch(() => statusFilter.value, (newVal) => {
             <p class="text-xs text-muted font-semibold">BEHIND</p>
 
             <template #footer>
-              <p class="text-black font-bold text-2xl m-0">{{ data.filter(item => item.status === 'Behind').length }}</p>
+              <p class="text-black font-bold text-2xl m-0 flex items-center">
+                {{ data.filter(item => item.status === 'Behind').length }}
+                <UBadge :class="snapshotChange && snapshotChange.behind_change !== undefined ? (snapshotChange.behind_change > 0 ? 'bg-error/10 border-error' : snapshotChange.behind_change < 0 ? 'bg-success/10 border-success' : 'bg-neutral/10 border-neutral') : ''" variant="outline" v-if="snapshotChange && snapshotChange.behind_change !== undefined" :color="snapshotChange.behind_change > 0 ? 'error' : snapshotChange.behind_change < 0 ? 'success' : 'neutral'" class="ml-3 mt-[2px]">
+                  {{ snapshotChange.behind_change > 0 ? '+' : '' }}{{ snapshotChange.behind_change }}
+                  <span v-if="snapshotChange.behind_pct_change !== null"> ({{ Math.abs(snapshotChange.behind_pct_change).toFixed(1) }}%)</span>
+                  <span v-else> (new)</span>
+                </UBadge>
+              </p>
             </template>
           </UCard>
           <UCard 
@@ -279,7 +297,7 @@ watch(() => statusFilter.value, (newVal) => {
             root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none xl:rounded-r-lg hover:bg-elevated cursor-pointer',
             body: 'border-none px-4 xl:!px-6 !py-0',
             header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
-            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6',
+            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6 flex items-center justify-start gap-2',
           }"
          >
             <template #header>
@@ -291,7 +309,14 @@ watch(() => statusFilter.value, (newVal) => {
             <p class="text-xs text-muted font-semibold">AHEAD</p>
 
             <template #footer>
-              <p class="text-black font-bold text-2xl m-0">{{ data.filter(item => item.status === 'Ahead').length }}</p>
+              <p class="text-black font-bold text-2xl m-0 flex items-center">
+                {{ data.filter(item => item.status === 'Ahead').length }}
+                <UBadge :class="snapshotChange && snapshotChange.ahead_change !== undefined ? (snapshotChange.ahead_change > 0 ? 'bg-success/10 border-success' : snapshotChange.ahead_change < 0 ? 'bg-error/10 border-error' : 'bg-neutral/10 border-neutral') : ''" variant="outline" v-if="snapshotChange && snapshotChange.ahead_change !== undefined" :color="snapshotChange.ahead_change > 0 ? 'success' : snapshotChange.ahead_change < 0 ? 'error' : 'neutral'" class="ml-3 mt-[2px]">
+                  {{ snapshotChange.ahead_change > 0 ? '+' : '' }}{{ snapshotChange.ahead_change }}
+                  <span v-if="snapshotChange.ahead_pct_change !== null"> ({{ Math.abs(snapshotChange.ahead_pct_change).toFixed(1) }}%)</span>
+                  <span v-else> (new)</span>
+                </UBadge>
+              </p>
             </template>
           </UCard>
       </div>
