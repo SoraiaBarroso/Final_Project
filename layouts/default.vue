@@ -53,7 +53,8 @@ const items = computed<DropdownMenuItem[][]>(() => [
       label: 'Logout',
       onClick: async () => {
         await supabase.auth.signOut()
-        navigateTo('/login')
+        clearNuxtData()
+        navigateTo('/')
       },
       icon: 'i-lucide-log-out',
       kbds: ['shift', 'meta', 'q']

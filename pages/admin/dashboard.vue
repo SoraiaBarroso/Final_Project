@@ -1,5 +1,9 @@
 <script setup>
 // Page that cannot be accessed without authentication  and has logic to log-out a user.
+definePageMeta({
+  layout: 'default',
+});
+
 import { onMounted, resolveComponent } from 'vue'
 import { getPaginationRowModel } from '@tanstack/vue-table'
 
@@ -9,21 +13,14 @@ const UAvatar = resolveComponent('UAvatar')
 const UButton = resolveComponent('UButton')
 
 const data = ref([])
-const loading = ref(true)
-const loadingPage = ref(true)
-const userRole = useState('userRole')
-
 const snapshotChange = ref(null)
+
 const getSnapshotChange = async () => {
   const { data } = await useFetch('/api/snapshot');
   snapshotChange.value = data.value;
   console.log("Snapshot change data:", snapshotChange.value);
   return snapshotChange.value;
 };
-
-definePageMeta({
-  layout: false,
-});
 
 const fetchStudents = async () => {
   const { data: students, error } = await supabase
@@ -66,52 +63,7 @@ const fetchStudents = async () => {
   loading.value = false
 }
 
-function getTimeRange(period = 'week') {
-  const now = new Date();
-  const timeMin = now.toISOString();
-
-  let timeMax = new Date();
-
-  if (period === 'week') {
-    timeMax.setDate(timeMax.getDate() + 7); // 7 days from now
-  } else if (period === 'month') {
-    timeMax.setMonth(timeMax.getMonth() + 1); // 1 month from now
-  }
-
-  return {
-    timeMin,
-    timeMax: timeMax.toISOString(),
-  };
-}
-
-// TODO DISPLAY EVENTS THIS WEEK
-async function fetchCalendarEvents(accessToken, period = 'week') {
-  const { timeMin, timeMax } = getTimeRange(period);
-
-  const res = await fetch(
-    `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(
-      timeMin
-    )}&timeMax=${encodeURIComponent(
-      timeMax
-    )}&singleEvents=true&orderBy=startTime`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
-
-  const data = await res.json();
-  console.log("Fetched calendar events:", data.items)
-  return data.items || [];
-}
-
 onMounted(async () => {
-  setPageLayout('default');
-  loadingPage.value = false;
-  const { data: { session } } = await supabase.auth.getSession();
-  const accessToken = session?.provider_token;
-  fetchCalendarEvents(accessToken)
   await getSnapshotChange();
   await fetchStudents();
 })
@@ -207,7 +159,7 @@ watch(() => statusFilter.value, (newVal) => {
 </script>
 
 <template>
-   <div v-if="!loadingPage" class="flex flex-col justify-center h-auto gap-6 px-10 my-6">    
+   <div class="flex flex-col justify-center h-auto gap-6 px-10 my-6">    
       <div class="grid grid-cols-1 grid-rows-2 md:grid-cols-2 md:grid-rows-2 lg:gap-4 lg:grid-cols-2 lg:grid-rows-2 xl:grid-cols-4 xl:grid-rows-1 gap-4 sm:gap-6 xl:gap-px">
          <UCard 
           variant="subtle"

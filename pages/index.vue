@@ -31,6 +31,14 @@ watch(() => route, () => {
       isErrorVisible.value = true;
     }
 }, { immediate: true })
+
+onMounted(async () => {
+    // This page is for performing authentication
+    console.log("Authentication page loaded");
+    // Force clear any cached layout
+    // clearNuxtData();
+    // await nextTick();
+});
 </script>
 
  
