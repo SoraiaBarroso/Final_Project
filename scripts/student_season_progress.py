@@ -24,9 +24,20 @@ def map_season_name_to_db(season_name):
     """Map scraped season names to database season names"""
     season_name = season_name.strip()
     
-    # Handle Season 03 Software Engineer variations (cpp, rust, golang, etc.)
+    # Handle Season 03 Software Engineer variations with specific language mappings
     if re.match(r'Season 03 Software Engineer', season_name, re.IGNORECASE):
-        return "Season 03 Software Engineer"
+        # Map specific language variants
+        if 'Cpp' in season_name:
+            return "Season 03 Software Engineer Cpp"
+        elif 'Rust' in season_name:
+            return "Season 03 Software Engineer Rust"
+        elif 'Golang' in season_name or 'Go' in season_name:
+            return "Season 03 Software Engineer Go"
+        else:
+            # If it's just "Season 03 Software Engineer" without specific language,
+            # we can't map it properly, so skip it
+            print(f"Warning: Found '{season_name}' but no specific language variant. Skipping.")
+            return None
     
     # Handle other specific mappings based on what exists in the database
     mappings = {

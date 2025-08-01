@@ -37,7 +37,7 @@ watch(user, async () => {
         } else {
             userRole.value = 'student'; // Set user role to student
             useCookie(`${cookieName}-redirect-path`).value = null;
-            return navigateTo('/admin/dashboard');
+            return navigateTo('/students/student_data');
         }
     }
 }, { immediate: true })

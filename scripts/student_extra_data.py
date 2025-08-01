@@ -6,46 +6,41 @@ from dotenv import load_dotenv
 import os
 import re
 
-# Load environment variables from .env file
 load_dotenv()
 
-# --- Supabase Configuration ---
-# Replace with your actual Supabase URL and Key
-SUPABASE_URL = os.getenv('SUPABASE_URL', 'https://example.supabase.co')
-SUPABASE_KEY = os.getenv('SUPABASE_KEY', 'YOUR_SUPABASE_KEY')
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-# --- Helper Function to Normalize Season Names ---
-def normalize_season_name(season_name):
+# --- Helper Function to Map Season Names ---
+def map_season_name_to_db(season_name):
     """
-    Normalize season names by removing language-specific suffixes
-    Examples:
-    - "Season 03 Software Engineer Cpp" -> "Season 03 Software Engineering"
-    - "Season 02 Data Science" -> "Season 02 Data Science"
-    - "Season 01 Arc 01" -> "Season 01 Arc 01"
+    Map scraped season names to database season names
+    Now that the database has full names with language variants, we need to map correctly
     """
     if not season_name:
         return season_name
     
-    # Common language suffixes to remove
-    language_suffixes = [
-        ' Cpp', ' C++', ' Python', ' JavaScript', ' Java', ' Go', ' Rust',
-        ' TypeScript', ' PHP', ' Ruby', ' Swift', ' Golang'
-    ]
+    season_name = season_name.strip()
     
-    normalized = season_name
+    # Handle Season 03 Software Engineer variations with specific language mappings
+    if re.match(r'Season 03 Software Engineer', season_name, re.IGNORECASE):
+        # Map specific language variants
+        if 'Cpp' in season_name:
+            return "Season 03 Software Engineer Cpp"
+        elif 'Rust' in season_name:
+            return "Season 03 Software Engineer Rust"
+        elif 'Golang' in season_name or 'Go' in season_name:
+            return "Season 03 Software Engineer Go"
+        else:
+            # If it's just "Season 03 Software Engineer" without specific language,
+            # we can't map it properly, so return as-is
+            print(f"Warning: Found '{season_name}' but no specific language variant.")
+            return season_name
     
-    # Remove language suffixes
-    for suffix in language_suffixes:
-        if normalized.endswith(suffix):
-            normalized = normalized[:-len(suffix)]
-            break
-    
-    # Don't change "Software Engineer" since that's what's in the database
-    # normalized = normalized.replace("Software Engineer", "Software Engineering")
-    
-    return normalized
+    # For other seasons, return as-is since they should match the database exactly
+    return season_name
 
 # --- Helper Function to Convert Relative Time to Timestamp ---
 def parse_relative_time_to_timestamp(relative_time_str):
@@ -135,7 +130,6 @@ def parse_relative_time_to_timestamp(relative_time_str):
     return timestamp.isoformat()
 
 
-# --- Your Scraped Data Example (REPLACE THIS WITH YOUR ACTUAL SCRAPED DATA) ---
 # Load scraped data from a JSON file in the 'public' folder
 with open('public/student_grades.json', 'r', encoding='utf-8') as f:
     scraped_data_example = json.load(f)
@@ -177,22 +171,6 @@ for student in scraped_data_example:
     # Add to the array
     students_data.append(student_data)
 
-# # Print all students data
-# print(f"\nProcessed {len(students_data)} students:")
-# for i, student in enumerate(students_data, 1):
-#     print(f"\n--- Student {i} ---")
-#     print(f"Username: {student['username']}")
-#     print(f"Profile Image URL: {student['profile_img_url']}")
-#     print(f"Last Login (original): {student['last_login_original']}")
-#     print(f"Last Login (timestamp): {student['last_login']}")
-#     print(f"Current Season: {student['current_season']}")
-
-# print(f"\nStudents data array contains {len(students_data)} students ready for database insertion.")
-
-# --- Update Student Records in Database ---
-print("\n" + "="*50)
-print("UPDATING STUDENT RECORDS IN DATABASE")
-print("="*50)
 
 # First, get all seasons from the database to create a mapping
 print("Loading seasons from database...")
@@ -241,18 +219,18 @@ for student_data in students_data:
             # Look up season UUID if current_season exists
             if student_data['current_season']:
                 original_season_name = student_data['current_season']
-                normalized_season_name = normalize_season_name(original_season_name)
+                mapped_season_name = map_season_name_to_db(original_season_name)
                 
-                # Try normalized name first, then original name
+                # Try mapped name first, then original name
                 season_uuid = None
-                if normalized_season_name in season_mapping:
-                    season_uuid = season_mapping[normalized_season_name]
-                    print(f"  - Mapped season '{original_season_name}' -> '{normalized_season_name}' to UUID: {season_uuid}")
+                if mapped_season_name in season_mapping:
+                    season_uuid = season_mapping[mapped_season_name]
+                    print(f"  - Mapped season '{original_season_name}' -> '{mapped_season_name}' to UUID: {season_uuid}")
                 elif original_season_name in season_mapping:
                     season_uuid = season_mapping[original_season_name]
                     print(f"  - Mapped season '{original_season_name}' to UUID: {season_uuid}")
                 else:
-                    print(f"  - Warning: Season '{original_season_name}' (normalized: '{normalized_season_name}') not found in database")
+                    print(f"  - Warning: Season '{original_season_name}' (mapped: '{mapped_season_name}') not found in database")
                 
                 if season_uuid:
                     update_data['current_season_id'] = season_uuid
@@ -288,21 +266,3 @@ print(f"Not found in database: {not_found_count} students")
 print(f"Errors encountered: {error_count} students")
 print(f"Total processed: {len(students_data)} students")
 print(f"Students not found: {not_found_students}")
-
-# This script:
-# 1. Loads student data from the JSON file
-# 2. Processes and structures the data
-# 3. Finds existing students in the database by username
-# 4. Updates the missing fields in the student table:
-#    - current_season_id (derived from 'seasons' field)
-#    - profile_image_url (from 'img' field)  
-#    - last_login (from 'last_log_in' field)
-#
-# The students_data array contains all student information ready for database operations
-# Each element in the array has the structure:
-# {
-#   "username": string,
-#   "profile_img_url": string,
-#   "last_login": string,
-#   "current_season": string
-# }
