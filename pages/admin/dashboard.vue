@@ -14,6 +14,7 @@ const UButton = resolveComponent('UButton')
 
 const data = ref([])
 const snapshotChange = ref(null)
+const loading = ref(true)
 
 const getSnapshotChange = async () => {
   const { data } = await useFetch('/api/snapshot');
