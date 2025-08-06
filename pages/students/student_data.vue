@@ -113,7 +113,7 @@ async function fetchCalendarEvents(accessToken, period = 'week') {
 
   const data = await res.json();
   calendarEvents.value = data.items || [];
-  console.log("Current calendar events:", calendarEvents.value);
+  console.log("Current calendar home:", calendarEvents.value);
 }
 
 onMounted(async () => {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
 import type { DropdownMenuItem } from '@nuxt/ui'
+import { useRoute } from 'vue-router';
 
 import { onMounted } from 'vue'
 
@@ -22,6 +23,7 @@ onBeforeUnmount(() => {
 })
 
 const supabase = useSupabaseClient()
+const route = useRoute();
 
 const isCollapsed = ref(false)
 const active = ref()
@@ -53,7 +55,6 @@ const items = computed<DropdownMenuItem[][]>(() => [
       label: 'Logout',
       onClick: async () => {
         await supabase.auth.signOut()
-        clearNuxtData()
         navigateTo('/')
       },
       icon: 'i-lucide-log-out',
@@ -72,9 +73,6 @@ const mainLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Dashboard',
     },
-    onClick: () => {
-      active.value = '0'
-    }
   },
   {
     label: 'Analytics',
@@ -84,9 +82,6 @@ const mainLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Analytics',
     },
-    onClick: () => {
-      active.value = '1'
-    }
   },
   {
     label: 'Messages',
@@ -96,9 +91,6 @@ const mainLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Messages',
     },
-    onClick: () => {
-      active.value = '2'
-    }
   },
 ]
 
@@ -123,6 +115,14 @@ onMounted(async () => {
   userName.value = user?.user_metadata?.full_name || 'Unknown User';
   userImg.value = user?.user_metadata?.picture;
 })
+
+// Watch for route changes and update active state
+watch(
+  () => route.path,
+  (newPath) => {
+    active.value = mainLinks.findIndex((link) => link.to === newPath);
+  }
+);
 </script>
 
 
