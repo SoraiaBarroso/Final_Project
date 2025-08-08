@@ -65,12 +65,12 @@ const mainLinks: NavigationMenuItem[] = [
     },
   },
   {
-    label: 'Inbox',
-    to: '/',
+    label: 'Timeline',
+    to: '/test',
     badge: '3',
-    icon: 'i-lucide-inbox',
+    icon: 'lucide-calendar-clock',
     tooltip: {
-      text: 'Inbox',
+      text: 'Timeline',
     },
   },
 ];
