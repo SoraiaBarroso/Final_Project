@@ -43,7 +43,7 @@
       >
         <div 
           class="relative"
-          :style="{ width: timelineWidth + 'px', minHeight: '364px' }"
+          :style="{ width: timelineWidth + 'px', minHeight: dynamicTimelineHeight + 'px' }"
         >
           <!-- Column borders background -->
           <div class="absolute inset-0 flex pointer-events-none">
@@ -175,38 +175,182 @@ const timelineContainer = ref<HTMLElement>()
 // Dynamic project items based on month/year
 const projectItems = ref<ProjectItem[]>([])
 
-// Function to generate projects for a given month/year
-const generateProjectsForMonth = (year: number, month: number) => {
-  // This would typically come from your database/API
-  const projectTemplates: Record<string, Array<{title: string, type: 1 | 2 | 3 | 4, startDate: number, endDate: number, crossMonth?: boolean, season?: string, seasonColor?: string}>> = {
-    // Format: "YYYY-MM": projects for that month
-    "2025-05": [ // May 2025 - 3 months back
-      { title: 'My Ls Project', type: 1, startDate: 15, endDate: 22, season: 'Season 01 Arc 01', seasonColor: '#3b82f6' },
-    ],
-    "2025-06": [ // June 2025 - 2 months back
-      { title: 'My Minishell Project', type: 2, startDate: 1, endDate: 15, season: 'Season 01 Arc 02', seasonColor: '#10b981' },
-    ],
-    "2025-07": [ // July 2025 - 1 month back
-      { title: 'My Rush Project', type: 3, startDate: 20, endDate: 31, season: 'Season 02 Software Engineer', seasonColor: '#f59e0b' },
-    ],
-    "2025-08": [ // August 2025 - current month
-      { title: 'My Cat Project', type: 1, startDate: 4, endDate: 9, season: 'Season 02 Software Engineer', seasonColor: '#f59e0b' },
-      { title: 'My Ngram Project', type: 2, startDate: 10, endDate: 18, season: 'Season 02 Software Engineer', seasonColor: '#f59e0b' },
-      { title: 'My Mastermind Project', type: 2, startDate: 19, endDate: 26, season: 'Season 02 Software Engineer', seasonColor: '#f59e0b' },
-      { title: 'My Printf Project', type: 3, startDate: 28, endDate: 31, crossMonth: true, season: 'Season 03 Software Engineer Cpp', seasonColor: '#ef4444' }, // Continues to September
-    ],
-    "2025-09": [ // September 2025 - 1 month ahead
-      { title: 'My Printf Project (cont.)', type: 3, startDate: 1, endDate: 7, crossMonth: true, season: 'Season 03 Software Engineer Cpp', seasonColor: '#ef4444' }, // Continued from August
-      { title: 'My Push Swap Project', type: 2, startDate: 10, endDate: 20, season: 'Season 03 Software Engineer Cpp', seasonColor: '#ef4444' },
-    ],
-    "2025-10": [ // October 2025 - 2 months ahead
-      { title: 'My Minitalk Project', type: 3, startDate: 1, endDate: 15, season: 'Season 03 Software Engineer Cpp', seasonColor: '#ef4444' },
-    ],
-    "2025-11": [ // November 2025 - 3 months ahead
-      { title: 'My So Long Project', type: 4, startDate: 10, endDate: 30, season: 'Season 03 Machine Learning', seasonColor: '#8b5cf6' },
-    ],
+// Global project templates that can be updated with real data
+const projectTemplates: Record<string, Array<{title: string, type: 1 | 2 | 3 | 4, startDate: number, endDate: number, crossMonth?: boolean, season?: string, seasonColor?: string}>> = {
+  // Default fallback data - will be replaced by real data
+  "2025-08": [
+    { title: 'Loading...', type: 1, startDate: 4, endDate: 9, season: 'Loading...', seasonColor: '#3b82f6' },
+  ],
+}
+
+// Function to add seasons array to timeline
+const addSeasonsToTimeline = (seasons: Array<{id: any, name: string, start_date: string, end_date: string}>) => {
+  const timelineProjects: Record<string, any[]> = {};
+  
+  // Group seasons by base name (e.g., "Season 03") to consolidate specializations
+  const groupedSeasons = groupSeasonsByBaseName(seasons);
+  
+  groupedSeasons.forEach((seasonGroup, seasonIndex) => {
+    const startDate = new Date(seasonGroup.start_date);
+    const endDate = new Date(seasonGroup.end_date);
+    
+    console.log(`Processing season group: ${seasonGroup.displayName}`, {
+      seasonStart: seasonGroup.start_date,
+      seasonEnd: seasonGroup.end_date,
+      specializations: seasonGroup.specializations
+    });
+
+    // Create timeline items for each month the season spans
+    let currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+      
+      if (!timelineProjects[monthKey]) {
+        timelineProjects[monthKey] = [];
+      }
+      
+      const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+      const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+      
+      const itemStartInMonth = Math.max(startDate.getTime(), monthStart.getTime());
+      const itemEndInMonth = Math.min(endDate.getTime(), monthEnd.getTime());
+      
+      const startDay = new Date(itemStartInMonth).getDate();
+      const endDay = new Date(itemEndInMonth).getDate();
+      const crossMonth = endDate > monthEnd;
+      
+      // Use the consolidated display name with specializations
+      const title = seasonGroup.displayName;
+      
+      timelineProjects[monthKey].push({
+        title: title,
+        type: Math.min(4, seasonIndex + 1) as 1 | 2 | 3 | 4,
+        startDate: startDay,
+        endDate: endDay,
+        crossMonth: crossMonth,
+        season: seasonGroup.baseName, // Use base name for season initials
+        seasonColor: getSeasonColorByIndex(seasonIndex),
+      });
+      
+      // Move to next month
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      currentDate.setDate(1);
+    }
+  });
+  
+  console.log('Generated timeline projects:', timelineProjects);
+  
+  // Clear existing templates and update with real data
+  Object.keys(projectTemplates).forEach(key => {
+    delete projectTemplates[key];
+  });
+  Object.assign(projectTemplates, timelineProjects);
+  
+  // Reload current month view to show new data
+  loadProjectsForCurrentMonth();
+}
+
+// Helper function to group seasons by base name and consolidate specializations
+const groupSeasonsByBaseName = (seasons: Array<{id: any, name: string, start_date: string, end_date: string}>) => {
+  const seasonGroups: Map<string, {
+    baseName: string,
+    displayName: string,
+    specializations: string[],
+    start_date: string,
+    end_date: string,
+    ids: any[]
+  }> = new Map();
+  
+  seasons.forEach(season => {
+    // Extract base season name and specialization
+    const seasonInfo = extractSeasonInfo(season.name);
+    
+    if (seasonGroups.has(seasonInfo.baseName)) {
+      // Add specialization to existing group
+      const group = seasonGroups.get(seasonInfo.baseName)!;
+      if (seasonInfo.specialization && !group.specializations.includes(seasonInfo.specialization)) {
+        group.specializations.push(seasonInfo.specialization);
+      }
+      group.ids.push(season.id);
+      
+      // Update date range if necessary
+      if (new Date(season.start_date) < new Date(group.start_date)) {
+        group.start_date = season.start_date;
+      }
+      if (new Date(season.end_date) > new Date(group.end_date)) {
+        group.end_date = season.end_date;
+      }
+    } else {
+      // Create new group
+      seasonGroups.set(seasonInfo.baseName, {
+        baseName: seasonInfo.baseName,
+        displayName: seasonInfo.baseName,
+        specializations: seasonInfo.specialization ? [seasonInfo.specialization] : [],
+        start_date: season.start_date,
+        end_date: season.end_date,
+        ids: [season.id]
+      });
+    }
+  });
+  
+  // Create final display names with specializations
+  return Array.from(seasonGroups.values()).map(group => ({
+    ...group,
+    displayName: group.specializations.length > 0 
+      ? `${group.baseName} (${group.specializations.join(', ')})`
+      : group.baseName
+  }));
+}
+
+// Helper function to extract season base name and specialization
+const extractSeasonInfo = (seasonName: string) => {
+  // Pattern matching for different season formats
+  const patterns = [
+    // "Season 03 Software Engineer Cpp" -> base: "Season 03 Software Engineer", specialization: "Cpp"
+    { 
+      regex: /^(Season \d+ Software Engineer)\s+(Cpp|Go|Rust)$/i, 
+      baseGroup: 1, 
+      specializationGroup: 2 
+    },
+    // "Season 03 Machine Learning Python" -> base: "Season 03 Machine Learning", specialization: "Python"  
+    { 
+      regex: /^(Season \d+ Machine Learning)\s+(Python|R|TensorFlow)$/i, 
+      baseGroup: 1, 
+      specializationGroup: 2 
+    },
+    // "Season 02 Data Science Advanced" -> base: "Season 02 Data Science", specialization: "Advanced"
+    { 
+      regex: /^(Season \d+ Data Science)\s+(Advanced|Basic|Intermediate)$/i, 
+      baseGroup: 1, 
+      specializationGroup: 2 
+    },
+  ];
+  
+  for (const pattern of patterns) {
+    const match = seasonName.match(pattern.regex);
+    if (match) {
+      return {
+        baseName: match[pattern.baseGroup],
+        specialization: match[pattern.specializationGroup]
+      };
+    }
   }
   
+  // If no specialization pattern matches, return the full name as base
+  return {
+    baseName: seasonName,
+    specialization: null
+  };
+}
+
+// Helper function to get season colors by index
+const getSeasonColorByIndex = (index: number) => {
+  const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#84cc16'];
+  return colors[index % colors.length];
+}
+
+// Function to generate projects for a given month/year
+const generateProjectsForMonth = (year: number, month: number) => {
   const monthKey = `${year}-${String(month + 1).padStart(2, '0')}`
   return projectTemplates[monthKey] || []
 }
@@ -217,11 +361,56 @@ const loadProjectsForCurrentMonth = () => {
   const month = currentDate.value.getMonth()
   
   const projects = generateProjectsForMonth(year, month)
-  projectItems.value = projects.map((project: any, index: number) => ({
+  const processedProjects = calculateNonOverlappingPositions(projects)
+  
+  projectItems.value = processedProjects.map((project: any, index: number) => ({
     ...project,
     id: `${year}-${month}-${index}`,
     avatars: ['/avatar1.jpg', '/avatar2.jpg'] // Default avatars
   }))
+}
+
+// Function to calculate non-overlapping positions for timeline items
+const calculateNonOverlappingPositions = (projects: any[]) => {
+  if (!projects.length) return projects;
+  
+  // Sort projects by start date to process them in order
+  const sortedProjects = [...projects].sort((a, b) => a.startDate - b.startDate);
+  
+  // Track occupied rows and their end positions
+  const occupiedRows: Array<{endDate: number, row: number}> = [];
+  
+  return sortedProjects.map((project) => {
+    // Find the first available row for this project
+    let assignedRow = 0;
+    
+    // Check each existing row to see if this project would overlap
+    for (let i = 0; i < occupiedRows.length; i++) {
+      const existingRow = occupiedRows[i];
+      
+      // If this project starts after the existing row ends (with 1 day buffer), we can use this row
+      if (project.startDate > existingRow.endDate + 1) {
+        assignedRow = existingRow.row;
+        // Update this row's end date
+        existingRow.endDate = project.endDate;
+        break;
+      }
+    }
+    
+    // If no existing row was available, create a new row
+    if (assignedRow === 0 || !occupiedRows.find(row => row.row === assignedRow && row.endDate < project.startDate - 1)) {
+      assignedRow = occupiedRows.length;
+      occupiedRows.push({
+        endDate: project.endDate,
+        row: assignedRow
+      });
+    }
+    
+    return {
+      ...project,
+      calculatedRow: assignedRow // Add calculated row for positioning
+    };
+  });
 }
 
 // Computed properties
@@ -238,6 +427,22 @@ const columnWidth = computed(() => {
 
 const timelineWidth = computed(() => {
   return daysInMonth.value.length * columnWidth.value
+})
+
+const dynamicTimelineHeight = computed(() => {
+  if (!projectItems.value.length) return 364; // Default height
+  
+  // Find the maximum row used
+  const maxRow = Math.max(
+    ...projectItems.value.map(item => (item as any).calculatedRow || 0),
+    0
+  );
+  
+  const baseRowHeight = 64;
+  const startOffset = 16;
+  const bottomPadding = 20;
+  
+  return startOffset + ((maxRow + 1) * baseRowHeight) + bottomPadding;
 })
 
 // Methods
@@ -278,19 +483,31 @@ const getItemStyle = (item: ProjectItem) => {
   const duration = item.endDate - item.startDate + 1
   const itemWidth = duration * columnWidth.value
   
-  // Calculate vertical position based on item type  
-  const positions = {
-    1: '16px',   // Season 01 / Early projects
-    2: '80px',   // Season 02 / Intermediate projects
-    3: '144px',  // Season 03 / Advanced projects
-    4: '208px'   // Specialized seasons (ML, Data Science, etc.)
-  }
+  // Use calculated row for vertical positioning, with fallback to type-based positioning
+  const baseRowHeight = 64; // Height of each row (56px item + 8px gap)
+  const startOffset = 16; // Starting offset from top
+  
+  const calculatedRow = (item as any).calculatedRow;
+  const verticalPosition = calculatedRow !== undefined 
+    ? startOffset + (calculatedRow * baseRowHeight)
+    : getTypeBasedPosition(item.type);
   
   return {
     left: `${startPosition}px`,
     width: `${itemWidth}px`,
-    top: positions[item.type] || '16px'
+    top: `${verticalPosition}px`
   }
+}
+
+// Fallback function for type-based positioning (when calculated row is not available)
+const getTypeBasedPosition = (type: number) => {
+  const positions: Record<number, number> = {
+    1: 16,   // Season 01 / Early projects
+    2: 80,   // Season 02 / Intermediate projects  
+    3: 144,  // Season 03 / Advanced projects
+    4: 208   // Specialized seasons (ML, Data Science, etc.)
+  }
+  return positions[type] || 16;
 }
 
 const getItemClasses = (type: number) => {
@@ -301,16 +518,6 @@ const getItemClasses = (type: number) => {
     4: 'h-8 w-1.5 bg-red-600 rounded-md'
   }
   return classes[type] || 'h-8 w-1.5 bg-gray-600 rounded-md'
-}
-
-const getItemIcon = (type: string) => {
-  const icons: Record<string, string> = {
-    research: '🔍',
-    development: '⚙️',
-    design: '🎨',
-    landing: '📄'
-  }
-  return icons[type] || '📋'
 }
 
 // Convert season name to initials
@@ -383,11 +590,60 @@ const addProjectItem = (item: Omit<ProjectItem, 'id'>) => {
   projectItems.value.push(newItem)
 }
 
+const supabase = useSupabaseClient()
+
+const loadSeasonDeadlines = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    // First, get the student's cohort ID
+    const { data: student, error: studentError } = await supabase
+      .from('students')
+      .select('cohort_id, program_id')
+      .eq('email', session?.user?.email ?? '')
+      .single();
+
+    console.log("Student data:", student);
+
+    // Now, use the cohort ID to query program_cohort_seasons
+    const { data: seasonsProgress, error: progressError } = await supabase
+      .from('program_cohort_seasons')
+      .select(`
+        start_date,
+        end_date,
+        cohort_id,
+        seasons!inner (
+          id,
+          name,
+          program_id
+        )
+      `)
+      .eq('cohort_id', (student as any)?.cohort_id)
+      .eq('program_id', (student as any)?.program_id)
+      .order('start_date', { ascending: true, nullsFirst: false }); // Filter by the cohort ID you just fetched
+
+    console.log("Seasons progress:", seasonsProgress);
+
+    const seasons = seasonsProgress?.map((season: any) => ({
+      id: season.seasons.id,
+      name: season.seasons.name,
+      start_date: season.start_date,
+      end_date: season.end_date,
+      type: 2,
+    }));
+
+    console.log("Seasons:", seasons);
+
+    // Process seasons and add to timeline
+    if (seasons) {
+      addSeasonsToTimeline(seasons);
+    }
+}
+
 // Keyboard navigation
 onMounted(() => {
   // Load projects for the initial month
   loadProjectsForCurrentMonth()
-  
+  loadSeasonDeadlines()
+
   const handleKeydown = (event: KeyboardEvent) => {
     if (!timelineContainer.value) return
     
