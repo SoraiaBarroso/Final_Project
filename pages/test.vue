@@ -1,48 +1,58 @@
 <template>
-  <div class="w-full bg-slate-50 rounded-xl p-6 font-sans">
+  <div class="w-full h-full flex flex-col bg-slate-50 rounded-xl p-6 font-sans">
     <!-- Header with month/year and navigation -->
-    <div class="flex items-center justify-between mb-6">
-      <button 
-        @click="previousMonth" 
-        class="bg-white border border-slate-200 rounded-lg w-10 h-10 flex items-center justify-center cursor-pointer text-lg text-slate-500 transition-all duration-200 hover:bg-slate-50 hover:border-slate-300"
-      >
-        <UIcon name="lucide:chevron-left" />
-      </button>
+   <div class="flex items-center justify-between mb-6">
+      <div class="flex gap-2 items-center">
+        <UButton
+          @click="previousMonth"
+          color="neutral"
+          variant="link"
+          size="xl"
+          class="cursor-pointer"
+        >
+          <UIcon name="lucide:chevron-left" />
+        </UButton>
+        <UButton
+          color="info"
+          variant="outline"
+          @click="goToToday"
+          size="xl"
+        >
+          Today
+        </UButton>
+        <UButton
+          color="neutral"
+          variant="link"
+          size="xl"
+          @click="nextMonth"
+          class="cursor-pointer"
+        >
+          <UIcon name="lucide:chevron-right" />
+        </UButton>
+      </div>
       <h2 class="text-2xl font-semibold text-slate-800 m-0">
         {{ formatMonthYear(currentDate) }}
       </h2>
-      <button 
-        @click="nextMonth" 
-        class="bg-white border border-slate-200 rounded-lg w-10 h-10 flex items-center justify-center cursor-pointer text-lg text-slate-500 transition-all duration-200 hover:bg-slate-50 hover:border-slate-300"
-      >
-        <UIcon name="lucide:chevron-right" />
-      </button>
+      <!-- Season dropdown -->
+      <USelect
+        size="xl"
+        v-model="selectedSeasonId"
+        :items="studentSeasons"
+        :ui="{ trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200' }"
+        placeholder="Filter by Seasons"
+        class="min-w-28"
+      />
     </div>
 
-    <!-- Zoom controls -->
-    <!-- <div class="flex items-center gap-2 mb-4">
-      <span class="text-sm text-slate-600">Zoom:</span>
-      <input 
-        type="range" 
-        v-model="zoomLevel" 
-        min="50" 
-        max="200" 
-        step="10"
-        class="w-32"
-      >
-      <span class="text-sm text-slate-600">{{ zoomLevel }}%</span>
-    </div> -->
-
     <!-- Scrollable timeline container -->
-    <div class="relative overflow-hidden rounded-lg bg-white border border-slate-200">
+    <div class="relative overflow-hidden rounded-lg flex-1 bg-white border border-slate-200">
       <!-- Timeline wrapper with horizontal scroll -->
       <div 
         ref="timelineContainer"
-        class="overflow-x-auto overflow-y-hidden"
-        @scroll="handleScroll"
+        class="overflow-x-auto overflow-y-hidden h-full"
       >
         <div 
-          class="relative"
+          class="relative h-full"
           :style="{ width: timelineWidth + 'px', minHeight: dynamicTimelineHeight + 'px' }"
         >
           <!-- Column borders background -->
@@ -80,7 +90,7 @@
         </div>
 
         <!-- Timeline content area -->
-        <div class="relative" style="min-height: 320px; padding-top: 16px;">
+        <div class="relative" style="height: 100%; padding-top: 16px;">
             <div class="flex absolute inset-0 pointer-events-none" style="z-index:0;">
                 <div
                 v-for="day in daysInMonth"
@@ -107,7 +117,7 @@
             class="absolute h-14 px-3 py-2 bg-white flex items-center justify-between shadow-sm cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
             :class="[
               item.crossMonth ? 'rounded-l-lg border-r-2 border-dashed border-gray-300' : 'rounded-lg',
-              item.title.includes('(cont.)') ? 'rounded-r-lg rounded-l-none border-l-2 border-dashed border-gray-300' : ''
+              item.title?.includes('(cont.)') ? 'rounded-r-lg rounded-l-none border-l-2 border-dashed border-gray-300' : ''
             ]"
             :style="getItemStyle(item)"
         >
@@ -143,18 +153,136 @@
     </div>
 
     <!-- Scroll indicator -->
-    <div class="flex items-center justify-center mt-2 text-xs text-slate-500">
+    <!-- <div class="flex items-center justify-center mt-2 flex-1 text-xs text-slate-500">
       <span>Scroll horizontally to see more days</span>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
-import { UIcon } from '#components';
-
 definePageMeta({
   layout: 'custom',
 });
+
+const today = new Date()
+const currentDate = ref(new Date())
+const zoomLevel = ref(50)
+const timelineContainer = ref<HTMLElement>()
+
+// Dynamic project items based on month/year
+const projectItems = ref<ProjectItem[]>([])
+
+// For season dropdown
+const studentSeasons = ref<Array<{ label: string, value: string }>>([])
+const selectedSeasonId = ref<string | undefined>(undefined)
+
+// Store program_id for later use
+const studentProgramId = ref<string | null>(null)
+const studentCohortId = ref<string | null>(null)
+const cohortSeasonsDeadlines = ref<Array<{ id: string, name: string, start_date: string, end_date: string, type: number }>>([])
+
+// Go to today: show previous, current, and next month
+const goToToday = () => {
+  currentDate.value = new Date(today.getFullYear(), today.getMonth(), 1)
+  loadProjectsForCurrentMonth()
+}
+
+// When dropdown changes show the timeline for that specific season
+watch(() => selectedSeasonId.value, async (newVal) => {
+  console.log("Selected season ID:", newVal)
+
+  const selectedSeason = cohortSeasonsDeadlines.value.find(season => season.id === newVal)
+  if (!selectedSeason) return;
+
+  const startDate = new Date(selectedSeason.start_date);
+  const endDate = new Date(selectedSeason.end_date);
+
+  currentDate.value = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+
+  // Load projects for this season
+  await loadProjectsForSeason(selectedSeason.id);
+
+  console.log("Selected season:", selectedSeason)
+})
+
+// Fetch projects for a given season and program
+const loadProjectsForSeason = async (seasonId: string) => {
+  if (!seasonId) return
+  const programId = studentProgramId.value
+  if (!programId) return
+
+  // Find the selected season to get its start date
+  const selectedSeason = cohortSeasonsDeadlines.value.find(season => season.id === seasonId)
+  if (!selectedSeason) return
+
+  const seasonStartDate = new Date(selectedSeason.start_date)
+  console.log("Season start date:", seasonStartDate)
+
+  const { data: projects, error } = await supabase
+    .from('projects')
+    .select('*')
+    .eq('season_id', seasonId)
+    .eq('program_id', programId)
+
+  console.log(projects)
+  if (projects) {
+    // Separate projects with description (e.g., Bootcamp) and others
+    const withDescription = projects.filter((p: any) => p.description && p.description.toLowerCase().includes('bootcamp'))
+    const withoutDescription = projects.filter((p: any) => !p.description || !p.description.toLowerCase().includes('bootcamp'))
+
+    let timelineProjects: any[] = []
+    let dayOffset = 0
+    console.log("Projects loaded for season:", projects)
+    // Grouped block for "Bootcamp" or similar
+// Grouped block for "Bootcamp" or similar
+if (withDescription.length > 0) {
+  const totalDuration = withDescription.reduce((sum, p) => sum + (p.duration_days || 1), 0)
+  const start = new Date(seasonStartDate)
+  start.setDate(start.getDate() + dayOffset)
+  const startDay = start.getDate()
+  const end = new Date(start)
+  end.setDate(start.getDate() + totalDuration - 1)
+  const endDay = end.getDate()
+
+  timelineProjects.push({
+    title: withDescription[0].description, // Use the description as the title
+    type: 4,
+    startDate: startDay,
+    endDate: endDay,
+    season: withDescription[0].season_name,
+    seasonColor: '#3b82f6',
+    id: `grouped-${seasonId}`,
+    avatars: [],
+  })
+
+  dayOffset += totalDuration
+}
+
+// Individual blocks for the rest
+withoutDescription.forEach((p: any, idx: number) => {
+  const start = new Date(seasonStartDate)
+  start.setDate(start.getDate() + dayOffset)
+  const startDay = start.getDate()
+  const end = new Date(start)
+  end.setDate(start.getDate() + ((p.duration_days ? p.duration_days : 1) - 1))
+  const endDay = end.getDate()
+  dayOffset += p.duration_days ? p.duration_days : 1
+
+  timelineProjects.push({
+    title: p.name,
+    type: 4,
+    startDate: startDay,
+    endDate: endDay,
+    season: p.season_name,
+    seasonColor: '#3b82f6',
+    id: `proj-${p.id}`,
+    avatars: [],
+  })
+})
+
+    projectItems.value = calculateNonOverlappingPositions(timelineProjects)
+  }
+}
 
 interface ProjectItem {
   id: string
@@ -167,13 +295,6 @@ interface ProjectItem {
   season?: string // Season/curriculum context
   seasonColor?: string // Visual indicator for season
 }
-
-const currentDate = ref(new Date())
-const zoomLevel = ref(50)
-const timelineContainer = ref<HTMLElement>()
-
-// Dynamic project items based on month/year
-const projectItems = ref<ProjectItem[]>([])
 
 // Global project templates that can be updated with real data
 const projectTemplates: Record<string, Array<{title: string, type: 1 | 2 | 3 | 4, startDate: number, endDate: number, crossMonth?: boolean, season?: string, seasonColor?: string}>> = {
@@ -577,9 +698,6 @@ const nextMonth = () => {
   loadProjectsForCurrentMonth() // Load projects for new month
 }
 
-const handleScroll = () => {
-  // Optional: Add scroll position tracking or snap-to-grid functionality
-}
 
 // Method to add new project items (for future use)
 const addProjectItem = (item: Omit<ProjectItem, 'id'>) => {
@@ -594,15 +712,38 @@ const supabase = useSupabaseClient()
 
 const loadSeasonDeadlines = async () => {
     const { data: { session } } = await supabase.auth.getSession();
+
     // First, get the student's cohort ID
     const { data: student, error: studentError } = await supabase
       .from('students')
       .select('cohort_id, program_id')
       .eq('email', session?.user?.email ?? '')
-      .single();
+      .single<{ cohort_id: string; program_id: string }>();
 
-    console.log("Student data:", student);
+    if (student) {
+      studentProgramId.value = student.program_id
+      studentCohortId.value = student.cohort_id
+    }
 
+    // fetch seasons for dropdown seasons
+    const { data: seasonsList, error: seasonsError } = await supabase
+      .from('seasons')
+      .select('id, name, order_in_program')
+      .eq('program_id', studentProgramId.value ?? '');
+
+    if (seasonsList) {
+      type SeasonListItem = { id: string | number, name: string, order_in_program?: number };
+      const typedSeasonsList = seasonsList as SeasonListItem[];
+      const sortedSeasons = [...typedSeasonsList].sort((a, b) => (a.order_in_program ?? 0) - (b.order_in_program ?? 0));
+      // Remove the first season from the list
+      const filteredSeasons = sortedSeasons.slice(1);
+      studentSeasons.value = filteredSeasons.map(season => ({
+      label: season.name,
+      value: String(season.id),
+      }));
+      console.log("Student seasons:", studentSeasons.value);
+    }
+    
     // Now, use the cohort ID to query program_cohort_seasons
     const { data: seasonsProgress, error: progressError } = await supabase
       .from('program_cohort_seasons')
@@ -620,8 +761,6 @@ const loadSeasonDeadlines = async () => {
       .eq('program_id', (student as any)?.program_id)
       .order('start_date', { ascending: true, nullsFirst: false }); // Filter by the cohort ID you just fetched
 
-    console.log("Seasons progress:", seasonsProgress);
-
     const seasons = seasonsProgress?.map((season: any) => ({
       id: season.seasons.id,
       name: season.seasons.name,
@@ -630,7 +769,8 @@ const loadSeasonDeadlines = async () => {
       type: 2,
     }));
 
-    console.log("Seasons:", seasons);
+    cohortSeasonsDeadlines.value = seasons || [];
+    console.log("Cohort season deadlines:", cohortSeasonsDeadlines.value);
 
     // Process seasons and add to timeline
     if (seasons) {
