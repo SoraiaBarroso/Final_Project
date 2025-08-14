@@ -3,14 +3,15 @@
     <!-- Header with month/year and navigation -->
    <div class="flex items-center justify-between mb-6">
       <div class="flex gap-2 items-center">
-        <UButton
-          @click="previousMonth"
-          color="neutral"
-          variant="link"
-          size="xl"
-          class="cursor-pointer"
-        >
-          <UIcon name="lucide:chevron-left" />
+       <UButton
+        @click="previousMonth"
+        color="neutral"
+        variant="link"
+        size="xl"
+        class="cursor-pointer"
+        :disabled="allowedStartDate && (currentDate.getFullYear() === allowedStartDate.getFullYear() && currentDate.getMonth() === allowedStartDate.getMonth())"
+      >
+        <UIcon name="lucide:chevron-left" />
         </UButton>
         <UButton
           color="info"
@@ -21,14 +22,15 @@
           Today
         </UButton>
         <UButton
-          color="neutral"
-          variant="link"
-          size="xl"
-          @click="nextMonth"
-          class="cursor-pointer"
-        >
-          <UIcon name="lucide:chevron-right" />
-        </UButton>
+        color="neutral"
+        variant="link"
+        size="xl"
+        @click="nextMonth"
+        class="cursor-pointer"
+        :disabled="allowedEndDate && (currentDate.getFullYear() === allowedEndDate.getFullYear() && currentDate.getMonth() === allowedEndDate.getMonth())"
+      >
+        <UIcon name="lucide:chevron-right" />
+      </UButton>
       </div>
       <h2 class="text-2xl font-semibold text-slate-800 m-0">
         {{ formatMonthYear(currentDate) }}
@@ -55,6 +57,15 @@
           class="relative h-full"
           :style="{ width: timelineWidth + 'px', minHeight: dynamicTimelineHeight + 'px' }"
         >
+          <div
+            v-if="todayLinePosition !== null"
+            :style="{
+              left: todayLinePosition + 30 + 'px',
+              height: '92%',
+              width: '2px',
+            }"
+            class="absolute bottom-0 bg-blue-500/80 pointer-events-none"
+          ></div>
           <!-- Column borders background -->
           <div class="absolute inset-0 flex pointer-events-none">
             <div
@@ -169,6 +180,9 @@ const currentDate = ref(new Date())
 const zoomLevel = ref(50)
 const timelineContainer = ref<HTMLElement>()
 
+const allowedStartDate = ref<Date | undefined>(undefined)
+const allowedEndDate = ref<Date | undefined>(undefined)
+
 // Dynamic project items based on month/year
 const projectItems = ref<ProjectItem[]>([])
 
@@ -189,21 +203,36 @@ const goToToday = () => {
 
 // When dropdown changes show the timeline for that specific season
 watch(() => selectedSeasonId.value, async (newVal) => {
-  console.log("Selected season ID:", newVal)
-
   const selectedSeason = cohortSeasonsDeadlines.value.find(season => season.id === newVal)
   if (!selectedSeason) return;
 
   const startDate = new Date(selectedSeason.start_date);
   const endDate = new Date(selectedSeason.end_date);
 
+  allowedStartDate.value = startDate
+  allowedEndDate.value = endDate
+
   currentDate.value = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
 
   // Load projects for this season
   await loadProjectsForSeason(selectedSeason.id);
 
-  console.log("Selected season:", selectedSeason)
+  // Scroll to the start day of the season in the current month
+  if (
+    currentDate.value.getFullYear() === startDate.getFullYear() &&
+    currentDate.value.getMonth() === startDate.getMonth()
+  ) {
+    scrollToDay(startDate.getDate());
+  }
 })
+
+// scroll to the start of the season when changinn seasons
+const scrollToDay = (day: number) => {
+  if (!timelineContainer.value) return;
+  // Calculate the horizontal scroll position
+  const scrollLeft = (day - 1) * columnWidth.value;
+  timelineContainer.value.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+}
 
 // Fetch projects for a given season and program
 const loadProjectsForSeason = async (seasonId: string) => {
@@ -216,7 +245,10 @@ const loadProjectsForSeason = async (seasonId: string) => {
   if (!selectedSeason) return
 
   const seasonStartDate = new Date(selectedSeason.start_date)
-  console.log("Season start date:", seasonStartDate)
+  const year = currentDate.value.getFullYear()
+  const month = currentDate.value.getMonth()
+  const monthStart = new Date(year, month, 1)
+  const monthEnd = new Date(year, month + 1, 0)
 
   const { data: projects, error } = await supabase
     .from('projects')
@@ -224,65 +256,75 @@ const loadProjectsForSeason = async (seasonId: string) => {
     .eq('season_id', seasonId)
     .eq('program_id', programId)
 
-  console.log(projects)
   if (projects) {
+    // Sort all projects by offset_days ascending
+    const sortedProjects = [...projects].sort((a, b) => (a.offset_days || 0) - (b.offset_days || 0))
     // Separate projects with description (e.g., Bootcamp) and others
-    const withDescription = projects.filter((p: any) => p.description && p.description.toLowerCase().includes('bootcamp'))
-    const withoutDescription = projects.filter((p: any) => !p.description || !p.description.toLowerCase().includes('bootcamp'))
+    const withDescription = sortedProjects.filter((p: any) => p.description && p.description.toLowerCase().includes('bootcamp'))
+    const withoutDescription = sortedProjects.filter((p: any) => !p.description || !p.description.toLowerCase().includes('bootcamp'))
 
     let timelineProjects: any[] = []
-    let dayOffset = 0
-    console.log("Projects loaded for season:", projects)
+
     // Grouped block for "Bootcamp" or similar
-// Grouped block for "Bootcamp" or similar
-if (withDescription.length > 0) {
-  const totalDuration = withDescription.reduce((sum, p) => sum + (p.duration_days || 1), 0)
-  const start = new Date(seasonStartDate)
-  start.setDate(start.getDate() + dayOffset)
-  const startDay = start.getDate()
-  const end = new Date(start)
-  end.setDate(start.getDate() + totalDuration - 1)
-  const endDay = end.getDate()
+    if (withDescription.length > 0) {
+      const minOffset = Math.min(...withDescription.map((p: any) => p.offset_days || 0))
+      const totalDuration = withDescription.reduce((sum, p) => sum + (p.duration_days || 1), 0)
+      const start = new Date(seasonStartDate)
+      start.setDate(start.getDate() + minOffset)
+      const end = new Date(start)
+      end.setDate(start.getDate() + totalDuration - 1)
 
-  timelineProjects.push({
-    title: withDescription[0].description, // Use the description as the title
-    type: 4,
-    startDate: startDay,
-    endDate: endDay,
-    season: withDescription[0].season_name,
-    seasonColor: '#3b82f6',
-    id: `grouped-${seasonId}`,
-    avatars: [],
-  })
+      // Only show if overlaps with this month
+      if (!(end < monthStart || start > monthEnd)) {
+        const startDay = Math.max(1, start > monthStart ? start.getDate() : 1)
+        const endDay = Math.min(monthEnd.getDate(), end < monthEnd ? end.getDate() : monthEnd.getDate())
 
-  dayOffset += totalDuration
-}
+        timelineProjects.push({
+          title: withDescription[0].description,
+          type: 4,
+          startDate: startDay,
+          endDate: endDay,
+          season: withDescription[0].season_name,
+          seasonColor: '#3b82f6',
+          id: `grouped-${seasonId}`,
+          crossMonth: end > monthEnd,
+          avatars: [],
+        })
+      }
+    }
 
-// Individual blocks for the rest
-withoutDescription.forEach((p: any, idx: number) => {
-  const start = new Date(seasonStartDate)
-  start.setDate(start.getDate() + dayOffset)
-  const startDay = start.getDate()
-  const end = new Date(start)
-  end.setDate(start.getDate() + ((p.duration_days ? p.duration_days : 1) - 1))
-  const endDay = end.getDate()
-  dayOffset += p.duration_days ? p.duration_days : 1
+    // Individual blocks for the rest, sorted by offset_days
+    withoutDescription.forEach((p: any) => {
+      const offset = p.offset_days || 0
+      const start = new Date(seasonStartDate)
+      start.setDate(start.getDate() + offset)
+      const end = new Date(start)
+      end.setDate(start.getDate() + ((p.duration_days ? p.duration_days : 1) - 1))
 
-  timelineProjects.push({
-    title: p.name,
-    type: 4,
-    startDate: startDay,
-    endDate: endDay,
-    season: p.season_name,
-    seasonColor: '#3b82f6',
-    id: `proj-${p.id}`,
-    avatars: [],
-  })
-})
+      // Only show if overlaps with this month
+      if (end < monthStart || start > monthEnd) return
+
+      // Calculate the day in the current month for the timeline
+      const startDay = Math.max(1, start > monthStart ? start.getDate() : 1)
+      const endDay = Math.min(monthEnd.getDate(), end < monthEnd ? end.getDate() : monthEnd.getDate())
+
+      timelineProjects.push({
+        title: p.name,
+        type: 4,
+        startDate: startDay,
+        endDate: endDay,
+        season: p.season_name,
+        seasonColor: '#3b82f6',
+        crossMonth: end > monthEnd,
+        id: `proj-${p.id}`,
+        avatars: [],
+      })
+    })
 
     projectItems.value = calculateNonOverlappingPositions(timelineProjects)
   }
 }
+
 
 interface ProjectItem {
   id: string
@@ -370,6 +412,20 @@ const addSeasonsToTimeline = (seasons: Array<{id: any, name: string, start_date:
   // Reload current month view to show new data
   loadProjectsForCurrentMonth();
 }
+
+const todayLinePosition = computed(() => {
+  const todayDate = new Date();
+  const year = currentDate.value.getFullYear();
+  const month = currentDate.value.getMonth();
+  if (
+    todayDate.getFullYear() === year &&
+    todayDate.getMonth() === month
+  ) {
+    // 0-based index, so subtract 1
+    return (todayDate.getDate() - 1) * columnWidth.value;
+  }
+  return null;
+});
 
 // Helper function to group seasons by base name and consolidate specializations
 const groupSeasonsByBaseName = (seasons: Array<{id: any, name: string, start_date: string, end_date: string}>) => {
@@ -687,17 +743,46 @@ const getSeasonInitials = (seasonName: string) => {
 const previousMonth = () => {
   const newDate = new Date(currentDate.value)
   newDate.setMonth(newDate.getMonth() - 1)
+  // Restrict to allowedStartDate
+  if (
+    allowedStartDate.value &&
+    (newDate.getFullYear() < allowedStartDate.value.getFullYear() ||
+      (newDate.getFullYear() === allowedStartDate.value.getFullYear() &&
+        newDate.getMonth() < allowedStartDate.value.getMonth()))
+  ) {
+    return
+  }
   currentDate.value = newDate
-  loadProjectsForCurrentMonth() // Load projects for new month
+  const lastday = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0).getDate();
+  scrollToDay(lastday)
+  if (selectedSeasonId.value) {
+    loadProjectsForSeason(selectedSeasonId.value)
+  } else {
+    loadProjectsForCurrentMonth()
+  }
 }
 
 const nextMonth = () => {
   const newDate = new Date(currentDate.value)
   newDate.setMonth(newDate.getMonth() + 1)
+  // Restrict to allowedEndDate
+  if (
+    allowedEndDate.value &&
+    (newDate.getFullYear() > allowedEndDate.value.getFullYear() ||
+      (newDate.getFullYear() === allowedEndDate.value.getFullYear() &&
+        newDate.getMonth() > allowedEndDate.value.getMonth()))
+  ) {
+    return
+  }
   currentDate.value = newDate
-  loadProjectsForCurrentMonth() // Load projects for new month
-}
+  scrollToDay(1)
 
+  if (selectedSeasonId.value) {
+    loadProjectsForSeason(selectedSeasonId.value)
+  } else {
+    loadProjectsForCurrentMonth()
+  }
+}
 
 // Method to add new project items (for future use)
 const addProjectItem = (item: Omit<ProjectItem, 'id'>) => {
@@ -736,11 +821,23 @@ const loadSeasonDeadlines = async () => {
       const typedSeasonsList = seasonsList as SeasonListItem[];
       const sortedSeasons = [...typedSeasonsList].sort((a, b) => (a.order_in_program ?? 0) - (b.order_in_program ?? 0));
       // Remove the first season from the list
+      // Remove the first season from the list
       const filteredSeasons = sortedSeasons.slice(1);
-      studentSeasons.value = filteredSeasons.map(season => ({
-      label: season.name,
-      value: String(season.id),
-      }));
+      filteredSeasons.pop()
+      
+      studentSeasons.value = filteredSeasons.map(season => {
+        // If the name starts with "Season XX Software Engineer", remove "Software Engineer" and trim
+        let label = season.name;
+        const match = label.match(/^(Season \d+)\s+Software Engineer\s*(.*)$/i);
+        if (match) {
+          // If there is a specialization (Cpp, Rust, Go), append it; otherwise, just "Season XX"
+          label = match[2] ? `${match[1]} ${match[2]}`.trim() : match[1];
+        }
+        return {
+          label,
+          value: String(season.id),
+        };
+      });
       console.log("Student seasons:", studentSeasons.value);
     }
     
