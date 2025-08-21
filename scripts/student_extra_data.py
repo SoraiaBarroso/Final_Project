@@ -1,4 +1,4 @@
-# SCRIPT 2 ADD MISSING INFO TO STUDENT TABLE, LAST_LOGIN, CURRENT_SEASON_ID, IMG_URL
+# SCRIPT 2 ADD MISSING INFO TO STUDENT TABLE, LAST_LOGIN, CURRENT_SEASON_ID, IMG_URL, POINTS, EXERCISES_COMPLETED
 import json
 from supabase import create_client, Client
 from datetime import datetime, timedelta
@@ -149,7 +149,9 @@ for student in scraped_data_example:
     profile_img_url = student.get("img")
     last_login_str = student.get("last_log_in")
     seasons = student.get("seasons")
-    
+    points = student.get("points")
+    exercises_completed = student.get("exercises_completed")
+
     # Convert relative time to timestamp
     last_login_timestamp = parse_relative_time_to_timestamp(last_login_str)
 
@@ -166,6 +168,8 @@ for student in scraped_data_example:
         "last_login": last_login_timestamp,
         "last_login_original": last_login_str,  # Keep original for reference
         "current_season": current_season,
+        "points": points,
+        "exercises_completed": exercises_completed
     }
     
     # Add to the array
@@ -215,7 +219,13 @@ for student_data in students_data:
                 
             if student_data['last_login']:
                 update_data['last_login'] = student_data['last_login']
-                
+
+            if student_data['points']:
+                update_data['points'] = student_data['points']
+
+            if student_data['exercises_completed']:
+                update_data['exercises_completed'] = student_data['exercises_completed']
+
             # Look up season UUID if current_season exists
             if student_data['current_season']:
                 original_season_name = student_data['current_season']

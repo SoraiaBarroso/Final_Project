@@ -3,6 +3,7 @@ import { UIcon } from '#components';
 
 definePageMeta({
   layout: 'custom',
+  middleware: ["auth"]
 });
 
 const calendarEvents = ref([]);
@@ -121,28 +122,29 @@ onMounted(async () => {
   console.log("Student data page loaded");
   const { data: { session } } = await supabase.auth.getSession();
   const accessToken = session?.provider_token;
+  console.log("Access token:", accessToken);
   await fetchCalendarEvents(accessToken)
   await fetchStudentData();
 });
 </script>
 
 <template>
-  <div class="flex h-screen">
+  <div class="flex h-screen background">
     
-    <div class="flex flex-col px-10 w-[40%] h-full pt-6 pb-3">
+    <div class="flex flex-col px-10 w-[40%] h-full pt-6 xl:pb-3 2xl:pb-6">
       
       <div class="flex mb-4 justify-start items-center gap-3">
-         <h1 class="text-4xl text-gray-800 font-semibold">Hello, </h1>
-          <span class="text-3xl text-gray-800 pt-1">{{ studentData.first_name }}</span>
+         <h1 class="xl:text-4xl 2xl:text-6xl text-black/80 font-semibold">Hello, </h1>
+          <span class="xl:text-3xl 2xl:text-5xl text-black/80 xl:pt-1 2xl:pt-2">{{ studentData.first_name }}</span>
           <UIcon
             name="fluent-emoji:hand-with-fingers-splayed-medium-light"
             size="40"
           ></UIcon>
       </div>
 
-      <p class="text-gray-500">Nice to have you back, what an exciting day!</p>
-      <p class="text-gray-500 pt-1">Get ready and check the calendar for this week</p>
-    
+      <p class="text-muted text-base 2xl:text-2xl 2xl:mt-8">Nice to have you back, what an exciting day!</p>
+      <p class="text-muted xl:pt-1 2xl:pt-2 text-base 2xl:text-2xl 2xl:mb-12">Get ready and check the calendar for this week</p>
+
       <UCard
           variant="outline"
           :ui="{
@@ -181,8 +183,23 @@ onMounted(async () => {
 
     </div>
 
-    <div class="w-[60%] flex justify-center items-center">
-      <p>something else</p>
+    <div class="w-[60%] flex justify-center items-center pt-8 pb-3 2xl:pb-6 px-8">
+      <UCard
+        variant="outline"
+        :ui="{
+          root: 'h-full w-full overflow-y-auto rounded-lg',
+        }"
+      >
+      </UCard>
     </div>
   </div>
 </template>
+
+<style>
+.background {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(218, 218, 218, 0.279) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(203, 203, 203, 0.267) 1px, transparent 1px);
+}
+</style>

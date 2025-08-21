@@ -2,6 +2,7 @@
 // Page that cannot be accessed without authentication  and has logic to log-out a user.
 definePageMeta({
   layout: 'default',
+  middleware: ['role', 'auth'] // check if user has the right role and is authenticated 
 });
 
 import { onMounted, resolveComponent } from 'vue'

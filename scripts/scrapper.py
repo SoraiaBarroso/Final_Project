@@ -101,7 +101,7 @@ def getTokens():
     res = requests.post(url, cookies=cookies, headers=headers, data=data, allow_redirects=False)
     # print("pass", res, res.text)
 
-    match = re.search('<a\s+href="(.*?)">', res.text)
+    match = re.search(r'<a\s+href="(.*?)">', res.text)
 
     # print(authToken)
     url = match.group(1)
@@ -113,12 +113,38 @@ def getTokens():
     # print(_session_id)
     return  {'user.id' : userID, '_session_id' : _session_id}
 
+def harvest_exercises_completed(soup):
+    """Extract the number of exercises completed."""
+    try:
+        li = soup.find('li', class_='row flex')
+        if li and 'Exercises Completed' in li.text:
+            spans = li.find_all('span')
+            if len(spans) > 1:
+                return spans[1].text.strip()
+    except Exception as e:
+        print(f"Error extracting exercises completed: {e}")
+    return None
+
+def harvest_points(soup):
+    """Extract the number of points."""
+    try:
+        # Find the div with the SVG and a number
+        for div in soup.find_all('div', class_='flex items-center gap-2'):
+            # Check if it contains an SVG and a span with a number
+            if div.find('svg') and div.find('span'):
+                spans = div.find_all('span')
+                if spans and spans[-1].text.strip().isdigit():
+                    return spans[-1].text.strip()
+    except Exception as e:
+        print(f"Error extracting points: {e}")
+    return None
+
 def harvestProjectsCompleted(soup):
     """Extract all projects under the 'Projects Completed' section."""
     projects = []
     try:
         # Find the header with the text 'Projects In Progress'
-        header = soup.find("h2", text=lambda t: t and "Projects Completed" in t)
+        header = soup.find("h2", string=lambda t: t and "Projects Completed" in t)
         
         if header:
             # Locate the outermost container of the section
@@ -142,8 +168,8 @@ def harvestProjects(soup):
     projects = []
     try:
         # Find the header with the text 'Projects In Progress'
-        header = soup.find("h2", text=lambda t: t and "Projects In Progress" in t)
-        
+        header = soup.find("h2", string=lambda t: t and "Projects In Progress" in t)
+
         if header:
             # Locate the outermost container of the section
             section_container = header.find_parent("div", class_="col-span-full")
@@ -191,7 +217,7 @@ def scrape(text, id):
 
     soup = BeautifulSoup(text, 'html.parser')
     # Locate all card elements
-    cards = soup.findAll('div', {'class': 'card-with-header'})
+    cards = soup.find_all('div', {'class': 'card-with-header'})
 
     image = soup.find('img', {'height': '256'})['src']
     last_log_ing = soup.find('time', {'data-format': '%B %e, %Y %l:%M%P'})
@@ -211,15 +237,20 @@ def scrape(text, id):
         dictmp = harvestBlock(card)
         seasons_data.update(dictmp)
 
+    exercises_completed = harvest_exercises_completed(soup)
+    points = harvest_points(soup)
+
     # Add extracted data to the main dictionary
     dic["seasons"] = seasons_data
     dic["img"] = image
     dic["last_log_in"] = last_log_in
     dic["ongoing_projects"] = ongoing_projects
     dic["completed_projects"] = completed_projects
+    dic["exercises_completed"] = exercises_completed
+    dic["points"] = points
 
     # Optionally extract other information like Hours Logged
-    card_block = soup.findAll('div', {'class': 'card-block'})
+    card_block = soup.find_all('div', {'class': 'card-block'})
     if len(card_block) > 3:
         dic['Hours Logged'] = card_block[3].find('div', {'class': 'col font-size-24 font-weight-bold'}).text.strip()
 
@@ -275,6 +306,8 @@ def save_to_json(finalDic):
             "last_log_in": last_log_in_time_ago,
             "ongoing_projects": grades.get("ongoing_projects"),
             "completed_projects": grades.get("completed_projects"),
+            "exercises_completed": grades.get("exercises_completed"),
+            "points": grades.get("points")
         })
 
     outputData.append({"last_modified": last_modified})
