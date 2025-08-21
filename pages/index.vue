@@ -2,7 +2,7 @@
 // Page on which authentication will be performed. 
 definePageMeta({
   layout: false,
-  middleware: ["auth"]
+  middleware: ["guest", "auth"]
 })
 
 const supabase = useSupabaseClient()

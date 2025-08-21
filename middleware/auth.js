@@ -1,10 +1,11 @@
-// Middleware that'll keep checking that the user isn't able to access the login page after logging in / signing in.
-export default defineNuxtRouteMiddleware(() => {
-    const user = useSupabaseUser()
-     
-    if (user.value) {
-        console.log("User is logged in, redirecting to secures page.")
-        console.log(user.value)
-        return navigateTo('/admin/dashboard')
+// This is the gatekeeper for all protected pages. It ensures a user is logged in.
+// middleware/auth.ts
+export default defineNuxtRouteMiddleware((to, from) => {
+    console.log("Auth middleware triggered");
+    const user = useSupabaseUser();
+
+    if (!user.value) {
+        // If the user is not logged in, redirect them to the login page.
+        return navigateTo('/'); 
     }
-})
+});

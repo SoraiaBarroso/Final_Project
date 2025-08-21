@@ -13,11 +13,10 @@ if (route.query.error === 'server_error') {
 }
 
 const user = useSupabaseUser()
-const userRole = useState('userRole', () => null)
 
 // Get redirect path from cookies
 const cookieName = useRuntimeConfig().public.supabase.cookieName
-
+console.log("Cookie name:", cookieName);
 const supabase = useSupabaseClient();
 
 watch(user, async () => {
@@ -31,11 +30,9 @@ watch(user, async () => {
             .eq('email', email)
             .single();
         if (adminData && adminData.email) {
-            userRole.value = 'admin'; // Set user role to admin
             useCookie(`${cookieName}-redirect-path`).value = null;
             return navigateTo('/admin/dashboard');
         } else {
-            userRole.value = 'student'; // Set user role to student
             useCookie(`${cookieName}-redirect-path`).value = null;
             return navigateTo('/students/student_data');
         }
