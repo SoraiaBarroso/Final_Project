@@ -51,7 +51,7 @@
       <!-- Timeline wrapper with horizontal scroll -->
       <div 
         ref="timelineContainer"
-        class="overflow-x-auto overflow-y-hidden h-full"
+        class="overflow-x-auto overflow-y-hidden h-full timeline"
       >
         <div 
           class="relative h-full"
@@ -902,3 +902,11 @@ onMounted(() => {
   })
 })
 </script>
+
+
+<style scoped>
+.timeline {
+  scrollbar-width: 6px;
+  scrollbar-color: #c2c2c2a2 transparent;
+}
+</style>

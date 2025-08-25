@@ -19,10 +19,13 @@ export default defineNuxtConfig({
     // Credentials - server-side only for security
     scraperUsername: process.env.SCRAPER_USERNAME,
     scraperPassword: process.env.SCRAPER_PASSWORD,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
     // Keys within public are also exposed client-side
-    // public: {
-    //   apiBase: '/api'
-    // }
+    public: {
+      googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
+      googleClientSecret: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_SECRET,
+    }
   },
   app: {
     head: {

@@ -73,6 +73,9 @@ const mainLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Dashboard',
     },
+    ui: {
+      linkLabel: 'xl:text-sm 2xl:text-lg', // Responsive text size
+    }
   },
   {
     label: 'Analytics',
@@ -82,6 +85,9 @@ const mainLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Analytics',
     },
+    ui: {
+      linkLabel: 'xl:text-sm 2xl:text-lg', // Responsive text size
+    }
   },
   {
     label: 'Messages',
@@ -91,6 +97,9 @@ const mainLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Messages',
     },
+    ui: {
+      linkLabel: 'xl:text-sm 2xl:text-lg', // Responsive text size
+    }
   },
 ]
 

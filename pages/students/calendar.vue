@@ -153,6 +153,42 @@ async function fetchCalendarEvents(accessToken) {
   });
 }
 
+const googleAccessToken = ref(1)
+const runtimeConfig = useRuntimeConfig();
+
+async function refreshGoogleToken() {
+  const storedRefreshToken = window.localStorage.getItem('oauth_provider_refresh_token')
+  
+  const response = await fetch('https://www.googleapis.com/oauth2/v3/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: runtimeConfig.public.googleClientId,
+      client_secret: runtimeConfig.public.googleClientSecret,
+      refresh_token: storedRefreshToken,
+      grant_type: 'refresh_token',
+    })
+  })
+
+  const dataGoogle = await response.json()
+  googleAccessToken.value = dataGoogle.access_token
+  console.log("New access token: ", googleAccessToken.value)
+  return dataGoogle.access_token
+}
+
+// Watch the token, refresh if undefined
+watch(googleAccessToken, async (newToken) => {
+  if (!newToken) {
+    console.log('Access token is undefined, refreshing...')
+    try {
+      await refreshGoogleToken()
+      await fetchCalendarEvents(googleAccessToken.value)
+    } catch (error) {
+      console.error('Failed to refresh Google token', error)
+    }
+  }
+}, { immediate: true })
+
 onMounted(async () => {
     handleResize();
   
@@ -160,11 +196,11 @@ onMounted(async () => {
     // Initialize the calendar only after the DOM is fully loaded
     calendarApp = createCalendar(config);
     
-    const { data: { session } } = await supabase.auth.getSession();
-    const accessToken = session?.provider_token;
+    const { data: { session } } = await supabase.auth.getSession()
+    googleAccessToken.value = session?.provider_token || null
 
-    if (accessToken) {
-        await fetchCalendarEvents(accessToken);
+    if (googleAccessToken.value) {
+        await fetchCalendarEvents(googleAccessToken.value);
     }
 });
 </script>

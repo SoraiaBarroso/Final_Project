@@ -16,7 +16,7 @@ const userLoading = ref(true);
 const open = ref(false);
 
 const styleNav = computed(() => {
-  return isCollapsed.value ? 'w-10 flex items-center mt-2' : 'w-48';
+  return isCollapsed.value ? 'w-10 flex items-center mt-2' : 'xl:w-48 2xl:w-56';
 });
 
 const styleContainer = computed(() => {
@@ -31,6 +31,9 @@ const items = computed<DropdownMenuItem[][]>(() => [
         src: userImg.value,
       },
       type: 'label',
+      ui: {
+        label: 'xl:text-sm 2xl:text-lg', // Responsive text size
+      }
     },
   ],
   [
@@ -54,6 +57,9 @@ const mainLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Home',
     },
+    ui: {
+      linkLabel: 'xl:text-sm 2xl:text-lg', // Responsive text size
+    }
   },
   {
     label: 'Calendar',
@@ -63,6 +69,9 @@ const mainLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Calendar',
     },
+    ui: {
+      linkLabel: 'xl:text-sm 2xl:text-lg', // Responsive text size
+    }
   },
   {
     label: 'Timeline',
@@ -72,6 +81,9 @@ const mainLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Timeline',
     },
+    ui: {
+      linkLabel: 'xl:text-sm 2xl:text-lg', // Responsive text size
+    }
   },
 ];
 
@@ -84,6 +96,9 @@ const secondaryLinks: NavigationMenuItem[] = [
     tooltip: {
       text: 'Write issue on GitHub',
     },
+    ui: {
+      linkLabel: 'xl:text-sm 2xl:text-lg', // Responsive text size
+    }
   },
 ];
 
@@ -113,8 +128,8 @@ watch(
   <div class="flex flex-row min-h-screen">
     <div :class="styleContainer" class="flex flex-col gap-2 pt-6 pb-2 px-2 border-r-[1.5px] border-border dark:border-neutral-700 h-screen flex-shrink-0">
       <div :class="isCollapsed ? 'justify-center' : 'justify-start'" class="flex items-center gap-2 w-full">
-        <img v-if="!isCollapsed" src="../public/favicon.png" alt="Logo" class="w-5 h-5 ml-2" />
-        <p v-if="!isCollapsed" class="text-currentColor font-semibold text-sm">Amsterdam Tech</p>
+        <img v-if="!isCollapsed" src="../public/favicon.png" alt="Logo" class="xl:w-5 xl:h-5 ml-2" />
+        <p v-if="!isCollapsed" class="text-currentColor font-semibold xl:text-sm 2xl:text-lg">Amsterdam Tech</p>
         <UIcon @click="isCollapsed = !isCollapsed" v-if="!isCollapsed" name="i-lucide-panel-left-close" class="size-5 cursor-pointer ml-auto" />
         <UIcon v-else name="i-lucide-panel-left-open" class="size-5 cursor-pointer" @click="isCollapsed = !isCollapsed" />
       </div>
@@ -145,12 +160,12 @@ watch(
         v-model:open="open"
         :items="items"
         :ui="{
-          content: 'w-48',
+          content: 'xl:w-48 2xl:w-56',
         }"
       >
-        <div class="flex items-center justify-center cursor-pointer hover:bg-gray-100 gap-2 w-full py-1 rounded-md transition delay-100 pl-2 pr-1">
+        <div :class="isCollapsed ? 'pl-1' : 'pl-2'" class="flex items-center justify-center cursor-pointer hover:bg-gray-100 gap-2 w-full py-1 rounded-md transition delay-100 pr-1">
           <UAvatar alt="User Avatar" size="2xs" :src="userImg" />
-          <p v-if="!isCollapsed" class="text-currentColor font-semibold text-sm">{{ userName }}</p>
+          <p v-if="!isCollapsed" class="text-currentColor font-semibold xl:text-sm 2xl:text-lg">{{ userName }}</p>
           <UIcon v-if="!isCollapsed" name="i-lucide-chevrons-up-down" class="size-4 text-muted ml-auto" />
         </div>
       </UDropdownMenu>
