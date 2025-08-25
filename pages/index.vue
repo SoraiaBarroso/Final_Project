@@ -9,21 +9,33 @@ const supabase = useSupabaseClient()
 const route = useRoute()
 const isErrorVisible = ref(false)
 
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log("Auth state changed:", event, session)
+  if (session && session.provider_token) {
+    window.localStorage.setItem('oauth_provider_token', session.provider_token)
+  }
+  if (session && session.provider_refresh_token) {
+    window.localStorage.setItem('oauth_provider_refresh_token', session.provider_refresh_token)
+  }
+  if (event === 'SIGNED_OUT') {
+    window.localStorage.removeItem('oauth_provider_token')
+    window.localStorage.removeItem('oauth_provider_refresh_token')
+  }
+})
+
 const signInWithOAuth = async () => {
-    console.log("Signing in with OAuth for email:")
-    const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          scopes: 'https://www.googleapis.com/auth/calendar.readonly',
-          redirectTo: 'http://localhost:3000/auth/confirm' // Redirect to confirm page after authentication
-        }
-    })
-    if (error) {
-        console.log("Authentication error:", error);
-        navigateTo('/?error=domain');
-    } else {
-        console.log("User signed in successfully (or will be redirected to confirm page)");
-    }
+  const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        scopes: 'https://www.googleapis.com/auth/calendar.readonly',
+        redirectTo: 'http://localhost:3000/auth/confirm', // Redirect to confirm page after authentication
+        queryParams: { access_type: 'offline', prompt: 'consent' }
+      }
+  })
+  if (error) {
+      console.log("Authentication error:", error);
+      navigateTo('/?error=domain');
+  } 
 }
 
 watch(() => route, () => {
@@ -31,14 +43,6 @@ watch(() => route, () => {
       isErrorVisible.value = true;
     }
 }, { immediate: true })
-
-onMounted(async () => {
-    // This page is for performing authentication
-    console.log("Authentication page loaded");
-    // Force clear any cached layout
-    // clearNuxtData();
-    // await nextTick();
-});
 </script>
 
  
