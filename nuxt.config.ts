@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/ui', '@nuxt/icon', '@nuxtjs/supabase'],
   css: ['~/assets/css/main.css'],
+  ui: {
+    colorMode: false
+  },
   supabase: {
     redirectOptions: {
       login: '/', // User will be redirected to this path if not authenticated or after logout.

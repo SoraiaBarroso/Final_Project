@@ -30,7 +30,6 @@ async function fetchOverallProgress(studentId) {
 }
 
 function getTimeRange(period = 'week') {
-  const now = new Date();
   let timeMin = new Date();
   let timeMax = new Date();
 
@@ -51,6 +50,9 @@ function getTimeRange(period = 'week') {
     // Set to beginning of next month
     timeMax.setMonth(timeMax.getMonth() + 1, 1);
     timeMax.setHours(0, 0, 0, 0);
+  } else if (period === 'day') {
+    timeMin.setHours(0, 0, 0, 0);
+    timeMax.setHours(23, 59, 59, 999);
   }
 
   return {
@@ -141,7 +143,7 @@ async function fetchStudentData() {
 }
 
 // TODO DISPLAY EVENTS THIS WEEK
-async function fetchCalendarEvents(accessToken, period = 'week') {
+async function fetchCalendarEvents(accessToken, period = 'today') {
   const { timeMin, timeMax } = getTimeRange(period);
 
   const res = await fetch(
@@ -197,6 +199,25 @@ watch(googleAccessToken, async (newToken) => {
   }
 }, { immediate: true })
 
+const deadline = new Date(Date.now() + 10 * 60 * 60 * 1000); // 10 hours from now
+const now = ref(new Date());
+const totalSeconds = Math.floor((deadline - new Date()) / 1000);
+
+const countdown = ref(totalSeconds);
+
+const hours = computed(() => Math.floor(countdown.value / 3600));
+const minutes = computed(() => Math.floor((countdown.value % 3600) / 60));
+const seconds = computed(() => countdown.value % 60);
+
+onMounted(() => {
+  const interval = setInterval(() => {
+    now.value = new Date();
+    const left = Math.floor((deadline - now.value) / 1000);
+    countdown.value = left > 0 ? left : 0;
+  }, 1000);
+  onUnmounted(() => clearInterval(interval));
+});
+
 onMounted(async () => {
   const { data: { session } } = await supabase.auth.getSession()
   googleAccessToken.value = session?.provider_token || null
@@ -217,83 +238,134 @@ const value = ref(80)
 <template>
   <div class="student_data flex h-screen background justify-between">
     
-    <div class="flex flex-col xl:pl-10 xl:pr-0 2xl:px-10 2xl:w-[40%] xl:w-[45%] h-full pt-8 xl:pb-3 2xl:pb-10">
+    <div class="flex flex-col xl:pl-10 xl:pr-0 2xl:px-6 2xl:w-[45%] xl:w-[45%] h-full pt-6 xl:pb-3 2xl:pb-10">
       
       <div class="flex mb-4 justify-start items-center gap-3">
-        <h1 class="xl:text-4xl 2xl:text-6xl text-black/80 font-semibold">Hello, </h1>
-        <span class="xl:text-4xl font-semibold 2xl:text-6xl text-black/80">{{ studentData.first_name }} 👋</span>
+        <h1 class="xl:text-4xl 2xl:text-3xl text-black/80 font-semibold">Hello, </h1>
+        <span class="xl:text-4xl font-semibold 2xl:text-3xl text-black/80">{{ studentData.first_name }}! 👋</span>
       </div>
 
-      <p class="text-muted text-base 2xl:text-2xl xl:mt-2 2xl:mt-8">Nice to have you back, what an exciting day!</p>
-      <p class="text-muted xl:pt-2 2xl:pt-2 text-base 2xl:text-2xl 2xl:mb-2">Get ready and check the calendar for this week</p>
+      <p class="text-muted text-base 2xl:text-lg xl:mt-2 2xl:mt-1">Nice to have you back, what an exciting day!</p>
+      <p class="text-muted text-base 2xl:text-lg 2xl:mb-2">Get ready and check uour projects today.</p>
 
+      <div class="flex justify-between items-center 2xl:mt-8">
+        <h2 class="text-black/80 font-semibold 2xl:text-xl">Today's meetings</h2>
+        <nuxtLink to="/students/calendar" class="text-blue-500 flex items-center gap-3 event_card">
+          View all meetings
+           <svg id="arrow" class="fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+              <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
+            </svg>
+        </nuxtLink>
+      </div>
       <UCard
-          variant=""
           :ui="{
-            root: 'events h-full overflow-y-auto rounded-lg relative p-0',
+            root: 'events overflow-y-auto rounded-lg relative p-0',
             body: 'p-0'
           }"
           class="2xl:mt-6 xl:mt-4 "
         >
-          <div 
-            v-for="(dayEvents, dayName) in groupEventsByDay(calendarEvents)" 
-            :key="dayName"
-            class="mb-8 last-of-type:mb-0"
-            v-if="calendarEvents.length > 0"
-          >
-            <h3 class="xl:text-lg 2xl:text-xl font-semibold text-black/90 ml-0.5 mb-3">{{ dayName }}</h3>
-            
-            <UCard 
-              v-for="event in dayEvents" 
-              :key="event.id" 
-              class="event_card mb-3 hover:border-blue-500 cursor-pointer transition-colors duration-200"
-              variant="outline"
-              :ui="{
-                body: 'xl:!px-4 xl:!py-4 flex items-center justify-between'
-              }"
+        <UCard 
+          v-if="calendarEvents.length > 0"
+          v-for="event in calendarEvents" 
+          :key="event.id" 
+          class="event_card mb-3 hover:border-blue-500 cursor-pointer transition-colors duration-200"
+          variant="outline"
+          :ui="{
+            body: 'xl:!px-4 xl:!py-4 flex items-center justify-between'
+          }"
+        >
+          <template #default>
+            <a
+              :href="event.location"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="pr-4 gap-4 flex items-center justify-between w-full h-full no-underline"
+              style="color: inherit;"
             >
-              <template #default>
-                <a
-                  :href="event.location"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="pr-4 gap-4 flex items-center justify-between w-full h-full no-underline"
-                  style="color: inherit;"
-                >
-                  <!-- <div class="h-12 w-1 rounded-full bg-blue-400"></div> -->
-                  <div class="w-full">
-                    <div class="font-medium text-gray-800 xl:text-base 2xl:text-base">{{ event.summary }}</div>
-                    <div class="xl:text-sm 2xl:text-sm text-muted mt-2">
-                      {{ formatEventTime(event.start?.dateTime || event.originalStartTime?.dateTime) }}
-                    </div>
-                  </div>
-                  <div>
-                    <svg id="arrow" class="fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 12 12">
-                      <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
-                    </svg>
-                  </div>
-                </a>
-              </template>
-            </UCard>
-
-          </div>
-        <div v-else class="text-gray-500 text-center py-8">
-          No events scheduled for this week
+              <!-- <div class="h-12 w-1 rounded-full bg-blue-400"></div> -->
+              <div class="w-full">
+                <div class="font-medium text-gray-800 xl:text-base 2xl:text-base">{{ event.summary }}</div>
+                <div class="xl:text-sm 2xl:text-sm text-muted mt-2">
+                  {{ formatEventTime(event.start?.dateTime || event.originalStartTime?.dateTime) }}
+                </div>
+              </div>
+              <div>
+                <svg id="arrow" class="fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 12 12">
+                  <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
+                </svg>
+              </div>
+            </a>
+          </template>
+        </UCard>
+        <div v-else class="text-gray-500 text-center py-2">
+          No events scheduled for today
         </div>
       </UCard>
 
+      <div class="flex justify-between items-center 2xl:mt-8">
+        <h2 class="text-black/80 font-semibold 2xl:text-xl">Upcoming deadlines</h2>
+        <nuxtLink to="/test" class="text-blue-500 flex items-center gap-3 event_card">
+          View Timeline
+           <svg id="arrow" class="fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+              <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
+            </svg>
+        </nuxtLink>
+      </div>
+
+      <div class="flex flex-col">
+        <div class="flex gap-6">
+          <UCard 
+            class="event_card mt-6 bg-[#faab0e] hover:border-blue-500 cursor-pointer transition-colors duration-200 w-[50%]"
+            variant="none"
+            :ui="{
+              body: 'xl:!px-4 xl:!py-4 2xl:!py-4 2xl:!px-4 flex flex-col items-start'
+            }"
+          >
+          <h1 class="text-white font-semibold 2xl:text-xl">My Ls</h1>
+          <p class="text-white/90 text-sm pt-1">Season 02</p>
+          <span class="countdown font-semibold text-xl text-white mt-6 ml-auto">
+            <span :style="`--value:${hours}`" aria-live="polite" :aria-label="hours">{{ hours }}</span> h
+            <span :style="`--value:${minutes}`" aria-live="polite" :aria-label="minutes">{{ minutes }}</span> m
+            <span :style="`--value:${seconds}`" aria-live="polite" :aria-label="seconds">{{ seconds }}</span> s
+          </span>
+          </UCard>
+
+          <UCard 
+            class="event_card mt-6 bg-[#A374FF] hover:border-blue-500 cursor-pointer transition-colors duration-200 w-[60%]"
+            variant="none"
+            :ui="{
+              body: 'xl:!px-4 xl:!py-4 2xl:!py-4 2xl:!px-4 flex flex-col items-start'
+            }"
+          >
+            <h1 class="text-white font-semibold 2xl:text-xl text-nowrap">My Mastermind</h1>
+            <p class="text-white/90 text-sm pt-1">Season 01</p>
+            <p class="font-semibold text-xl text-white mt-6 ml-auto">2 days</p>
+          </UCard>
+        </div>
+        <UCard 
+            class="event_card mt-6 bg-[#1775f1] hover:border-blue-500 cursor-pointer transition-colors duration-200 w-full"
+            variant="none"
+            :ui="{
+              body: 'xl:!px-4 xl:!py-4 2xl:!py-4 2xl:!px-4 flex flex-col items-start'
+            }"
+          >
+          <h1 class="text-white font-semibold 2xl:text-xl text-nowrap">Season 03 Software Engineering</h1>
+          <p class="text-white/90 text-sm pt-1">Season 03</p>
+          <p class="font-semibold text-xl text-white mt-6 ml-auto">20 days</p>
+        </UCard>
+      </div>
     </div>
 
-    <div class="2xl:w-[60%] xl:w-[55%] flex justify-center items-center pt-8 pb-6 2xl:pb-6 xl:px-6 2xl:px-8">
+    <div class="2xl:w-[60%] xl:w-[55%] flex justify-center items-start pt-6 pr-2 pl-8">
       <UCard
         variant="outline"
         :ui="{
-          root: 'h-full w-full overflow-y-auto rounded-lg xl:px-6 2xl:px-14',
-          body: 'h-full w-full flex flex-col items-center justify-center gap-14'
+          root: 'h-[50%] w-full overflow-y-auto rounded-lg xl:px-6 2xl:px-14',
+          body: 'w-full flex flex-col items-center justify-center gap-14'
         }"
       >
         <!-- Header -->
-        <div class="flex 2xl:flex-col xl:flex-row items-center justify-between w-full text-center">
+        <div class="flex xl:flex-row items-center justify-between w-full text-center">
           
           <div class="flex items-center 2xl:flex-col xl:flex-row">
             <UAvatar size="3xl" :src="studentData.profile_image_url" icon="i-lucide-image" class="2xl:h-24 2xl:w-24 xl:h-14 xl:w-14"/>
@@ -306,7 +378,7 @@ const value = ref(80)
           <UBadge :color="colorChip" variant="subtle" size="xl">On Track</UBadge>
         </div>
 
-        <div class="grid grid-cols-2 grid-rows-2 xl:gap-6 2xl:gap-12 xl:h-[55%] 2xl:h-[50%] w-full">
+        <div class="grid grid-cols-2 grid-rows-2  w-full">
           
           <StatCard
             :value="studentData.completed_projects"
@@ -334,14 +406,14 @@ const value = ref(80)
           
         </div>
 
-        <div class="flex flex-col items-center justify-center w-full">
+        <!-- <div class="flex flex-col items-center justify-center w-full">
           <div class="flex justify-between items-center w-full mb-4">
             <p class="2xl:text-2xl xl:text-xl font-bold text-black/80">Overall Progress</p>
             <p class="text-muted mt-2">{{ studentData.progress }}%</p>
           </div>
 
           <UProgress color="success" v-model="studentData.progress" />
-        </div>
+        </div> -->
       </UCard>
     </div>
   </div>
