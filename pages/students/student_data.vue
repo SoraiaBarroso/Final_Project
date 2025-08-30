@@ -1,6 +1,7 @@
 <script setup>
 import { UIcon } from '#components';
 import StatCard from '~/components/students/StatCard.vue';
+import DeadlinesCard from '~/components/students/DeadlinesCard.vue';
 
 definePageMeta({
   layout: 'custom',
@@ -242,28 +243,23 @@ const value = ref(80)
       
       <div class="flex mb-4 justify-start items-center gap-3">
         <h1 class="xl:text-4xl 2xl:text-3xl text-black/80 font-semibold">Hello, </h1>
-        <span class="xl:text-4xl font-semibold 2xl:text-3xl text-black/80">{{ studentData.first_name }}! 👋</span>
+        <span class="xl:text-4xl font-semibold 2xl:text-3xl text-black/80">{{ studentData.first_name }}! <UIcon name="emojione:camel" class="w-8 h-8 ml-1"/></span>
       </div>
 
       <p class="text-muted text-base 2xl:text-lg xl:mt-2 2xl:mt-1">Nice to have you back, what an exciting day!</p>
-      <p class="text-muted text-base 2xl:text-lg 2xl:mb-2">Get ready and check uour projects today.</p>
+      <p class="text-muted text-base 2xl:text-lg 2xl:mb-2">Get ready and check your projects today</p>
 
-      <div class="flex justify-between items-center 2xl:mt-8">
+      <div class="flex justify-between items-center 2xl:mt-6">
         <h2 class="text-black/80 font-semibold 2xl:text-xl">Today's meetings</h2>
-        <nuxtLink to="/students/calendar" class="text-blue-500 flex items-center gap-3 event_card">
+        <nuxtLink to="/students/calendar" class="text-[#0D47A1] flex items-center gap-3 event_card">
           View all meetings
-           <svg id="arrow" class="fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+           <svg id="arrow" class="fill-[#0D47A1]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
               <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
             </svg>
         </nuxtLink>
       </div>
-      <UCard
-          :ui="{
-            root: 'events overflow-y-auto rounded-lg relative p-0',
-            body: 'p-0'
-          }"
-          class="2xl:mt-6 xl:mt-4 "
-        >
+
+      <div class="mt-4 flex justify-center">
         <UCard 
           v-if="calendarEvents.length > 0"
           v-for="event in calendarEvents" 
@@ -297,63 +293,41 @@ const value = ref(80)
             </a>
           </template>
         </UCard>
-        <div v-else class="text-gray-500 text-center py-2">
-          No events scheduled for today
-        </div>
-      </UCard>
+        <UCard
+          v-else
+          variant="outline"
+          class="flex justify-center items-center w-full mt-2"
+          :ui="{
+            body: 'w-full flex flex-col items-center justify-center gap-4'
+          }"
+        >
+          <div class="text-gray-500 text-center flex flex-col justify-center items-center">
+            <div class="bg-elevated/60 p-3 rounded-full flex justify-center items-center mb-4">
+              <UIcon name="emojione:tear-off-calendar" class="w-9 h-9 text-muted" />
+            </div>
+            <p>No events scheduled for today</p>
+            <p>Great time to keep working on your projects</p>
+          </div>
+        </UCard>
+      </div>
 
-      <div class="flex justify-between items-center 2xl:mt-8">
+      <div class="flex justify-between items-center 2xl:my-8">
         <h2 class="text-black/80 font-semibold 2xl:text-xl">Upcoming deadlines</h2>
-        <nuxtLink to="/test" class="text-blue-500 flex items-center gap-3 event_card">
+        <nuxtLink to="/test" class="text-[#0D47A1] flex items-center gap-3 event_card">
           View Timeline
-           <svg id="arrow" class="fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+           <svg id="arrow" class="fill-[#0D47A1]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
               <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
             </svg>
         </nuxtLink>
-      </div>
-
-      <div class="flex flex-col">
-        <div class="flex gap-6">
-          <UCard 
-            class="event_card mt-6 bg-[#faab0e] hover:border-blue-500 cursor-pointer transition-colors duration-200 w-[50%]"
-            variant="none"
-            :ui="{
-              body: 'xl:!px-4 xl:!py-4 2xl:!py-4 2xl:!px-4 flex flex-col items-start'
-            }"
-          >
-          <h1 class="text-white font-semibold 2xl:text-xl">My Ls</h1>
-          <p class="text-white/90 text-sm pt-1">Season 02</p>
-          <span class="countdown font-semibold text-xl text-white mt-6 ml-auto">
-            <span :style="`--value:${hours}`" aria-live="polite" :aria-label="hours">{{ hours }}</span> h
-            <span :style="`--value:${minutes}`" aria-live="polite" :aria-label="minutes">{{ minutes }}</span> m
-            <span :style="`--value:${seconds}`" aria-live="polite" :aria-label="seconds">{{ seconds }}</span> s
-          </span>
-          </UCard>
-
-          <UCard 
-            class="event_card mt-6 bg-[#A374FF] hover:border-blue-500 cursor-pointer transition-colors duration-200 w-[60%]"
-            variant="none"
-            :ui="{
-              body: 'xl:!px-4 xl:!py-4 2xl:!py-4 2xl:!px-4 flex flex-col items-start'
-            }"
-          >
-            <h1 class="text-white font-semibold 2xl:text-xl text-nowrap">My Mastermind</h1>
-            <p class="text-white/90 text-sm pt-1">Season 01</p>
-            <p class="font-semibold text-xl text-white mt-6 ml-auto">2 days</p>
-          </UCard>
-        </div>
-        <UCard 
-            class="event_card mt-6 bg-[#1775f1] hover:border-blue-500 cursor-pointer transition-colors duration-200 w-full"
-            variant="none"
-            :ui="{
-              body: 'xl:!px-4 xl:!py-4 2xl:!py-4 2xl:!px-4 flex flex-col items-start'
-            }"
-          >
-          <h1 class="text-white font-semibold 2xl:text-xl text-nowrap">Season 03 Software Engineering</h1>
-          <p class="text-white/90 text-sm pt-1">Season 03</p>
-          <p class="font-semibold text-xl text-white mt-6 ml-auto">20 days</p>
-        </UCard>
-      </div>
+      </div> 
+    
+      <DeadlinesCard
+        v-if="studentData"
+        :seasonId="studentData.expected_season_id"
+        :programId="studentData.program_id"
+        :cohortId="studentData.cohort_id" 
+      />
+       
     </div>
 
     <div class="2xl:w-[60%] xl:w-[55%] flex justify-center items-start pt-6 pr-2 pl-8">
@@ -399,7 +373,7 @@ const value = ref(80)
           />
 
           <StatCard
-            :value="studentData.points"
+            :value="studentData.points ?? 0"
             label="Qwasar Points"
             icon="fluent-emoji:trophy"
           />

@@ -24,6 +24,7 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@iconify-json/emojione": "^1.2.3",
     "@iconify-json/lucide": "^1.2.63"
   }
 }
