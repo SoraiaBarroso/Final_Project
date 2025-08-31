@@ -128,7 +128,7 @@ watch(
   <div class="flex flex-row min-h-screen">
     <div :class="styleContainer" class="flex flex-col gap-2 pt-6 pb-2 px-3 border-r-[1.5px] border-border dark:border-neutral-700 h-screen flex-shrink-0">
       <div :class="isCollapsed ? 'justify-center pb-2' : 'justify-start pl-2'" class="flex items-center gap-3 w-full mb-2">
-        <img src="../public/favicon.png" alt="Logo" class="xl:w-5 xl:h-5" />
+        <img src="../public/favicon.png" alt="Logo" class="xl:w-5 xl:h-5 w-5 h-5" />
         <p v-if="!isCollapsed" class="text-currentColor font-semibold xl:text-sm 2xl:text-lg">Amsterdam Tech</p>
         <!-- <UIcon @click="isCollapsed = !isCollapsed" v-if="!isCollapsed" name="i-lucide-panel-left-close" class="size-5 cursor-pointer ml-auto" /> -->
         <!-- <UIcon v-else name="i-lucide-panel-left-open" class="size-5 cursor-pointer" @click="isCollapsed = !isCollapsed" /> -->

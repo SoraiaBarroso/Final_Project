@@ -14,6 +14,52 @@ const supabase = useSupabaseClient()
 const runtimeConfig = useRuntimeConfig();
 const colorChip = computed(() => studentData.value.status ? { 'On Track': 'success', 'At Risk': 'warning', 'Behind': 'error', 'Unknown': 'neutral' }[studentData.value.status] : 'neutral')
 
+// Motivational tips/quotes for students
+const motivationTips = [
+  "Break large assignments into smaller tasks to avoid feeling overwhelmed.",
+  "Write pseudocode before jumping into actual coding — it saves time.",
+  "Review your class notes within 24 hours to reinforce memory.",
+  "Practice coding by hand occasionally; it strengthens problem-solving skills.",
+  "Use version control (like Git) early — it’s a must-have skill for developers.",
+  "Don’t just copy solutions; re-implement them from scratch to truly learn.",
+  "Test your code often; small tests prevent big headaches later.",
+  "Set a timer for focused study sessions (Pomodoro technique works well).",
+  "Balance theory with practice — apply concepts by building mini-projects.",
+  "Read error messages carefully; they often tell you exactly what’s wrong.",
+  "Collaborate with classmates — teaching a concept helps you master it.",
+  "Learn how to read documentation; it’s your best friend in the long run.",
+  "Stay organized with folders, naming conventions, and comments.",
+  "Focus on mastering fundamentals (data structures, algorithms, OOP).",
+  "Don’t procrastinate debugging; fix issues as soon as they appear.",
+  "Keep a 'bug journal' — write down common mistakes and how you solved them.",
+  "Ask for help when stuck, but try solving on your own first.",
+  "Take breaks and step away from the screen to clear your mind.",
+  "Keep practicing regularly; consistency beats cramming.",
+  "Remember: progress is better than perfection — just keep coding!"
+];
+
+
+const currentTip = ref("");
+const tipsRead = ref(0)
+
+function pickRandomTip() {
+  const idx = Math.floor(Math.random() * motivationTips.length);
+  currentTip.value = motivationTips[idx];
+  tipsRead.value++;
+}
+
+watch(tipsRead, (newVal) => {
+  if (newVal >= 5) {
+    // Trigger confetti animation
+    useConfetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    tipsRead.value = 0;
+  } 
+});
+
+const launchConfetti = () => {
+  useConfetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+}
+
 async function fetchOverallProgress(studentId) {
   const { data, error } = await supabase
     .from('student_season_progress')
@@ -82,22 +128,22 @@ function formatEventTime(dateTimeString) {
   });
 }
 
-function groupEventsByDay(events) {
-  const grouped = {};
+// function groupEventsByDay(events) {
+//   const grouped = {};
   
-  events.forEach(event => {
-    const dateTime = event.start?.dateTime || event.originalStartTime?.dateTime;
-    const dayKey = formatEventDate(dateTime);
+//   events.forEach(event => {
+//     const dateTime = event.start?.dateTime || event.originalStartTime?.dateTime;
+//     const dayKey = formatEventDate(dateTime);
     
-    if (!grouped[dayKey]) {
-      grouped[dayKey] = [];
-    }
+//     if (!grouped[dayKey]) {
+//       grouped[dayKey] = [];
+//     }
     
-    grouped[dayKey].push(event);
-  });
+//     grouped[dayKey].push(event);
+//   });
   
-  return grouped;
-}
+//   return grouped;
+// }
 
 // ...existing code...
 
@@ -231,15 +277,30 @@ onMounted(async () => {
   }
 
   await fetchStudentData()
+  pickRandomTip();
 })
 
-const value = ref(80)
+// Format last_login as 'x days/hours/minutes ago'
+function formatLastLogin(dateString) {
+  if (!dateString) return 'N/A';
+  const now = new Date();
+  const last = new Date(dateString);
+  const diffMs = now - last;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+  if (diffDay > 0) return diffDay === 1 ? '1 d ago' : `${diffDay}d ago`;
+  if (diffHour > 0) return diffHour === 1 ? '1 h ago' : `${diffHour}h ago`;
+  if (diffMin > 0) return diffMin === 1 ? '1 min ago' : `${diffMin}min ago`;
+  return 'just now';
+}
 </script>
 
 <template>
-  <div class="student_data flex h-screen background justify-between">
+  <div class="student_data flex background justify-between">
     
-    <div class="flex flex-col xl:pl-10 xl:pr-0 2xl:px-6 2xl:w-[45%] xl:w-[45%] h-full pt-6 xl:pb-3 2xl:pb-10">
+    <div class="flex flex-col xl:pl-10 xl:pr-0 2xl:px-6 px-8 2xl:w-1/2 xl:w-[45%] w-[45%] pt-6">
       
       <div class="flex mb-4 justify-start items-center gap-3">
         <h1 class="xl:text-4xl 2xl:text-3xl text-black/80 font-semibold">Hello, </h1>
@@ -311,7 +372,7 @@ const value = ref(80)
         </UCard>
       </div>
 
-      <div class="flex justify-between items-center 2xl:my-8">
+      <div class="flex justify-between items-center 2xl:mt-8">
         <h2 class="text-black/80 font-semibold 2xl:text-xl">Upcoming deadlines</h2>
         <nuxtLink to="/test" class="text-[#0D47A1] flex items-center gap-3 event_card">
           View Timeline
@@ -330,65 +391,88 @@ const value = ref(80)
        
     </div>
 
-    <div class="2xl:w-[60%] xl:w-[55%] flex justify-center items-start pt-6 pr-2 pl-8">
+    <div class="2xl:w-1/2 xl:w-[55%] w-[55%] flex flex-col gap-2 items-center pt-6 px-4">
       <UCard
         variant="outline"
         :ui="{
-          root: 'h-[50%] w-full overflow-y-auto rounded-lg xl:px-6 2xl:px-14',
-          body: 'w-full flex flex-col items-center justify-center gap-14'
+          root: 'w-full rounded-lg xl:px-6 2xl:px-4',
+          body: 'w-full flex flex-col items-center justify-center gap-12'
         }"
       >
         <!-- Header -->
-        <div class="flex xl:flex-row items-center justify-between w-full text-center">
+        <div class="flex items-center justify-between w-full text-center">
           
-          <div class="flex items-center 2xl:flex-col xl:flex-row">
-            <UAvatar size="3xl" :src="studentData.profile_image_url" icon="i-lucide-image" class="2xl:h-24 2xl:w-24 xl:h-14 xl:w-14"/>
-            <div class="xl:text-left 2xl:text-center xl:ml-6">
-              <p class="2xl:mt-4 2xl:text-xl xl:text-lg font-semibold text-black/90">{{ studentData.program_name }}</p>
+          <div class="flex items-center">
+            <UAvatar :src="studentData.profile_image_url" icon="i-lucide-image" class="2xl:w-14 2xl:h-14"/>
+            <div class="text-left 2xl:ml-4">
+              <p class="2xl:text-xl font-semibold text-black/90">{{ studentData.program_name }}</p>
               <p class="text-muted 2xl:text-lg xl:text-base">Cohort {{ studentData.cohort_name }}</p>
             </div>
           </div>
 
-          <UBadge :color="colorChip" variant="subtle" size="xl">On Track</UBadge>
+          <UBadge :color="colorChip" variant="subtle" size="xl" class="rounded-full">On Track</UBadge>
         </div>
 
-        <div class="grid grid-cols-2 grid-rows-2  w-full">
+        <div class="grid grid-cols-2 grid-rows-2 w-full 2xl:gap-8 gap-4">
           
           <StatCard
             :value="studentData.completed_projects"
             label="Projects Completed"
-            icon="fluent-emoji:desktop-computer"
+            icon="emojione:books"
           />
           
           <StatCard
             :value="studentData.exercises_completed"
             label="Exercises Completed"
-            icon="fluent-emoji:paperclip"
+            icon="emojione:green-book"
           />
 
           <StatCard
-            :value="studentData.last_login ? new Date(studentData.last_login).toLocaleDateString() : 'N/A'"
-            label="Last Logged"
-            icon="fluent-emoji:alarm-clock"
+            :value="formatLastLogin(studentData.last_login)"
+            label="Last Login"
+            icon="emojione:alien-monster"
           />
 
           <StatCard
             :value="studentData.points ?? 0"
             label="Qwasar Points"
-            icon="fluent-emoji:trophy"
+            icon="emojione:trophy"
           />
           
         </div>
 
-        <!-- <div class="flex flex-col items-center justify-center w-full">
+        <div class="flex flex-col items-center justify-center w-full">
           <div class="flex justify-between items-center w-full mb-4">
             <p class="2xl:text-2xl xl:text-xl font-bold text-black/80">Overall Progress</p>
-            <p class="text-muted mt-2">{{ studentData.progress }}%</p>
+            <p class="text-muted">{{ studentData.progress }}%</p>
           </div>
 
-          <UProgress color="success" v-model="studentData.progress" />
-        </div> -->
+          <UProgress color="info" v-model="studentData.progress" />
+        </div>
       </UCard>
+
+      <UCard
+        class="mt-6 w-full flex flex-col flex-1 min-h-0"
+        variant="outline"
+        :ui="{
+          root: 'w-full h-full flex-1 min-h-0 overflow-y-auto rounded-lg xl:px-6 2xl:px-2',
+          body: 'w-full flex flex-col items-center justify-center gap-6 h-full'
+        }"
+      >
+        <div class="flex justify-between items-center w-full">
+          <div class="flex justify-center items-center gap-4">
+            <div class="bg-gradient-to-r from-purple-500 to-pink-400 w-10 h-10 rounded-lg flex justify-center items-center">
+              <UIcon name="i-lucide:sparkles" class="w-6 h-6 text-white" />
+            </div>
+            <h2 class="2xl:text-2xl xl:text-xl font-bold text-black/80">Daily Tips</h2>
+          </div>
+          <UIcon name="i-lucide:refresh-cw" class="w-5 h-5 text-purple-500 cursor-pointer" @click="pickRandomTip" />
+        </div>
+        <p class="text-muted text-left w-full">
+          {{ currentTip }}
+        </p>
+      </UCard>
+
     </div>
   </div>
 </template>
