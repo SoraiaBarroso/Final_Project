@@ -94,7 +94,7 @@ watch(ready, async (isReady) => {
     const { data: projectData, error } = await supabase
         .from('projects')
         .select('*')
-        .eq('season_id', 'f21625b7-9328-4bbb-8336-00fe68249513') //f21625b7-9328-4bbb-8336-00fe68249513
+        .eq('season_id', props.seasonId)
         .eq('program_id', props.programId)
 
     projects.value = Array.isArray(projectData) ? projectData : []
@@ -113,7 +113,7 @@ watch(ready, async (isReady) => {
                 :class="['w-full', idx === 0 ? 'bg-[#E3F2FD]' : 'bg-[#B2DFDB]']"
                 variant="none"
                 :ui="{
-                    body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-5 flex flex-col items-start w-full h-32'
+                    body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-5 flex flex-col items-start w-full h-34'
                 }"
             >
                 <h3 :class="['font-semibold 2xl:text-xl', idx === 0 ? 'text-[#0D47A1]' : 'text-[#004D40]']">{{ project.name }}</h3>
@@ -123,13 +123,13 @@ watch(ready, async (isReady) => {
         </template>
 
         <template v-else>
-            <UCard class=" bg-white flex items-center justify-center w-full h-32">
+            <UCard class=" bg-white flex items-center justify-center w-full h-34">
                 <div class="bg-elevated/60 w-14 h-14 m-auto rounded-full flex justify-center items-center mb-4">
                     <UIcon name="emojione:file-cabinet" class="w-8 h-8" />
                 </div>
                 <p class="text-gray-500 text-center ">No upcoming project</p>
             </UCard>
-            <UCard class=" bg-white flex items-center justify-center w-full h-32">
+            <UCard class=" bg-white flex items-center justify-center w-full h-34">
                 <div class="bg-elevated/60 w-14 h-14 m-auto rounded-full flex justify-center items-center mb-4">
                     <UIcon name="emojione:file-cabinet" class="w-8 h-8" />
                 </div>
@@ -143,7 +143,7 @@ watch(ready, async (isReady) => {
         class="event_card mt-4 bg-[#C5CAE9] w-full"
         variant="none"
         :ui="{
-            body: 'xl:!px-4 xl:!py-4 2xl:!py-2 2xl:!px-4 flex flex-col items-start h-32'
+            body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-4 flex flex-col items-start h-34'
         }"
     >
         <h3 class="font-semibold 2xl:text-xl text-[#1A237E]">{{ season && season[0]?.name || 'Season' }}</h3>

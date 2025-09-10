@@ -8,6 +8,7 @@ definePageMeta({
   middleware: ["auth"]
 });
 
+
 const calendarEvents = ref([]);
 const studentData = ref({});
 const supabase = useSupabaseClient()
@@ -97,7 +98,7 @@ function getTimeRange(period = 'week') {
     // Set to beginning of next month
     timeMax.setMonth(timeMax.getMonth() + 1, 1);
     timeMax.setHours(0, 0, 0, 0);
-  } else if (period === 'day') {
+  } else if (period === 'today') {
     timeMin.setHours(0, 0, 0, 0);
     timeMax.setHours(23, 59, 59, 999);
   }
@@ -127,25 +128,6 @@ function formatEventTime(dateTimeString) {
     hour12: false 
   });
 }
-
-// function groupEventsByDay(events) {
-//   const grouped = {};
-  
-//   events.forEach(event => {
-//     const dateTime = event.start?.dateTime || event.originalStartTime?.dateTime;
-//     const dayKey = formatEventDate(dateTime);
-    
-//     if (!grouped[dayKey]) {
-//       grouped[dayKey] = [];
-//     }
-    
-//     grouped[dayKey].push(event);
-//   });
-  
-//   return grouped;
-// }
-
-// ...existing code...
 
 async function fetchProjectsCompleted(studentId) {
   const { count, error } = await supabase
@@ -252,10 +234,6 @@ const totalSeconds = Math.floor((deadline - new Date()) / 1000);
 
 const countdown = ref(totalSeconds);
 
-const hours = computed(() => Math.floor(countdown.value / 3600));
-const minutes = computed(() => Math.floor((countdown.value % 3600) / 60));
-const seconds = computed(() => countdown.value % 60);
-
 onMounted(() => {
   const interval = setInterval(() => {
     now.value = new Date();
@@ -304,7 +282,7 @@ function formatLastLogin(dateString) {
       
       <div class="flex mb-4 justify-start items-center gap-3">
         <h1 class="xl:text-4xl 2xl:text-3xl text-black/80 font-semibold">Hello, </h1>
-        <span class="xl:text-4xl font-semibold 2xl:text-3xl text-black/80">{{ studentData.first_name }}! <UIcon name="emojione:camel" class="w-8 h-8 ml-1"/></span>
+        <span class="xl:text-4xl font-semibold 2xl:text-3xl text-primary mb-0.5">{{ studentData.first_name }}! <UIcon name="emojione:camel" class="w-8 h-8 ml-1"/></span>
       </div>
 
       <p class="text-muted text-base 2xl:text-lg xl:mt-2 2xl:mt-1">Nice to have you back, what an exciting day!</p>
@@ -312,25 +290,35 @@ function formatLastLogin(dateString) {
 
       <div class="flex justify-between items-center 2xl:mt-6">
         <h2 class="text-black/80 font-semibold 2xl:text-xl">Today's meetings</h2>
-        <nuxtLink to="/students/calendar" class="text-[#0D47A1] flex items-center gap-3 event_card">
+        <nuxtLink to="/students/calendar" class="text-primary flex items-center gap-3 event_card">
           View all meetings
-           <svg id="arrow" class="fill-[#0D47A1]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+           <svg id="arrow" class="fill-primary" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
               <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
             </svg>
         </nuxtLink>
       </div>
+      
+      <div class="mt-6 flex flex-col justify-center">
 
-      <div class="mt-4 flex justify-center">
         <UCard 
-          v-if="calendarEvents.length > 0"
-          v-for="event in calendarEvents" 
-          :key="event.id" 
-          class="event_card mb-3 hover:border-blue-500 cursor-pointer transition-colors duration-200"
-          variant="outline"
+          v-if="calendarEvents.length > 0" 
+          class="events overflow-y-auto 2xl:max-h-68 w-full pr-2"
           :ui="{
-            body: 'xl:!px-4 xl:!py-4 flex items-center justify-between'
+            root: '2xl:!px-0',
+            body: '2xl:!px-2 2xl:!py-1'
           }"
+          variant="none"
         >
+          <UCard 
+            v-for="event in calendarEvents" 
+            :key="event.id" 
+            class="event_card mb-3 cursor-pointer"
+            variant="outline"
+            :ui="{
+              root: 'w-full h-30 border-l-5 border-info',
+              body: 'xl:!px-6 px-6 xl:!py-4 2xl:!py-6 flex items-center justify-between'
+            }"
+          >
           <template #default>
             <a
               :href="event.location"
@@ -339,12 +327,11 @@ function formatLastLogin(dateString) {
               class="pr-4 gap-4 flex items-center justify-between w-full h-full no-underline"
               style="color: inherit;"
             >
-              <!-- <div class="h-12 w-1 rounded-full bg-blue-400"></div> -->
               <div class="w-full">
-                <div class="font-medium text-gray-800 xl:text-base 2xl:text-base">{{ event.summary }}</div>
-                <div class="xl:text-sm 2xl:text-sm text-muted mt-2">
+                <h1 class="font-medium text-gray-800 xl:text-base 2xl:text-lg">{{ event.summary }}</h1>
+                <p class="xl:text-sm 2xl:text-base text-muted mt-2">
                   {{ formatEventTime(event.start?.dateTime || event.originalStartTime?.dateTime) }}
-                </div>
+                </p>
               </div>
               <div>
                 <svg id="arrow" class="fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 12 12">
@@ -353,7 +340,9 @@ function formatLastLogin(dateString) {
               </div>
             </a>
           </template>
+          </UCard>
         </UCard>
+        
         <UCard
           v-else
           variant="outline"
@@ -371,6 +360,7 @@ function formatLastLogin(dateString) {
           </div>
         </UCard>
       </div>
+
 
       <div class="flex justify-between items-center 2xl:mt-8">
         <h2 class="text-black/80 font-semibold 2xl:text-xl">Upcoming deadlines</h2>

@@ -2,11 +2,12 @@
 import { useRoute } from 'vue-router';
 import type { NavigationMenuItem } from '@nuxt/ui';
 import type { DropdownMenuItem } from '@nuxt/ui';
-
 import { onMounted, watch } from 'vue';
 
 const supabase = useSupabaseClient();
 const route = useRoute();
+const colorMode = useColorMode()
+const appConfig = useAppConfig()
 
 const isCollapsed = ref(false);
 const active = ref();
@@ -15,6 +16,8 @@ const userImg = ref('');
 const userLoading = ref(true);
 const open = ref(false);
 
+const colors = ['neutral', 'red','orange','amber','yellow','lime','green','emerald','teal','cyan','sky','blue','indigo','violet','purple','fuchsia','pink','rose']
+
 const styleNav = computed(() => {
   return isCollapsed.value ? 'w-10 flex items-center mt-2' : 'xl:w-48 2xl:w-54';
 });
@@ -22,6 +25,7 @@ const styleNav = computed(() => {
 const styleContainer = computed(() => {
   return isCollapsed.value ? 'flex items-center' : 'flex items-end';
 });
+
 
 const items = computed<DropdownMenuItem[][]>(() => [
   [
@@ -38,17 +42,65 @@ const items = computed<DropdownMenuItem[][]>(() => [
   ],
   [
     {
+      label: 'Theme',
+      icon: 'i-lucide-palette',
+      children: [
+        {
+          label: 'Primary',
+          slot: 'chip',
+          chip: appConfig.ui.colors.primary,
+          children: colors.map(color => ({
+            label: color,
+            chip: color,
+            slot: 'chip',
+            type: 'checkbox',
+            checked: appConfig.ui.colors.primary === color,
+            onSelect: (e) => {
+              e.preventDefault()
+              appConfig.ui.colors.primary = color
+            }
+          }))
+        },
+      ]
+    },
+    {
+      label: 'Appearance',
+      icon: 'i-lucide-sun-moon',
+      children: [
+        {
+          label: 'Light',
+          icon: 'i-lucide-sun',
+          type: 'checkbox',
+          checked: colorMode.value === 'light',
+          onSelect(e: Event) {
+            e.preventDefault()
+            colorMode.preference = 'light'
+          }
+        },
+        {
+          label: 'Dark',
+          icon: 'i-lucide-moon',
+          type: 'checkbox',
+          checked: colorMode.value === 'dark',
+          onSelect(e: Event) {
+            e.preventDefault()
+            colorMode.preference = 'dark'
+          }
+        }
+      ]
+    } ,
+    {
       label: 'Logout',
       onClick: async () => {
-        await supabase.auth.signOut();
-        navigateTo('/');
+        await supabase.auth.signOut()
+        navigateTo('/')
       },
       icon: 'i-lucide-log-out',
       kbds: ['shift', 'meta', 'q'],
     },
-  ],
-]);
-
+  ]
+])
+  
 const mainLinks: NavigationMenuItem[] = [
   {
     label: 'Home',
@@ -135,7 +187,7 @@ watch(
       </div>
 
       <UNavigationMenu
-        color="info"
+        color="primary"
         v-model="active"
         :tooltip="isCollapsed"
         :collapsed="isCollapsed"
@@ -146,7 +198,7 @@ watch(
       />
 
       <UNavigationMenu
-        color="info"
+        color="primary"
         v-model="active"
         :tooltip="isCollapsed"
         :collapsed="isCollapsed"
@@ -168,15 +220,25 @@ watch(
           <p v-if="!isCollapsed" class="text-currentColor font-semibold xl:text-sm 2xl:text-base">{{ userName }}</p>
           <UIcon v-if="!isCollapsed" name="i-lucide-chevrons-up-down" class="size-4 text-muted ml-auto" />
         </div>
+        <template #chip-leading="{ item }: { item: { chip: string } }">
+          <span
+            :style="{
+              '--chip-light': `var(--color-${item.chip}-500, #ccc)`,
+              '--chip-dark': `var(--color-${item.chip}-400, #888)`
+            }"
+            class="ms-0.5 size-2 rounded-full bg-[var(--chip-light)] dark:bg-[var(--chip-dark)]"
+          />
+        </template>
       </UDropdownMenu>
     </div>
     <main class="flex-1 h-screen overflow-y-auto">
       <div class="w-full h-18 border-b border-border flex justify-between items-center px-6 sticky top-0 z-10 bg-white">
         <div class="flex items-center gap-4">
-          <UIcon @click="isCollapsed = !isCollapsed" name="i-lucide-panel-left-close" class="size-5 cursor-pointer" />
+          <UIcon v-if="!isCollapsed" @click="isCollapsed = !isCollapsed" name="i-lucide-panel-left-close" class="size-5 cursor-pointer" />
+          <UIcon v-else name="i-lucide-panel-left-open" class="size-5 cursor-pointer" @click="isCollapsed = !isCollapsed" /> 
           <h1 class="2xl:text-lg font-semibold">Home</h1>
         </div>
-        <UIcon name="i-lucide-bell" class="size-5 cursor-pointer cursor-pointer"/>
+        <UIcon name="i-lucide-bell" class="size-5 cursor-pointer"/>
       </div>
       <slot />
     </main>
