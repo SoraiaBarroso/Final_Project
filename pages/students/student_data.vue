@@ -276,26 +276,20 @@ function formatLastLogin(dateString) {
 </script>
 
 <template>
-  <div class="student_data flex background justify-between">
-    
-    <div class="flex flex-col xl:pl-10 xl:pr-0 2xl:px-6 px-8 2xl:w-1/2 xl:w-[45%] w-[45%] pt-6">
-      
+  <div class="student_data h-full flex justify-between py-8">
+
+    <div class="flex flex-col xl:pl-10 2xl:px-6 px-8 2xl:w-1/2 xl:w-[45%] w-[45%]">
+
       <div class="flex mb-4 justify-start items-center gap-3">
         <h1 class="xl:text-4xl 2xl:text-3xl text-black/80 font-semibold">Hello, </h1>
-        <span class="xl:text-4xl font-semibold 2xl:text-3xl text-primary mb-0.5">{{ studentData.first_name }}! <UIcon name="emojione:camel" class="w-8 h-8 ml-1"/></span>
+        <span class="xl:text-4xl font-semibold 2xl:text-3xl text-primary-500">{{ studentData.first_name }}! <UIcon name="emojione:camel" size="32" class="ml-2"/></span>
       </div>
 
       <p class="text-muted text-base 2xl:text-lg xl:mt-2 2xl:mt-1">Nice to have you back, what an exciting day!</p>
-      <p class="text-muted text-base 2xl:text-lg 2xl:mb-2">Get ready and check your projects today</p>
+      <p class="text-muted text-base 2xl:text-lg mt-1 2xl:mb-2">Get ready and check your projects today</p>
 
       <div class="flex justify-between items-center 2xl:mt-6">
-        <h2 class="text-black/80 font-semibold 2xl:text-xl">Today's meetings</h2>
-        <nuxtLink to="/students/calendar" class="text-primary flex items-center gap-3 event_card">
-          View all meetings
-           <svg id="arrow" class="fill-primary" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
-              <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
-            </svg>
-        </nuxtLink>
+        <h2 class="text-black/80 font-semibold 2xl:text-2xl">Today's meetings</h2>
       </div>
       
       <div class="mt-6 flex flex-col justify-center">
@@ -352,21 +346,24 @@ function formatLastLogin(dateString) {
           }"
         >
           <div class="text-gray-500 text-center flex flex-col justify-center items-center">
-            <div class="bg-elevated/60 p-3 rounded-full flex justify-center items-center mb-4">
-              <UIcon name="emojione:tear-off-calendar" class="w-9 h-9 text-muted" />
+            <div class="bg-primary-200 border-1 border-primary-300 p-3 rounded-full flex justify-center items-center mb-4">
+              <UIcon name="i-lucide-lab:mailbox-flag" size="30" class="text-primary-800" />
             </div>
-            <p>No events scheduled for today</p>
-            <p>Great time to keep working on your projects</p>
+            <p class="text-black/80 font-semibold text-lg">No events today</p>
+            <p class="mt-1">Perfect time to focus on your projects</p>
+            <UButton class="mt-6 px-4 bg-white border-1 border-muted text-black/80 cursor-pointer py-2 rounded-lg hover:bg-elevated/60 transition" @click="$router.push('/students/calendar')">
+              View Calendar
+            </UButton>
           </div>
         </UCard>
       </div>
 
 
       <div class="flex justify-between items-center 2xl:mt-8">
-        <h2 class="text-black/80 font-semibold 2xl:text-xl">Upcoming deadlines</h2>
-        <nuxtLink to="/test" class="text-[#0D47A1] flex items-center gap-3 event_card">
+        <h2 class="text-black/80 font-semibold 2xl:text-2xl">Upcoming deadlines</h2>
+        <nuxtLink to="/test" class="text-muted flex items-center gap-3 event_card">
           View Timeline
-           <svg id="arrow" class="fill-[#0D47A1]" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
+           <svg id="arrow" class="fill-muted" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
               <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
             </svg>
         </nuxtLink>
@@ -381,7 +378,7 @@ function formatLastLogin(dateString) {
        
     </div>
 
-    <div class="2xl:w-1/2 xl:w-[55%] w-[55%] flex flex-col gap-2 items-center pt-6 px-4">
+    <div class="2xl:w-1/2 xl:w-[55%] w-[55%] flex flex-col gap-2 items-center px-4">
       <UCard
         variant="outline"
         :ui="{

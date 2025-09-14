@@ -94,7 +94,7 @@ watch(ready, async (isReady) => {
     const { data: projectData, error } = await supabase
         .from('projects')
         .select('*')
-        .eq('season_id', props.seasonId)
+        .eq('season_id', 'f21625b7-9328-4bbb-8336-00fe68249513')
         .eq('program_id', props.programId)
 
     projects.value = Array.isArray(projectData) ? projectData : []
@@ -110,16 +110,32 @@ watch(ready, async (isReady) => {
 
         <template v-if="upcomingProjects.length > 0">
             <UCard v-for="(project, idx) in upcomingProjects" :key="project.id"
-                :class="['w-full', idx === 0 ? 'bg-[#E3F2FD]' : 'bg-[#B2DFDB]']"
+                :class="['w-full relative overflow-hidden', idx === 1 ? 'bg-primary-300 border-1 border-primary-400' : 'bg-primary-200 border-1 border-primary-300']"
                 variant="none"
                 :ui="{
-                    body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-5 flex flex-col items-start w-full h-34'
+                    body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-5 flex flex-col items-start w-full h-34 relative z-10'
                 }"
             >
-                <h3 :class="['font-semibold 2xl:text-xl', idx === 0 ? 'text-[#0D47A1]' : 'text-[#004D40]']">{{ project.name }}</h3>
-                <p :class="['text-sm pt-1', idx === 0 ? 'text-[#0D47A1]' : 'text-[#004D40]']">{{ project.deadline.toLocaleDateString() }}</p>
-                <p :class="['font-semibold text-xl mt-6 ml-auto', idx === 0 ? 'text-[#0D47A1]' : 'text-[#004D40]']">{{ Math.max(0, Math.ceil((project.deadline - today) / (1000 * 60 * 60 * 24))) }} days</p>
-            </UCard>
+              <div class="absolute inset-0 w-full h-full z-0 pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1440 560">
+                  <g mask="url(#SvgjsMask1001)" fill="none">
+                    <path d="M522.28 651.82C715.41 619.37 811.98 147.83 1120.08 145.57 1428.18 143.31 1559.73 349.86 1717.88 352.77" :stroke="'var(--color-primary-800)'" stroke-width="2"></path>
+                    <path d="M365.53 647.68C466.81 645.39 441.6 512.59 745.12 505.89 1048.64 499.19 1302.06 230.31 1504.3 225.89" :stroke="'var(--color-primary-800)'" stroke-width="2"></path>
+                    <path d="M221.8 648.23C388.58 600.92 428.99 144.56 686.22 133.27 943.46 121.98 918.44 203.27 1150.65 203.27 1382.86 203.27 1497.65 133.47 1615.07 133.27" :stroke="'var(--color-primary-800)'" stroke-width="2"></path>
+                    <path d="M718.52 628.99C826.74 609.58 774.72 351.5 1049.66 339.55 1324.6 327.6 1540.05 156.47 1711.93 154.75" :stroke="'var(--color-primary-800)'" stroke-width="2"></path>
+                    <path d="M623.65 646.63C800.26 614.09 882.1 173.24 1161.4 170.38 1440.71 167.52 1557.91 341.85 1699.16 343.98" :stroke="'var(--color-primary-800)'" stroke-width="2"></path>
+                  </g>
+                  <defs>
+                    <mask id="SvgjsMask1001">
+                      <rect width="1440" height="560" fill="#ffffff"></rect>
+                    </mask>
+                  </defs>
+                </svg>
+              </div>
+              <h3 :class="['font-semibold 2xl:text-xl text-primary-950 relative z-10']">{{ project.name }}</h3>
+              <p :class="['text-sm pt-1 text-primary-950 relative z-10']">{{ project.deadline.toLocaleDateString() }}</p>
+              <p :class="['font-semibold 2xl:text-3xl text-xl mt-4 ml-auto text-primary-950 relative z-10']">{{ Math.max(0, Math.ceil((project.deadline - today) / (1000 * 60 * 60 * 24))) }} days</p>
+      </UCard>
         </template>
 
         <template v-else>
@@ -139,17 +155,32 @@ watch(ready, async (isReady) => {
 
     </div>
     
-    <UCard 
-        class="event_card mt-4 bg-[#C5CAE9] w-full"
-        variant="none"
-        :ui="{
-            body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-4 flex flex-col items-start h-34'
-        }"
-    >
-        <h3 class="font-semibold 2xl:text-xl text-[#1A237E]">{{ season && season[0]?.name || 'Season' }}</h3>
-        <p v-if="seasonDeadline" class="text-sm pt-1 text-[#1A237E]">{{ seasonDeadline.toLocaleDateString() }}</p>
-        <p v-if="daysToSeasonDeadline !== null" class="font-semibold text-xl text-[#1A237E] mt-6 ml-auto">{{ daysToSeasonDeadline }} days</p>
-    </UCard>
+  <UCard 
+    class="event_card mt-4 bg-primary-400 border-1 border-primary-500 w-full relative overflow-hidden"
+    variant="none"
+    :ui="{
+      body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-4 flex flex-col items-start h-34 relative z-10'
+    }"
+  >   
+    <div class="absolute inset-0 w-full h-full z-0 pointer-events-none">
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev/svgjs" width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1440 560">
+      <g mask="url(#SvgjsMask1012)" fill="none">
+                <path d="M -503.2753191494023,321 C -407.28,306.8 -215.28,231.6 -23.275319149402307,250 C 168.72,268.4 264.72,432.8 456.7246808505977,413 C 648.72,393.2 744.72,169.2 936.7246808505977,151 C 1128.72,132.8 1316.07,308.6 1416.7246808505977,322 C 1517.38,335.4 1435.34,238.8 1440,218" :stroke="'var(--color-primary-800)'"></path>
+                <path d="M -625.6056941241858,403 C -529.61,368.8 -337.61,216.2 -145.60569412418576,232 C 46.39,247.8 142.39,497.4 334.3943058758142,482 C 526.39,466.6 622.39,172.2 814.3943058758142,155 C 1006.39,137.8 1169.27,384.4 1294.3943058758143,396 C 1419.52,407.6 1410.88,249.6 1440,213" :stroke="'var(--color-primary-800)'"></path>
+                <path d="M -586.1423367867757,78 C -490.14,135 -298.14,360.8 -106.14233678677572,363 C 85.86,365.2 181.86,86.6 373.85766321322427,89 C 565.86,91.4 661.86,355 853.8576632132243,375 C 1045.86,395 1216.63,184.2 1333.8576632132242,189 C 1451.09,193.8 1418.77,357 1440,399" :stroke="'var(--color-primary-800)'"></path>
+                <path d="M -813.0101302759645,230 C -717.01,249.2 -525.01,348.6 -333.0101302759645,326 C -141.01,303.4 -45.01,90.2 146.9898697240355,117 C 338.99,143.8 434.99,455.2 626.9898697240355,460 C 818.99,464.8 944.39,146 1106.9898697240355,141 C 1269.59,136 1373.4,376.2 1440,435" :stroke="'var(--color-primary-800)'"></path>
+      </g>
+      <defs>
+        <mask id="SvgjsMask1012">
+          <rect width="1440" height="560" fill="#ffffff"></rect>
+        </mask>
+      </defs>
+      </svg>
+    </div>
+    <h3 class="font-semibold 2xl:text-2xl text-primary-950 relative z-10">{{ season && season[0]?.name || 'Season' }}</h3>
+    <p v-if="seasonDeadline" class="text-sm pt-2 text-primary-950 relative z-10">{{ seasonDeadline.toLocaleDateString() }}</p>
+    <p v-if="daysToSeasonDeadline !== null" class="font-semibold text-xl 2xl:text-3xl text-primary-950 mt-3 ml-auto relative z-10">{{ daysToSeasonDeadline }} days</p>
+  </UCard>
 
   </div>
 </template>

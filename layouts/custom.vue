@@ -16,7 +16,7 @@ const userImg = ref('');
 const userLoading = ref(true);
 const open = ref(false);
 
-const colors = ['neutral', 'red','orange','amber','yellow','lime','green','emerald','teal','cyan','sky','blue','indigo','violet','purple','fuchsia','pink','rose']
+const colors = ['gray', 'red','orange','amber','yellow','green','blue','glacier','purple','pink']
 
 const styleNav = computed(() => {
   return isCollapsed.value ? 'w-10 flex items-center mt-2' : 'xl:w-48 2xl:w-54';
@@ -58,6 +58,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
             onSelect: (e) => {
               e.preventDefault()
               appConfig.ui.colors.primary = color
+              localStorage.setItem('theme-color', color)
             }
           }))
         },
@@ -105,7 +106,7 @@ const mainLinks: NavigationMenuItem[] = [
   {
     label: 'Home',
     to: '/students/student_data',
-    icon: 'i-lucide-users',
+    icon: 'i-lucide:house',
     tooltip: {
       text: 'Home',
     },
@@ -129,7 +130,7 @@ const mainLinks: NavigationMenuItem[] = [
     label: 'Timeline',
     to: '/test',
     badge: '3',
-    icon: 'lucide-calendar-clock',
+    icon: 'i-lucide:folder-clock',
     tooltip: {
       text: 'Timeline',
     },
@@ -231,7 +232,9 @@ watch(
         </template>
       </UDropdownMenu>
     </div>
-    <main class="flex-1 h-screen overflow-y-auto">
+
+   <main class="flex flex-col flex-1 h-screen">
+      <!-- Navbar -->
       <div class="w-full h-18 border-b border-border flex justify-between items-center px-6 sticky top-0 z-10 bg-white">
         <div class="flex items-center gap-4">
           <UIcon v-if="!isCollapsed" @click="isCollapsed = !isCollapsed" name="i-lucide-panel-left-close" class="size-5 cursor-pointer" />
@@ -240,7 +243,12 @@ watch(
         </div>
         <UIcon name="i-lucide-bell" class="size-5 cursor-pointer"/>
       </div>
-      <slot />
+
+      <!-- Content (slot) -->
+      <div class="flex-1 min-h-0 overflow-y-auto">
+        <slot />
+      </div>
     </main>
+
   </div>
 </template>
