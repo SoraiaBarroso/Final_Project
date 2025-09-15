@@ -16,7 +16,7 @@ const userImg = ref('');
 const userLoading = ref(true);
 const open = ref(false);
 
-const colors = ['gray', 'red','orange','amber','yellow','green','blue','glacier','purple','pink']
+const colors = ['gray', 'red','orange','yellow','green', 'laurel', 'esmerald', 'teal','blue','glacier','purple','pink']
 
 const styleNav = computed(() => {
   return isCollapsed.value ? 'w-10 flex items-center mt-2' : 'xl:w-48 2xl:w-54';
@@ -153,6 +153,30 @@ const secondaryLinks: NavigationMenuItem[] = [
       linkLabel: 'xl:text-sm 2xl:text-base', // Responsive text size
     }
   },
+  {
+    label: 'Notion',
+    icon: 'i-lineicons:notion',
+    to: 'https://reka-ui.com/',
+    target: '_blank',
+    tooltip: {
+      text: 'Go to Notion docs',
+    },
+    ui: {
+      linkLabel: 'xl:text-sm 2xl:text-base', // Responsive text size
+    }
+  },
+  {
+    label: 'Recordings',
+    icon: 'i-solar:videocamera-record-outline',
+    to: 'https://reka-ui.com/',
+    target: '_blank',
+    tooltip: {
+      text: 'Workshop Recordings',
+    },
+    ui: {
+      linkLabel: 'xl:text-sm 2xl:text-base', // Responsive text size
+    }
+  }
 ];
 
 const links = [mainLinks, secondaryLinks];
@@ -183,8 +207,6 @@ watch(
       <div :class="isCollapsed ? 'justify-center pb-2' : 'justify-start pl-2'" class="flex items-center gap-3 w-full mb-2">
         <img src="../public/favicon.png" alt="Logo" class="xl:w-5 xl:h-5 w-5 h-5" />
         <p v-if="!isCollapsed" class="text-currentColor font-semibold xl:text-sm 2xl:text-lg">Amsterdam Tech</p>
-        <!-- <UIcon @click="isCollapsed = !isCollapsed" v-if="!isCollapsed" name="i-lucide-panel-left-close" class="size-5 cursor-pointer ml-auto" /> -->
-        <!-- <UIcon v-else name="i-lucide-panel-left-open" class="size-5 cursor-pointer" @click="isCollapsed = !isCollapsed" /> -->
       </div>
 
       <UNavigationMenu
@@ -196,6 +218,9 @@ watch(
         :items="links[0]"
         :class="styleNav"
         class="cursor-pointer mt-2"
+        :ui="{
+          item: 'mb-0.5',
+        }"
       />
 
       <UNavigationMenu
@@ -241,7 +266,21 @@ watch(
           <UIcon v-else name="i-lucide-panel-left-open" class="size-5 cursor-pointer" @click="isCollapsed = !isCollapsed" /> 
           <h1 class="2xl:text-lg font-semibold">Home</h1>
         </div>
-        <UIcon name="i-lucide-bell" class="size-5 cursor-pointer"/>
+
+        <UIcon name="i-lucide-bell" class="size-5 cursor-pointer" @click="open = true"/>
+        <USlideover 
+          v-model:open="open"
+          title="Notifications"
+          close-icon="i-lucide-arrow-right"
+        >
+          <template #content>
+            <div class="p-6">
+              <h2 class="font-semibold text-lg mb-2">Notifications</h2>
+              <p class="text-muted">You have no new notifications.</p>
+            </div>
+          </template>
+        </USlideover>
+
       </div>
 
       <!-- Content (slot) -->

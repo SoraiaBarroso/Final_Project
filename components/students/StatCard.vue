@@ -8,7 +8,7 @@
     <div class="flex justify-between items-center">
       <p :class="['font-semibold', '2xl:text-3xl', 'xl:text-2xl']">{{ value }}</p>
       <div
-        class="bg-elevated/60 p-2 rounded-lg flex justify-center items-center"
+        class="bg-primary-200 border-1 border-primary-300 p-2 rounded-lg flex justify-center items-center"
       >
         <UIcon :name="icon" size="22" class="text-blue-500" />
       </div>

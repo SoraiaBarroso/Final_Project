@@ -3,31 +3,104 @@
 @import "@nuxt/ui";
 
 :root {
-    --color-red-500: #ef4444;
-    --color-orange-500: #f59e42;
     --color-amber-500: #fbbf24;
-    --color-yellow-500: #fde047;
     --color-lime-500: #a3e635;
-    --color-emerald-500: #10b981;
-    --color-teal-500: #14b8a6;
     --color-cyan-500: #06b6d4;
     --color-sky-500: #0ea5e9;
     --color-indigo-500: #6366f1;
     --color-violet-500: #8b5cf6;
     --color-fuchsia-500: #d946ef;
 
+    /* Laurel */
+     --color-laurel-50:  #f3f6f4;
+    --color-laurel-100: #e1eae1;
+    --color-laurel-200: #c5d5c8;
+    --color-laurel-300: #9eb7a3;
+    --color-laurel-400: #73947b;
+    --color-laurel-500: #53765c;
+    --color-laurel-600: #3e5d47;
+    --color-laurel-700: #324a3a;
+    --color-laurel-800: #293c30;
+    --color-laurel-900: #233129;
+    --color-laurel-950: #131b16;
+    
+    /* Yellow */
+    --color-yellow-50:  #f8fbeb;
+    --color-yellow-100: #f0f7ca;
+    --color-yellow-200: #e6f098;
+    --color-yellow-300: #dbe75d;
+    --color-yellow-400: #d7de31;
+    --color-yellow-500: #c6c622;
+    --color-yellow-600: #b2a61c;
+    --color-yellow-700: #8e7b1a;
+    --color-yellow-800: #77621c;
+    --color-yellow-900: #65511e;
+    --color-yellow-950: #3b2c0d;
+
+    /* Teal */
+    --color-teal-50:  #f4f9f8;
+    --color-teal-100: #daede9;
+    --color-teal-200: #b5dad4;
+    --color-teal-300: #88c0b8;
+    --color-teal-400: #5fa29b;
+    --color-teal-500: #468680;
+    --color-teal-600: #366b67;
+    --color-teal-700: #2e5755;
+    --color-teal-800: #284746;
+    --color-teal-900: #253c3c;
+    --color-teal-950: #070e0e;
+
+    /* Esmerald */
+     --color-esmerald-50:  #edfcf6;
+    --color-esmerald-100: #d5f6e7;
+    --color-esmerald-200: #aeecd2;
+    --color-esmerald-300: #5fd6ad;
+    --color-esmerald-400: #42c59c;
+    --color-esmerald-500: #1faa83;
+    --color-esmerald-600: #12896a;
+    --color-esmerald-700: #0e6e58;
+    --color-esmerald-800: #0e5747;
+    --color-esmerald-900: #0c483b;
+    --color-esmerald-950: #062822;
+
+    /* Orange */
+    --color-orange-50:  #fff5ed;
+    --color-orange-100: #ffe7d4;
+    --color-orange-200: #ffcba9;
+    --color-orange-300: #ff9d62;
+    --color-orange-400: #fe7739;
+    --color-orange-500: #fc5313;
+    --color-orange-600: #ed3809;
+    --color-orange-700: #c52709;
+    --color-orange-800: #9c2010;
+    --color-orange-900: #7e1d10;
+    --color-orange-950: #440c06;
+
+    /* Red */
+    --color-red-50:  #fff3f1;
+    --color-red-100: #ffe5e0;
+    --color-red-200: #ffcfc6;
+    --color-red-300: #ffae9f;
+    --color-red-400: #ff7f68;
+    --color-red-500: #fb5638;
+    --color-red-600: #e83a1a;
+    --color-red-700: #d63113;
+    --color-red-800: #a22812;
+    --color-red-900: #862716;
+    --color-red-950: #491006;
+
     /* Neutral */
-  --color-gray-50:  #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5dc;
-  --color-gray-400: #99a1af;
-  --color-gray-500: #6a7282;
-  --color-gray-600: #4a5565;
-  --color-gray-700: #364153;
-  --color-gray-800: #1e2939;
-  --color-gray-900: #101828;
-  --color-gray-950: #030712;
+    --color-gray-50:  #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5dc;
+    --color-gray-400: #99a1af;
+    --color-gray-500: #6a7282;
+    --color-gray-600: #4a5565;
+    --color-gray-700: #364153;
+    --color-gray-800: #1e2939;
+    --color-gray-900: #101828;
+    --color-gray-950: #030712;
     
     /* Glacier */
     --color-glacier-50:  #f1f8fa;

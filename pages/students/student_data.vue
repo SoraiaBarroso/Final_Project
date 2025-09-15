@@ -39,9 +39,11 @@ const motivationTips = [
   "Remember: progress is better than perfection — just keep coding!"
 ];
 
-
 const currentTip = ref("");
 const tipsRead = ref(0)
+
+const totalSeasons = ref(0)
+const completedSeasons = ref(0)
 
 function pickRandomTip() {
   const idx = Math.floor(Math.random() * motivationTips.length);
@@ -168,6 +170,26 @@ async function fetchStudentData() {
   studentData.value.completed_projects = await fetchProjectsCompleted(studentData.value.id);
   studentData.value.progress = await fetchOverallProgress(studentData.value.id);
 
+  // Fetch all seasons for the student's cohort and program
+  const { data: seasonsData, error: seasonsError } = await supabase
+    .from('program_cohort_seasons')
+    .select('id, start_date, end_date')
+    .eq('cohort_id', studentData.value.cohort_id)
+    .eq('program_id', studentData.value.program_id)
+
+  console.log("Fetched seasons:", seasonsData, seasonsError);
+  totalSeasons.value = Array.isArray(seasonsData) ? seasonsData.length : 0;
+
+  // Fetch completed seasons for the student
+  const { data: completedData, error: completedError } = await supabase
+    .from('student_season_progress')
+    .select('season_id, is_completed')
+    .eq('student_id', studentData.value.id)
+    .eq('is_completed', true)
+
+  console.log("Fetched completed seasons:", completedData);
+  completedSeasons.value = Array.isArray(completedData) ? completedData.length : 0;
+
   console.log("Fetched student data:", studentData.value);
 }
 
@@ -273,6 +295,14 @@ function formatLastLogin(dateString) {
   if (diffMin > 0) return diffMin === 1 ? '1 min ago' : `${diffMin}min ago`;
   return 'just now';
 }
+
+const openLocation = (url) => {
+  if (url) {
+    window.open(url, '_blank', 'noopener');
+  } else {
+    console.warn("No location provided for this event");
+  }
+};
 </script>
 
 <template>
@@ -294,48 +324,51 @@ function formatLastLogin(dateString) {
       
       <div class="mt-6 flex flex-col justify-center">
 
-        <UCard 
-          v-if="calendarEvents.length > 0" 
-          class="events overflow-y-auto 2xl:max-h-68 w-full pr-2"
-          :ui="{
-            root: '2xl:!px-0',
-            body: '2xl:!px-2 2xl:!py-1'
-          }"
-          variant="none"
-        >
-          <UCard 
-            v-for="event in calendarEvents" 
-            :key="event.id" 
-            class="event_card mb-3 cursor-pointer"
-            variant="outline"
-            :ui="{
-              root: 'w-full h-30 border-l-5 border-info',
-              body: 'xl:!px-6 px-6 xl:!py-4 2xl:!py-6 flex items-center justify-between'
-            }"
-          >
-          <template #default>
-            <a
-              :href="event.location"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="pr-4 gap-4 flex items-center justify-between w-full h-full no-underline"
-              style="color: inherit;"
-            >
-              <div class="w-full">
-                <h1 class="font-medium text-gray-800 xl:text-base 2xl:text-lg">{{ event.summary }}</h1>
-                <p class="xl:text-sm 2xl:text-base text-muted mt-2">
-                  {{ formatEventTime(event.start?.dateTime || event.originalStartTime?.dateTime) }}
-                </p>
-              </div>
-              <div>
-                <svg id="arrow" class="fill-blue-500" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 12 12">
-                  <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
-                </svg>
-              </div>
-            </a>
-          </template>
-          </UCard>
-        </UCard>
+      <div v-if="calendarEvents.length > 0" class="events w-full pr-2">
+          <div class="grid grid-cols-2 gap-4">
+            <template v-for="(events, idx) in calendarEvents" :key="events.id">
+              <UCard 
+                class="event_card mb-3 cursor-pointer"
+                variant="outline"
+                :ui="{
+                  root: 'w-full border-l-5 border-primary',
+                  body: 'xl:!px-6 px-6 xl:!py-4 2xl:!py-4 h-full flex'
+                }"
+              >
+                <template #default>
+                    <div class="w-full flex flex-col flex-1 justify-between gap-2">
+                      
+                      <div class="flex flex-col gap-2">
+                        <h1 class="font-medium text-primary-950 xl:text-base 2xl:text-lg">{{ events.summary }}</h1>
+                        <p class="xl:text-sm 2xl:text-base text-primary-950">
+                          {{ formatEventTime(events.start?.dateTime || events.originalStartTime?.dateTime) }}
+                            <span v-if="events.end?.dateTime || events.originalEndTime?.dateTime">
+                              &ndash;
+                              {{ formatEventTime(events.end?.dateTime || events.originalEndTime?.dateTime) }}
+                              CEST
+                            </span>
+                        </p>
+                      </div>
+
+                      <div class="flex justify-between items-center mt-6">
+                          <UAvatarGroup :max="3">
+                            <UAvatar
+                              v-for="people in events.attendees"
+                              :key="people.id"
+                              :alt="people.email ? people.email.charAt(0).toUpperCase() : (people.name ? people.name.charAt(0).toUpperCase() : '')"
+                            />
+                          </UAvatarGroup>
+                          <UButton class=" cursor-pointer" @click="openLocation(events.location)">
+                            Attend
+                          </UButton>
+                      </div>
+
+                    </div>
+                </template>
+              </UCard>
+            </template>
+          </div>
+        </div>
         
         <UCard
           v-else
@@ -378,15 +411,15 @@ function formatLastLogin(dateString) {
        
     </div>
 
-    <div class="2xl:w-1/2 xl:w-[55%] w-[55%] flex flex-col gap-2 items-center px-4">
+    <div class="2xl:w-1/2 xl:w-[55%] w-[55%] flex flex-col gap-6 items-center px-4">
+      <!-- Header -->
       <UCard
         variant="outline"
         :ui="{
           root: 'w-full rounded-lg xl:px-6 2xl:px-4',
-          body: 'w-full flex flex-col items-center justify-center gap-12'
+          body: 'w-full flex items-center justify-between'
         }"
       >
-        <!-- Header -->
         <div class="flex items-center justify-between w-full text-center">
           
           <div class="flex items-center">
@@ -399,50 +432,62 @@ function formatLastLogin(dateString) {
 
           <UBadge :color="colorChip" variant="subtle" size="xl" class="rounded-full">On Track</UBadge>
         </div>
+      </UCard>
 
-        <div class="grid grid-cols-2 grid-rows-2 w-full 2xl:gap-8 gap-4">
+      <div class="grid grid-cols-2 grid-rows-2 w-full 2xl:gap-8 gap-4">
           
-          <StatCard
-            :value="studentData.completed_projects"
-            label="Projects Completed"
-            icon="emojione:books"
-          />
-          
-          <StatCard
-            :value="studentData.exercises_completed"
-            label="Exercises Completed"
-            icon="emojione:green-book"
-          />
+        <StatCard
+          :value="studentData.completed_projects"
+          label="Projects Completed"
+          icon="emojione:books"
+        />
+        
+        <StatCard
+          :value="studentData.exercises_completed"
+          label="Exercises Completed"
+          icon="emojione:green-book"
+        />
 
-          <StatCard
-            :value="formatLastLogin(studentData.last_login)"
-            label="Last Login"
-            icon="emojione:alien-monster"
-          />
+        <StatCard
+          :value="formatLastLogin(studentData.last_login)"
+          label="Last Login"
+          icon="emojione:alien-monster"
+        />
 
-          <StatCard
-            :value="studentData.points ?? 0"
-            label="Qwasar Points"
-            icon="emojione:trophy"
-          />
-          
-        </div>
+        <StatCard
+          :value="studentData.points ?? 0"
+          label="Qwasar Points"
+          icon="emojione:trophy"
+        />
+        
+      </div>
 
+      <UCard
+        variant="outline"
+        :ui="{
+          root: 'w-full rounded-lg xl:px-6 2xl:px-4',
+          body: 'w-full flex flex-col items-center justify-center gap-12'
+        }"
+      >
         <div class="flex flex-col items-center justify-center w-full">
           <div class="flex justify-between items-center w-full mb-4">
             <p class="2xl:text-2xl xl:text-xl font-bold text-black/80">Overall Progress</p>
             <p class="text-muted">{{ studentData.progress }}%</p>
           </div>
 
-          <UProgress color="info" v-model="studentData.progress" />
+          <UProgress color="primary" v-model="studentData.progress" />
+
+          <p class="text-muted ml-auto mt-2">
+            {{ completedSeasons }} out of {{ totalSeasons }} seasons completed
+          </p>
         </div>
       </UCard>
 
       <UCard
-        class="mt-6 w-full flex flex-col flex-1 min-h-0"
+        class="mt-6 w-full flex flex-col"
         variant="outline"
         :ui="{
-          root: 'w-full h-full flex-1 min-h-0 overflow-y-auto rounded-lg xl:px-6 2xl:px-2',
+          root: 'w-full min-h-0 overflow-y-auto rounded-lg xl:px-6 2xl:px-2',
           body: 'w-full flex flex-col items-center justify-center gap-6 h-full'
         }"
       >
