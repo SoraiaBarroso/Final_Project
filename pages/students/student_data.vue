@@ -2,6 +2,7 @@
 import { UIcon } from '#components';
 import StatCard from '~/components/students/StatCard.vue';
 import DeadlinesCard from '~/components/students/DeadlinesCard.vue';
+import MeetingsDisplay from '~/components/student_dashboard/MeetingsDisplay.vue';
 
 definePageMeta({
   layout: 'custom',
@@ -9,7 +10,6 @@ definePageMeta({
 });
 
 
-const calendarEvents = ref([]);
 const studentData = ref({});
 const supabase = useSupabaseClient()
 const runtimeConfig = useRuntimeConfig();
@@ -43,7 +43,31 @@ const currentTip = ref("");
 const tipsRead = ref(0)
 
 const totalSeasons = ref(0)
+// Helper: filtered and deduplicated seasons for progress count
+const filteredSeasons = computed(() => {
+  if (!Array.isArray(allProgramSeasons.value)) return [];
+  // Exclude 'Final Project' and 'Onboarding'
+  let filtered = allProgramSeasons.value.filter(s =>
+    s.name !== 'Final Project' && s.name !== 'Onboarding'
+  );
+  // Deduplicate Season 03 (any specialization)
+  const seen = new Set();
+  filtered = filtered.filter(s => {
+    // Match 'Season 03 Software Engineer ...'
+    const match = s.name.match(/^Season 03 Software Engineer( .+)?$/);
+    if (match) {
+      if (seen.has('Season 03')) return false;
+      seen.add('Season 03');
+      return true;
+    }
+    return true;
+  });
+  return filtered;
+});
 const completedSeasons = ref(0)
+const googleAccessToken = ref(1)
+// Store all seasons for the student's program for id-to-name mapping
+const allProgramSeasons = ref([])
 
 function pickRandomTip() {
   const idx = Math.floor(Math.random() * motivationTips.length);
@@ -79,38 +103,6 @@ async function fetchOverallProgress(studentId) {
   return Math.round(avg); // or keep as float if you want decimals
 }
 
-function getTimeRange(period = 'week') {
-  let timeMin = new Date();
-  let timeMax = new Date();
-
-  if (period === 'week') {
-    // Set to Monday of current week (start of week)
-    timeMin.setDate(timeMin.getDate() - timeMin.getDay() + 1);
-    timeMin.setHours(0, 0, 0, 0);
-    
-    // Set to Monday of next week (end of current week)
-    timeMax.setDate(timeMax.getDate() - timeMax.getDay() + 8);
-    timeMax.setHours(0, 0, 0, 0);
-    
-  } else if (period === 'month') {
-    // Set to beginning of current month
-    timeMin.setDate(1);
-    timeMin.setHours(0, 0, 0, 0);
-    
-    // Set to beginning of next month
-    timeMax.setMonth(timeMax.getMonth() + 1, 1);
-    timeMax.setHours(0, 0, 0, 0);
-  } else if (period === 'today') {
-    timeMin.setHours(0, 0, 0, 0);
-    timeMax.setHours(23, 59, 59, 999);
-  }
-
-  return {
-    timeMin: timeMin.toISOString(),
-    timeMax: timeMax.toISOString(),
-  };
-}
-
 function formatEventDate(dateTimeString) {
   const date = new Date(dateTimeString);
   const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -120,15 +112,6 @@ function formatEventDate(dateTimeString) {
   const month = monthNames[date.getMonth()];
   
   return `${dayName} ${day} ${month}`;
-}
-
-function formatEventTime(dateTimeString) {
-  const date = new Date(dateTimeString);
-  return date.toLocaleTimeString('en-US', { 
-    hour: '2-digit', 
-    minute: '2-digit',
-    hour12: false 
-  });
 }
 
 async function fetchProjectsCompleted(studentId) {
@@ -170,6 +153,21 @@ async function fetchStudentData() {
   studentData.value.completed_projects = await fetchProjectsCompleted(studentData.value.id);
   studentData.value.progress = await fetchOverallProgress(studentData.value.id);
 
+  // Fetch all seasons for the student's program (for id-to-name mapping)
+  const { data: programSeasons, error: programSeasonsError } = await supabase
+    .from('seasons')
+    .select('id, name, program_id')
+    .eq('program_id', studentData.value.program_id);
+  if (programSeasons) {
+    allProgramSeasons.value = programSeasons;
+    console.log('All program seasons:', programSeasons);
+    // Set totalSeasons to filtered count
+    totalSeasons.value = filteredSeasons.value.length;
+  } else {
+    console.error('Error fetching program seasons:', programSeasonsError);
+  }
+
+  console.log("fetched seasons for program:", allProgramSeasons.value)
   // Fetch all seasons for the student's cohort and program
   const { data: seasonsData, error: seasonsError } = await supabase
     .from('program_cohort_seasons')
@@ -178,7 +176,7 @@ async function fetchStudentData() {
     .eq('program_id', studentData.value.program_id)
 
   console.log("Fetched seasons:", seasonsData, seasonsError);
-  totalSeasons.value = Array.isArray(seasonsData) ? seasonsData.length : 0;
+  // totalSeasons.value is now set from filteredSeasons
 
   // Fetch completed seasons for the student
   const { data: completedData, error: completedError } = await supabase
@@ -192,30 +190,6 @@ async function fetchStudentData() {
 
   console.log("Fetched student data:", studentData.value);
 }
-
-// TODO DISPLAY EVENTS THIS WEEK
-async function fetchCalendarEvents(accessToken, period = 'today') {
-  const { timeMin, timeMax } = getTimeRange(period);
-
-  const res = await fetch(
-    `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(
-      timeMin
-    )}&timeMax=${encodeURIComponent(
-      timeMax
-    )}&singleEvents=true&orderBy=startTime`,
-    {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
-
-  const data = await res.json();
-  calendarEvents.value = data.items || [];
-  console.log("Current calendar home:", calendarEvents.value);
-}
-
-const googleAccessToken = ref(1)
 
 async function refreshGoogleToken() {
   const storedRefreshToken = window.localStorage.getItem('oauth_provider_refresh_token')
@@ -243,7 +217,7 @@ watch(googleAccessToken, async (newToken) => {
     console.log('Access token is undefined, refreshing...')
     try {
       await refreshGoogleToken()
-      await fetchCalendarEvents(googleAccessToken.value)
+      // await fetchCalendarEvents(googleAccessToken.value)
     } catch (error) {
       console.error('Failed to refresh Google token', error)
     }
@@ -295,102 +269,29 @@ function formatLastLogin(dateString) {
   if (diffMin > 0) return diffMin === 1 ? '1 min ago' : `${diffMin}min ago`;
   return 'just now';
 }
-
-const openLocation = (url) => {
-  if (url) {
-    window.open(url, '_blank', 'noopener');
-  } else {
-    console.warn("No location provided for this event");
-  }
-};
 </script>
 
 <template>
-  <div class="student_data h-full flex justify-between py-8">
+  <div class="student_data h-full flex gap-16 px-8 py-8">
 
-    <div class="flex flex-col xl:pl-10 2xl:px-6 px-8 2xl:w-1/2 xl:w-[45%] w-[45%]">
+  <div class="flex flex-col gap-4" style="width:50%; max-width:750px;">
 
-      <div class="flex mb-4 justify-start items-center gap-3">
-        <h1 class="xl:text-4xl 2xl:text-3xl text-black/80 font-semibold">Hello, </h1>
-        <span class="xl:text-4xl font-semibold 2xl:text-3xl text-primary-500">{{ studentData.first_name }}! <UIcon name="emojione:camel" size="32" class="ml-2"/></span>
-      </div>
-
-      <p class="text-muted text-base 2xl:text-lg xl:mt-2 2xl:mt-1">Nice to have you back, what an exciting day!</p>
-      <p class="text-muted text-base 2xl:text-lg mt-1 2xl:mb-2">Get ready and check your projects today</p>
-
-      <div class="flex justify-between items-center 2xl:mt-6">
-        <h2 class="text-black/80 font-semibold 2xl:text-2xl">Today's meetings</h2>
-      </div>
-      
-      <div class="mt-6 flex flex-col justify-center">
-
-      <div v-if="calendarEvents.length > 0" class="events w-full pr-2">
-          <div class="grid grid-cols-2 gap-4">
-            <template v-for="(events, idx) in calendarEvents" :key="events.id">
-              <UCard 
-                class="event_card mb-3 cursor-pointer"
-                variant="outline"
-                :ui="{
-                  root: 'w-full border-l-5 border-primary',
-                  body: 'xl:!px-6 px-6 xl:!py-4 2xl:!py-4 h-full flex'
-                }"
-              >
-                <template #default>
-                    <div class="w-full flex flex-col flex-1 justify-between gap-2">
-                      
-                      <div class="flex flex-col gap-2">
-                        <h1 class="font-medium text-primary-950 xl:text-base 2xl:text-lg">{{ events.summary }}</h1>
-                        <p class="xl:text-sm 2xl:text-base text-primary-950">
-                          {{ formatEventTime(events.start?.dateTime || events.originalStartTime?.dateTime) }}
-                            <span v-if="events.end?.dateTime || events.originalEndTime?.dateTime">
-                              &ndash;
-                              {{ formatEventTime(events.end?.dateTime || events.originalEndTime?.dateTime) }}
-                              CEST
-                            </span>
-                        </p>
-                      </div>
-
-                      <div class="flex justify-between items-center mt-6">
-                          <UAvatarGroup :max="3">
-                            <UAvatar
-                              v-for="people in events.attendees"
-                              :key="people.id"
-                              :alt="people.email ? people.email.charAt(0).toUpperCase() : (people.name ? people.name.charAt(0).toUpperCase() : '')"
-                            />
-                          </UAvatarGroup>
-                          <UButton class=" cursor-pointer" @click="openLocation(events.location)">
-                            Attend
-                          </UButton>
-                      </div>
-
-                    </div>
-                </template>
-              </UCard>
-            </template>
-          </div>
+    <div class="flex flex-col">
+        <div class="flex mb-4 justify-start items-center gap-3">
+          <h1 class="xl:text-4xl 2xl:text-3xl text-black/80 font-semibold">Hello, </h1>
+          <span class="xl:text-4xl font-semibold 2xl:text-3xl text-primary-500">{{ studentData.first_name }}! <UIcon name="emojione:camel" size="32" class="ml-2"/></span>
         </div>
-        
-        <UCard
-          v-else
-          variant="outline"
-          class="flex justify-center items-center w-full mt-2"
-          :ui="{
-            body: 'w-full flex flex-col items-center justify-center gap-4'
-          }"
-        >
-          <div class="text-gray-500 text-center flex flex-col justify-center items-center">
-            <div class="bg-primary-200 border-1 border-primary-300 p-3 rounded-full flex justify-center items-center mb-4">
-              <UIcon name="i-lucide-lab:mailbox-flag" size="30" class="text-primary-800" />
-            </div>
-            <p class="text-black/80 font-semibold text-lg">No events today</p>
-            <p class="mt-1">Perfect time to focus on your projects</p>
-            <UButton class="mt-6 px-4 bg-white border-1 border-muted text-black/80 cursor-pointer py-2 rounded-lg hover:bg-elevated/60 transition" @click="$router.push('/students/calendar')">
-              View Calendar
-            </UButton>
-          </div>
-        </UCard>
-      </div>
 
+        <div>
+          <p class="text-muted text-base 2xl:text-xl xl:mt-2 2xl:mt-2">Nice to have you back, what an exciting day!</p>
+          <p class="text-muted text-base 2xl:text-xl mt-2">Get ready and check your projects today</p>
+        </div>
+    </div>
+
+      <MeetingsDisplay
+        v-if="googleAccessToken"
+        :googleAccessToken="googleAccessToken"
+      />
 
       <div class="flex justify-between items-center 2xl:mt-8">
         <h2 class="text-black/80 font-semibold 2xl:text-2xl">Upcoming deadlines</h2>
@@ -411,13 +312,13 @@ const openLocation = (url) => {
        
     </div>
 
-    <div class="2xl:w-1/2 xl:w-[55%] w-[55%] flex flex-col gap-6 items-center px-4">
+    <div class="w-1/2 flex flex-col gap-6 items-center">
       <!-- Header -->
       <UCard
         variant="outline"
         :ui="{
           root: 'w-full rounded-lg xl:px-6 2xl:px-4',
-          body: 'w-full flex items-center justify-between'
+          body: 'w-full flex items-center 2xl:!px-2 justify-between'
         }"
       >
         <div class="flex items-center justify-between w-full text-center">
@@ -434,7 +335,7 @@ const openLocation = (url) => {
         </div>
       </UCard>
 
-      <div class="grid grid-cols-2 grid-rows-2 w-full 2xl:gap-8 gap-4">
+      <div class="grid grid-cols-2 grid-rows-2 w-full 2xl:gap-6 gap-4">
           
         <StatCard
           :value="studentData.completed_projects"
@@ -449,8 +350,8 @@ const openLocation = (url) => {
         />
 
         <StatCard
-          :value="formatLastLogin(studentData.last_login)"
-          label="Last Login"
+          :value="`${completedSeasons} / ${totalSeasons}`"
+          label="Seasons Completed"
           icon="emojione:alien-monster"
         />
 
@@ -462,11 +363,11 @@ const openLocation = (url) => {
         
       </div>
 
-      <UCard
+      <!-- <UCard
         variant="outline"
         :ui="{
           root: 'w-full rounded-lg xl:px-6 2xl:px-4',
-          body: 'w-full flex flex-col items-center justify-center gap-12'
+          body: 'w-full flex flex-col items-center justify-center 2xl:!px-2 gap-12'
         }"
       >
         <div class="flex flex-col items-center justify-center w-full">
@@ -481,24 +382,24 @@ const openLocation = (url) => {
             {{ completedSeasons }} out of {{ totalSeasons }} seasons completed
           </p>
         </div>
-      </UCard>
+      </UCard> -->
 
       <UCard
         class="mt-6 w-full flex flex-col"
         variant="outline"
         :ui="{
           root: 'w-full min-h-0 overflow-y-auto rounded-lg xl:px-6 2xl:px-2',
-          body: 'w-full flex flex-col items-center justify-center gap-6 h-full'
+          body: 'w-full flex flex-col items-center justify-center 2xl:!px-4 gap-6 h-full'
         }"
       >
         <div class="flex justify-between items-center w-full">
           <div class="flex justify-center items-center gap-4">
-            <div class="bg-gradient-to-r from-purple-500 to-pink-400 w-10 h-10 rounded-lg flex justify-center items-center">
+            <div class="bg-gradient-to-r from-primary-500 to-primary-300 w-10 h-10 rounded-lg flex justify-center items-center">
               <UIcon name="i-lucide:sparkles" class="w-6 h-6 text-white" />
             </div>
             <h2 class="2xl:text-2xl xl:text-xl font-bold text-black/80">Daily Tips</h2>
           </div>
-          <UIcon name="i-lucide:refresh-cw" class="w-5 h-5 text-purple-500 cursor-pointer" @click="pickRandomTip" />
+          <UIcon name="i-lucide:refresh-cw" class="w-5 h-5 text-primary-500 cursor-pointer" @click="pickRandomTip" />
         </div>
         <p class="text-muted text-left w-full">
           {{ currentTip }}
@@ -518,8 +419,19 @@ const openLocation = (url) => {
   transform: translate(4px, -4px);
 }
 
+
 .student_data {
   font-family: 'Space Grotesk', sans-serif;
+  overflow-x: hidden;
+}
+
+html, body, #__nuxt {
+  overflow-x: hidden !important;
+}
+
+.events[ref="meetingsScroll"] {
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .events:hover {

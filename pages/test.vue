@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full h-full flex flex-col bg-slate-50 rounded-xl p-6 font-sans">
+  <div class="h-full flex flex-col bg-slate-50 rounded-xl p-6 font-sans">
     <!-- Header with month/year and navigation -->
    <div class="flex items-center justify-between mb-6">
       <div class="flex gap-2 items-center">
@@ -14,8 +14,6 @@
         <UIcon name="lucide:chevron-left" />
         </UButton>
         <UButton
-          color="info"
-          variant="outline"
           @click="goToToday"
           size="xl"
         >
@@ -47,7 +45,7 @@
     </div>
 
     <!-- Scrollable timeline container -->
-    <div class="relative overflow-hidden rounded-lg flex-1 bg-white border border-slate-200">
+  <div class="relative overflow-hidden rounded-lg bg-white border border-slate-200 h-full">
       <!-- Timeline wrapper with horizontal scroll -->
       <div 
         ref="timelineContainer"

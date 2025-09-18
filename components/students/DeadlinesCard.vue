@@ -104,7 +104,7 @@ watch(ready, async (isReady) => {
 </script>
 
 <template>
-  <div class="flex flex-col mt-6">
+  <div class="flex flex-col mt-4">
     
     <div class="flex gap-4">
 

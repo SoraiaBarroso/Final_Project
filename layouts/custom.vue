@@ -156,7 +156,7 @@ const secondaryLinks: NavigationMenuItem[] = [
   {
     label: 'Notion',
     icon: 'i-lineicons:notion',
-    to: 'https://reka-ui.com/',
+    to: 'https://www.notion.so/elu-programme/Help-Sheet-5ee210707ad24004b0d35473d7fb6f4e',
     target: '_blank',
     tooltip: {
       text: 'Go to Notion docs',
@@ -268,7 +268,7 @@ watch(
         </div>
 
         <UIcon name="i-lucide-bell" class="size-5 cursor-pointer" @click="open = true"/>
-        <USlideover 
+        <!-- <USlideover 
           v-model:open="open"
           title="Notifications"
           close-icon="i-lucide-arrow-right"
@@ -279,7 +279,7 @@ watch(
               <p class="text-muted">You have no new notifications.</p>
             </div>
           </template>
-        </USlideover>
+        </USlideover> -->
 
       </div>
 
