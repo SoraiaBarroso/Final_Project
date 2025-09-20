@@ -91,7 +91,7 @@ const openLocation = (url) => {
 
 onMounted(() => {
   if (props.googleAccessToken) {
-    fetchCalendarEvents(props.googleAccessToken);
+    fetchCalendarEvents(props.googleAccessToken)
   }
 })
 </script>
@@ -110,12 +110,19 @@ onMounted(() => {
         </div>
     </div>
 
-    <div class="mt-4 flex justify-center">
-        
-          <div v-if="calendarEvents.length > 0"  ref="meetingsScroll" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth" style="scrollbar-width: none;">
+    <div class="mt-4 flex">
+
+          <div v-if="calendarEvents.length > 0"  
+            :class="[
+              calendarEvents.length === 1 ? 'px-2 w-full' : 'px-0 w-full flex'
+            ]"
+            ref="meetingsScroll" class="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth" style="scrollbar-width: none;">
             <template v-for="(events, idx) in calendarEvents" :key="events.id">
               <UCard 
-                class="event_card mb-3 mt-2 mr-2 min-w-[320px] max-w-[340px] flex-shrink-0"
+                :class="[
+                  'event_card mb-3 mt-2 mr-2 flex-shrink-0',
+                  calendarEvents.length === 1 ? 'w-full' : 'flex-1 min-w-[320px] max-w-[340px'
+                ]"
                 variant="outline"
                 :ui="{
                   root: 'w-full border-l-5 border-primary',

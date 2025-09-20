@@ -295,7 +295,7 @@ function formatLastLogin(dateString) {
 
       <div class="flex justify-between items-center 2xl:mt-8">
         <h2 class="text-black/80 font-semibold 2xl:text-2xl">Upcoming deadlines</h2>
-        <nuxtLink to="/test" class="text-muted flex items-center gap-3 event_card">
+        <nuxtLink to="/timeline" class="text-muted flex items-center gap-3 event_card">
           View Timeline
            <svg id="arrow" class="fill-muted" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
               <path d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"></path>
@@ -331,61 +331,43 @@ function formatLastLogin(dateString) {
             </div>
           </div>
 
-          <UBadge :color="colorChip" variant="subtle" size="xl" class="rounded-full">On Track</UBadge>
+          <UBadge :color="colorChip" variant="subtle" size="xl" class="rounded-full">{{ studentData.status }}</UBadge>
         </div>
       </UCard>
 
       <div class="grid grid-cols-2 grid-rows-2 w-full 2xl:gap-6 gap-4">
-          
+        
+        <StatCard
+          :value="`${completedSeasons} / ${totalSeasons}`"
+          label="Seasons"
+          icon="i-lucide:brain"
+          :percentage="`${(completedSeasons / totalSeasons * 100).toFixed(0)}%`"
+        />
+
         <StatCard
           :value="studentData.completed_projects"
-          label="Projects Completed"
-          icon="emojione:books"
+          label="Projects"
+          icon="i-lucide:computer"
         />
         
         <StatCard
           :value="studentData.exercises_completed"
-          label="Exercises Completed"
-          icon="emojione:green-book"
-        />
-
-        <StatCard
-          :value="`${completedSeasons} / ${totalSeasons}`"
-          label="Seasons Completed"
-          icon="emojione:alien-monster"
+          label="Exercises"
+          icon="i-lucide:clipboard-check"
         />
 
         <StatCard
           :value="studentData.points ?? 0"
           label="Qwasar Points"
-          icon="emojione:trophy"
+          icon="i-lucide:trophy"
+          :tooltip=true
         />
         
       </div>
 
-      <!-- <UCard
-        variant="outline"
-        :ui="{
-          root: 'w-full rounded-lg xl:px-6 2xl:px-4',
-          body: 'w-full flex flex-col items-center justify-center 2xl:!px-2 gap-12'
-        }"
-      >
-        <div class="flex flex-col items-center justify-center w-full">
-          <div class="flex justify-between items-center w-full mb-4">
-            <p class="2xl:text-2xl xl:text-xl font-bold text-black/80">Overall Progress</p>
-            <p class="text-muted">{{ studentData.progress }}%</p>
-          </div>
-
-          <UProgress color="primary" v-model="studentData.progress" />
-
-          <p class="text-muted ml-auto mt-2">
-            {{ completedSeasons }} out of {{ totalSeasons }} seasons completed
-          </p>
-        </div>
-      </UCard> -->
 
       <UCard
-        class="mt-6 w-full flex flex-col"
+        class="w-full flex flex-col"
         variant="outline"
         :ui="{
           root: 'w-full min-h-0 overflow-y-auto rounded-lg xl:px-6 2xl:px-2',
@@ -394,7 +376,7 @@ function formatLastLogin(dateString) {
       >
         <div class="flex justify-between items-center w-full">
           <div class="flex justify-center items-center gap-4">
-            <div class="bg-gradient-to-r from-primary-500 to-primary-300 w-10 h-10 rounded-lg flex justify-center items-center">
+            <div class="bg-gradient-to-r from-primary-500 to-primary-300 w-10 h-10 rounded-xl flex justify-center items-center">
               <UIcon name="i-lucide:sparkles" class="w-6 h-6 text-white" />
             </div>
             <h2 class="2xl:text-2xl xl:text-xl font-bold text-black/80">Daily Tips</h2>

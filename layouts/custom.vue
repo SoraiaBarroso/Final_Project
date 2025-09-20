@@ -26,6 +26,14 @@ const styleContainer = computed(() => {
   return isCollapsed.value ? 'flex items-center' : 'flex items-end';
 });
 
+// Helper to get a readable page title from the route
+const getPageTitle = (route: any) => {
+  if (route.meta && route.meta.title) return route.meta.title;
+  const segments = route.path.split('/').filter(Boolean);
+  if (segments.length === 0) return 'Home';
+  const last = segments[segments.length - 1];
+  return last.charAt(0).toUpperCase() + last.slice(1).replace(/-/g, ' ');
+};
 
 const items = computed<DropdownMenuItem[][]>(() => [
   [
@@ -105,7 +113,7 @@ const items = computed<DropdownMenuItem[][]>(() => [
 const mainLinks: NavigationMenuItem[] = [
   {
     label: 'Home',
-    to: '/students/student_data',
+    to: '/students/dashboard',
     icon: 'i-lucide:house',
     tooltip: {
       text: 'Home',
@@ -128,7 +136,7 @@ const mainLinks: NavigationMenuItem[] = [
   },
   {
     label: 'Timeline',
-    to: '/test',
+    to: '/timeline',
     badge: '3',
     icon: 'i-lucide:folder-clock',
     tooltip: {
@@ -138,6 +146,14 @@ const mainLinks: NavigationMenuItem[] = [
       linkLabel: 'xl:text-sm 2xl:text-base', // Responsive text size
     }
   },
+  {
+    label: 'Roadmap',
+    to: '/students/roadmap',
+    icon: 'i-lucide-map',
+    tooltip: {
+      text: 'Roadmap',
+    },
+  }
 ];
 
 const secondaryLinks: NavigationMenuItem[] = [
@@ -204,7 +220,7 @@ watch(
 <template>
   <div class="flex flex-row min-h-screen">
     <div :class="styleContainer" class="flex flex-col gap-2 pt-6 pb-2 px-3 border-r-[1.5px] border-border dark:border-neutral-700 h-screen flex-shrink-0">
-      <div :class="isCollapsed ? 'justify-center pb-2' : 'justify-start pl-2'" class="flex items-center gap-3 w-full mb-2">
+      <div :class="isCollapsed ? 'justify-center pb-2 mt-1' : 'justify-start pl-2'" class="flex items-center gap-3 w-full mb-2">
         <img src="../public/favicon.png" alt="Logo" class="xl:w-5 xl:h-5 w-5 h-5" />
         <p v-if="!isCollapsed" class="text-currentColor font-semibold xl:text-sm 2xl:text-lg">Amsterdam Tech</p>
       </div>
@@ -264,7 +280,9 @@ watch(
         <div class="flex items-center gap-4">
           <UIcon v-if="!isCollapsed" @click="isCollapsed = !isCollapsed" name="i-lucide-panel-left-close" class="size-5 cursor-pointer" />
           <UIcon v-else name="i-lucide-panel-left-open" class="size-5 cursor-pointer" @click="isCollapsed = !isCollapsed" /> 
-          <h1 class="2xl:text-lg font-semibold">Home</h1>
+          <h1 class="2xl:text-lg font-semibold">
+            {{ route.meta.title || getPageTitle(route) }}
+          </h1>
         </div>
 
         <UIcon name="i-lucide-bell" class="size-5 cursor-pointer" @click="open = true"/>
