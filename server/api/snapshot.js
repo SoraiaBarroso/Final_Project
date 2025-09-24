@@ -1,19 +1,19 @@
 // final_project/api/snapshot.js
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@supabase/supabase-js";
 
 export default defineEventHandler(async (event) => {
-  const supabaseUrl = process.env.SUPABASE_URL
-  const supabaseKey = process.env.SUPABASE_ROLE_KEY // or anon key for public data
-  const client = createClient(supabaseUrl, supabaseKey)
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_ROLE_KEY; // or anon key for public data
+  const client = createClient(supabaseUrl, supabaseKey);
 
   const { data, error } = await client
-    .from('progress_snapshots')
-    .select('*')
-    .order('snapshot_date', { ascending: false })
-    .limit(2)
+    .from("progress_snapshots")
+    .select("*")
+    .order("snapshot_date", { ascending: false })
+    .limit(2);
 
   if (error) {
-    return { error: error.message }
+    return { error: error.message };
   }
 
   if (!data || data.length < 2) {
@@ -23,13 +23,13 @@ export default defineEventHandler(async (event) => {
       on_track_pct_change: null,
       behind_pct_change: null,
       ahead_pct_change: null,
-    }
+    };
   }
 
-  const [latest, previous] = data
+  const [latest, previous] = data;
   function pctChange(curr, prev) {
     if (!prev || prev === 0) return curr > 0 ? 100 : 0;
-    return 100 * (curr - prev) / prev;
+    return (100 * (curr - prev)) / prev;
   }
 
   return {
@@ -42,5 +42,5 @@ export default defineEventHandler(async (event) => {
     behind_pct_change: pctChange(latest.behind, previous.behind),
     ahead_change: latest.ahead - previous.ahead,
     ahead_pct_change: pctChange(latest.ahead, previous.ahead),
-  }
-})
+  };
+});

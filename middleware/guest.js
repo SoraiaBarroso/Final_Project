@@ -6,6 +6,6 @@ export default defineNuxtRouteMiddleware(() => {
   if (user.value) {
     // Redirect to a default authenticated page. The role-specific
     // middleware there will handle the final destination.
-    return navigateTo('/students/student_data'); 
+    return navigateTo("/students/dashboard");
   }
 });
