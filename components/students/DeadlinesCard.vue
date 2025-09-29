@@ -120,21 +120,9 @@
 <template>
   <div class="mt-4 flex flex-col">
     <div class="flex items-center justify-between">
-      <h2 class="font-semibold text-black/80 2xl:text-2xl">Upcoming deadlines</h2>
-      <nuxtLink to="/timeline" class="text-muted event_card flex items-center gap-3">
+      <h2 class="font-semibold text-black/80 text-lg 2xl:text-xl">Upcoming deadlines</h2>
+      <nuxtLink to="/timeline" class="text-primary-800 underline hover:text-primary-600">
         View Timeline
-        <svg
-          id="arrow"
-          class="fill-muted"
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 14 14"
-        >
-          <path
-            d="m1.649 8.514-.91-.915 5.514-5.523H2.027l.01-1.258h6.388v6.394H7.158l.01-4.226z"
-          ></path>
-        </svg>
       </nuxtLink>
     </div>
 

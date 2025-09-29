@@ -230,7 +230,7 @@
         class="mb-2 flex w-full items-center gap-3"
       >
         <img src="../public/favicon.png" alt="Logo" class="h-5 w-5 xl:h-5 xl:w-5" />
-        <p v-if="!isCollapsed" class="text-currentColor font-semibold xl:text-sm 2xl:text-lg">
+        <p v-if="!isCollapsed" class="text-currentColor font-semibold xl:text-sm 2xl:text-base">
           Amsterdam Tech
         </p>
       </div>
@@ -296,9 +296,9 @@
     <main class="flex h-screen flex-1 flex-col">
       <!-- Navbar -->
       <div
-        class="border-border sticky top-0 z-10 flex h-14 w-full items-center justify-between border-b bg-white px-6"
+        class="border-border sticky top-0 z-10 flex h-14 w-full items-center justify-between border-b bg-white px-8"
       >
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3">
           <UIcon
             v-if="!isCollapsed"
             @click="isCollapsed = !isCollapsed"
@@ -311,7 +311,7 @@
             class="size-5 cursor-pointer"
             @click="isCollapsed = !isCollapsed"
           />
-          <h1 class="font-semibold 2xl:text-lg">
+          <h1 class="font-semibold 2xl:text-base">
             {{ route.meta.title || getPageTitle(route) }}
           </h1>
         </div>

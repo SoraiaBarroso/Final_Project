@@ -2,6 +2,10 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
+@theme {
+  --breakpoint-3xl: 1720px;
+}
+
 :root {
   --color-amber-500: #fbbf24;
   --color-lime-500: #a3e635;

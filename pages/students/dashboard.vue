@@ -1,9 +1,7 @@
 <script setup>
-  import { UIcon } from "#components";
   import MeetingsDisplay from "~/components/student_dashboard/MeetingsDisplay.vue";
   import DeadlinesCard from "~/components/students/DeadlinesCard.vue";
   import StatCard from "~/components/students/StatCard.vue";
-  import BarChart from "~/components/students/BarChart.vue";
 
   definePageMeta({
     layout: "custom",
@@ -298,69 +296,71 @@
     if (diffMin > 0) return diffMin === 1 ? "1 min ago" : `${diffMin}min ago`;
     return "just now";
   }
+
+  const value = ref(50)
+
 </script>
 
 <template>
-  <div class="student_data flex h-full gap-8 px-8 py-6">
-    <div class="flex flex-col justify-between w-1/2">
-      <div class="flex flex-col">
+  <div class="student_data flex flex-col h-full gap-6 2xl:gap-8 px-8 py-6">
+    
+    <div class="w-full">
+       <div class="flex flex-col">
         <div class="mb-4 flex items-center justify-start gap-3">
-          <h1 class="font-semibold text-black/80 xl:text-4xl 2xl:text-3xl">Hello,</h1>
-          <span class="text-primary-500 font-semibold xl:text-4xl 2xl:text-3xl"
+          <h1 class="font-semibold text-black/80 xl:text-4xl 2xl:text-2xl">Hello,</h1>
+          <span class="text-primary-500 font-semibold xl:text-4xl 2xl:text-2xl"
             >{{ studentData.first_name }}! 
           </span>
         </div>
 
         <div>
-          <p class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-xl">
+          <p class="text-muted text-base xl:mt-2 2xl:mt-1 2xl:text-lg">
             Nice to have you back, what an exciting day!
           </p>
-          <p class="text-muted mt-2 text-base 2xl:text-xl">
+          <p class="text-muted mt-2 text-base 2xl:text-lg">
             Get ready and check your projects today
           </p>
         </div>
       </div>
-
-      <MeetingsDisplay v-if="googleAccessToken" :googleAccessToken="googleAccessToken" />
-
-      <DeadlinesCard
-        v-if="studentData"
-        :seasonId="studentData.expected_season_id"
-        :programId="studentData.program_id"
-        :cohortId="studentData.cohort_id"
-      />
     </div>
 
-    <div class="flex w-1/2 flex-col justify-between items-center gap-6">
 
-      <UCard
-        class="w-full"
-        :ui="{
-          body: 'w-full 2xl:!px-3 2xl:!py-4 flex flex-col gap-4',
-        }"
-      >
-            <div class="flex w-full items-center justify-between text-center px-2">
-          <div class="flex items-center">
-            <UAvatar
-              :src="studentData.profile_image_url"
-              icon="i-lucide-image"
-              class="2xl:h-13 2xl:w-13"
-            />
-            <div class="text-left 2xl:ml-4">
-              <p class="font-semibold text-black/90 2xl:text-xl">{{ studentData.program_name }}</p>
-              <p class="text-muted xl:text-base 2xl:text-lg">
-                Cohort {{ studentData.cohort_name }}
-              </p>
-            </div>
-          </div>
+    <div class="w-full flex flex-col lg:flex-row h-full gap-8 lg:gap-12">
+      
+      <div class="flex flex-col justify-around h-full gap-4 2xl:gap-2 w-full lg:w-1/2">
+        <MeetingsDisplay v-if="googleAccessToken" :googleAccessToken="googleAccessToken" />
 
-          <UBadge :color="colorChip" variant="subtle" size="xl" class="rounded-full">{{
-            studentData.status
-          }}</UBadge>
+        <DeadlinesCard
+          v-if="studentData"
+          :seasonId="studentData.expected_season_id"
+          :programId="studentData.program_id"
+          :cohortId="studentData.cohort_id"
+        />
+      </div>
+
+      
+      <div class="flex w-full lg:w-1/2 flex-col h-full justify-around items-center gap-6">
+        
+        <div class="flex flex-col w-full gap-4">
+            <h2 class="font-semibold text-black/80 2xl:text-xl">
+              Progress
+            </h2>
+            <p v-if="studentData.status == 'On Track'" class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">Congratulations! You're currently <span class="text-green-500 font-semibold cursor-pointer" @click="launchConfetti">on track</span></p>
+            <p v-else-if="studentData.status == 'At Risk'" class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">You're currently <span class="text-yellow-500">at risk</span>, please check your tasks</p>
+            <p v-else class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">You're currently <span class="text-red-500 text-semi">off track</span>, please reach out for help</p>
+            <UCard
+              class="mt-4 w-full"
+              :ui="{
+                body: '2xl:!px-6 2xl:!py-4 xl:!px-6 w-full flex flex-col items-end gap-4',
+              }"
+            >
+              <p class="text-muted ">{{ studentData.progress }}%</p>
+              <UProgress size="lg" v-model="value" />
+              <p class="text-muted">{{ completedSeasons }} out of {{ totalSeasons }} completed</p>
+            </UCard>
         </div>
-    </UCard>
 
-      <div class="grid w-full grid-cols-2 grid-rows-2 gap-4 2xl:gap-4">
+        <div class="grid w-full grid-cols-2 grid-rows-2 gap-4 2xl:gap-4">
         <StatCard
           :value="`${completedSeasons} / ${totalSeasons}`"
           label="Seasons"
@@ -386,19 +386,9 @@
           icon="i-lucide:trophy"
           :tooltip="true"
         />
+        </div>
       </div>
 
-      <UCard
-        variant="soft"
-        class="w-full"
-        :ui="{
-          root: 'rounded-lg border-1 border-gray-200',
-          body: 'w-full bg-primary-50 2xl:!px-6 2xl:!py-4',
-        }"
-      >
-        <BarChart class="w-full" v-if="studentData" :cohortId="studentData.cohort_id" :userId="studentData.id" />
-      </UCard>
-      
     </div>
   </div>
 </template>

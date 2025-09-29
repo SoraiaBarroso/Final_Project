@@ -87,7 +87,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <BarChart
+  <!-- <BarChart
     :data="RevenueData"
     :height="300"
     :categories="RevenueCategoriesMultple"
@@ -101,5 +101,5 @@ onMounted(async () => {
     :legend-position="LegendPosition.Top"
     :hide-legend="false"
     :y-grid-line="true"
-  />
+  /> -->
 </template>

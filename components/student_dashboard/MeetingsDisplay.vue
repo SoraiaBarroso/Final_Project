@@ -96,7 +96,7 @@
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex items-center justify-between">
-      <h2 class="flex items-center gap-2 font-semibold text-black/80 2xl:text-2xl">
+      <h2 class="flex items-center gap-2 font-semibold text-black/80 text-lg 2xl:text-xl ">
         Today's meetings
       </h2>
 
