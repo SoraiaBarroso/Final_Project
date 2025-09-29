@@ -1,0 +1,816 @@
+"""
+Consolidated Data Processor
+Combines scrapping, student data updates, project completion, and season progress
+Run with: python data_processor.py [--scrape] [--students] [--projects] [--progress] [--all]
+"""
+
+import argparse
+import sys
+import os
+import json
+import requests
+import time
+import re
+from datetime import datetime, timedelta
+from bs4 import BeautifulSoup
+
+# Import our utilities
+from utils import (
+    get_supabase_client, map_season_name_to_db, parse_relative_time_to_timestamp,
+    load_scraped_data, get_student_id_map, get_project_id_map, get_season_id_map,
+    safe_upsert, print_step
+)
+
+class QwasarScraper:
+    """Handles web scraping from Qwasar platform"""
+    
+    def __init__(self, supabase_client=None):
+        self.username = os.getenv('SCRAPER_USERNAME')
+        self.password = os.getenv('SCRAPER_PASSWORD')
+        
+        if not self.username or not self.password:
+            raise ValueError("SCRAPER_USERNAME and SCRAPER_PASSWORD must be set in environment")
+        
+        self.session = requests.Session()
+        self.supabase = supabase_client or get_supabase_client()
+    
+    def get_auth_token(self):
+        """Get authentication token for login"""
+        url = "https://casapp.us.qwasar.io/login"
+        params = {"service": "https%3A%2F%2Fupskill.us.qwasar.io%2Fusers%2Fservice"}
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:109.0) Gecko/20100101 Firefox/110.0",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Language": "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+            "Accept-Encoding": "gzip, deflate",
+            "Dnt": "1",
+            "Upgrade-Insecure-Requests": "1",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "none",
+            "Sec-Fetch-User": "?1",
+            "Te": "trailers"
+        }
+        
+        try:
+            response = self.session.get(url, params=params, headers=headers)
+            response.raise_for_status()  # Raise an exception for bad status codes
+            
+            # Extract CSRF token
+            auth_token = re.search(r'<meta\s+name="csrf-token"\s+content="([a-zA-Z0-9\/+=]+)"\s*/>', response.text)
+            if not auth_token:
+                raise Exception("Could not find CSRF token in response")
+            
+            # Extract LT token
+            lt_pattern = r'<input type="hidden" name="lt" id="lt" value="([^"]+)" autocomplete="off" />'
+            lt_match = re.search(lt_pattern, response.text)
+            if not lt_match:
+                raise Exception("Could not find LT token in response")
+            
+            lt_value = lt_match.group(1)
+            appcas_session = response.cookies.get('_appcas_session')
+            
+            if not appcas_session:
+                raise Exception("Could not get session cookie")
+            
+            print(f"✓ Successfully extracted authentication tokens")
+            return auth_token.group(1), lt_value, appcas_session
+            
+        except requests.RequestException as e:
+            raise Exception(f"Network error during authentication: {e}")
+        except Exception as e:
+            print(f"Auth token extraction failed: {e}")
+            print(f"Response status: {response.status_code if 'response' in locals() else 'N/A'}")
+            raise Exception(f"Could not extract authentication tokens: {e}")
+    
+    def login(self):
+        """Authenticate with Qwasar platform using working method"""
+        print_step("AUTHENTICATION", "Logging into Qwasar platform")
+        
+        try:
+            cookies = self.get_tokens()
+            if cookies and cookies.get('user.id') and cookies.get('_session_id'):
+                print("✓ Authentication successful")
+                self.session_cookies = cookies
+                return True
+            else:
+                raise Exception("Failed to obtain valid session cookies")
+                
+        except Exception as e:
+            print(f"❌ Authentication error: {e}")
+            raise Exception(f"Authentication failed: {e}")
+    
+    def get_tokens(self):
+        """Original working token method from scraper.py"""
+        url = 'https://upskill.us.qwasar.io/login'
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:109.0) Gecko/20100101 Firefox/110.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': 'gzip, deflate',
+            'Dnt': '1',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Te': 'trailers'
+        }
+
+        response = requests.get(url, headers=headers, allow_redirects=False)
+        sessionIdCookies = response.cookies
+        
+        auth_token, lt_value, appcas_session = self.get_auth_token()
+        
+        url = 'https://casapp.us.qwasar.io/login'
+        cookies = {'_appcas_session': appcas_session}
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:109.0) Gecko/20100101 Firefox/110.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': 'gzip, deflate',
+            'Referer': 'https://casapp.us.qwasar.io/login?service=https%3A%2F%2Fupskill.us.qwasar.io%2Fusers%2Fservice',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Origin': 'https://casapp.us.qwasar.io',
+            'Dnt': '1',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-User': '?1',
+            'Te': 'trailers'
+        }
+
+        data = {
+            'authenticity_token': auth_token,
+            'lt': lt_value,
+            'service': 'https://upskill.us.qwasar.io/users/service',
+            'username': self.username,
+            'password': self.password,
+        }
+
+        res = requests.post(url, cookies=cookies, headers=headers, data=data, allow_redirects=False)
+        
+        match = re.search(r'<a\s+href="(.*?)">', res.text)
+        if not match:
+            raise Exception("Could not find redirect URL in login response")
+
+        redirect_url = match.group(1)
+        session_cookies = {'_session_id': sessionIdCookies.get('_session_id')}
+        res = requests.get(redirect_url, headers=headers, cookies=session_cookies, allow_redirects=False)
+        
+        user_id = res.cookies.get('user.id')
+        session_id = res.cookies.get('_session_id')
+        
+        return {'user.id': user_id, '_session_id': session_id}
+    
+    def get_session_cookies(self):
+        """Get session cookies"""
+        return getattr(self, 'session_cookies', {})
+    
+    def get_student_usernames(self, limit=None, exclude_inactive=True):
+        """Fetch student usernames from Supabase database"""
+        try:
+            print("📋 Fetching student usernames from database...")
+            
+            # Build query - get username and optionally filter active students
+            query = self.supabase.from_('students').select('username, is_active')
+            
+            # Optional: Filter out inactive students
+            if exclude_inactive:
+                query = query.neq('is_active', False)
+            
+            # Optional: Limit number of students (useful for testing)
+            if limit:
+                query = query.limit(limit)
+            
+            response = query.execute()
+            
+            if response.data:
+                usernames = [student['username'] for student in response.data 
+                           if student.get('username') and student.get('username').strip()]
+                
+                # Remove any None or empty usernames
+                usernames = [u for u in usernames if u]
+                
+                print(f"✓ Found {len(usernames)} student usernames in database")
+                
+                # Log first few usernames for verification
+                if usernames:
+                    preview = usernames[:5]
+                    print(f"  Preview: {', '.join(preview)}{'...' if len(usernames) > 5 else ''}")
+                
+                return usernames
+            else:
+                print("⚠️  No students found in database")
+                return []
+                
+        except Exception as e:
+            print(f"❌ Error fetching student usernames: {e}")
+            # Fallback to hardcoded list if database fetch fails
+            print("🔄 Falling back to hardcoded student list...")
+            return [
+                "moreira_t", "miasko_j", "bizimung_j", "migkas_s", "zaid-wak_a", 
+                "martine_fe", "shittu_i", "tofan_c", "araujo-c_d", "tickaite_e",
+                "suarez_g", "martens_h", "hopp_h", "abdulla_ma", "larsen-d_n"
+            ]  # Shortened fallback list
+    
+    def extract_student_data(self, html_content, student_id):
+        """Extract data from a student's profile page using original working logic"""
+        soup = BeautifulSoup(html_content, 'html.parser')
+        
+        # Use the exact working scrape function from original scraper
+        data = self.scrape_data_original(html_content, student_id)
+        
+        return {
+            'img_url': data.get('img'),
+            'last_login': data.get('last_log_in', 'N/A'),
+            'ongoing_projects': data.get('ongoing_projects', []),
+            'completed_projects': data.get('completed_projects', []),
+            'exercises_completed': data.get('exercises_completed'),
+            'points': data.get('points'),
+            'season_progress': data.get('seasons', {})
+        }
+    
+    def scrape_data_original(self, text, student_id):
+        """Original working scrape function from scraper.py"""
+        dic = {}
+        seasons_data = {}  # Only for seasons
+        ongoing_projects = []
+        completed_projects = []
+
+        soup = BeautifulSoup(text, 'html.parser')
+        # Locate all card elements
+        cards = soup.find_all('div', {'class': 'card-with-header'})
+
+        # Extract image
+        img_element = soup.find('img', {'height': '256'})
+        image = img_element['src'] if img_element else None
+        
+        # Extract last login
+        last_log_ing = soup.find('time', {'data-format': '%B %e, %Y %l:%M%P'})
+        if last_log_ing:
+            last_log_in = last_log_ing.get_text(strip=True)
+        else:
+            last_log_in = "N/A"
+
+        # Extract projects
+        projects = self.harvest_projects_original(soup)
+        projects_completed = self.harvest_projects_completed_original(soup)
+        completed_projects.extend(projects_completed)
+        ongoing_projects.extend(projects)
+
+        # Process each card to extract season progress
+        for card in cards:
+            dictmp = self.harvest_block_original(card)
+            seasons_data.update(dictmp)
+
+        exercises_completed = self.harvest_exercises_completed_original(soup)
+        points = self.harvest_points_original(soup)
+
+        # Add extracted data to the main dictionary
+        dic["seasons"] = seasons_data
+        dic["img"] = image
+        dic["last_log_in"] = last_log_in
+        dic["ongoing_projects"] = ongoing_projects
+        dic["completed_projects"] = completed_projects
+        dic["exercises_completed"] = exercises_completed
+        dic["points"] = points
+
+        return dic
+    
+    def harvest_exercises_completed_original(self, soup):
+        """Original working method from scraper.py"""
+        try:
+            li = soup.find('li', class_='row flex')
+            if li and 'Exercises Completed' in li.text:
+                spans = li.find_all('span')
+                if len(spans) > 1:
+                    return spans[1].text.strip()
+        except Exception as e:
+            print(f"Error extracting exercises completed: {e}")
+        return None
+
+    def harvest_points_original(self, soup):
+        """Original working method from scraper.py"""
+        try:
+            # Find the div with the SVG and a number
+            for div in soup.find_all('div', class_='flex items-center gap-2'):
+                # Check if it contains an SVG and a span with a number
+                if div.find('svg') and div.find('span'):
+                    spans = div.find_all('span')
+                    if spans and spans[-1].text.strip().isdigit():
+                        return spans[-1].text.strip()
+        except Exception as e:
+            print(f"Error extracting points: {e}")
+        return None
+
+    def harvest_projects_completed_original(self, soup):
+        """Original working method from scraper.py"""
+        projects = []
+        try:
+            # Find the header with the text 'Projects Completed'
+            header = soup.find("h2", string=lambda t: t and "Projects Completed" in t)
+            
+            if header:
+                # Locate the outermost container of the section
+                section_container = header.find_parent("div", class_="col-span-full")
+                
+                if section_container:
+                    # Find all divs with project items inside the section
+                    for project_div in section_container.find_all("div", class_="border-b border-slate-800"):
+                        # Extract the <a> link inside each <li>
+                        li = project_div.find("li", class_="flex gap-3 px-3 py-2 text-sm")
+                        if li:
+                            link = li.find("a", href=True)
+                            if link:
+                                projects.append(link.text.strip())
+        except Exception as e:
+            print(f"Error extracting completed projects: {e}")
+        return projects
+
+    def harvest_projects_original(self, soup):
+        """Original working method from scraper.py"""
+        projects = []
+        try:
+            # Find the header with the text 'Projects In Progress'
+            header = soup.find("h2", string=lambda t: t and "Projects In Progress" in t)
+
+            if header:
+                # Locate the outermost container of the section
+                section_container = header.find_parent("div", class_="col-span-full")
+                
+                if section_container:
+                    # Find all divs with project items inside the section
+                    for project_div in section_container.find_all("div", class_="border-b border-slate-800"):
+                        # Extract the <a> link inside each <li>
+                        li = project_div.find("li", class_="flex gap-3 px-3 py-2 text-sm")
+                        if li:
+                            link = li.find("a", href=True)
+                            if link:
+                                projects.append(link.text.strip())
+        except Exception as e:
+            print(f"Error extracting ongoing projects: {e}")
+        return projects
+
+    def harvest_block_original(self, card):
+        """Original working method from scraper.py"""
+        dic = {}
+        try:
+            # Extract the track name
+            track_name = card.find("h2", class_="text-xl").text.strip()
+            
+            # Extract progress percentage
+            progress_bar = card.find('div', class_='bg-yellow-400') or card.find('div', class_='bg-green-500')
+            if progress_bar:
+                progress_percent = progress_bar['style'].split('width:')[1].strip().replace(';', '')
+            else:
+                progress_percent = 'Unknown'
+            
+            dic[track_name] = progress_percent
+
+        except Exception as e:
+            print(f"Error processing track: {e}")
+        
+        return dic
+    
+    def extract_projects_in_progress(self, soup):
+        """Extract ongoing projects"""
+        projects = []
+        try:
+            # Find the header with the text 'Projects In Progress'
+            header = soup.find("h2", string=lambda t: t and "Projects In Progress" in t)
+            
+            if header:
+                # Locate the outermost container of the section
+                section_container = header.find_parent("div", class_="col-span-full")
+                
+                if section_container:
+                    # Find all divs with project items inside the section
+                    for project_div in section_container.find_all("div", class_="border-b border-slate-800"):
+                        # Extract the <a> link inside each <li>
+                        li = project_div.find("li", class_="flex gap-3 px-3 py-2 text-sm")
+                        if li:
+                            link = li.find("a", href=True)
+                            if link:
+                                projects.append(link.text.strip())
+        except Exception as e:
+            print(f"Error extracting ongoing projects: {e}")
+        
+        return projects
+    
+    def extract_completed_projects(self, soup):
+        """Extract completed projects"""
+        projects = []
+        try:
+            # Find the header with the text 'Projects Completed'
+            header = soup.find("h2", string=lambda t: t and "Projects Completed" in t)
+            
+            if header:
+                # Locate the outermost container of the section
+                section_container = header.find_parent("div", class_="col-span-full")
+                
+                if section_container:
+                    # Find all divs with project items inside the section
+                    for project_div in section_container.find_all("div", class_="border-b border-slate-800"):
+                        # Extract the <a> link inside each <li>
+                        li = project_div.find("li", class_="flex gap-3 px-3 py-2 text-sm")
+                        if li:
+                            link = li.find("a", href=True)
+                            if link:
+                                projects.append(link.text.strip())
+        except Exception as e:
+            print(f"Error extracting completed projects: {e}")
+        
+        return projects
+    
+    def extract_exercises_completed(self, soup):
+        """Extract exercises completed count"""
+        try:
+            li = soup.find('li', class_='row flex')
+            if li and 'Exercises Completed' in li.text:
+                spans = li.find_all('span')
+                if len(spans) > 1:
+                    return spans[1].text.strip()
+        except Exception as e:
+            print(f"Error extracting exercises completed: {e}")
+        return None
+    
+    def extract_points(self, soup):
+        """Extract points"""
+        try:
+            # Find the div with the SVG and a number
+            for div in soup.find_all('div', class_='flex items-center gap-2'):
+                # Check if it contains an SVG and a span with a number
+                if div.find('svg') and div.find('span'):
+                    spans = div.find_all('span')
+                    if spans and spans[-1].text.strip().isdigit():
+                        return spans[-1].text.strip()
+        except Exception as e:
+            print(f"Error extracting points: {e}")
+        return None
+    
+    def extract_season_progress(self, soup):
+        """Extract season progress data"""
+        season_data = {}
+        try:
+            cards = soup.find_all('div', {'class': 'card-with-header'})
+            for card in cards:
+                try:
+                    # Extract season name
+                    track_name_element = card.find("h2", class_="text-xl")
+                    if not track_name_element:
+                        continue
+                        
+                    track_name = track_name_element.text.strip()
+                    
+                    # Extract progress percentage
+                    progress_bar = card.find('div', class_='bg-yellow-400') or card.find('div', class_='bg-green-500')
+                    if progress_bar:
+                        style = progress_bar.get('style', '')
+                        if 'width:' in style:
+                            # Extract percentage from style attribute
+                            progress_percent = style.split('width:')[1].strip().replace(';', '').replace('%', '')
+                            try:
+                                percentage = float(progress_percent) if progress_percent else 0
+                            except ValueError:
+                                percentage = 0
+                            season_data[track_name] = {
+                                'completion_percentage': percentage
+                            }
+                        else:
+                            season_data[track_name] = {'completion_percentage': 0}
+                    else:
+                        season_data[track_name] = {'completion_percentage': 0}
+                        
+                except Exception as e:
+                    print(f"Error processing season card: {e}")
+                    continue
+                    
+        except Exception as e:
+            print(f"Error extracting season progress: {e}")
+        
+        return season_data
+    
+    def scrape_student_data(self, limit=None, include_inactive=False):
+        """Scrape student data from the platform"""
+        print_step("SCRAPING", "Extracting student data from Qwasar platform")
+    
+        try:
+            if not self.login():
+                raise Exception("Login failed")
+            
+            # Get student IDs dynamically from database
+            student_ids = self.get_student_usernames(
+                limit=limit,
+                exclude_inactive=not include_inactive
+            )
+            
+            if not student_ids:
+                raise Exception("No student usernames found to scrape")
+            
+            scraped_data = []
+            base_url = "https://upskill.us.qwasar.io/users/"
+            
+            print(f"Starting to scrape {len(student_ids)} students...")
+            
+            for i, student_id in enumerate(student_ids, 1):
+                try:
+                    print(f"\n{'='*60}")
+                    print(f"Scraping student {i}/{len(student_ids)}: {student_id}")
+                    print(f"{'='*60}")
+                    
+                    # Get student profile page using cookies directly
+                    url = base_url + student_id
+                    cookies = self.get_session_cookies()
+                    response = requests.get(url, cookies=cookies)
+                    response.raise_for_status()
+                    
+                    # Check if we're actually logged in
+                    if 'login' in response.url.lower() or 'sign in' in response.text.lower()[:500]:
+                        print(f"WARNING: Appears to be redirected to login page!")
+                        print(f"Current URL: {response.url}")
+                        print(f"Response length: {len(response.text)} characters")
+                        # Try to re-login
+                        if self.login():
+                            cookies = self.get_session_cookies()
+                            response = requests.get(url, cookies=cookies)
+                        else:
+                            raise Exception("Re-login failed")
+                    
+                    # Extract data from the page
+                    student_data = self.extract_student_data(response.text, student_id)
+                    student_data['name'] = student_id
+                    
+                    scraped_data.append(student_data)
+                    
+                    # Small delay to be respectful
+                    time.sleep(0.5)
+                    
+                except Exception as e:
+                    print(f"Failed to scrape {student_id}: {e}")
+                    import traceback
+                    traceback.print_exc()
+                    continue
+            
+            # Add metadata
+            scraped_data.append({
+                "last_modified": datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                "total_students": len(scraped_data) - 1  # Exclude metadata entry
+            })
+            
+            print(f"\n✓ Successfully scraped data for {len(scraped_data) - 1} students")
+            return scraped_data
+                
+        except Exception as e:
+            print(f"✗ Scraping failed: {e}")
+            import traceback
+            traceback.print_exc()
+            print("🔄 Attempting to fall back to existing data...")
+            
+            # Try to use existing data as fallback
+            existing_data = load_scraped_data()
+            if existing_data:
+                print(f"✓ Using existing data as fallback ({len(existing_data)} records)")
+                return existing_data
+            else:
+                raise Exception(f"Scraping failed and no existing data available: {e}")
+
+class StudentDataProcessor:
+    """Handles student data updates including extra data and season progress"""
+    
+    def __init__(self, supabase_client):
+        self.supabase = supabase_client
+        self.student_id_map = get_student_id_map(supabase_client)
+        self.season_id_map = get_season_id_map(supabase_client)
+    
+    def update_student_extra_data(self, scraped_data):
+        """Update student extra information (last login, points, etc.)"""
+        print_step("STUDENT EXTRA DATA", "Updating student details, points, and login info")
+        
+        records_to_update = []
+        
+        for student_data in scraped_data:
+            username = student_data.get("name")
+            if not username or username not in self.student_id_map:
+                continue
+            
+            student_id = self.student_id_map[username]
+            
+            # Prepare update record
+            update_record = {"id": student_id}
+            
+            # Handle last login
+            if "last_login" in student_data:
+                last_login_timestamp = parse_relative_time_to_timestamp(student_data["last_login"])
+                if last_login_timestamp:
+                    update_record["last_login"] = last_login_timestamp
+            
+            # Handle current season
+            current_season_name = student_data.get("current_season")
+            if current_season_name:
+                mapped_season = map_season_name_to_db(current_season_name)
+                season_id = self.season_id_map.get(mapped_season)
+                if season_id:
+                    update_record["current_season_id"] = season_id
+            
+            # Handle other fields
+            if "img_url" in student_data:
+                update_record["img_url"] = student_data["img_url"]
+            if "points" in student_data:
+                update_record["points"] = student_data["points"]
+            if "exercises_completed" in student_data:
+                update_record["exercises_completed"] = student_data["exercises_completed"]
+            
+            if len(update_record) > 1:  # More than just the ID
+                records_to_update.append(update_record)
+        
+        if records_to_update:
+            safe_upsert(self.supabase, 'students', records_to_update)
+            print(f"✓ Updated {len(records_to_update)} student records")
+        else:
+            print("No student records to update")
+    
+    def update_season_progress(self, scraped_data):
+        """Update student season progress"""
+        print_step("SEASON PROGRESS", "Updating student progress across seasons")
+        
+        records_to_upsert = []
+        
+        for student_data in scraped_data:
+            username = student_data.get("name")
+            if not username or username not in self.student_id_map:
+                continue
+            
+            student_id = self.student_id_map[username]
+            
+            # Process season progress data
+            season_progress = student_data.get("season_progress", {})
+            for season_name, progress_data in season_progress.items():
+                mapped_season_name = map_season_name_to_db(season_name)
+                if not mapped_season_name:
+                    continue
+                
+                season_id = self.season_id_map.get(mapped_season_name)
+                if not season_id:
+                    # Silently skip unknown seasons
+                    continue
+                
+                # Handle progress_data - could be string percentage or dict
+                if isinstance(progress_data, str):
+                    # Convert percentage string like "75%" to float
+                    try:
+                        if progress_data == 'Unknown':
+                            completion_percentage = 0
+                        elif progress_data.endswith('%'):
+                            completion_percentage = float(progress_data[:-1])
+                        else:
+                            completion_percentage = float(progress_data)
+                    except (ValueError, TypeError):
+                        completion_percentage = 0
+                elif isinstance(progress_data, dict):
+                    completion_percentage = progress_data.get("progress_percentage", 0)
+                else:
+                    completion_percentage = 0
+                
+                # Create progress record
+                progress_record = {
+                    "student_id": student_id,
+                    "season_id": season_id,
+                    "progress_percentage": completion_percentage,
+                    "is_completed": completion_percentage >= 100,
+                    "completion_date": datetime.now().date().isoformat() if completion_percentage >= 100 else None,
+                    "updated_at": datetime.now().isoformat()
+                }
+                
+                records_to_upsert.append(progress_record)
+        
+        if records_to_upsert:
+            safe_upsert(self.supabase, 'student_season_progress', records_to_upsert, 
+                       on_conflict="student_id, season_id")
+            print(f"✓ Updated {len(records_to_upsert)} season progress records")
+        else:
+            print("No season progress records to update")
+
+class ProjectCompletionProcessor:
+    """Handles project completion data updates"""
+    
+    def __init__(self, supabase_client):
+        self.supabase = supabase_client
+        self.student_id_map = get_student_id_map(supabase_client)
+        self.project_id_map = get_project_id_map(supabase_client)
+    
+    def update_project_completion(self, scraped_data):
+        """Update student project completion data"""
+        print_step("PROJECT COMPLETION", "Updating student project completion status")
+        
+        records_dict = {}
+        
+        for student_data in scraped_data:
+            username = student_data.get("name")
+            if not username or username not in self.student_id_map:
+                continue
+            
+            student_id = self.student_id_map[username]
+            
+            # Process completed projects first (these take priority)
+            for project_name in student_data.get("completed_projects", []):
+                project_id = self.project_id_map.get(project_name)
+                if project_id:
+                    key = (student_id, project_id)
+                    records_dict[key] = {
+                        "student_id": student_id,
+                        "project_id": project_id,
+                        "is_completed": True,
+                        "completion_date": datetime.now().date().isoformat()
+                    }
+            
+            # Process ongoing projects (only if not already completed)
+            for project_name in student_data.get("ongoing_projects", []):
+                project_id = self.project_id_map.get(project_name)
+                if project_id:
+                    key = (student_id, project_id)
+                    if key not in records_dict:
+                        records_dict[key] = {
+                            "student_id": student_id,
+                            "project_id": project_id,
+                            "is_completed": False,
+                            "completion_date": None
+                        }
+        
+        records_to_upsert = list(records_dict.values())
+        
+        if records_to_upsert:
+            safe_upsert(self.supabase, 'student_project_completion', records_to_upsert,
+                       on_conflict="student_id, project_id")
+            print(f"✓ Updated {len(records_to_upsert)} project completion records")
+        else:
+            print("No project completion records to update")
+
+def main():
+    """Main function with CLI argument parsing"""
+    parser = argparse.ArgumentParser(description='Process student data from Qwasar platform')
+    parser.add_argument('--scrape', action='store_true', help='Scrape new data from Qwasar')
+    parser.add_argument('--students', action='store_true', help='Update student extra data')
+    parser.add_argument('--projects', action='store_true', help='Update project completion data')
+    parser.add_argument('--progress', action='store_true', help='Update season progress data')
+    parser.add_argument('--all', action='store_true', help='Run all operations')
+    parser.add_argument('--limit', type=int, help='Limit number of students to scrape (for testing)')
+    parser.add_argument('--include-inactive', action='store_true', help='Include inactive students in scraping')
+    
+    args = parser.parse_args()
+    
+    # If no specific flags are provided, show help
+    if not any([args.scrape, args.students, args.projects, args.progress, args.all]):
+        parser.print_help()
+        return
+    
+    try:
+        # Get Supabase client
+        supabase = get_supabase_client()
+        
+        # Load or scrape data
+        if args.scrape or args.all:
+            scraper = QwasarScraper(supabase_client=supabase)
+            scraped_data = scraper.scrape_student_data(
+                limit=args.limit if hasattr(args, 'limit') else None,
+                include_inactive=args.include_inactive if hasattr(args, 'include_inactive') else False
+            )
+            # Save scraped data to the correct path
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            json_path = os.path.join(script_dir, '..', 'public', 'student_grades.json')
+            os.makedirs(os.path.dirname(json_path), exist_ok=True)
+            
+            with open(json_path, 'w', encoding='utf-8') as f:
+                json.dump(scraped_data, f, indent=2, ensure_ascii=False)
+            print(f"✓ Saved scraped data to {json_path}")
+        else:
+            scraped_data = load_scraped_data()
+        
+        if not scraped_data:
+            print("No data available to process")
+            return
+        
+        # Process student extra data
+        if args.students or args.all:
+            student_processor = StudentDataProcessor(supabase)
+            student_processor.update_student_extra_data(scraped_data)
+        
+        # Process project completion
+        if args.projects or args.all:
+            project_processor = ProjectCompletionProcessor(supabase)
+            project_processor.update_project_completion(scraped_data)
+        
+        # Process season progress
+        if args.progress or args.all:
+            student_processor = StudentDataProcessor(supabase)
+            student_processor.update_season_progress(scraped_data)
+        
+        print_step("COMPLETED", "All selected operations completed successfully")
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

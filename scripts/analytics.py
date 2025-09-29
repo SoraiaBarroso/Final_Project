@@ -1,0 +1,237 @@
+"""
+Analytics and Reporting
+Generates progress snapshots and analytics data for the dashboard
+Run with: python analytics.py [--snapshot] [--all]
+"""
+
+import argparse
+import sys
+from datetime import datetime
+
+# Import our utilities
+from utils import get_supabase_client, print_step
+
+class ProgressAnalytics:
+    """Handles progress snapshots and analytics generation"""
+    
+    def __init__(self, supabase_client):
+        self.supabase = supabase_client
+    
+    def create_progress_snapshot(self):
+        """Create a snapshot of current student progress statistics"""
+        print_step("PROGRESS SNAPSHOT", "Creating analytics snapshot of student progress")
+        
+        try:
+            # Query student table and count statuses
+            students_response = self.supabase.table('students').select('status').execute()
+            students = students_response.data
+            
+            if not students:
+                print("No student data found")
+                return False
+            
+            # Calculate statistics
+            total_students = len(students)
+            on_track = sum(1 for s in students if s.get('status') == 'On Track')
+            behind = sum(1 for s in students if s.get('status') == 'Behind')
+            ahead = sum(1 for s in students if s.get('status') == 'Ahead')
+            
+            # Handle students with no status or other statuses
+            untracked = total_students - (on_track + behind + ahead)
+            
+            # Create snapshot record
+            snapshot = {
+                "total_students": total_students,
+                "on_track": on_track,
+                "behind": behind,
+                "ahead": ahead,
+                "untracked": untracked,
+                "created_at": datetime.now().isoformat()
+            }
+            
+            # Insert snapshot
+            result = self.supabase.table('progress_snapshots').insert(snapshot).execute()
+            
+            print(f"✓ Created progress snapshot:")
+            print(f"  Total Students: {total_students}")
+            print(f"  On Track: {on_track} ({(on_track/total_students*100):.1f}%)")
+            print(f"  Behind: {behind} ({(behind/total_students*100):.1f}%)")
+            print(f"  Ahead: {ahead} ({(ahead/total_students*100):.1f}%)")
+            if untracked > 0:
+                print(f"  Untracked: {untracked} ({(untracked/total_students*100):.1f}%)")
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error creating progress snapshot: {e}")
+            return False
+    
+    def get_latest_statistics(self):
+        """Get the latest student statistics without creating a snapshot"""
+        print_step("CURRENT STATISTICS", "Retrieving current student progress statistics")
+        
+        try:
+            # Get student status distribution
+            students_response = self.supabase.table('students') \
+                .select('status, current_season_id, expected_season_id').execute()
+            students = students_response.data
+            
+            if not students:
+                print("No student data found")
+                return
+            
+            # Status distribution
+            status_counts = {}
+            season_alignment = {"aligned": 0, "misaligned": 0, "unknown": 0}
+            
+            for student in students:
+                status = student.get('status', 'Unknown')
+                status_counts[status] = status_counts.get(status, 0) + 1
+                
+                # Check season alignment
+                current_season = student.get('current_season_id')
+                expected_season = student.get('expected_season_id')
+                
+                if current_season and expected_season:
+                    if current_season == expected_season:
+                        season_alignment["aligned"] += 1
+                    else:
+                        season_alignment["misaligned"] += 1
+                else:
+                    season_alignment["unknown"] += 1
+            
+            # Print statistics
+            total = len(students)
+            print(f"Total Students: {total}")
+            print("\nStatus Distribution:")
+            for status, count in status_counts.items():
+                percentage = (count / total * 100) if total > 0 else 0
+                print(f"  {status}: {count} ({percentage:.1f}%)")
+            
+            print(f"\nSeason Alignment:")
+            for alignment, count in season_alignment.items():
+                percentage = (count / total * 100) if total > 0 else 0
+                print(f"  {alignment.title()}: {count} ({percentage:.1f}%)")
+            
+            return status_counts, season_alignment
+            
+        except Exception as e:
+            print(f"Error retrieving statistics: {e}")
+            return None, None
+    
+    def generate_detailed_report(self):
+        """Generate a detailed analytics report"""
+        print_step("DETAILED REPORT", "Generating comprehensive analytics report")
+        
+        try:
+            # Get comprehensive student data
+            students_response = self.supabase.table('students') \
+                .select('id, username, status, current_season_id, expected_season_id, last_login, points') \
+                .execute()
+            students = students_response.data
+            
+            if not students:
+                print("No student data found")
+                return False
+            
+            # Get season names for better reporting
+            seasons_response = self.supabase.table('seasons').select('id, name').execute()
+            season_names = {s['id']: s['name'] for s in seasons_response.data}
+            
+            # Analyze data
+            total_students = len(students)
+            active_students = sum(1 for s in students if s.get('last_login'))
+            students_with_points = sum(1 for s in students if s.get('points', 0) > 0)
+            
+            # Season distribution
+            season_distribution = {}
+            for student in students:
+                current_season_id = student.get('current_season_id')
+                if current_season_id:
+                    season_name = season_names.get(current_season_id, f"Season {current_season_id}")
+                    season_distribution[season_name] = season_distribution.get(season_name, 0) + 1
+            
+            # Print detailed report
+            print(f"\n📊 DETAILED ANALYTICS REPORT")
+            print(f"Generated at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            print("=" * 50)
+            
+            print(f"\n👥 STUDENT OVERVIEW")
+            print(f"Total Students: {total_students}")
+            print(f"Active Students (with login): {active_students} ({(active_students/total_students*100):.1f}%)")
+            print(f"Students with Points: {students_with_points} ({(students_with_points/total_students*100):.1f}%)")
+            
+            print(f"\n📚 CURRENT SEASON DISTRIBUTION")
+            for season, count in sorted(season_distribution.items()):
+                percentage = (count / total_students * 100) if total_students > 0 else 0
+                print(f"  {season}: {count} ({percentage:.1f}%)")
+            
+            # Get status and season alignment
+            status_counts, season_alignment = self.get_latest_statistics()
+            
+            return True
+            
+        except Exception as e:
+            print(f"Error generating detailed report: {e}")
+            return False
+
+def main():
+    """Main function with CLI argument parsing"""
+    parser = argparse.ArgumentParser(description='Generate analytics and progress snapshots')
+    parser.add_argument('--snapshot', action='store_true', help='Create a progress snapshot')
+    parser.add_argument('--stats', action='store_true', help='Show current statistics')
+    parser.add_argument('--report', action='store_true', help='Generate detailed report')
+    parser.add_argument('--all', action='store_true', help='Run all analytics operations')
+    parser.add_argument('--service-role', action='store_true', default=False,
+                       help='Use service role key for database access')
+    
+    args = parser.parse_args()
+    
+    # If no specific flags are provided, show help
+    if not any([args.snapshot, args.stats, args.report, args.all]):
+        parser.print_help()
+        return
+    
+    try:
+        # Get Supabase client
+        supabase = get_supabase_client(service_role=args.service_role)
+        analytics = ProgressAnalytics(supabase)
+        
+        success = True
+        
+        # Run requested operations
+        if args.all:
+            print_step("ANALYTICS SUITE", "Running all analytics operations")
+            
+            # Run all operations
+            if not analytics.create_progress_snapshot():
+                success = False
+            
+            analytics.get_latest_statistics()
+            
+            if not analytics.generate_detailed_report():
+                success = False
+        else:
+            if args.snapshot:
+                if not analytics.create_progress_snapshot():
+                    success = False
+            
+            if args.stats:
+                analytics.get_latest_statistics()
+            
+            if args.report:
+                if not analytics.generate_detailed_report():
+                    success = False
+        
+        if success:
+            print_step("COMPLETED", "Analytics operations completed successfully")
+        else:
+            print_step("PARTIAL SUCCESS", "Some analytics operations failed")
+            sys.exit(1)
+    
+    except Exception as e:
+        print(f"\n❌ Error: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
