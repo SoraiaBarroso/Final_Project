@@ -1,7 +1,7 @@
 // This is the gatekeeper for all protected pages. It ensures a user is logged in.
 // middleware/auth.ts
 export default defineNuxtRouteMiddleware((to, from) => {
-  console.log("Auth middleware triggered");
+  console.log("Auth middleware triggered is user logged in?");
   const user = useSupabaseUser();
 
   if (!user.value) {

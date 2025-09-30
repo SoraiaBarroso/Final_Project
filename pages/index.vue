@@ -5,6 +5,8 @@
     middleware: ["guest"],
   });
 
+  const colorMode = useColorMode()
+  colorMode.preference = 'light'
   const supabase = useSupabaseClient();
   const route = useRoute();
   const isErrorVisible = ref(false);

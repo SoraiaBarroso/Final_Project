@@ -1,6 +1,7 @@
 // middleware/guest.ts
 // will run on pages that should only be visible to unauthenticated users, like your login page.
 export default defineNuxtRouteMiddleware(() => {
+  console.log("Guest middleware");
   const user = useSupabaseUser();
 
   if (user.value) {

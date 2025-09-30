@@ -5,7 +5,7 @@
 
   definePageMeta({
     layout: "custom",
-    middleware: ["auth"],
+    middleware: ["auth", "role"],
   });
 
   const studentData = ref({});
