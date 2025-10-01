@@ -165,6 +165,9 @@
       tooltip: {
         text: "Roadmap",
       },
+      ui: {
+        linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
+      },
     },
   ];
 

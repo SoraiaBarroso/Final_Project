@@ -5,7 +5,7 @@
   // Page that cannot be accessed without authentication and has logic to log-out a user.
   definePageMeta({
     layout: "default",
-    middleware: ["role", "auth"], // check if user has the right role and is authenticated
+    middleware: ["admin"], // check if user has admin role (auth is checked globally)
   });
 
   const supabase = useSupabaseClient();
@@ -20,6 +20,7 @@
 
   const getSnapshotChange = async () => {
     const { data } = await useFetch("/api/snapshot");
+    console.log("Raw snapshot data:", data.value);
     snapshotChange.value = data.value;
     console.log("Snapshot change data:", snapshotChange.value);
     return snapshotChange.value;

@@ -583,6 +583,36 @@ class StudentDataProcessor:
         self.supabase = supabase_client
         self.student_id_map = get_student_id_map(supabase_client)
         self.season_id_map = get_season_id_map(supabase_client)
+        
+        # Get student program mapping for season filtering
+        self.student_program_map = self._get_student_program_map()
+        
+        # Get seasons grouped by program for proper filtering
+        self.seasons_by_program = self._get_seasons_by_program()
+    
+    def _get_student_program_map(self):
+        """Get mapping of student_id to program_id"""
+        try:
+            response = self.supabase.from_('students').select('id, program_id').execute()
+            return {row['id']: row['program_id'] for row in response.data}
+        except Exception as e:
+            print(f"Error fetching student program mapping: {e}")
+            return {}
+    
+    def _get_seasons_by_program(self):
+        """Get seasons grouped by program_id"""
+        try:
+            response = self.supabase.from_('seasons').select('id, name, program_id').execute()
+            seasons_by_program = {}
+            for row in response.data:
+                program_id = row['program_id']
+                if program_id not in seasons_by_program:
+                    seasons_by_program[program_id] = {}
+                seasons_by_program[program_id][row['name']] = row['id']
+            return seasons_by_program
+        except Exception as e:
+            print(f"Error fetching seasons by program: {e}")
+            return {}
     
     def update_student_extra_data(self, scraped_data):
         """Update student extra information (last login, points, etc.)"""
@@ -644,6 +674,18 @@ class StudentDataProcessor:
             
             student_id = self.student_id_map[username]
             
+            # Get the student's program to filter seasons correctly
+            student_program_id = self.student_program_map.get(student_id)
+            if not student_program_id:
+                print(f"Warning: No program found for student {username}")
+                continue
+            
+            # Get seasons for this student's specific program
+            program_seasons = self.seasons_by_program.get(student_program_id, {})
+            if not program_seasons:
+                print(f"Warning: No seasons found for program {student_program_id}")
+                continue
+            
             # Process season progress data
             season_progress = student_data.get("season_progress", {})
             for season_name, progress_data in season_progress.items():
@@ -651,9 +693,11 @@ class StudentDataProcessor:
                 if not mapped_season_name:
                     continue
                 
-                season_id = self.season_id_map.get(mapped_season_name)
+                # IMPORTANT: Only match seasons from the student's program
+                season_id = program_seasons.get(mapped_season_name)
                 if not season_id:
-                    # Silently skip unknown seasons
+                    # Skip seasons that don't belong to this student's program
+                    print(f"Skipping season '{mapped_season_name}' - not found in program {student_program_id} for student {username}")
                     continue
                 
                 # Handle progress_data - could be string percentage or dict
@@ -691,6 +735,46 @@ class StudentDataProcessor:
             print(f"✓ Updated {len(records_to_upsert)} season progress records")
         else:
             print("No season progress records to update")
+    
+    def cleanup_incorrect_season_progress(self):
+        """Remove student season progress records where the season doesn't belong to the student's program"""
+        print_step("CLEANUP", "Removing incorrect cross-program season progress records")
+        
+        try:
+            # Get all student season progress records with student and season program info
+            response = self.supabase.from_('student_season_progress').select(
+                '''
+                id, 
+                student_id,
+                season_id,
+                students!inner(program_id),
+                seasons!inner(program_id)
+                '''
+            ).execute()
+            
+            incorrect_records = []
+            for record in response.data:
+                student_program = record['students']['program_id']
+                season_program = record['seasons']['program_id']
+                
+                # If student's program doesn't match season's program, mark for deletion
+                if student_program != season_program:
+                    incorrect_records.append(record['id'])
+                    print(f"Found incorrect record: student program {student_program} vs season program {season_program}")
+            
+            if incorrect_records:
+                # Delete incorrect records
+                for record_id in incorrect_records:
+                    self.supabase.from_('student_season_progress').delete().eq('id', record_id).execute()
+                
+                print(f"✓ Removed {len(incorrect_records)} incorrect season progress records")
+            else:
+                print("✓ No incorrect season progress records found")
+                
+        except Exception as e:
+            print(f"Error during cleanup: {e}")
+            import traceback
+            traceback.print_exc()
 
 class ProjectCompletionProcessor:
     """Handles project completion data updates"""
@@ -754,6 +838,7 @@ def main():
     parser.add_argument('--students', action='store_true', help='Update student extra data')
     parser.add_argument('--projects', action='store_true', help='Update project completion data')
     parser.add_argument('--progress', action='store_true', help='Update season progress data')
+    parser.add_argument('--cleanup', action='store_true', help='Clean up incorrect cross-program season progress records')
     parser.add_argument('--all', action='store_true', help='Run all operations')
     parser.add_argument('--limit', type=int, help='Limit number of students to scrape (for testing)')
     parser.add_argument('--include-inactive', action='store_true', help='Include inactive students in scraping')
@@ -761,7 +846,7 @@ def main():
     args = parser.parse_args()
     
     # If no specific flags are provided, show help
-    if not any([args.scrape, args.students, args.projects, args.progress, args.all]):
+    if not any([args.scrape, args.students, args.projects, args.progress, args.cleanup, args.all]):
         parser.print_help()
         return
     
@@ -805,6 +890,11 @@ def main():
         if args.progress or args.all:
             student_processor = StudentDataProcessor(supabase)
             student_processor.update_season_progress(scraped_data)
+        
+        # Clean up incorrect cross-program records
+        if args.cleanup or args.all:
+            student_processor = StudentDataProcessor(supabase)
+            student_processor.cleanup_incorrect_season_progress()
         
         print_step("COMPLETED", "All selected operations completed successfully")
         

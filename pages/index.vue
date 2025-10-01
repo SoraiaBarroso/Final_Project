@@ -4,6 +4,10 @@
     layout: false,
     middleware: ["guest"],
   });
+  
+  import { useAuth } from "../composables/useAuth";
+
+  const { user, role, signInWithGoogle } = useAuth()
 
   const colorMode = useColorMode()
   colorMode.preference = 'light'
@@ -13,6 +17,8 @@
 
   supabase.auth.onAuthStateChange((event, session) => {
     console.log("Auth state changed:", event, session);
+    console.log("Current user from useAuth:", user.value?.email || 'null');
+    
     if (session && session.provider_token) {
       window.localStorage.setItem("oauth_provider_token", session.provider_token);
     }
@@ -23,20 +29,23 @@
       window.localStorage.removeItem("oauth_provider_token");
       window.localStorage.removeItem("oauth_provider_refresh_token");
     }
+    
+    // After authentication success, redirect to dashboard
+    if (event === "SIGNED_IN" && session) {
+      console.log("User successfully signed in, redirecting to dashboard...");
+      navigateTo("/students/dashboard");
+    }
   });
 
   const signInWithOAuth = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        scopes: "https://www.googleapis.com/auth/calendar.readonly",
-        redirectTo: "http://localhost:3000/auth/confirm", // Redirect to confirm page after authentication
-        queryParams: { access_type: "offline", prompt: "consent" },
-      },
-    });
+    const { data, error } = await signInWithGoogle()
+    
     if (error) {
       console.log("Authentication error:", error);
       navigateTo("/?error=domain");
+    } else {
+      console.log("OAuth initiated successfully");
+      // Note: After OAuth redirect, the user will be automatically set via the auth state change
     }
   };
 
@@ -74,6 +83,15 @@
       <UIcon name="i-lucide-user" class="size-8" />
       <h1 class="text-highlighted text-xl font-semibold text-pretty">Login</h1>
       <p class="text-muted text-base text-pretty">Enter your credentials to access your account.</p>
+      
+      <!-- Debug: Show current user state -->
+      <div v-if="user" class="text-sm text-green-600 bg-green-50 p-2 rounded">
+        ✅ Logged in as: {{ user.email }}<br>
+        🏷️ Role: {{ role }}
+      </div>
+      <div v-else class="text-sm text-gray-600 bg-gray-50 p-2 rounded">
+        👤 Not logged in (Role: {{ role }})
+      </div>
     </div>
     <div class="flex w-[35%] items-center justify-center">
       <UButton

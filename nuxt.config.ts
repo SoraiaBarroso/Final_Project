@@ -40,6 +40,8 @@ export default defineNuxtConfig({
     public: {
       googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
       googleClientSecret: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_SECRET,
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseKey: process.env.SUPABASE_KEY,
     },
   },
 

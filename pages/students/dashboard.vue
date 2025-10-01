@@ -5,45 +5,14 @@
 
   definePageMeta({
     layout: "custom",
-    middleware: ["auth", "role"],
+    middleware: ["auth"],
   });
 
   const studentData = ref({});
   const supabase = useSupabaseClient();
   const runtimeConfig = useRuntimeConfig();
-  const colorChip = computed(() =>
-    studentData.value.status
-      ? { "On Track": "success", "At Risk": "warning", Behind: "error", Unknown: "neutral" }[
-          studentData.value.status
-        ]
-      : "neutral"
-  );
+  const calendarEvents = ref([]);
 
-  // Motivational tips/quotes for students
-  const motivationTips = [
-    "Break large assignments into smaller tasks to avoid feeling overwhelmed.",
-    "Write pseudocode before jumping into actual coding — it saves time.",
-    "Review your class notes within 24 hours to reinforce memory.",
-    "Practice coding by hand occasionally; it strengthens problem-solving skills.",
-    "Use version control (like Git) early — it’s a must-have skill for developers.",
-    "Don’t just copy solutions; re-implement them from scratch to truly learn.",
-    "Test your code often; small tests prevent big headaches later.",
-    "Set a timer for focused study sessions (Pomodoro technique works well).",
-    "Balance theory with practice — apply concepts by building mini-projects.",
-    "Read error messages carefully; they often tell you exactly what’s wrong.",
-    "Collaborate with classmates — teaching a concept helps you master it.",
-    "Learn how to read documentation; it’s your best friend in the long run.",
-    "Stay organized with folders, naming conventions, and comments.",
-    "Focus on mastering fundamentals (data structures, algorithms, OOP).",
-    "Don’t procrastinate debugging; fix issues as soon as they appear.",
-    "Keep a 'bug journal' — write down common mistakes and how you solved them.",
-    "Ask for help when stuck, but try solving on your own first.",
-    "Take breaks and step away from the screen to clear your mind.",
-    "Keep practicing regularly; consistency beats cramming.",
-    "Remember: progress is better than perfection — just keep coding!",
-  ];
-
-  const currentTip = ref("");
   const tipsRead = ref(0);
 
   const totalSeasons = ref(0);
@@ -68,16 +37,11 @@
     });
     return filtered;
   });
+
   const completedSeasons = ref(0);
-  const googleAccessToken = ref(1);
+  const googleAccessToken = ref(null);
   // Store all seasons for the student's program for id-to-name mapping
   const allProgramSeasons = ref([]);
-
-  function pickRandomTip() {
-    const idx = Math.floor(Math.random() * motivationTips.length);
-    currentTip.value = motivationTips[idx];
-    tipsRead.value++;
-  }
 
   watch(tipsRead, (newVal) => {
     if (newVal >= 5) {
@@ -107,30 +71,6 @@
     return Math.round(avg); // or keep as float if you want decimals
   }
 
-  function formatEventDate(dateTimeString) {
-    const date = new Date(dateTimeString);
-    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    const dayName = dayNames[date.getDay()];
-    const day = date.getDate();
-    const month = monthNames[date.getMonth()];
-
-    return `${dayName} ${day} ${month}`;
-  }
-
   async function fetchProjectsCompleted(studentId) {
     const { count, error } = await supabase
       .from("student_project_completion")
@@ -141,6 +81,58 @@
     return count || 0;
   }
 
+  
+  async function fetchCalendarEvents(accessToken, period = 'today') {
+    const { timeMin, timeMax } = getTimeRange(period);
+
+    const res = await fetch(
+      `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(
+        timeMin
+      )}&timeMax=${encodeURIComponent(
+        timeMax
+      )}&singleEvents=true&orderBy=startTime`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    const data = await res.json();
+    calendarEvents.value = data.items || [];
+    console.log("Current calendar home:", calendarEvents.value);
+  }
+
+  function getTimeRange(period = "week") {
+    let timeMin = new Date();
+    let timeMax = new Date();
+
+    if (period === "week") {
+      // Set to Monday of current week (start of week)
+      timeMin.setDate(timeMin.getDate() - timeMin.getDay() + 1);
+      timeMin.setHours(0, 0, 0, 0);
+
+      // Set to Monday of next week (end of current week)
+      timeMax.setDate(timeMax.getDate() - timeMax.getDay() + 8);
+      timeMax.setHours(0, 0, 0, 0);
+    } else if (period === "month") {
+      // Set to beginning of current month
+      timeMin.setDate(1);
+      timeMin.setHours(0, 0, 0, 0);
+
+      // Set to beginning of next month
+      timeMax.setMonth(timeMax.getMonth() + 1, 1);
+      timeMax.setHours(0, 0, 0, 0);
+    } else if (period === "today") {
+      timeMin.setHours(0, 0, 0, 0);
+      timeMax.setHours(23, 59, 59, 999);
+    }
+
+    return {
+      timeMin: timeMin.toISOString(),
+      timeMax: timeMax.toISOString(),
+    };
+  }
   async function fetchStudentData() {
     const {
       data: { session },
@@ -202,7 +194,7 @@
     // Fetch completed seasons for the student
     const { data: completedData, error: completedError } = await supabase
       .from("student_season_progress")
-      .select("season_id, is_completed")
+      .select("season_id, seasons(name), is_completed")
       .eq("student_id", studentData.value.id)
       .eq("is_completed", true);
 
@@ -249,25 +241,26 @@
     { immediate: true }
   );
 
-  const deadline = new Date(Date.now() + 10 * 60 * 60 * 1000); // 10 hours from now
-  const now = ref(new Date());
-  const totalSeconds = Math.floor((deadline - new Date()) / 1000);
+  // const deadline = new Date(Date.now() + 10 * 60 * 60 * 1000); // 10 hours from now
+  // const now = ref(new Date());
+  // const totalSeconds = Math.floor((deadline - new Date()) / 1000);
 
-  const countdown = ref(totalSeconds);
+  // const countdown = ref(totalSeconds);
 
-  onMounted(() => {
-    const interval = setInterval(() => {
-      now.value = new Date();
-      const left = Math.floor((deadline - now.value) / 1000);
-      countdown.value = left > 0 ? left : 0;
-    }, 1000);
-    onUnmounted(() => clearInterval(interval));
-  });
+  // onMounted(() => {
+  //   const interval = setInterval(() => {
+  //     now.value = new Date();
+  //     const left = Math.floor((deadline - now.value) / 1000);
+  //     countdown.value = left > 0 ? left : 0;
+  //   }, 1000);
+  //   onUnmounted(() => clearInterval(interval));
+  // });
 
   onMounted(async () => {
     const {
       data: { session },
     } = await supabase.auth.getSession();
+
     googleAccessToken.value = session?.provider_token || null;
 
     // const { data: { session: newSession } } = await supabase.auth.refreshSession()
@@ -278,7 +271,6 @@
     }
 
     await fetchStudentData();
-    pickRandomTip();
   });
 
   // Format last_login as 'x days/hours/minutes ago'
@@ -297,7 +289,7 @@
     return "just now";
   }
 
-  const value = ref(50)
+  const value = computed(() => studentData.value.progress || 0);
 
 </script>
 

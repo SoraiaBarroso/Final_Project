@@ -1,9 +1,7 @@
 // final_project/api/snapshot.js
-import { createClient } from "@supabase/supabase-js";
-
 export default defineEventHandler(async (event) => {
   const supabaseUrl = process.env.SUPABASE_URL;
-  const supabaseKey = process.env.SUPABASE_ROLE_KEY; // or anon key for public data
+  const supabaseKey = process.env.SUPABASE_ROLE_KEY;
   const client = createClient(supabaseUrl, supabaseKey);
 
   const { data, error } = await client
@@ -12,6 +10,7 @@ export default defineEventHandler(async (event) => {
     .order("snapshot_date", { ascending: false })
     .limit(2);
 
+  console.log("data:", data, "error:", error);
   if (error) {
     return { error: error.message };
   }

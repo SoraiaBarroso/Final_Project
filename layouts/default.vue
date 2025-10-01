@@ -3,24 +3,7 @@ import { onMounted } from "vue";
 import { useRoute } from "vue-router";
 import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
 
-const XL_BREAKPOINT = 1280;
 const colorMode = useColorMode();
-
-function handleResize() {
-  if (window.innerWidth < XL_BREAKPOINT) {
-    isCollapsed.value = true;
-  }
-}
-
-onMounted(() => {
-  handleResize();
-  window.addEventListener("resize", handleResize);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", handleResize);
-});
-
 const supabase = useSupabaseClient();
 const route = useRoute();
 
@@ -104,7 +87,6 @@ const mainLinks: NavigationMenuItem[] = [
     label: "Dashboard",
     to: "/admin/dashboard",
     ariaLabel: "Dashboard",
-    active: true,
     icon: "i-lucide-house",
     tooltip: {
       text: "Dashboard",
@@ -115,7 +97,6 @@ const mainLinks: NavigationMenuItem[] = [
   },
   {
     label: "Analytics",
-    to: "/",
     icon: "i-lucide-chart-no-axes-combined",
     ariaLabel: "Analytics",
     tooltip: {
@@ -124,18 +105,20 @@ const mainLinks: NavigationMenuItem[] = [
     ui: {
       linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
     },
-  },
-  {
-    label: "Messages",
-    icon: "i-lucide-send",
-    ariaLabel: "Messages",
-    to: "/",
-    tooltip: {
-      text: "Messages",
-    },
-    ui: {
-      linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
-    },
+    children: [
+      {
+        label: 'Overall Analytics',
+        description: 'Overall attendance analytics among all students.',
+        icon: 'i-lucide-house',
+        to: '/admin/analytics'
+      },
+      {
+        label: 'Cohort Analytics',
+        description: 'Cohort-based attendance analytics.',
+        icon: 'i-lucide-house',
+        to: '/admin/analytics/cohort'
+      },
+    ],
   },
 ];
 
@@ -154,22 +137,25 @@ const secondaryLinks: NavigationMenuItem[] = [
 
 const links = [mainLinks, secondaryLinks];
 
-onMounted(async () => {
-  // Initialize active link based on current route or default to first link
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  userName.value = user?.user_metadata?.full_name || "Unknown User";
-  userImg.value = user?.user_metadata?.picture;
-});
+  onMounted(async () => {
+    // Initialize active link based on current route or default to first link
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    userName.value = user?.user_metadata?.full_name || "Unknown User";
+    userImg.value = user?.user_metadata?.picture;
 
-// Watch for route changes and update active state
-watch(
-  () => route.path,
-  (newPath) => {
-    active.value = mainLinks.findIndex((link) => link.to === newPath);
-  }
-);
+    // Set active state based on current route
+    active.value = mainLinks.findIndex((link) => link.to === route.path);
+  });
+
+  // Watch for route changes and update active state
+  watch(
+    () => route.path,
+    (newPath) => {
+      active.value = mainLinks.findIndex((link) => link.to === newPath);
+    }
+  );
 </script>
 
 <template>
@@ -197,6 +183,7 @@ watch(
         :items="links[0]"
         :class="styleNav"
         class="mt-2 cursor-pointer"
+        popover
         :ui="{
           item: 'mb-0.5',
         }"
@@ -217,14 +204,17 @@ watch(
         v-model:open="open"
         :items="items"
         :ui="{
-          content: 'w-48',
+          content: 'xl:w-48 2xl:w-56',
         }"
       >
         <div
-          class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md py-1 pr-1 pl-2 transition delay-100 hover:bg-gray-100"
+          :class="isCollapsed ? 'pl-1' : 'pl-2'"
+          class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md py-1 pr-1 transition delay-100 hover:bg-gray-100"
         >
           <UAvatar alt="User Avatar" size="2xs" :src="userImg" />
-          <p v-if="!isCollapsed" class="text-currentColor text-sm font-semibold">{{ userName }}</p>
+          <p v-if="!isCollapsed" class="text-currentColor font-semibold xl:text-sm 2xl:text-base">
+            {{ userName }}
+          </p>
           <UIcon
             v-if="!isCollapsed"
             name="i-lucide-chevrons-up-down"
@@ -260,7 +250,8 @@ watch(
         <UIcon name="i-lucide-bell" class="size-5 cursor-pointer" @click="open = true" />
       </div>
 
-      <div class="min-h-0 flex-1">
+      <!-- Content (slot) -->
+      <div class="min-h-0 flex-1 overflow-y-auto">
         <slot />
       </div>
     </main>

@@ -2,6 +2,7 @@
 // middleware/auth.ts
 export default defineNuxtRouteMiddleware((to, from) => {
   console.log("Auth middleware triggered is user logged in?");
+
   const user = useSupabaseUser();
 
   if (!user.value) {

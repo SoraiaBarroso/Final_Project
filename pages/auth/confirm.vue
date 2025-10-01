@@ -21,32 +21,12 @@
     }
   });
 
-  // Table to store refresh tokens
-  // const storeRefreshToken = async (userId, refreshToken) => {
-  //   const { error } = await supabase
-  //     .from('user_tokens')
-  //     .upsert({
-  //       user_id: userId,
-  //       provider: 'google',
-  //       refresh_token: refreshToken
-  //     })
-  //   if (error) console.error('Error saving refresh token:', error)
-  //   else console.log('Refresh token saved successfully')
-  // }
-
   watch(
     user,
     async () => {
       if (user.value) {
         // const userId = user.value.id
         const email = user.value.email?.toLowerCase() || "";
-
-        // Save refresh token if available
-        // const { data: { session } } = await supabase.auth.getSession()
-        // const refreshToken = session?.refresh_token // may be null if not requested offline
-        // if (refreshToken) {
-        //   await storeRefreshToken(userId, refreshToken)
-        // }
 
         // Check if user is admin
         const { data: adminData } = await supabase
