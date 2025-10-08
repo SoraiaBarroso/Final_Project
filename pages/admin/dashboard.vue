@@ -235,8 +235,8 @@ function getRowItems(row) {
 </script>
 
 <template>
-  <div class="py-6 flex flex-col h-full gap-6 px-8 ">
-        <div class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px"
+  <div class="py-6 flex flex-col h-full gap-6 px-8">
+    <div class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px"
     > 
       <UCard
         variant="subtle"

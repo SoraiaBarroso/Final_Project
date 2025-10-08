@@ -1,20 +1,32 @@
 <script setup>
 definePageMeta({
-layout: "default",
-middleware: ["admin"], // check if user has admin role (auth is checked globally)
+  layout: "default",
+  middleware: ["admin"], // check if user has admin role (auth is checked globally)
 });
 
-import BarCharSingle from '~/components/admin/BarCharSingle.vue';
+import BarCharSingle from '~/components/admin/analytics/BarCharSingle.vue';
+import { useAttendance } from '~/composables/useAttendance';
+import { onMounted, ref } from 'vue'
 
-// Hardcoded analytics data
-const analyticsData = {
-  attendanceRate: 87.5,
-  workshopRate: 78.2,
-  mentoringRate: 15.4,
-  standupRate: 6.4
-};
+// reactive analytics data (will be populated from the API)
+const attendanceOverall = ref(null)
+const attendanceWorkshop = ref(null)
+const attendanceMentoring = ref(null)
+const attendanceStandup = ref(null)
 
+const { data: attendanceData, error: attendanceError, loading: attendanceLoading, fetchAttendance } = useAttendance()
 
+onMounted(async () => {
+  await fetchAttendance()
+  const metrics = attendanceData.value ?? []
+  for (const m of metrics) {
+    if (m.metric === 'overall') attendanceOverall.value = m.percentage
+    if (m.metric === 'workshop') attendanceWorkshop.value = m.percentage
+    if (m.metric === 'mentoring') attendanceMentoring.value = m.percentage
+    if (m.metric === 'standup') attendanceStandup.value = m.percentage
+  }
+  console.log('Fetched attendance metrics:', metrics)
+})
 </script>
 
 <template>
@@ -43,9 +55,9 @@ const analyticsData = {
                 <p class="text-muted text-xs font-semibold uppercase">Average Attendance</p>
 
                 <template #footer>
-                <p class="m-0 flex items-center text-2xl font-bold text-black">
-                    {{ analyticsData.attendanceRate }}%
-                </p>
+        <p class="m-0 flex items-center text-2xl font-bold text-black">
+          {{ attendanceOverall !== null ? attendanceOverall + '%' : (attendanceLoading ? 'Loading...' : '—') }}
+        </p>
                 </template>
             </UCard>
       <UCard
@@ -69,7 +81,7 @@ const analyticsData = {
 
         <template #footer>
           <p class="m-0 flex items-center text-2xl font-bold text-black">
-            {{ analyticsData.workshopRate }}%
+            {{ attendanceWorkshop !== null ? attendanceWorkshop + '%' : (attendanceLoading ? 'Loading...' : '—') }}
           </p>
         </template>
       </UCard>
@@ -94,7 +106,7 @@ const analyticsData = {
 
         <template #footer>
           <p class="m-0 flex items-center text-2xl font-bold text-black">
-            {{ analyticsData.mentoringRate }}%
+            {{ attendanceMentoring !== null ? attendanceMentoring + '%' : (attendanceLoading ? 'Loading...' : '—') }}
           </p>
         </template>
       </UCard>
@@ -118,8 +130,8 @@ const analyticsData = {
         <p class="text-muted text-xs font-semibold uppercase">Stand-Ups</p>
 
         <template #footer>
-          <p class="m-0 flex items-center text-2xl font-bold text-black">
-            {{ analyticsData.standupRate }}%
+            <p class="m-0 flex items-center text-2xl font-bold text-black">
+            {{ attendanceStandup !== null ? attendanceStandup + '%' : (attendanceLoading ? 'Loading...' : '—') }}
           </p>
         </template>
       </UCard>
@@ -129,9 +141,7 @@ const analyticsData = {
         class="flex flex-col items-center justify-between h-full overflow-y-auto"
         :ui="{
           root: 'relative',
-          // make header sticky within the card's scroll container (not fixed to viewport)
           header: 'w-full border-b border-border px-4 xl:px-6 flex items-center gap-2 sticky top-0 z-10 bg-white',
-          // add top padding equal to header height so body content isn't overlapped by the sticky header
           body: 'w-full flex justify-center items-center pt-14',
         }"
        >
