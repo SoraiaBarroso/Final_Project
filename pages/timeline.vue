@@ -281,17 +281,18 @@
       .eq("season_id", seasonId)
       .eq("program_id", programId);
 
-    if (projects) {
+    const projectsData = (projects || []) as any[];
+    if (projectsData.length) {
       // Sort all projects by offset_days ascending
-      const sortedProjects = [...projects].sort(
-        (a, b) => (a.offset_days || 0) - (b.offset_days || 0)
+      const sortedProjects = [...projectsData].sort(
+        (a: any, b: any) => (a.offset_days || 0) - (b.offset_days || 0)
       );
       // Separate projects with description (e.g., Bootcamp) and others
-      const withDescription = sortedProjects.filter(
-        (p: any) => p.description && p.description.toLowerCase().includes("bootcamp")
+      const withDescription = sortedProjects.filter((p: any) =>
+        p.description && String(p.description).toLowerCase().includes("bootcamp")
       );
       const withoutDescription = sortedProjects.filter(
-        (p: any) => !p.description || !p.description.toLowerCase().includes("bootcamp")
+        (p: any) => !p.description || !String(p.description).toLowerCase().includes("bootcamp")
       );
 
       let timelineProjects: any[] = [];

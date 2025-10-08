@@ -12,6 +12,7 @@
 
   definePageMeta({
     layout: "custom",
+    middleware: ["auth", "student-only"],
   });
 
   const supabase = useSupabaseClient();

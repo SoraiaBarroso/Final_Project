@@ -19,10 +19,9 @@ const analyticsData = {
 
 <template>
     <div class="py-6 flex flex-col h-full gap-6 px-8">
-        <h1 class="text-black/80 text-lg font-semibold">Attendance Percentage</h1>
+        <!-- <h1 class="text-black/80 text-lg font-semibold">Attendance Percentage</h1> -->
 
-        <div
-            class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px"
+        <div class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px"
         >
             <UCard
                 variant="subtle"
@@ -60,13 +59,13 @@ const analyticsData = {
       >
         <template #header>
           <div
-            class="bg-success/10 border-success flex h-8 w-8 items-center justify-center rounded-full border"
+            class="bg-info/10 border-info  flex h-8 w-8 items-center justify-center rounded-full border"
           >
-            <UIcon name="i-lucide-check-circle" class="text-success text-currentColor size-4" />
+            <UIcon name="i-lucide:atom" class="text-info text-currentColor size-4" />
           </div>
         </template>
 
-        <p class="text-muted text-xs font-semibold uppercase">Workshop</p>
+        <p class="text-muted text-xs font-semibold uppercase">Workshops</p>
 
         <template #footer>
           <p class="m-0 flex items-center text-2xl font-bold text-black">
@@ -85,13 +84,13 @@ const analyticsData = {
       >
         <template #header>
           <div
-            class="bg-error/10 border-error flex h-8 w-8 items-center justify-center rounded-full border"
+            class="bg-info/10 border-info flex h-8 w-8 items-center justify-center rounded-full border"
           >
-            <UIcon name="i-lucide-triangle-alert" class="text-error text-currentColor size-4" />
+            <UIcon name="i-lucide:graduation-cap" class="text-info text-currentColor size-4" />
           </div>
         </template>
 
-        <p class="text-muted text-xs font-semibold uppercase">Mentoring</p>
+        <p class="text-muted text-xs font-semibold uppercase">Mentorings</p>
 
         <template #footer>
           <p class="m-0 flex items-center text-2xl font-bold text-black">
@@ -112,11 +111,11 @@ const analyticsData = {
           <div
             class="bg-info/10 border-info flex h-8 w-8 items-center justify-center rounded-full border"
           >
-            <UIcon name="i-lucide-party-popper" class="text-info text-currentColor size-4" />
+            <UIcon name="i-lucide:scan-face" class="text-info text-currentColor size-4" />
           </div>
         </template>
 
-        <p class="text-muted text-xs font-semibold uppercase">Stand-Up</p>
+        <p class="text-muted text-xs font-semibold uppercase">Stand-Ups</p>
 
         <template #footer>
           <p class="m-0 flex items-center text-2xl font-bold text-black">
@@ -127,10 +126,13 @@ const analyticsData = {
         </div>
 
        <UCard
-        class="flex flex-col items-center h-full"
+        class="flex flex-col items-center justify-between h-full overflow-y-auto"
         :ui="{
-          header: 'w-full border-b border-border px-4 xl:px-6 flex items-center gap-2',
-          body: 'w-full flex justify-center items-center',
+          root: 'relative',
+          // make header sticky within the card's scroll container (not fixed to viewport)
+          header: 'w-full border-b border-border px-4 xl:px-6 flex items-center gap-2 sticky top-0 z-10 bg-white',
+          // add top padding equal to header height so body content isn't overlapped by the sticky header
+          body: 'w-full flex justify-center items-center pt-14',
         }"
        >
         <template #header>

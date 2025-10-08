@@ -1,7 +1,7 @@
 <script setup> 
   definePageMeta({
     layout: "custom",
-    middleware: ["auth"],
+    middleware: ["auth", "student-only"],
   });
 </script>
 

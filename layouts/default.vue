@@ -110,13 +110,19 @@ const mainLinks: NavigationMenuItem[] = [
         label: 'Overall Analytics',
         description: 'Overall attendance analytics among all students.',
         icon: 'i-lucide-house',
-        to: '/admin/analytics'
+        to: '/admin/analytics',
+        ui: {
+          linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
+        },
       },
       {
         label: 'Cohort Analytics',
         description: 'Cohort-based attendance analytics.',
         icon: 'i-lucide-house',
-        to: '/admin/analytics/cohort'
+        to: '/admin/analytics/cohort',
+        ui: {
+          linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
+        },
       },
     ],
   },

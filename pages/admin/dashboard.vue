@@ -19,11 +19,19 @@
   const loading = ref(true);
 
   const getSnapshotChange = async () => {
-    const { data } = await useFetch("/api/snapshot");
-    console.log("Raw snapshot data:", data.value);
-    snapshotChange.value = data.value;
-    console.log("Snapshot change data:", snapshotChange.value);
-    return snapshotChange.value;
+    try {
+      const res = await $fetch("/api/snapshot");
+      // some handlers return { data: { value } } while others may return the value directly
+      const payload = res?.data?.value ?? res?.data ?? res
+      console.log("Raw snapshot payload:", payload);
+      snapshotChange.value = payload;
+      console.log("Snapshot change data:", snapshotChange.value);
+      return snapshotChange.value;
+    } catch (err) {
+      console.error('Failed to fetch snapshot:', err);
+      snapshotChange.value = null;
+      return null;
+    }
   };
 
   const fetchStudents = async () => {
@@ -66,6 +74,7 @@
   };
 
   onMounted(async () => {
+    console.log("Admin dashboard mounted");
     await getSnapshotChange();
     await fetchStudents();
   });
@@ -226,10 +235,9 @@ function getRowItems(row) {
 </script>
 
 <template>
-  <div class="py-6 flex flex-col h-full gap-6 px-8">
-    <div
-      class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px"
-    >
+  <div class="py-6 flex flex-col h-full gap-6 px-8 ">
+        <div class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px"
+    > 
       <UCard
         variant="subtle"
         :ui="{
@@ -262,9 +270,10 @@ function getRowItems(row) {
                     ? 'error'
                     : 'neutral'
               "
-              class="mt-[2px] ml-3"
+              class="mt-[3px] ml-3"
             >
-              {{ snapshotChange.total_change > 0 ? "+" : "" }}{{ snapshotChange.total_change }}
+              <span v-if="snapshotChange.total_change === 0"><UIcon name="i-lucide-minus" /></span>
+              <span v-else>{{ snapshotChange.total_change > 0 ? '+' : '' }}{{ snapshotChange.total_change }}</span>
             </UBadge>
           </p>
         </template>
@@ -312,12 +321,14 @@ function getRowItems(row) {
               "
               class="mt-[2px] ml-3"
             >
-              {{ snapshotChange.on_track_change > 0 ? "+" : ""
-              }}{{ snapshotChange.on_track_change }}
-              <span v-if="snapshotChange.on_track_pct_change !== null">
-                ({{ Math.abs(snapshotChange.on_track_pct_change).toFixed(1) }}%)</span
-              >
-              <span v-else> (new)</span>
+              <span v-if="snapshotChange.on_track_change === 0"><UIcon name="i-lucide-minus"/></span>
+              <span v-else>
+                {{ snapshotChange.on_track_change > 0 ? '+' : '' }}{{ snapshotChange.on_track_change }}
+                <span v-if="snapshotChange.on_track_pct_change !== null">
+                  ({{ Math.abs(snapshotChange.on_track_pct_change).toFixed(1) }}%)
+                </span>
+                <span v-else> (new)</span>
+              </span>
             </UBadge>
           </p>
         </template>
@@ -365,11 +376,14 @@ function getRowItems(row) {
               "
               class="mt-[2px] ml-3"
             >
-              {{ snapshotChange.behind_change > 0 ? "+" : "" }}{{ snapshotChange.behind_change }}
-              <span v-if="snapshotChange.behind_pct_change !== null">
-                ({{ Math.abs(snapshotChange.behind_pct_change).toFixed(1) }}%)</span
-              >
-              <span v-else> (new)</span>
+              <span v-if="snapshotChange.behind_change === 0"><UIcon name="i-lucide-minus"/></span>
+              <span v-else>
+                {{ snapshotChange.behind_change > 0 ? '+' : '' }}{{ snapshotChange.behind_change }}
+                <span v-if="snapshotChange.behind_pct_change !== null">
+                  ({{ Math.abs(snapshotChange.behind_pct_change).toFixed(1) }}%)
+                </span>
+                <span v-else> (new)</span>
+              </span>
             </UBadge>
           </p>
         </template>
@@ -417,18 +431,21 @@ function getRowItems(row) {
               "
               class="mt-[2px] ml-3"
             >
-              {{ snapshotChange.ahead_change > 0 ? "+" : "" }}{{ snapshotChange.ahead_change }}
-              <span v-if="snapshotChange.ahead_pct_change !== null">
-                ({{ Math.abs(snapshotChange.ahead_pct_change).toFixed(1) }}%)</span
-              >
-              <span v-else> (new)</span>
+              <span v-if="snapshotChange.ahead_change === 0"><UIcon name="i-lucide-minus"/></span>
+              <span v-else>
+                {{ snapshotChange.ahead_change > 0 ? '+' : '' }}{{ snapshotChange.ahead_change }}
+                <span v-if="snapshotChange.ahead_pct_change !== null">
+                  ({{ Math.abs(snapshotChange.ahead_pct_change).toFixed(1) }}%)
+                </span>
+                <span v-else> (new)</span>
+              </span>
             </UBadge>
           </p>
         </template>
       </UCard>
     </div>
 
-    <div class="flex h-full flex-col">
+    <div class="flex h-full w-full flex-col">
       <div class="flex w-full items-center justify-between">
         <UInput
           size="md"

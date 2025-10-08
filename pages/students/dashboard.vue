@@ -5,7 +5,7 @@
 
   definePageMeta({
     layout: "custom",
-    middleware: ["auth"],
+    middleware: ["auth", "student-only"],
   });
 
   const studentData = ref({});
@@ -240,21 +240,6 @@
     },
     { immediate: true }
   );
-
-  // const deadline = new Date(Date.now() + 10 * 60 * 60 * 1000); // 10 hours from now
-  // const now = ref(new Date());
-  // const totalSeconds = Math.floor((deadline - new Date()) / 1000);
-
-  // const countdown = ref(totalSeconds);
-
-  // onMounted(() => {
-  //   const interval = setInterval(() => {
-  //     now.value = new Date();
-  //     const left = Math.floor((deadline - now.value) / 1000);
-  //     countdown.value = left > 0 ? left : 0;
-  //   }, 1000);
-  //   onUnmounted(() => clearInterval(interval));
-  // });
 
   onMounted(async () => {
     const {
