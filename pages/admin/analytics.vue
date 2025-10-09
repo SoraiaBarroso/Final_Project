@@ -14,18 +14,37 @@ const attendanceWorkshop = ref(null)
 const attendanceMentoring = ref(null)
 const attendanceStandup = ref(null)
 
-const { data: attendanceData, error: attendanceError, loading: attendanceLoading, fetchAttendance } = useAttendance()
+const SumWorkshops = ref(0)
+const SumMentorings = ref(0)
+const SumStandups = ref(0)
+
+const SumWorkshopAttended = ref(0)
+const SumMentoringAttended = ref(0)
+const SumStandupAttended = ref(0)
+
+const isDataFetched = ref(false)
+
+const { data: attendanceData, dataByCohort, error: attendanceError, loading: attendanceLoading, fetchAttendance, fetchAttendanceByCohort } = useAttendance()
 
 onMounted(async () => {
   await fetchAttendance()
+  await fetchAttendanceByCohort()
+  console.log('Attendance data by cohort:', dataByCohort.value)
   const metrics = attendanceData.value ?? []
   for (const m of metrics) {
     if (m.metric === 'overall') attendanceOverall.value = m.percentage
     if (m.metric === 'workshop') attendanceWorkshop.value = m.percentage
     if (m.metric === 'mentoring') attendanceMentoring.value = m.percentage
     if (m.metric === 'standup') attendanceStandup.value = m.percentage
+    if (m.metric === 'workshop_recordings') SumWorkshops.value = m.percentage
+    if (m.metric === 'mentoring_recordings') SumMentorings.value = m.percentage
+    if (m.metric === 'standup_recordings') SumStandups.value = m.percentage
+    if (m.metric === 'workshop_attended') SumWorkshopAttended.value = m.percentage
+    if (m.metric === 'mentoring_attended') SumMentoringAttended.value = m.percentage
+    if (m.metric === 'standup_attended') SumStandupAttended.value = m.percentage
   }
-  console.log('Fetched attendance metrics:', metrics)
+  isDataFetched.value = true
+  console.log('Fetched attendance metrics:', SumWorkshops, SumMentorings, SumStandups, SumWorkshopAttended, SumMentoringAttended, SumStandupAttended, attendanceOverall, attendanceWorkshop, attendanceMentoring, attendanceStandup)
 })
 </script>
 
@@ -153,7 +172,15 @@ onMounted(async () => {
             </UTooltip>
         </template>
 
-            <BarCharSingle />
+            <BarCharSingle  
+              v-if="isDataFetched"
+              :sumWorkshops="SumWorkshops"
+              :sumStandups="SumStandups"
+              :sumMentorings="SumMentorings"
+              :sumWorkshopAttended="SumWorkshopAttended"
+              :sumStandupAttended="SumStandupAttended"
+              :sumMentoringAttended="SumMentoringAttended"
+            />
        </UCard>
     </div>
 </template>
