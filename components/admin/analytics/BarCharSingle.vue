@@ -38,7 +38,7 @@ const yFormatter = (tick: number) => tick.toString()
   <BarChart
     class="w-[80%]"
     :data="MeetingData"
-    :height="460"
+    :height="400"
     :categories="MeetingCategories"
     :y-axis="['totalMeetings', 'attendedMeetings', 'attendancesPerStudent']"
     :group-padding="0"

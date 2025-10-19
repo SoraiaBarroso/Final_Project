@@ -3,7 +3,9 @@ import tailwindcss from "@tailwindcss/vite";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
+
   devtools: { enabled: true },
+
   modules: [
     "@nuxt/ui",
     "@nuxt/icon",
@@ -14,6 +16,7 @@ export default defineNuxtConfig({
     "motion-v/nuxt",
     "@vueuse/nuxt",
     "@nuxt/fonts",
+    "@nuxt/image",
   ],
   plugins: [],
   css: ["~/assets/css/main.css"],
@@ -81,7 +84,9 @@ export default defineNuxtConfig({
     fetchTimeout: 2000,
     serverBundle: "local",
   },
-
+  experimental: {
+    componentIslands: true,
+  },
   vite: {
     plugins: [tailwindcss()],
   },
