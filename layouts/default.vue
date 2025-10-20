@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
-import UserMenuAdmin from "~/components/admin/analytics/UserMenuAdmin.vue";
-
+import UserMenuAdmin from "~/components/admin/UserMenuAdmin.vue";
 const supabase = useSupabaseClient();
 const appConfig = useAppConfig();
 
@@ -43,6 +42,15 @@ const mainLinks: NavigationMenuItem[] = [
       },
     ],
   },
+  {
+    label: "Students",
+    to: "/admin/students",
+    ariaLabel: "Students",
+    icon: "i-lucide-users",
+    tooltip: {
+      text: "Students",
+    },
+  },
 ];
 
 const secondaryLinks: NavigationMenuItem[] = [
@@ -65,7 +73,7 @@ onMounted(async () => {
   } = await supabase.auth.getUser();
   userName.value = user?.user_metadata?.full_name || "Unknown User";
   userImg.value = user?.user_metadata?.picture;
-  appConfig.ui.colors.primary = 'red'
+  appConfig.ui.colors.primary = 'blue'
 });
 </script>
 
@@ -99,7 +107,7 @@ onMounted(async () => {
             </template>
 
             <template #footer="{ collapsed }">
-                <UserMenuAdmin :collapsed="collapsed" :userLabel="username" :userAvatar="userImg"/>
+                <UserMenuAdmin :collapsed="collapsed" :userLabel="userName" :userAvatar="userImg"/>
             </template>
         </UDashboardSidebar>
 

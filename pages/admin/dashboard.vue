@@ -60,6 +60,7 @@
     data.value = (students || [])
       .filter((s) => s.is_active)
       .map((s) => ({
+        id: s.id,
         status: s.status,
         name: `${s.first_name} ${s.last_name}`,
         email: s.email,
@@ -174,7 +175,7 @@ function getRowItems(row) {
     {
       label: 'View student',
       onSelect: () => {
-        useRouter().push(`/admin/students/${studentId}`);
+        useRouter().push(`/admin/students/${row.original.id}`);
       }
     },
   ]
