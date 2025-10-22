@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from "@nuxt/ui";
 import UserMenuAdmin from "~/components/admin/UserMenuAdmin.vue";
+
 const supabase = useSupabaseClient();
 const appConfig = useAppConfig();
 
@@ -31,13 +32,11 @@ const mainLinks: NavigationMenuItem[] = [
       {
         label: 'Overall Analytics',
         description: 'Overall attendance analytics among all students.',
-        icon: 'i-lucide-house',
         to: '/admin/analytics/overall',
       },
       {
         label: 'Cohort Analytics',
         description: 'Cohort-based attendance analytics.',
-        icon: 'i-lucide-house',
         to: '/admin/analytics/cohort',
       },
     ],
@@ -74,6 +73,8 @@ onMounted(async () => {
   userName.value = user?.user_metadata?.full_name || "Unknown User";
   userImg.value = user?.user_metadata?.picture;
   appConfig.ui.colors.primary = 'blue'
+  appConfig.ui.colors.neutral = 'stone'
+  
 });
 </script>
 
@@ -88,7 +89,7 @@ onMounted(async () => {
         >
             <template #header="{ collapsed }">
                 <NuxtImg src="../public/favicon.png" alt="Logo" class="h-6" :class="collapsed ? 'm-auto' : 'ml-2'" />
-                <p v-if="!collapsed" class="text-center text-xl text-highlighted font-medium ml-1">Amsterdam Tech</p>
+                <p v-if="!collapsed" class="text-center text-lg text-semibold text-highlighted">Amsterdam Tech</p>
             </template>
 
             <template #default="{ collapsed }">

@@ -68,10 +68,10 @@ onMounted(async () => {
             </div>
             </template>
 
-            <p class="text-muted text-xs font-semibold uppercase">Average Attendance</p>
+            <p class="text-muted text-xs font-¡ uppercase">Average Attendance</p>
 
             <template #footer>
-    <p class="m-0 flex items-center text-2xl font-bold text-black">
+    <p class="m-0 flex items-center text-2xl font-semibold text-highlighted">
       {{ attendanceOverall !== null ? attendanceOverall + '%' : (attendanceLoading ? 'Loading...' : '—') }}
     </p>
             </template>
@@ -169,14 +169,14 @@ onMounted(async () => {
           </UTooltip>
       </template>
 
-          <BarCharSingle  
-            v-if="isDataFetched"
-            :sumWorkshops="SumWorkshops"
-            :sumStandups="SumStandups"
-            :sumMentorings="SumMentorings"
-            :sumWorkshopAttended="SumWorkshopAttended"
-            :sumStandupAttended="SumStandupAttended"
-            :sumMentoringAttended="SumMentoringAttended"
-          />
+        <BarCharSingle  
+          v-if="isDataFetched"
+          :sumWorkshops="SumWorkshops"
+          :sumStandups="SumStandups"
+          :sumMentorings="SumMentorings"
+          :sumWorkshopAttended="SumWorkshopAttended"
+          :sumStandupAttended="SumStandupAttended"
+          :sumMentoringAttended="SumMentoringAttended"
+        />
     </UCard>
 </template>
