@@ -5,11 +5,10 @@ export default defineEventHandler(async (event) => {
     try {
         const client = await serverSupabaseClient(event)
 
-        // Fetch active students and their attendance counters
+        // Fetch all students and their attendance counters (including inactive students)
         const { data: students, error: studentsErr } = await client
             .from('students')
             .select('id,username,cohort_id,workshops_attended,standup_attended,mentoring_attended')
-            .eq('is_active', true)
 
         const sumWorkshopAttended = students.reduce((sum, s) => sum + (s.workshops_attended || 0), 0)
         const sumStandupAttended = students.reduce((sum, s) => sum + (s.standup_attended || 0), 0)
@@ -107,6 +106,7 @@ export default defineEventHandler(async (event) => {
             { metric: 'workshop_attended', percentage: sumWorkshopAttended },
             { metric: 'standup_attended', percentage: sumStandupAttended },
             { metric: 'mentoring_attended', percentage: sumMentoringAttended },
+            { metric: 'student_count', percentage: students.length },
         ]
 
         return { data: { value: result } }

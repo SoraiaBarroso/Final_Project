@@ -21,6 +21,7 @@ const SumStandups = ref(0)
 const SumWorkshopAttended = ref(0)
 const SumMentoringAttended = ref(0)
 const SumStandupAttended = ref(0)
+const studentCount = ref(0)
 
 const isDataFetched = ref(false)
 
@@ -42,6 +43,7 @@ onMounted(async () => {
     if (m.metric === 'workshop_attended') SumWorkshopAttended.value = m.percentage
     if (m.metric === 'mentoring_attended') SumMentoringAttended.value = m.percentage
     if (m.metric === 'standup_attended') SumStandupAttended.value = m.percentage
+    if (m.metric === 'student_count') studentCount.value = m.percentage
   }
   isDataFetched.value = true
   console.log('Fetched attendance metrics:', SumWorkshops, SumMentorings, SumStandups, SumWorkshopAttended, SumMentoringAttended, SumStandupAttended, attendanceOverall, attendanceWorkshop, attendanceMentoring, attendanceStandup)
@@ -169,7 +171,7 @@ onMounted(async () => {
           </UTooltip>
       </template>
 
-        <BarCharSingle  
+        <BarCharSingle
           v-if="isDataFetched"
           :sumWorkshops="SumWorkshops"
           :sumStandups="SumStandups"
@@ -177,6 +179,7 @@ onMounted(async () => {
           :sumWorkshopAttended="SumWorkshopAttended"
           :sumStandupAttended="SumStandupAttended"
           :sumMentoringAttended="SumMentoringAttended"
+          :studentCount="studentCount"
         />
     </UCard>
 </template>

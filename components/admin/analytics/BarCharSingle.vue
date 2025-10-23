@@ -13,15 +13,16 @@ const props = defineProps({
   sumWorkshopAttended: { type: Number, required: true },
   sumStandupAttended: { type: Number, required: true },
   sumMentoringAttended: { type: Number, required: true },
+  studentCount: { type: Number, required: true },
 });
 
 onMounted(() => {
   console.log('Props received:', props);
 });
 const MeetingData: MeetingDataItem[] = [
-  { meetingType: 'Workshop', totalMeetings: props.sumWorkshops, attendedMeetings: props.sumWorkshopAttended, attendancesPerStudent: Math.round(props.sumWorkshopAttended / 105) },
-  { meetingType: 'Standup', totalMeetings: props.sumStandups, attendedMeetings: props.sumStandupAttended, attendancesPerStudent: Math.round(props.sumStandupAttended / 105) },
-  { meetingType: 'Mentoring', totalMeetings: props.sumMentorings, attendedMeetings: props.sumMentoringAttended, attendancesPerStudent: Math.round(props.sumMentoringAttended / 105) },
+  { meetingType: 'Workshop', totalMeetings: props.sumWorkshops, attendedMeetings: props.sumWorkshopAttended, attendancesPerStudent: props.studentCount > 0 ? Math.round(props.sumWorkshopAttended / props.studentCount) : 0 },
+  { meetingType: 'Standup', totalMeetings: props.sumStandups, attendedMeetings: props.sumStandupAttended, attendancesPerStudent: props.studentCount > 0 ? Math.round(props.sumStandupAttended / props.studentCount) : 0 },
+  { meetingType: 'Mentoring', totalMeetings: props.sumMentorings, attendedMeetings: props.sumMentoringAttended, attendancesPerStudent: props.studentCount > 0 ? Math.round(props.sumMentoringAttended / props.studentCount) : 0 },
 ]
 
 const MeetingCategories = {

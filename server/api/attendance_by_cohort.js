@@ -5,11 +5,10 @@ export default defineEventHandler(async (event) => {
     try {
         const client = await serverSupabaseClient(event)
 
-        // Fetch active students with cohort ids and attendance counters
+        // Fetch all students with cohort ids and attendance counters (including inactive students)
         const { data: students = [], error: studentsErr } = await client
             .from('students')
             .select('id,username,cohort_id,workshops_attended,standup_attended,mentoring_attended')
-            .eq('is_active', true)
 
         if (studentsErr) {
             console.error('Error fetching students', studentsErr)

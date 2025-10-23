@@ -167,7 +167,7 @@ const columns = [
 ];
 
 function getRowItems(row) {
-  const isActive = row.original.isActive;
+  const isActive = row.original.is_active;
 
   return [
     {

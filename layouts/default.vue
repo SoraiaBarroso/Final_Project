@@ -45,11 +45,20 @@ const mainLinks: NavigationMenuItem[] = [
     label: "Students",
     to: "/admin/students",
     ariaLabel: "Students",
-    icon: "i-lucide-users",
+    icon: "i-lucide-users-2",
     tooltip: {
       text: "Students",
     },
   },
+  {
+    label: "Cohorts",
+    to: "/admin/cohorts",
+    ariaLabel: "Cohorts",
+    icon: "i-lucide-users-2",
+    tooltip: {
+      text: "Cohorts",
+    },
+  }
 ];
 
 const secondaryLinks: NavigationMenuItem[] = [
