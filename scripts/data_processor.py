@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 from utils import (
     get_supabase_client, map_season_name_to_db, parse_relative_time_to_timestamp,
     load_scraped_data, get_student_id_map, get_project_id_map, get_season_id_map,
-    safe_upsert, print_step
+    safe_upsert, safe_update, print_step
 )
 
 class QwasarScraper:
@@ -654,10 +654,9 @@ class StudentDataProcessor:
             
             if len(update_record) > 1:  # More than just the ID
                 records_to_update.append(update_record)
-        
+
         if records_to_update:
-            safe_upsert(self.supabase, 'students', records_to_update)
-            print(f"✓ Updated {len(records_to_update)} student records")
+            safe_update(self.supabase, 'students', records_to_update)
         else:
             print("No student records to update")
     

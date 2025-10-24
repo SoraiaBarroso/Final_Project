@@ -87,84 +87,108 @@ def map_season_name_to_db(season_name):
 
 def parse_relative_time_to_timestamp(relative_time_str):
     """
-    Convert relative time strings like '3 days ago', 'a month ago', '30 days ago' 
-    to actual timestamps
+    Convert time strings to timestamps. Handles both:
+    - Relative times: '3 days ago', 'a month ago', '30 days ago'
+    - Absolute dates: 'february 19, 2025  9:17pm', 'October 24, 2025 11:15am'
     """
     if not relative_time_str or relative_time_str.strip() == "":
         return None
-    
-    relative_time_str = relative_time_str.strip().lower()
+
+    relative_time_str = relative_time_str.strip()
     now = datetime.now()
-    
+
     try:
+        # First, try to parse as absolute date/time
+        # Common formats from Qwasar: "february 19, 2025  9:17pm", "October 24, 2025 11:15am"
+        absolute_formats = [
+            "%B %d, %Y %I:%M%p",      # February 19, 2025 9:17pm
+            "%B  %d, %Y  %I:%M%p",    # February  19, 2025  9:17pm (extra spaces)
+            "%B %d, %Y  %I:%M%p",     # February 19, 2025  9:17pm (space before time)
+            "%B  %d, %Y %I:%M%p",     # February  19, 2025 9:17pm (space before day)
+            "%b %d, %Y %I:%M%p",      # Feb 19, 2025 9:17pm (abbreviated month)
+            "%B %d, %Y %H:%M",        # February 19, 2025 21:17 (24-hour format)
+            "%Y-%m-%d %H:%M:%S",      # 2025-02-19 21:17:00
+            "%Y-%m-%d",               # 2025-02-19
+        ]
+
+        for fmt in absolute_formats:
+            try:
+                timestamp = datetime.strptime(relative_time_str, fmt)
+                return timestamp.isoformat()
+            except ValueError:
+                continue
+
+        # If absolute parsing fails, try relative time parsing
+        relative_time_lower = relative_time_str.lower()
+
         # Handle "X days ago"
-        if "days ago" in relative_time_str:
-            days_match = re.search(r'(\d+)\s*days?\s*ago', relative_time_str)
+        if "days ago" in relative_time_lower:
+            days_match = re.search(r'(\d+)\s*days?\s*ago', relative_time_lower)
             if days_match:
                 days = int(days_match.group(1))
                 timestamp = now - timedelta(days=days)
                 return timestamp.isoformat()
-        
+
         # Handle "a day ago"
-        if "a day ago" in relative_time_str or "1 day ago" in relative_time_str:
+        if "a day ago" in relative_time_lower or "1 day ago" in relative_time_lower:
             timestamp = now - timedelta(days=1)
             return timestamp.isoformat()
-        
+
         # Handle "X months ago"
-        if "months ago" in relative_time_str:
-            months_match = re.search(r'(\d+)\s*months?\s*ago', relative_time_str)
+        if "months ago" in relative_time_lower:
+            months_match = re.search(r'(\d+)\s*months?\s*ago', relative_time_lower)
             if months_match:
                 months = int(months_match.group(1))
                 # Approximate: 1 month = 30 days
                 timestamp = now - timedelta(days=months * 30)
                 return timestamp.isoformat()
-        
+
         # Handle "a month ago"
-        if "a month ago" in relative_time_str or "1 month ago" in relative_time_str:
+        if "a month ago" in relative_time_lower or "1 month ago" in relative_time_lower:
             timestamp = now - timedelta(days=30)
             return timestamp.isoformat()
-        
+
         # Handle "X years ago"
-        if "years ago" in relative_time_str:
-            years_match = re.search(r'(\d+)\s*years?\s*ago', relative_time_str)
+        if "years ago" in relative_time_lower:
+            years_match = re.search(r'(\d+)\s*years?\s*ago', relative_time_lower)
             if years_match:
                 years = int(years_match.group(1))
                 # Approximate: 1 year = 365 days
                 timestamp = now - timedelta(days=years * 365)
                 return timestamp.isoformat()
-        
+
         # Handle "a year ago"
-        if "a year ago" in relative_time_str or "1 year ago" in relative_time_str:
+        if "a year ago" in relative_time_lower or "1 year ago" in relative_time_lower:
             timestamp = now - timedelta(days=365)
             return timestamp.isoformat()
-        
+
         # Handle "X hours ago"
-        if "hours ago" in relative_time_str:
-            hours_match = re.search(r'(\d+)\s*hours?\s*ago', relative_time_str)
+        if "hours ago" in relative_time_lower:
+            hours_match = re.search(r'(\d+)\s*hours?\s*ago', relative_time_lower)
             if hours_match:
                 hours = int(hours_match.group(1))
                 timestamp = now - timedelta(hours=hours)
                 return timestamp.isoformat()
-        
+
         # Handle "an hour ago"
-        if "an hour ago" in relative_time_str or "1 hour ago" in relative_time_str:
+        if "an hour ago" in relative_time_lower or "1 hour ago" in relative_time_lower:
             timestamp = now - timedelta(hours=1)
             return timestamp.isoformat()
-        
+
         # Handle "X minutes ago"
-        if "minutes ago" in relative_time_str:
-            minutes_match = re.search(r'(\d+)\s*minutes?\s*ago', relative_time_str)
+        if "minutes ago" in relative_time_lower:
+            minutes_match = re.search(r'(\d+)\s*minutes?\s*ago', relative_time_lower)
             if minutes_match:
                 minutes = int(minutes_match.group(1))
                 timestamp = now - timedelta(minutes=minutes)
                 return timestamp.isoformat()
-        
+
         # If none of the patterns match, return None or current time
-        print(f"Warning: Could not parse relative time '{relative_time_str}'. Using current time.")
+        print(f"Warning: Could not parse time string '{relative_time_str}'. Using current time.")
         return now.isoformat()
-    
+
     except Exception as e:
-        print(f"Error parsing relative time '{relative_time_str}': {e}")
+        print(f"Error parsing time string '{relative_time_str}': {e}")
         return None
 
 def load_scraped_data(file_path=None):
@@ -220,17 +244,56 @@ def safe_upsert(supabase_client, table_name, records, on_conflict=None):
     if not records:
         print(f"No records to upsert to {table_name}")
         return False
-    
+
     try:
         if on_conflict:
             response = supabase_client.from_(table_name).upsert(records, on_conflict=on_conflict).execute()
         else:
             response = supabase_client.from_(table_name).upsert(records).execute()
-        
+
         print(f"Successfully upserted {len(records)} records to {table_name}")
         return True
     except Exception as e:
         print(f"Error upserting to {table_name}: {e}")
+        return False
+
+def safe_update(supabase_client, table_name, records, id_field='id'):
+    """Safely perform update operation on existing records with error handling"""
+    if not records:
+        print(f"No records to update in {table_name}")
+        return False
+
+    try:
+        updated_count = 0
+        failed_count = 0
+
+        for record in records:
+            if id_field not in record:
+                print(f"Warning: Record missing {id_field} field, skipping")
+                failed_count += 1
+                continue
+
+            record_id = record[id_field]
+            # Create update data without the ID field
+            update_data = {k: v for k, v in record.items() if k != id_field}
+
+            if not update_data:
+                continue
+
+            try:
+                response = supabase_client.from_(table_name).update(update_data).eq(id_field, record_id).execute()
+                updated_count += 1
+            except Exception as e:
+                print(f"Error updating record {record_id}: {e}")
+                failed_count += 1
+
+        print(f"Successfully updated {updated_count} records in {table_name}")
+        if failed_count > 0:
+            print(f"Failed to update {failed_count} records")
+
+        return updated_count > 0
+    except Exception as e:
+        print(f"Error during update operation on {table_name}: {e}")
         return False
 
 def print_step(step_name, description=""):
