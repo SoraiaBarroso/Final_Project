@@ -165,90 +165,100 @@ const submitForm = async () => {
         </template>
 
         <template #body>
-              <!-- Stats Card -->
-              <StudentStatCard
-                title="Total Cohorts"
-                :count="cohorts.length"
-                icon="i-lucide-users"
-                icon-color="info"
-                rounded-class="rounded-lg"
-              />
+          <!-- Stats Card -->
+          <UPageGrid class="lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-px">
+            <StudentStatCard
+              title="Total Cohorts"
+              :count="cohorts.length"
+              icon="i-pajamas:subgroup"
+              icon-color="info"
+              rounded-class="rounded-lg xl:rounded-none xl:rounded-l-lg lg:rounded-r-none"
+            />
             
-              <div class="flex justify-end mb-4">
-                <UButton
-                  label="Add Cohort"
-                  color="neutral"
-                  variant="outline"
-                  icon="i-lucide-plus"
-                  class="w-fit"
-                  @click="openModal"
-                />
-              </div>
+            <StudentStatCard
+              title="Active Cohorts"
+              :count="cohorts.filter(cohort => cohort.is_active).length"
+              icon="i-pajamas:status-health"
+              icon-color="success"
+              rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg lg:rounded-l-none"
+            />
+          </UPageGrid>
+        
+          <div class="flex justify-end mb-4">
+            <UButton
+              label="Add Cohort"
+              color="neutral"
+              variant="outline"
+              icon="i-codex:plus"
+              class="w-fit"
+              @click="openModal"
+            />
+          </div>
 
-              <UModal
-                v-model:open="isModalOpen"
-                title="Create New Cohort"
-                description="Add new cohort details below"
-                :ui="{
-                  content: 'sm:max-w-2xl',
-                  body: 'p-6',
-                  footer: 'flex justify-end gap-2 p-4'
-                }"
-              >
-                <template #body>
-                  <UForm ref="formRef" :schema="schema" :state="state" class="space-y-6 px-10">
-                    <UFormField label="Cohort Name" name="cohortName" description="e.g., Sep 24, Mar 25" required>
-                      <UInput v-model="state.cohortName" placeholder="e.g., Sep 24" class="w-full"/>
-                    </UFormField>
+          <UModal
+            v-model:open="isModalOpen"
+            title="Create New Cohort"
+            description="Add new cohort details below"
+            :ui="{
+              content: 'sm:max-w-2xl',
+              body: 'p-6',
+              footer: 'flex justify-end gap-2 p-4'
+            }"
+          >
+            <template #body>
+              <UForm ref="formRef" :schema="schema" :state="state" class="space-y-6 px-10">
+                <UFormField label="Cohort Name" name="cohortName" description="e.g., Sep 24, Mar 25" required>
+                  <UInput v-model="state.cohortName" placeholder="e.g., Sep 24" class="w-full"/>
+                </UFormField>
 
-                    <UFormField label="Programs" description="Select programs for this cohort" required>
-                      <USelectMenu
-                        v-model="selectedPrograms"
-                        multiple 
-                        :items="programItems"  
-                        placeholder="Select programs"
-                        class="w-full"
-                      />
-                    </UFormField>
+                <UFormField label="Programs" description="Select programs for this cohort" required>
+                  <USelectMenu
+                    v-model="selectedPrograms"
+                    multiple 
+                    :items="programItems"  
+                    placeholder="Select programs"
+                    class="w-full"
+                  />
+                </UFormField>
 
-                    <UFormField label="Meeting ID" name="meetingId" description="Optional meeting ID for cohort sessions">
-                      <UInput v-model="state.meetingId" placeholder="Enter meeting ID" class="w-full"/>
-                    </UFormField>
+                <UFormField label="Meeting ID" name="meetingId" description="Optional meeting ID for cohort sessions">
+                  <UInput v-model="state.meetingId" placeholder="Enter meeting ID" class="w-full"/>
+                </UFormField>
 
-                    <div class="flex gap-4 w-full">
-                      <UFormField label="Start Date" name="startDate" description="Cohort start date" required class="w-full">
-                        <UInput
-                          v-model="state.startDate"
-                          type="date"
-                          class="w-full"
-                        />
-                      </UFormField>
+                <div class="flex gap-4 w-full">
+                  <UFormField label="Start Date" name="startDate" description="Cohort start date" required class="w-full">
+                    <UInput
+                      v-model="state.startDate"
+                      type="date"
+                      class="w-full"
+                    />
+                  </UFormField>
 
-                      <UFormField label="End Date" name="endDate" description="Cohort end date" required class="w-full">
-                        <UInput
-                          v-model="state.endDate"
-                          type="date"
-                          class="w-full"
-                        />
-                      </UFormField>
-                    </div>
-              
-                    <UFormField label="Active Status" name="isActive" description="Set cohort as active or inactive">
-                      <div class="flex items-center gap-2">
-                        <USwitch v-model="state.isActive" />
-                        <span class="text-sm">{{ state.isActive ? 'Active' : 'Inactive' }}</span>
-                      </div>
-                    </UFormField>
-                  </UForm>
-                </template>
+                  <UFormField label="End Date" name="endDate" description="Cohort end date" required class="w-full">
+                    <UInput
+                      v-model="state.endDate"
+                      type="date"
+                      class="w-full"
+                    />
+                  </UFormField>
+                </div>
+          
+                <UFormField label="Active Status" name="isActive" description="Set cohort as active or inactive">
+                  <div class="flex items-center gap-2">
+                    <USwitch v-model="state.isActive" />
+                    <span class="text-sm">{{ state.isActive ? 'Active' : 'Inactive' }}</span>
+                  </div>
+                </UFormField>
+              </UForm>
+            </template>
 
-                <template #footer="{ close }">
-                  <UButton label="Cancel" color="neutral" variant="outline" @click="close" />
-                  <UButton label="Create Cohort" color="success" icon="i-lucide-plus" @click="submitForm" :loading="loading" />
-                </template>
-              </UModal>
-              <!-- Cohorts Table -->
-              <CohortsTable :data="cohorts" :loading="loading" @toggle-status="handleToggleStatus" />
+            <template #footer="{ close }">
+              <UButton label="Cancel" color="neutral" variant="outline" @click="close" />
+              <UButton label="Create Cohort" color="success" icon="i-lucide-plus" @click="submitForm" :loading="loading" />
+            </template>
+          </UModal>
+
+          <CohortsTable :data="cohorts" :loading="loading" @toggle-status="handleToggleStatus" />
         </template>
     </UDashboardPanel>
 </template>

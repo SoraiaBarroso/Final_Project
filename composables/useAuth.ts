@@ -12,7 +12,6 @@ export const useAuth = () => {
     const supabaseUser = useSupabaseUser()
 
     const getUser = async () => {
-        console.log("Getting user...")
         const { data, error } = await supabase.auth.getUser()
 
         if (error) {
@@ -23,11 +22,9 @@ export const useAuth = () => {
         }
 
         if (data.user) {
-            console.log("User fetched successfully:", data.user.email)
             user.value = data.user
 
             // Fetch role from profiles table
-            console.log("Fetching user role from profiles...")
             const { data: profile, error: profileError } = await supabase
                 .from("profiles")
                 .select("role")
@@ -39,7 +36,6 @@ export const useAuth = () => {
                 role.value = 'user' // Default to 'user' if profile fetch fails
             } else if (profile && profile.role) {
                 role.value = profile.role
-                console.log("User role:", profile.role)
             } else {
                 console.log("No profile found, defaulting to 'user' role")
                 role.value = 'user'
@@ -97,7 +93,6 @@ export const useAuth = () => {
 
     // Watch for changes in the supabase user state and sync with our local state
     watch(supabaseUser, (newUser) => {
-        console.log("Supabase user changed:", newUser?.email || 'null')
         user.value = newUser
         if (!newUser) {
             role.value = 'guest'

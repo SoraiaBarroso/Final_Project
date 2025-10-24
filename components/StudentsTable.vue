@@ -270,7 +270,7 @@ function getRowItems(row) {
       </p>
       <UPagination
         variant="subtle"
-        active-color="neutral"
+        active-color="primary"
         :default-page="(table?.tableApi?.getState().pagination.pageIndex || 0) + 1"
         :items-per-page="table?.tableApi?.getState().pagination.pageSize"
         :total="table?.tableApi?.getFilteredRowModel().rows.length"

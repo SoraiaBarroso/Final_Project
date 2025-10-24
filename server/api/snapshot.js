@@ -3,8 +3,6 @@ import { createError } from 'h3'
 import { serverSupabaseClient } from '#supabase/server'
 
 export default defineEventHandler(async (event) => {
-  console.log('Fetching snapshot change data...')
-
   try {
     const client = await serverSupabaseClient(event)
 

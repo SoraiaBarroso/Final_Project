@@ -1,10 +1,11 @@
 <script setup>
 definePageMeta({
   layout: "default",
-  middleware: ["admin"], 
+  middleware: ["admin"],
 });
 
 import BarCharSingle from '~/components/admin/analytics/BarCharSingle.vue';
+import StudentStatCard from '~/components/StudentStatCard.vue';
 import { useAttendance } from '~/composables/useAttendance';
 import { onMounted, ref } from 'vue'
 
@@ -51,108 +52,38 @@ onMounted(async () => {
 </script>
 
 <template>
-    <div class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px"
-    >
-        <UCard
-            variant="subtle"
-            :ui="{
-            root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none xl:rounded-l-lg hover:bg-elevated cursor-pointer',
-            body: 'border-none px-4 xl:!px-6 !py-0',
-            header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
-            footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6',
-            }"
-        >
-            <template #header>
-            <div
-                class="bg-info/10 border-info flex h-8 w-8 items-center justify-center rounded-full border"
-            >
-                <UIcon name="i-lucide-users" class="text-info text-currentColor size-4" />
-            </div>
-            </template>
+    <div class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px">
+        <StudentStatCard
+            title="Average Attendance"
+            :count="attendanceOverall !== null ? attendanceOverall + '%' : (attendanceLoading ? '0' : '—')"
+            icon="i-pajamas:users"
+            icon-color="info"
+            rounded-class="rounded-lg xl:rounded-none xl:rounded-l-lg"
+        />
 
-            <p class="text-muted text-xs font-¡ uppercase">Average Attendance</p>
+        <StudentStatCard
+            title="Workshops"
+            :count="attendanceWorkshop !== null ? attendanceWorkshop + '%' : (attendanceLoading ? '0' : '—')"
+            icon="i-pajamas:terminal"
+            icon-color="info"
+            rounded-class="rounded-lg xl:rounded-none"
+        />
 
-            <template #footer>
-    <p class="m-0 flex items-center text-2xl font-semibold text-highlighted">
-      {{ attendanceOverall !== null ? attendanceOverall + '%' : (attendanceLoading ? 'Loading...' : '—') }}
-    </p>
-            </template>
-        </UCard>
-  <UCard
-    variant="subtle"
-    :ui="{
-      root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none hover:bg-elevated cursor-pointer',
-      body: 'border-none px-4 xl:!px-6 !py-0',
-      header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
-      footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6 flex items-center justify-start gap-2',
-    }"
-  >
-    <template #header>
-      <div
-        class="bg-info/10 border-info  flex h-8 w-8 items-center justify-center rounded-full border"
-      >
-        <UIcon name="i-lucide:atom" class="text-info text-currentColor size-4" />
-      </div>
-    </template>
+        <StudentStatCard
+            title="Mentorings"
+            :count="attendanceMentoring !== null ? attendanceMentoring + '%' : (attendanceLoading ? '0' : '—')"
+            icon="i-lucide:graduation-cap"
+            icon-color="info"
+            rounded-class="rounded-lg xl:rounded-none"
+        />
 
-    <p class="text-muted text-xs font-semibold uppercase">Workshops</p>
-
-    <template #footer>
-      <p class="m-0 flex items-center text-2xl font-bold text-black">
-        {{ attendanceWorkshop !== null ? attendanceWorkshop + '%' : (attendanceLoading ? 'Loading...' : '—') }}
-      </p>
-    </template>
-  </UCard>
-  <UCard
-    variant="subtle"
-    :ui="{
-      root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none hover:bg-elevated cursor-pointer',
-      body: 'border-none px-4 xl:!px-6 !py-0',
-      header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
-      footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6 flex items-center justify-start gap-2',
-    }"
-  >
-    <template #header>
-      <div
-        class="bg-info/10 border-info flex h-8 w-8 items-center justify-center rounded-full border"
-      >
-        <UIcon name="i-lucide:graduation-cap" class="text-info text-currentColor size-4" />
-      </div>
-    </template>
-
-    <p class="text-muted text-xs font-semibold uppercase">Mentorings</p>
-
-    <template #footer>
-      <p class="m-0 flex items-center text-2xl font-bold text-black">
-        {{ attendanceMentoring !== null ? attendanceMentoring + '%' : (attendanceLoading ? 'Loading...' : '—') }}
-      </p>
-    </template>
-  </UCard>
-  <UCard
-    variant="subtle"
-    :ui="{
-      root: 'border-none py-1 h-30 xl:h-34 xl:!py-2 hover:ring-accented rounded-lg xl:rounded-none xl:rounded-r-lg hover:bg-elevated cursor-pointer',
-      body: 'border-none px-4 xl:!px-6 !py-0',
-      header: 'border-none xl:px-2 px-4 !py-3 xl:px-6',
-      footer: 'border-none xl:px-2 px-4 !py-1 xl:px-6 flex items-center justify-start gap-2',
-    }"
-  >
-    <template #header>
-      <div
-        class="bg-info/10 border-info flex h-8 w-8 items-center justify-center rounded-full border"
-      >
-        <UIcon name="i-lucide:scan-face" class="text-info text-currentColor size-4" />
-      </div>
-    </template>
-
-    <p class="text-muted text-xs font-semibold uppercase">Stand-Ups</p>
-
-    <template #footer>
-        <p class="m-0 flex items-center text-2xl font-bold text-black">
-        {{ attendanceStandup !== null ? attendanceStandup + '%' : (attendanceLoading ? 'Loading...' : '—') }}
-      </p>
-    </template>
-  </UCard>
+        <StudentStatCard
+            title="Stand-Ups"
+            :count="attendanceStandup !== null ? attendanceStandup + '%' : (attendanceLoading ? '0' : '—')"
+            icon="i-lucide:scan-face"
+            icon-color="info"
+            rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg"
+        />
     </div>
 
     <UCard

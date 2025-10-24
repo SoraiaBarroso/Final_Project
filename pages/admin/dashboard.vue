@@ -133,39 +133,41 @@
                 <StudentStatCard
                 title="STUDENTS"
                 :count="data.length"
-                icon="i-lucide-users"
+                icon="i-pajamas:users"
                 icon-color="info"
                 :change="snapshotChange?.total_change"
-                rounded-class="rounded-lg xl:rounded-none xl:rounded-l-lg"
+                rounded-class="rounded-lg xl:rounded-none xl:rounded-l-lg lg:rounded-r-none"
               />
 
               <StudentStatCard
                 title="ON TRACK"
                 :count="data.filter((item) => item.status === 'On Track').length"
-                icon="i-lucide-check-circle"
+                icon="i-pajamas:partner-verified"
                 icon-color="success"
                 :change="snapshotChange?.on_track_change"
                 :percent-change="snapshotChange?.on_track_pct_change"
+                rounded-class="rounded-lg xl:rounded-none lg:rounded-none"
               />
 
               <StudentStatCard
                 title="BEHIND"
                 :count="data.filter((item) => item.status === 'Behind').length"
-                icon="i-lucide-triangle-alert"
+                icon="i-pajamas:status-alert"
                 icon-color="error"
                 :change="snapshotChange?.behind_change"
                 :percent-change="snapshotChange?.behind_pct_change"
                 :invert-colors="true"
+                rounded-class="rounded-lg xl:rounded-none lg:rounded-none"
               />
 
               <StudentStatCard
                 title="AHEAD"
                 :count="data.filter((item) => item.status === 'Ahead').length"
-                icon="i-lucide-party-popper"
+                icon="i-pajamas:rocket-launch"
                 icon-color="info"
                 :change="snapshotChange?.ahead_change"
                 :percent-change="snapshotChange?.ahead_pct_change"
-                rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg"
+                rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg lg:rounded-l-none"
               />
             </UPageGrid>
        

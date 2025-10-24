@@ -13,29 +13,29 @@ const mainLinks: NavigationMenuItem[] = [
     label: "Dashboard",
     to: "/admin/dashboard",
     ariaLabel: "Dashboard",
-    icon: "i-lucide-house",
+    icon: "i-lucide-lab:house-roof",
     tooltip: {
       text: "Dashboard",
     },
   },
   {
     label: "Analytics",
-    icon: "i-lucide-chart-no-axes-combined",
+    icon: "i-pajamas:chart",
     ariaLabel: "Analytics",
     defaultOpen: true,
-    to: '/admin/analytics',
+    to: '/admin/analytics/overall',
     type: 'trigger',
     tooltip: {
       text: "Analytics",
     },
     children: [
       {
-        label: 'Overall Analytics',
+        label: 'Overall ',
         description: 'Overall attendance analytics among all students.',
         to: '/admin/analytics/overall',
       },
       {
-        label: 'Cohort Analytics',
+        label: 'Cohort ',
         description: 'Cohort-based attendance analytics.',
         to: '/admin/analytics/cohort',
       },
@@ -45,7 +45,7 @@ const mainLinks: NavigationMenuItem[] = [
     label: "Students",
     to: "/admin/students",
     ariaLabel: "Students",
-    icon: "i-lucide-users-2",
+    icon: "i-pajamas:account",
     tooltip: {
       text: "Students",
     },
@@ -54,7 +54,7 @@ const mainLinks: NavigationMenuItem[] = [
     label: "Cohorts",
     to: "/admin/cohorts",
     ariaLabel: "Cohorts",
-    icon: "i-lucide-users-2",
+    icon: "i-pajamas:group",
     tooltip: {
       text: "Cohorts",
     },
@@ -98,7 +98,7 @@ onMounted(async () => {
         >
             <template #header="{ collapsed }">
                 <NuxtImg src="../public/favicon.png" alt="Logo" class="h-6" :class="collapsed ? 'm-auto' : 'ml-2'" />
-                <p v-if="!collapsed" class="text-center text-lg text-semibold text-highlighted">Amsterdam Tech</p>
+                <p v-if="!collapsed" class="text-center text-xs xl:text-lg font-semibold text-highlighted">Amsterdam Tech</p>
             </template>
 
             <template #default="{ collapsed }">
@@ -106,6 +106,10 @@ onMounted(async () => {
                     :collapsed="collapsed"
                     :items="mainLinks"
                     orientation="vertical"
+                    :ui="{
+                      childItem: 'mt-1',
+                      link: 'mt-1'
+                    }"
                 />
 
                 <UNavigationMenu
