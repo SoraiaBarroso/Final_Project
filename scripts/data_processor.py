@@ -646,7 +646,7 @@ class StudentDataProcessor:
             
             # Handle other fields
             if "img_url" in student_data:
-                update_record["img_url"] = student_data["img_url"]
+                update_record["profile_image_url"] = student_data["img_url"]
             if "points" in student_data:
                 update_record["points"] = student_data["points"]
             if "exercises_completed" in student_data:
