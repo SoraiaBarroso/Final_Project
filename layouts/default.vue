@@ -41,6 +41,15 @@ const mainLinks: NavigationMenuItem[] = [
       },
     ],
   },
+    {
+    label: "Cohorts",
+    to: "/admin/cohorts",
+    ariaLabel: "Cohorts",
+    icon: "i-pajamas:group",
+    tooltip: {
+      text: "Cohorts",
+    },
+  },
   {
     label: "Students",
     to: "/admin/students",
@@ -50,14 +59,11 @@ const mainLinks: NavigationMenuItem[] = [
       text: "Students",
     },
   },
-  {
-    label: "Cohorts",
-    to: "/admin/cohorts",
-    ariaLabel: "Cohorts",
-    icon: "i-pajamas:group",
-    tooltip: {
-      text: "Cohorts",
-    },
+{
+    label: "test",
+    icon: "i-lucide-gear",
+    ariaLabel: "Settings",
+    to: "/test",
   }
 ];
 

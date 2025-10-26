@@ -310,36 +310,6 @@ const handleSendSlackMessage = (student) => {
             </div>
           </div>
         </UCard> -->
-
-        <!-- Additional Info -->
-        <UCard variant="subtle">
-          <template #header>
-            <h3 class="text-lg font-semibold flex items-center gap-2">
-              <UIcon name="i-lucide-info" class="size-5" />
-              Additional Information
-            </h3>
-          </template>
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <p class="text-muted text-sm">Student ID</p>
-              <p class="font-mono text-sm">{{ student.id }}</p>
-            </div>
-            <div>
-              <p class="text-muted text-sm">Last Login</p>
-              <p class="text-sm">
-                {{ formatDateTime(student.last_login) || 'Never' }}
-              </p>
-            </div>
-            <div>
-              <p class="text-muted text-sm">Created At</p>
-              <p class="text-sm">{{ new Date(student.created_at).toLocaleDateString() }}</p>
-            </div>
-            <div>
-              <p class="text-muted text-sm">Last Updated</p>
-              <p class="text-sm">{{ new Date(student.updated_at).toLocaleDateString() }}</p>
-            </div>
-          </div>
-        </UCard>
       </div>
     </template>
   </UDashboardPanel>
