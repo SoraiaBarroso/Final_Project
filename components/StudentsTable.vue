@@ -220,7 +220,7 @@ function getRowItems(row) {
             trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
           }"
           placeholder="Filter program"
-          class="min-w-58"
+          class="min-w-52"
         />
 
         <USelect
@@ -236,7 +236,7 @@ function getRowItems(row) {
             trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
           }"
           placeholder="Filter status"
-          class="min-w-58"
+          class="min-w-52"
         />
       </div>
     </div>

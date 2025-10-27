@@ -180,6 +180,15 @@ export default defineEventHandler(async (event) => {
       insertedCount = data.length
     }
 
+    // Throw error if no students were inserted
+    if (insertedCount === 0 && skipped.length > 0) {
+      throw createError({
+        statusCode: 400,
+        statusMessage: `All ${skipped.length} students were skipped - they already exist in the database`,
+        data: { errors: [...errors, ...skipped] }
+      })
+    }
+
     return {
       success: true,
       inserted: insertedCount,

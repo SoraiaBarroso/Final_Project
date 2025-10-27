@@ -98,7 +98,7 @@
     data.value = (students || [])
       .map((s) => ({
         id: s.id,
-        status: s.status,
+        status: s.status || "Unknown",
         name: `${s.first_name} ${s.last_name}`,
         email: s.email,
         program: s.programs?.name || "",

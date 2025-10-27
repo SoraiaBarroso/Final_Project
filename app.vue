@@ -15,8 +15,10 @@
 
 <template>
   <TooltipProvider>
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+    <UApp>
+      <NuxtLayout>
+        <NuxtPage />
+      </NuxtLayout>
+    </UApp>
   </TooltipProvider>
 </template>

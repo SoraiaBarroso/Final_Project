@@ -88,8 +88,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     const message = data.skipped > 0
       ? `Imported ${data.inserted} students, skipped ${data.skipped} duplicates`
       : `Successfully imported ${data.inserted} students`
-
-    toast.add({
+    
+      toast.add({
       title: 'Import Complete',
       description: message,
       color: 'success'
@@ -162,7 +162,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
                         color="primary"
                         variant="soft"
                         :loading="isUploading"
-                        :disabled="isUploading"
+                        :disabled="isUploading || !state.csvFile"
                     />
                 </UForm>
             </UCard>

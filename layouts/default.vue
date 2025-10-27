@@ -103,8 +103,9 @@ onMounted(async () => {
             }"
         >
             <template #header="{ collapsed }">
-                <NuxtImg src="../public/favicon.png" alt="Logo" class="h-6" :class="collapsed ? 'm-auto' : 'ml-2'" />
-                <p v-if="!collapsed" class="text-center text-xs xl:text-lg font-semibold text-highlighted">Amsterdam Tech</p>
+                <UAvatar src="../public/favicon.png" size="xs" :class="collapsed ? 'm-auto' : 'ml-2'" />
+                <!-- <NuxtImg src="../public/favicon.png" alt="Logo" class="h-6" :class="collapsed ? 'm-auto' : 'ml-2'" /> -->
+                <p v-if="!collapsed" class="text-center text-xs xl:text-base font-semibold text-highlighted">Amsterdam Tech</p>
             </template>
 
             <template #default="{ collapsed }">

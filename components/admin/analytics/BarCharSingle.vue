@@ -26,9 +26,9 @@ const MeetingData: MeetingDataItem[] = [
 ]
 
 const MeetingCategories = {
-  totalMeetings: { name: 'Total Meetings', color: '#e5e7eb' },
-  attendedMeetings: { name: 'Attended Meetings', color: '#3b82f6' },
-  attendancesPerStudent: { name: 'Average Attendances per Student', color: '#10b981' },
+  totalMeetings: { name: 'Total Meetings', color: '#ebebf7' },
+  attendedMeetings: { name: 'Attended Meetings', color: '#706fe5' },
+  attendancesPerStudent: { name: 'Average Attendances per Student', color: '#ffc400' },
 }
 
 const xFormatter = (i: number): string => `${MeetingData[i]?.meetingType}`
