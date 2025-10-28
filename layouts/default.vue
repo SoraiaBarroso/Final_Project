@@ -50,18 +50,32 @@ const mainLinks: NavigationMenuItem[] = [
       text: "Cohorts",
     },
   },
-  {
-    label: "Students",
-    to: "/admin/students",
-    ariaLabel: "Students",
-    icon: "i-pajamas:account",
+    {
+    label: "Managment",
+    icon: "i-pajamas:chart",
+    ariaLabel: "Managment",
+    defaultOpen: true,
+    to: '/admin/managment',
+    type: 'trigger',
     tooltip: {
-      text: "Students",
+      text: "Managment",
     },
+    children: [
+      {
+        label: 'Students ',
+        description: 'Overall attendance analytics among all students.',
+        to: '/admin/managment/students',
+      },
+      {
+        label: 'Seasons ',
+        description: 'Cohort-based attendance analytics.',
+        to: '/admin/managment/seasons',
+      },
+    ],
   },
 {
-    label: "test",
-    icon: "i-lucide-gear",
+    label: "Kanban Test",
+    icon: "i-lucide-settings-2",
     ariaLabel: "Settings",
     to: "/test",
   }

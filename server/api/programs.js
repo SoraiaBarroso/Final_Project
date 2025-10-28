@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
             .select('id, name, description')
             .order('name', { ascending: true })
 
+        console.log('Fetched programs:', programs)
         if (programsErr) {
             console.error('Error fetching programs', programsErr)
             throw createError({ statusCode: 500, statusMessage: programsErr.message || 'Failed fetching programs' })

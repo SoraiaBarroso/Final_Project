@@ -112,60 +112,46 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 
 <template>
-    <UDashboardPanel id="students"
-     :ui="{
-        body: 'mt-6 w-full lg:max-w-xl mx-auto !gap-0'
-     }"
-    >
-        <template #header>
-            <UDashboardNavbar title="Students" >
-                <template #leading>
-                    <UDashboardSidebarCollapse />
-                </template>
-            </UDashboardNavbar>
-        </template>
+  <div class="mt-6 w-full lg:max-w-xl mx-auto !gap-0">
+    <div class="flex justify-between">
+        <div>
+            <h1 class="text-highlighted font-medium text-left w-full">Student Management</h1>
+            <p class="text-muted text-[15px] text-pretty mt-1">Upload a CSV file to add new students to the system.</p>
+        </div>
 
-        <template #body>
-            <div class="flex justify-between">
-                  <div>
-                    <h1 class="text-highlighted font-medium text-left w-full">Student Management</h1>
-                    <p class="text-muted text-[15px] text-pretty mt-1">Upload a CSV file to add new students to the system.</p>
-                </div>
-
-                <UTooltip class="mr-2 mt-1" arrow text="The CSV file should contain the following columns: Name, Qwasar ID, Email, Programme, Cohort" :delay-duration="0">
-                    <UIcon name="i-lucide-info" class="text-muted text-currentColor size- cursor-pointer" />
-                </UTooltip>
-            </div>
+        <UTooltip class="mr-2 mt-1" arrow text="The CSV file should contain the following columns: Name, Qwasar ID, Email, Programme, Cohort" :delay-duration="0">
+            <UIcon name="i-lucide-info" class="text-muted text-currentColor size- cursor-pointer" />
+        </UTooltip>
+    </div>
           
 
-            <UCard
-                variant="subtle"
-                class="mt-4 flex justify-center"
-                :ui="{
-                    body: '!py-4'
-                }"
-            >
-                 <UForm :schema="schema" :state="state" class="space-y-4 w-124" @submit="onSubmit">
-                    <UFormField name="csvFile" >
-                        <UFileUpload
-                            v-model="state.csvFile"
-                            accept=".csv"
-                            class="min-h-48"
-                            label="Drop your CSV here"
-                            description="or click to browse."
-                        />
-                    </UFormField>
+    <UCard
+      variant="subtle"
+      class="mt-4 flex justify-center"
+      :ui="{
+          body: '!py-4'
+      }"
+    >
+      <UForm :schema="schema" :state="state" class="space-y-4 w-124" @submit="onSubmit">
+        <UFormField name="csvFile" >
+            <UFileUpload
+              v-model="state.csvFile"
+              accept=".csv"
+              class="min-h-48"
+              label="Drop your CSV here"
+              description="or click to browse."
+            />
+        </UFormField>
 
-                    <UButton
-                        type="submit"
-                        label="Import Students"
-                        color="primary"
-                        variant="soft"
-                        :loading="isUploading"
-                        :disabled="isUploading || !state.csvFile"
-                    />
-                </UForm>
-            </UCard>
-        </template>
-    </UDashboardPanel>
+        <UButton
+            type="submit"
+            label="Import Students"
+            color="primary"
+            variant="soft"
+            :loading="isUploading"
+            :disabled="isUploading || !state.csvFile"
+        />
+      </UForm>
+    </UCard>
+  </div>
 </template>
