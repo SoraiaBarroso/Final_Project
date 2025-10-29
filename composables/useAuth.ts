@@ -52,11 +52,15 @@ export const useAuth = () => {
     const signInWithGoogle = async () => {
         console.log("Starting Google OAuth sign in...")
 
+        // Get the current origin to make redirect URL dynamic
+        const redirectUrl = `${window.location.origin}/auth/confirm`
+        console.log("OAuth redirect URL:", redirectUrl)
+
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
             options: {
                 scopes: "https://www.googleapis.com/auth/calendar.readonly",
-                redirectTo: "http://localhost:3000/auth/confirm",
+                redirectTo: redirectUrl,
                 queryParams: { access_type: "offline", prompt: "consent" },
             },
         })

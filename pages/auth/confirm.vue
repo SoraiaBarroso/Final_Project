@@ -25,22 +25,34 @@
     user,
     async () => {
       if (user.value) {
-        // const userId = user.value.id
-        const email = user.value.email?.toLowerCase() || "";
+        console.log("User detected in confirm page:", user.value.email);
 
-        // Check if user is admin
-        const { data: adminData } = await supabase
-          .from("admin")
-          .select("email")
-          .eq("email", email)
-          .single();
+        try {
+          // Ensure profile exists and get role from admin table
+          const response = await $fetch('/api/auth/ensure-profile', {
+            method: 'POST'
+          });
 
-        useCookie(`${cookieName}-redirect-path`).value = null;
+          console.log("Profile ensured:", response);
 
-        if (adminData && adminData.email) {
-          return navigateTo("/admin/dashboard");
-        } else {
-          return navigateTo("/students/dashboard");
+          if (!response.success) {
+            console.error('Error ensuring profile:', response.error);
+            return navigateTo('/?error=profile');
+          }
+
+          useCookie(`${cookieName}-redirect-path`).value = null;
+
+          // Redirect based on role from admin table
+          if (response.role === 'admin') {
+            console.log("Redirecting to admin dashboard");
+            return navigateTo("/admin/dashboard");
+          } else {
+            console.log("Redirecting to student dashboard");
+            return navigateTo("/students/dashboard");
+          }
+        } catch (err) {
+          console.error('Failed to ensure profile:', err);
+          return navigateTo('/?error=profile');
         }
       }
     },

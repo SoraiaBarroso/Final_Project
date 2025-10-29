@@ -22,6 +22,8 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
 
   supabase: {
+    url: process.env.NUXT_PUBLIC_SUPABASE_URL,
+    key: process.env.NUXT_PUBLIC_SUPABASE_KEY,
     redirectOptions: {
       login: "/", // User will be redirected to this path if not authenticated or after logout.
       callback: "/auth/confirm", // This is the path the user will be redirect to after supabase login redirection.
@@ -29,8 +31,6 @@ export default defineNuxtConfig({
       exclude: ["/"],
       cookieRedirect: false,
     },
-    url: process.env.SUPABASE_URL,
-    key: process.env.SUPABASE_KEY,
   },
 
   runtimeConfig: {
@@ -43,8 +43,8 @@ export default defineNuxtConfig({
     public: {
       googleClientId: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_ID,
       googleClientSecret: process.env.NUXT_PUBLIC_GOOGLE_CLIENT_SECRET,
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabaseKey: process.env.SUPABASE_KEY,
+      supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL,
+      supabaseKey: process.env.NUXT_PUBLIC_SUPABASE_KEY,
     },
   },
 
