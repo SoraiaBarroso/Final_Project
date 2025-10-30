@@ -4,7 +4,7 @@ import type { User } from "@supabase/supabase-js"
 export const useAuth = () => {
     // Use useState to create a global reactive user state (like in the tutorial)
     const user = useState<User | null>('user', () => null)
-    // Add role state to track user's role from profiles table
+    // Add role state to track user's role (admin or user)
     const role = useState<string>('role', () => 'guest')
 
     // Get the Supabase client from @nuxtjs/supabase module
@@ -24,22 +24,21 @@ export const useAuth = () => {
         if (data.user) {
             user.value = data.user
 
-            // Fetch role from profiles table
-            const { data: profile, error: profileError } = await supabase
-                .from("profiles")
-                .select("role")
-                .eq("id", data.user.id)
-                .single() as { data: { role: string } | null, error: any }
+            // Check if user email exists in admin table
+            const { data: adminRecord, error: adminError } = await supabase
+                .from("admin")
+                .select("email")
+                .eq("email", data.user.email)
+                .single()
 
-            if (profileError) {
-                console.error('Error fetching user profile:', profileError)
-                role.value = 'user' // Default to 'user' if profile fetch fails
-            } else if (profile && profile.role) {
-                role.value = profile.role
+            // If email exists in admin table, they're admin; otherwise user/student
+            if (adminRecord && !adminError) {
+                role.value = 'admin'
             } else {
-                console.log("No profile found, defaulting to 'user' role")
                 role.value = 'user'
             }
+
+            console.log('User role determined:', role.value)
         } else {
             console.log("No user found")
             user.value = null
@@ -110,7 +109,7 @@ export const useAuth = () => {
 
     return {
         user, // Global reactive user state
-        role, // User role from profiles table ('user', 'admin', or 'guest')
+        role, // User role from admin table check ('user', 'admin', or 'guest')
         getUser,
         signInWithGoogle,
         signOut,

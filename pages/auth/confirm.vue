@@ -28,21 +28,21 @@
         console.log("User detected in confirm page:", user.value.email);
 
         try {
-          // Ensure profile exists and get role from admin table
+          // Check user role (admin table determines if user is admin)
           const response = await $fetch('/api/auth/ensure-profile', {
             method: 'POST'
           });
 
-          console.log("Profile ensured:", response);
+          console.log("Role check complete:", response);
 
           if (!response.success) {
-            console.error('Error ensuring profile:', response.error);
-            return navigateTo('/?error=profile');
+            console.error('Error checking role:', response.error);
+            return navigateTo('/?error=auth');
           }
 
           useCookie(`${cookieName}-redirect-path`).value = null;
-
-          // Redirect based on role from admin table
+          console.log("User role:", response.role);
+          // Redirect based on role (admin or student)
           if (response.role === 'admin') {
             console.log("Redirecting to admin dashboard");
             return navigateTo("/admin/dashboard");
@@ -51,8 +51,8 @@
             return navigateTo("/students/dashboard");
           }
         } catch (err) {
-          console.error('Failed to ensure profile:', err);
-          return navigateTo('/?error=profile');
+          console.error('Failed to check role:', err);
+          return navigateTo('/?error=auth');
         }
       }
     },
