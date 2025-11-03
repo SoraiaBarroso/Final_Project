@@ -41,6 +41,31 @@ const sorting = ref([
 
 const statusFilter = ref("");
 const programFilter = ref("");
+const cohortFilter = ref("");
+const cohortItems = ref([]);
+
+onMounted(() =>{
+  const cohorts = [...new Set(props.data.map(item => item.cohort))];
+  cohortItems.value = [{ label: 'All', value: 'all' }, ...cohorts.map(cohort => ({ label: cohort, value: cohort }))];
+
+  console.log("Cohort items:", cohortItems.value);
+})
+
+watch(
+  () => cohortFilter.value,
+  (newVal) => {
+    if (!table?.value?.tableApi) return;
+
+    const cohortColumn = table.value.tableApi.getColumn("cohort");
+    if (!cohortColumn) return;
+
+    if (newVal === "all") {
+      cohortColumn.setFilterValue(undefined);
+    } else {
+      cohortColumn.setFilterValue(newVal);
+    }
+  }
+);
 
 watch(
   () => programFilter.value,
@@ -118,8 +143,8 @@ const columns = [
       const color =
         {
           "On Track": "success",
-          Behind: "error",
-          Ahead: "info",
+          "At Risk": "error",
+          "Monitor": "warning",
         }[row.getValue("status")] || "neutral";
 
       return h(UBadge, { class: "capitalize", variant: "subtle", color }, () =>
@@ -209,6 +234,17 @@ function getRowItems(row) {
       <div class="flex items-center gap-4">
         <USelect
           size="md"
+          v-model="cohortFilter"
+          :items="cohortItems"
+          :ui="{
+            trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+          }"
+          placeholder="Filter cohort"
+          class="min-w-52"
+        />
+
+        <USelect
+          size="md"
           v-model="programFilter"
           :items="[
             { label: 'All', value: 'all' },
@@ -227,10 +263,10 @@ function getRowItems(row) {
           size="md"
           v-model="statusFilter"
           :items="[
-            { label: 'All', value: 'all' },
-            { label: 'On Track', value: 'on track' },
-            { label: 'Behind', value: 'behind' },
-            { label: 'Ahead', value: 'ahead' },
+            { label: 'All', value: 'all', chip },
+            { label: 'On Track', value: 'on track', chip: { color: 'success' } },
+            { label: 'At Risk', value: 'at risk', chip: { color: 'error' } },
+            { label: 'Monitor', value: 'monitor', chip: { color: 'warning' } },
           ]"
           :ui="{
             trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',

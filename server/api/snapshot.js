@@ -26,8 +26,8 @@ export default defineEventHandler(async (event) => {
             message: 'Not enough data',
             total_pct_change: null,
             on_track_pct_change: null,
-            behind_pct_change: null,
-            ahead_pct_change: null,
+            at_risk_pct_change: null,
+            monitor_pct_change: null,
           },
         },
       }
@@ -46,10 +46,10 @@ export default defineEventHandler(async (event) => {
       total_pct_change: pctChange(latest.total_students, previous.total_students),
       on_track_change: latest.on_track - previous.on_track,
       on_track_pct_change: pctChange(latest.on_track, previous.on_track),
-      behind_change: latest.behind - previous.behind,
-      behind_pct_change: pctChange(latest.behind, previous.behind),
-      ahead_change: latest.ahead - previous.ahead,
-      ahead_pct_change: pctChange(latest.ahead, previous.ahead),
+      at_risk_change: latest.at_risk - previous.at_risk,
+      at_risk_pct_change: pctChange(latest.at_risk, previous.at_risk),
+      monitor_change: latest.monitor - previous.monitor,
+      monitor_pct_change: pctChange(latest.monitor, previous.monitor),
     }
 
     return { data: { value: result } }

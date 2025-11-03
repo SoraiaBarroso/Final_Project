@@ -150,24 +150,24 @@
               />
 
               <StudentStatCard
-                title="BEHIND"
-                :count="data.filter((item) => item.status === 'Behind').length"
-                icon="i-pajamas:status-alert"
-                icon-color="error"
-                :change="snapshotChange?.behind_change"
-                :percent-change="snapshotChange?.behind_pct_change"
-                :invert-colors="true"
-                rounded-class="rounded-lg xl:rounded-none lg:rounded-none"
+                title="MONITOR"
+                :count="data.filter((item) => item.status === 'Monitor').length"
+                icon="i-pajamas:eye"
+                icon-color="warning"
+                :change="snapshotChange?.monitor_change"
+                :percent-change="snapshotChange?.monitor_pct_change"
+                rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg lg:rounded-l-none"
               />
 
               <StudentStatCard
-                title="AHEAD"
-                :count="data.filter((item) => item.status === 'Ahead').length"
-                icon="i-pajamas:rocket-launch"
-                icon-color="info"
-                :change="snapshotChange?.ahead_change"
-                :percent-change="snapshotChange?.ahead_pct_change"
-                rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg lg:rounded-l-none"
+                title="AT RISK"
+                :count="data.filter((item) => item.status === 'At Risk').length"
+                icon="i-pajamas:status-alert"
+                icon-color="error"
+                :change="snapshotChange?.at_risk_change"
+                :percent-change="snapshotChange?.at_risk_pct_change"
+                :invert-colors="true"
+                rounded-class="rounded-lg xl:rounded-none lg:rounded-none"
               />
             </UPageGrid>
        

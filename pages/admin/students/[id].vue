@@ -163,8 +163,8 @@ onMounted(async () => {
 const getStatusColor = (status) => {
   const colors = {
     'On Track': 'success',
-    'Behind': 'error',
-    'Ahead': 'info',
+    'At Risk': 'error',
+    'Monitor': 'warning',
     'Unknown': 'neutral'
   }
   return colors[status] || 'neutral'
