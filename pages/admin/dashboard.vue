@@ -108,6 +108,7 @@
         profileImgUrl: s.profile_image_url || "",
       }));
 
+    console.log("Processed student data:", data.value);
     loading.value = false;
   };
 

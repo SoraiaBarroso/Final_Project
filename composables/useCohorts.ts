@@ -3,12 +3,24 @@ export function useCohorts() {
     const loading = ref(false)
     const error = ref<string | null>(null)
 
-    async function fetchCohorts() {
+    async function fetchCohorts(filters?: { program_id?: string }) {
         loading.value = true
         error.value = null
         try {
             const response = await $fetch('/api/cohorts')
-            cohorts.value = response?.data || []
+            let fetchedCohorts = response?.data || []
+            console.log('Fetched cohorts:', fetchedCohorts)
+
+            // Apply filters if provided
+            if (filters?.program_id) {
+                fetchedCohorts = fetchedCohorts.filter((cohort: any) => {
+                    // Check if any program in the programs array matches the filter
+                    return cohort.programs?.some((program: any) => program.id === filters.program_id)
+                })
+                console.log('Filtered cohorts by program_id:', filters.program_id, fetchedCohorts)
+            }
+
+            cohorts.value = fetchedCohorts
         } catch (err: any) {
             error.value = err?.message || 'Failed to fetch cohorts'
             console.error('Error fetching cohorts:', err)

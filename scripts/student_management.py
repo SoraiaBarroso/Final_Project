@@ -83,23 +83,136 @@ class StudentStatusManager:
     async def update_student_status(self):
         """Update student status based on season progress using PostgreSQL function"""
         print_step("STUDENT STATUS", "Updating student status based on progress")
-        
+
         try:
             # Call the PostgreSQL function directly
             print("Calling PostgreSQL function 'update_student_status_based_on_season_progress'...")
-            
+
             response = self.supabase.rpc('update_student_status_based_on_season_progress').execute()
-            
+
             if hasattr(response, 'data') and response.data is not None:
                 print("✓ Student statuses updated successfully by PostgreSQL function")
                 if response.data:
                     print(f"Response data: {response.data}")
-                return True
             else:
                 print("Warning: PostgreSQL function call completed but returned no data")
                 print(f"Full response: {response}")
-                return True  # Assuming success if no error was raised
-        
+
+            # Get status distribution
+            print("\n" + "="*70)
+            print("STATUS DISTRIBUTION")
+            print("="*70)
+            status_response = self.supabase.from_('students').select('status').execute()
+            status_counts = {}
+            for student in status_response.data:
+                status = student.get('status', 'Unknown')
+                status_counts[status] = status_counts.get(status, 0) + 1
+
+            for status, count in sorted(status_counts.items()):
+                print(f"  {status}: {count} students")
+
+            # Check for students with Unknown status and provide reasons
+            print("\n" + "="*70)
+            print("STUDENTS WITH 'UNKNOWN' STATUS - DIAGNOSIS")
+            print("="*70)
+
+            unknown_students_response = self.supabase.from_('students').select(
+                'id, username, expected_season_id, current_season_id, cohort_id, program_id'
+            ).eq('status', 'Unknown').execute()
+
+            unknown_students = unknown_students_response.data
+
+            if not unknown_students:
+                print("✓ No students with 'Unknown' status found!")
+            else:
+                print(f"Found {len(unknown_students)} students with 'Unknown' status\n")
+
+                for student in unknown_students:
+                    student_id = student['id']
+                    username = student['username']
+                    expected_season_id = student.get('expected_season_id')
+                    current_season_id = student.get('current_season_id')
+                    cohort_id = student.get('cohort_id')
+                    program_id = student.get('program_id')
+
+                    print(f"Student: {username} (ID: {student_id})")
+                    print(f"  Cohort ID: {cohort_id or 'NOT SET'}")
+                    print(f"  Program ID: {program_id or 'NOT SET'}")
+                    print(f"  Current Season ID: {current_season_id or 'NOT SET'}")
+                    print(f"  Expected Season ID: {expected_season_id or 'NOT SET'}")
+
+                    reasons = []
+
+                    # Reason 1: No expected season assigned
+                    if not expected_season_id:
+                        reasons.append("❌ No expected_season_id assigned")
+                        if not cohort_id:
+                            reasons.append("   └─ Missing cohort_id")
+                        if not program_id:
+                            reasons.append("   └─ Missing program_id")
+                        if cohort_id and program_id:
+                            reasons.append("   └─ Has cohort_id and program_id but expected season not set")
+                            reasons.append("   └─ Run: python scripts/student_management.py --seasons")
+                    else:
+                        # Reason 2: No progress data for expected season
+                        progress_response = self.supabase.from_('student_season_progress').select(
+                            'season_id, progress_percentage, is_completed'
+                        ).eq('student_id', student_id).eq('season_id', expected_season_id).execute()
+
+                        if not progress_response.data:
+                            reasons.append("❌ No progress data for expected season")
+
+                            # Check current season progress since expected season has no data
+                            if current_season_id:
+                                current_progress_response = self.supabase.from_('student_season_progress').select(
+                                    'progress_percentage, is_completed'
+                                ).eq('student_id', student_id).eq('season_id', current_season_id).execute()
+
+                                if current_progress_response.data:
+                                    current_progress = current_progress_response.data[0]
+                                    current_pct = float(current_progress['progress_percentage'])
+
+                                    reasons.append(f"   └─ Current season progress: {current_pct}%")
+
+                                    if current_pct > 75:
+                                        reasons.append("   └─ ✓ Should be 'Monitor' (current > 75%)")
+                                    else:
+                                        reasons.append("   └─ ✓ Should be 'At Risk' (current ≤ 75%)")
+
+                                    reasons.append("   └─ Status function should handle this case")
+                                else:
+                                    reasons.append("   └─ No current season progress data either")
+                                    reasons.append("   └─ Run the data scraping script to populate progress")
+                            else:
+                                reasons.append("   └─ No current_season_id set")
+                                reasons.append("   └─ Run the data scraping script to populate progress")
+                        else:
+                            # Has progress data but still Unknown - check the value
+                            progress = progress_response.data[0]
+                            reasons.append(f"⚠️ Has progress data (Expected season progress: {progress['progress_percentage']}%)")
+                            reasons.append("   └─ This shouldn't happen - may indicate a bug in the function")
+
+                        # Check for Final Project special case
+                        season_response = self.supabase.from_('seasons').select('name').eq('id', expected_season_id).execute()
+                        if season_response.data and season_response.data[0]['name'] == 'Final Project':
+                            if not current_season_id:
+                                reasons.append("   └─ Expected season is 'Final Project' but no current_season_id set")
+                            else:
+                                current_progress_response = self.supabase.from_('student_season_progress').select(
+                                    'progress_percentage'
+                                ).eq('student_id', student_id).eq('season_id', current_season_id).execute()
+
+                                if not current_progress_response.data:
+                                    reasons.append("   └─ Expected season is 'Final Project' but no current season progress data")
+
+                    print("  Reasons:")
+                    for reason in reasons:
+                        print(f"    {reason}")
+                    print()
+
+            print("="*70 + "\n")
+            return True
+
         except Exception as e:
             print(f"Error calling PostgreSQL function: {e}")
             return False

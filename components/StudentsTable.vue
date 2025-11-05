@@ -44,12 +44,19 @@ const programFilter = ref("");
 const cohortFilter = ref("");
 const cohortItems = ref([]);
 
-onMounted(() =>{
-  const cohorts = [...new Set(props.data.map(item => item.cohort))];
-  cohortItems.value = [{ label: 'All', value: 'all' }, ...cohorts.map(cohort => ({ label: cohort, value: cohort }))];
-
-  console.log("Cohort items:", cohortItems.value);
-})
+watch(
+  () => props.data,
+  (newData) => {
+    const cohorts = [...new Set(newData.map(item => item.cohort))];
+    cohortItems.value = cohorts.map(cohort => ({
+      label: cohort,
+      value: cohort,
+    }));
+    cohortItems.value.unshift({ label: 'All', value: 'all' });
+    console.log("Cohort items updated:", cohortItems.value);
+  },
+  { immediate: true }
+);
 
 watch(
   () => cohortFilter.value,

@@ -217,100 +217,28 @@ const handleSendSlackMessage = (student) => {
     </template>
 
     <template #body>
-      <div v-if="loading" class="flex items-center justify-center h-64">
-        <UIcon name="i-lucide-loader-2" class="animate-spin size-8 text-info" />
-      </div>
+        <div v-if="loading" class="flex justify-center items-center h-64">
+          <ULoadingSpinner size="lg" />
+        </div> 
 
-      <div v-else-if="error" class="flex flex-col items-center justify-center h-64 gap-4">
-        <UIcon name="i-lucide-alert-circle" class="size-12 text-error" />
-        <p class="text-error">Error loading student: {{ error }}</p>
-        <UButton @click="goBack" color="neutral">Back to Dashboard</UButton>
-      </div>
+        <div v-else class="flex flex-col gap-10 h-full">
 
-      <div v-else-if="student" class="space-y-6">
-        <!-- Student Header Card -->
-        <StudentHeaderCard
-          :student="student"
-          @send-email="handleSendEmail"
-          @send-slack-message="handleSendSlackMessage"
-        />
+          <div class="flex gap-6 h-fit">
+            <!-- Student Header Card -->
+            <StudentHeaderCard
+              :student="student"
+              @send-email="handleSendEmail"
+              @send-slack-message="handleSendSlackMessage"
+            />
 
-        <!-- Stats Cards -->
-        <StudentStats :student="student" />
-      
-        <!-- Attendance Details -->
-        <!-- <UCard variant="subtle">
-          <template #header>
-            <h3 class="text-lg font-semibold flex items-center gap-2">
-              <UIcon name="i-lucide-calendar-check" class="size-5" />
-              Attendance Details
-            </h3>
-          </template>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="p-4 border border-default rounded-lg">
-              <p class="text-muted text-sm mb-1">Standup Meetings</p>
-              <p class="text-xl font-bold">{{ student.standup_attended || 0 }}</p>
-            </div>
-            <div class="p-4 border border-default rounded-lg">
-              <p class="text-muted text-sm mb-1">Workshops</p>
-              <p class="text-xl font-bold">{{ student.workshops_attended || 0 }}</p>
-            </div>
-            <div class="p-4 border border-default rounded-lg">
-              <p class="text-muted text-sm mb-1">Mentoring Sessions</p>
-              <p class="text-xl font-bold">{{ student.mentoring_attended || 0 }}</p>
-            </div>
+            <!-- Stats Cards -->
+            <StudentStats :student="student" />
           </div>
-        </UCard> -->
 
-        <!-- Season Progress -->
-        <SeasonProgressTable :season-progress="seasonProgress" />
-
-        <!-- Project Completions -->
-        <!-- <UCard variant="subtle" v-if="projectCompletions.length > 0">
-          <template #header>
-            <h3 class="text-lg font-semibold flex items-center gap-2">
-              <UIcon name="i-lucide-folder-check" class="size-5" />
-              Project Completions
-            </h3>
-          </template>
-          <div class="space-y-3">
-            <div
-              v-for="completion in projectCompletions"
-              :key="completion.id"
-              class="p-4 border border-default rounded-lg"
-            >
-              <div class="flex items-start justify-between">
-                <div class="flex-1">
-                  <div class="flex items-center gap-2 mb-1">
-                    <p class="font-medium">{{ completion.projects?.name }}</p>
-                    <UBadge
-                      :color="completion.is_completed ? 'success' : 'warning'"
-                      variant="subtle"
-                      size="sm"
-                    >
-                      {{ completion.is_completed ? 'Completed' : 'In Progress' }}
-                    </UBadge>
-                  </div>
-                  <p class="text-muted text-sm mb-2">
-                    {{ completion.projects?.description }}
-                  </p>
-                  <div class="flex items-center gap-4 text-sm">
-                    <span v-if="completion.grade" class="text-muted">
-                      Grade: <span class="font-medium">{{ completion.grade }}</span>
-                    </span>
-                    <span v-if="completion.completion_date" class="text-muted">
-                      Completed: {{ new Date(completion.completion_date).toLocaleDateString() }}
-                    </span>
-                  </div>
-                  <p v-if="completion.feedback" class="text-sm mt-2 p-2 bg-elevated rounded">
-                    {{ completion.feedback }}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </UCard> -->
-      </div>
+        
+          <!-- Season Progress -->
+          <SeasonProgressTable :season-progress="seasonProgress" />
+        </div>
     </template>
   </UDashboardPanel>
 </template>

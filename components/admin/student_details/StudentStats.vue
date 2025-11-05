@@ -43,27 +43,28 @@ const stats = computed(() => [
 </script>
 
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 h-full">
     <UCard
       v-for="stat in stats"
       :key="stat.label"
       :ui="{
         header: 'border-none',
-        body: 'flex justify-between !pb-3 !pt-0',
+        body: 'flex justify-between items-center !pt-0 w-full',
       }"
+      class="h-full"
     >
-      <template #header>      
-          <h1 class="text-muted text-sm">{{ stat.label }}</h1>
+      <template #header>
+          <h1 class="text-muted text-sm font-medium">{{ stat.label }}</h1>
       </template>
       <p class="text-xl font-bold">{{ stat.value }}</p>
       <div
         :class="[
             stat.bgColor,
             stat.borderColor,
-            'flex h-8 w-8 items-center justify-center rounded-full'
+            'flex h-10 w-10 items-center justify-center rounded-full flex-shrink-0'
         ]"
         >
-            <UIcon :name="stat.icon" :class="[stat.textColor, 'size-4']" />
+            <UIcon :name="stat.icon" :class="[stat.textColor, 'size-5']" />
         </div>
     </UCard>
   </div>
