@@ -156,6 +156,7 @@
                 icon="i-pajamas:eye"
                 icon-color="warning"
                 :change="snapshotChange?.monitor_change"
+                :invert-colors="true"
                 :percent-change="snapshotChange?.monitor_pct_change"
                 rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg lg:rounded-l-none"
               />
@@ -165,9 +166,9 @@
                 :count="data.filter((item) => item.status === 'At Risk').length"
                 icon="i-pajamas:status-alert"
                 icon-color="error"
+                :invert-colors="true"
                 :change="snapshotChange?.at_risk_change"
                 :percent-change="snapshotChange?.at_risk_pct_change"
-                :invert-colors="true"
                 rounded-class="rounded-lg xl:rounded-none lg:rounded-none"
               />
             </UPageGrid>
