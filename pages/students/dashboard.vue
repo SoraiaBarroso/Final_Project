@@ -1,8 +1,4 @@
 <script setup>
-  import MeetingsDisplay from "~/components/student_dashboard/MeetingsDisplay.vue";
-  import DeadlinesCard from "~/components/students/DeadlinesCard.vue";
-  import StatCard from "~/components/students/StatCard.vue";
-
   definePageMeta({
     layout: "custom",
     middleware: ["auth", "student-only"],
@@ -12,7 +8,7 @@
   const supabase = useSupabaseClient();
   const runtimeConfig = useRuntimeConfig();
   const calendarEvents = ref([]);
-
+  const toast = useToast();
   const tipsRead = ref(0);
 
   const totalSeasons = ref(0);
@@ -43,6 +39,20 @@
   // Store all seasons for the student's program for id-to-name mapping
   const allProgramSeasons = ref([]);
 
+  // Get current season name
+  const currentSeasonName = computed(() => {
+    if (!studentData.value.current_season_id || !allProgramSeasons.value.length) return 'N/A';
+    const season = allProgramSeasons.value.find(s => s.id === studentData.value.current_season_id);
+    return season?.name || 'N/A';
+  });
+
+  // Get expected season name
+  const expectedSeasonName = computed(() => {
+    if (!studentData.value.expected_season_id || !allProgramSeasons.value.length) return 'N/A';
+    const season = allProgramSeasons.value.find(s => s.id === studentData.value.expected_season_id);
+    return season?.name || 'N/A';
+  });
+
   watch(tipsRead, (newVal) => {
     if (newVal >= 5) {
       // Trigger confetti animation
@@ -50,10 +60,6 @@
       tipsRead.value = 0;
     }
   });
-
-  const launchConfetti = () => {
-    useConfetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
-  };
 
   async function fetchOverallProgress(studentId) {
     const { data, error } = await supabase
@@ -97,7 +103,12 @@
         },
       }
     );
-
+    
+    if (!res.ok) {
+      toast.error("Failed to fetch calendar events");
+      console.error("Failed to fetch calendar events:", res.statusText);
+      return;
+    }
     const data = await res.json();
     calendarEvents.value = data.items || [];
     console.log("Current calendar home:", calendarEvents.value);
@@ -133,6 +144,7 @@
       timeMax: timeMax.toISOString(),
     };
   }
+  
   async function fetchStudentData() {
     const {
       data: { session },
@@ -247,11 +259,11 @@
     } = await supabase.auth.getSession();
 
     googleAccessToken.value = session?.provider_token || null;
-
     // const { data: { session: newSession } } = await supabase.auth.refreshSession()
     // console.log("Refreshed session:", newSession)
 
     if (googleAccessToken.value) {
+      console.log("Fetching calendar events with token:", googleAccessToken.value);
       await fetchCalendarEvents(googleAccessToken.value);
     }
 
@@ -279,124 +291,87 @@
 </script>
 
 <template>
-  <div class="student_data flex flex-col h-full gap-6 2xl:gap-8 px-8 py-6">
-    
-    <div class="w-full">
-       <div class="flex flex-col">
-        <div class="mb-4 flex items-center justify-start gap-3">
-          <h1 class="font-semibold text-black/80 xl:text-4xl 2xl:text-2xl">Hello,</h1>
-          <span class="text-primary-500 font-semibold xl:text-4xl 2xl:text-2xl"
-            >{{ studentData.first_name }}! 
-          </span>
+    <UDashboardPanel id="home">
+      <template #header>
+          <UDashboardNavbar title="Dashboard" >
+              <template #leading>
+                  <UDashboardSidebarCollapse />
+              </template>
+
+              <template #right>
+                <UIcon name="i-game-icons:crown" class="text-primary-500 size-8 mr-1" />
+                {{ studentData.points ?? 0 }} pts
+
+              </template>
+          </UDashboardNavbar>
+      </template>
+
+      <template #body>
+        <div class="w-full">
+          <StudentDashboardGreetings v-if="studentData.first_name" :first_name="studentData.first_name" />
         </div>
 
-        <div>
-          <p class="text-muted text-base xl:mt-2 2xl:mt-1 2xl:text-lg">
-            Nice to have you back, what an exciting day!
-          </p>
-          <p class="text-muted mt-2 text-base 2xl:text-lg">
-            Get ready and check your projects today
-          </p>
-        </div>
-      </div>
-    </div>
+        <UPageGrid class="h-full grid-cols-1 sm:grid-cols-1 lg:grid-cols-2">
+          <div class="flex flex-col justify-between">            
+            <StudentDashboardMeetingsDisplay v-if="googleAccessToken" :googleAccessToken="googleAccessToken" />
 
+            <StudentDashboardDeadlinesCard
+              v-if="studentData"
+              :seasonId="studentData.expected_season_id"
+              :programId="studentData.program_id"
+              :cohortId="studentData.cohort_id"
+            />
+          </div>
+           
+           <div class="flex flex-col justify-between">
+              <StudentDashboardProgress
+                v-if="studentData"
+                :status="studentData.status"
+                :progress="studentData.progress"
+                :completedSeasons="completedSeasons"
+                :totalSeasons="totalSeasons"
+              />
 
-    <div class="w-full flex flex-col lg:flex-row h-full gap-8 lg:gap-12">
-      
-      <div class="flex flex-col justify-around h-full gap-4 2xl:gap-2 w-full lg:w-1/2">
-        <MeetingsDisplay v-if="googleAccessToken" :googleAccessToken="googleAccessToken" />
+              <UPageGrid class="grid-cols-2 lg:grid-cols-2 grid-rows-2 gap-6">
+                 <StudentDashboardStatCard
+                  :value="currentSeasonName"
+                  label="Current Season"
+                  icon="i-lucide:calendar"
+                />
 
-        <DeadlinesCard
-          v-if="studentData"
-          :seasonId="studentData.expected_season_id"
-          :programId="studentData.program_id"
-          :cohortId="studentData.cohort_id"
-        />
-      </div>
+                 <StudentDashboardStatCard
+                  :value="expectedSeasonName"
+                  label="Expected Season"
+                  icon="i-lucide:target"
+                />
 
-      
-      <div class="flex w-full lg:w-1/2 flex-col h-full justify-around items-center gap-6">
-        
-        <div class="flex flex-col w-full gap-4">
-            <h2 class="font-semibold text-black/80 2xl:text-xl">
-              Progress
-            </h2>
-            <p v-if="studentData.status == 'On Track'" class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">Congratulations! You're currently <span class="text-green-500 font-semibold cursor-pointer" @click="launchConfetti">on track</span></p>
-            <p v-else-if="studentData.status == 'At Risk'" class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">You're currently <span class="text-yellow-500">at risk</span>, please check your tasks</p>
-            <p v-else class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">You're currently <span class="text-red-500 text-semi">off track</span>, please reach out for help</p>
-            <UCard
-              class="mt-4 w-full"
-              :ui="{
-                body: '2xl:!px-6 2xl:!py-4 xl:!px-6 w-full flex flex-col items-end gap-4',
-              }"
-            >
-              <p class="text-muted ">{{ studentData.progress }}%</p>
-              <UProgress size="lg" v-model="value" />
-              <p class="text-muted">{{ completedSeasons }} out of {{ totalSeasons }} completed</p>
-            </UCard>
-        </div>
+                <StudentDashboardStatCard
+                  :value="formatLastLogin(studentData.last_login)"
+                  label="Last Login"
+                  icon="i-lucide:clock"
+                />
 
-        <div class="grid w-full grid-cols-2 grid-rows-2 gap-4 2xl:gap-4">
-        <StatCard
-          :value="`${completedSeasons} / ${totalSeasons}`"
-          label="Seasons"
-          icon="i-lucide:brain"
-          :percentage="`${((completedSeasons / totalSeasons) * 100).toFixed(0)}%`"
-        />
+                <StudentDashboardStatCard
+                  :value="studentData.completed_projects"
+                  label="Projects"
+                  icon="i-lucide:computer"
+                />
 
-        <StatCard
-          :value="studentData.completed_projects"
-          label="Projects"
-          icon="i-lucide:computer"
-        />
+                <StudentDashboardStatCard
+                  :value="studentData.exercises_completed"
+                  label="Exercises"
+                  icon="i-lucide:clipboard-check"
+                />
 
-        <StatCard
-          :value="studentData.exercises_completed"
-          label="Exercises"
-          icon="i-lucide:clipboard-check"
-        />
-
-        <StatCard
-          :value="studentData.points ?? 0"
-          label="Qwasar Points"
-          icon="i-lucide:trophy"
-          :tooltip="true"
-        />
-        </div>
-      </div>
-
-    </div>
-  </div>
+                <StudentDashboardStatCard
+                  :value="studentData.points ?? 0"
+                  label="Qwasar Points"
+                  icon="i-lucide:trophy"
+                  :tooltip="true"
+                />
+              </UPageGrid>
+           </div>
+        </UPageGrid>
+      </template>
+  </UDashboardPanel>
 </template>
-
-<style>
-#arrow {
-  transition: transform 0.2s ease;
-}
-
-.event_card:hover #arrow {
-  transform: translate(4px, -4px);
-}
-
-.student_data {
-  font-family: "Space Grotesk", sans-serif;
-  overflow-x: hidden;
-}
-
-html,
-body,
-#__nuxt {
-  overflow-x: hidden !important;
-}
-
-.events[ref="meetingsScroll"] {
-  max-width: 100%;
-  box-sizing: border-box;
-}
-
-.events:hover {
-  scrollbar-width: 6px;
-  scrollbar-color: #c2c2c2a2 transparent;
-}
-</style>

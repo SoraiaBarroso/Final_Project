@@ -1,126 +1,12 @@
 <script setup lang="ts">
   import { onMounted, watch } from "vue";
-  import { useRoute } from "vue-router";
-  import type { DropdownMenuItem, NavigationMenuItem } from "@nuxt/ui";
+  import type {  NavigationMenuItem } from "@nuxt/ui";
 
   const supabase = useSupabaseClient();
-  const route = useRoute();
-  const colorMode = useColorMode();
-  const appConfig = useAppConfig();
 
-  const isCollapsed = ref(false);
-  const active = ref();
   const userName = ref("");
   const userImg = ref("");
   const userLoading = ref(true);
-  const open = ref(false);
-
-  const colors = [
-    "gray",
-    "red",
-    "orange",
-    "yellow",
-    "green",
-    "laurel",
-    "esmerald",
-    "teal",
-    "blue",
-    "glacier",
-    "purple",
-    "pink",
-  ];
-
-  const styleNav = computed(() => {
-    return isCollapsed.value ? "w-10 flex items-center mt-2" : "xl:w-48 2xl:w-54";
-  });
-
-  const styleContainer = computed(() => {
-    return isCollapsed.value ? "flex items-center" : "flex items-end";
-  });
-
-  // Helper to get a readable page title from the route
-  const getPageTitle = (route: any) => {
-    if (route.meta && route.meta.title) return route.meta.title;
-    const segments = route.path.split("/").filter(Boolean);
-    if (segments.length === 0) return "Home";
-    const last = segments[segments.length - 1];
-    return last.charAt(0).toUpperCase() + last.slice(1).replace(/-/g, " ");
-  };
-
-  const items = computed<DropdownMenuItem[][]>(() => [
-    [
-      {
-        label: userName.value,
-        avatar: {
-          src: userImg.value,
-        },
-        type: "label",
-        ui: {
-          label: "xl:text-sm 2xl:text-base", // Responsive text size
-        },
-      },
-    ],
-    [
-      {
-        label: "Theme",
-        icon: "i-lucide-palette",
-        children: [
-          {
-            label: "Primary",
-            slot: "chip",
-            chip: appConfig.ui.colors.primary,
-            children: colors.map((color) => ({
-              label: color,
-              chip: color,
-              slot: "chip",
-              type: "checkbox",
-              checked: appConfig.ui.colors.primary === color,
-              onSelect: (e) => {
-                e.preventDefault();
-                appConfig.ui.colors.primary = color;
-                localStorage.setItem("theme-color", color);
-              },
-            })),
-          },
-        ],
-      },
-      {
-        label: "Appearance",
-        icon: "i-lucide-sun-moon",
-        children: [
-          {
-            label: "Light",
-            icon: "i-lucide-sun",
-            type: "checkbox",
-            checked: colorMode.value === "light",
-            onSelect(e: Event) {
-              e.preventDefault();
-              colorMode.preference = "light";
-            },
-          },
-          {
-            label: "Dark",
-            icon: "i-lucide-moon",
-            type: "checkbox",
-            checked: colorMode.value === "dark",
-            onSelect(e: Event) {
-              e.preventDefault();
-              colorMode.preference = "dark";
-            },
-          },
-        ],
-      },
-      {
-        label: "Logout",
-        onClick: async () => {
-          await supabase.auth.signOut();
-          navigateTo("/");
-        },
-        icon: "i-lucide-log-out",
-        kbds: ["shift", "meta", "q"],
-      },
-    ],
-  ]);
 
   const mainLinks: NavigationMenuItem[] = [
     {
@@ -198,8 +84,6 @@
     },
   ];
 
-  const links = [mainLinks, secondaryLinks];
-
   onMounted(async () => {
     // Initialize active link based on current route or default to first link
     const {
@@ -208,22 +92,52 @@
     userName.value = user?.user_metadata?.full_name || "Unknown User";
     userImg.value = user?.user_metadata?.picture;
     userLoading.value = false;
-
-    // Set active state based on current route
-    active.value = mainLinks.findIndex((link) => link.to === route.path);
   });
-
-  // Watch for route changes and update active state
-  watch(
-    () => route.path,
-    (newPath) => {
-      active.value = mainLinks.findIndex((link) => link.to === newPath);
-    }
-  );
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-row">
+   <UDashboardGroup>
+        <UDashboardSidebar 
+            collapsible 
+            :ui="{ 
+                footer: 'border-t border-default', 
+                header: 'flex items-center gap-2'
+            }"
+        >
+            <template #header="{ collapsed }">
+                <UAvatar src="../public/favicon.png" size="xs" :class="collapsed ? 'm-auto' : 'ml-2'" />
+                <!-- <NuxtImg src="../public/favicon.png" alt="Logo" class="h-6" :class="collapsed ? 'm-auto' : 'ml-2'" /> -->
+                <p v-if="!collapsed" class="text-center text-xs xl:text-base font-semibold text-highlighted">Amsterdam Tech</p>
+            </template>
+
+            <template #default="{ collapsed }">
+                <UNavigationMenu
+                    :collapsed="collapsed"
+                    :items="mainLinks"
+                    orientation="vertical"
+                    :ui="{
+                      childItem: 'mt-1',
+                      link: 'mt-1'
+                    }"
+                />
+
+                <UNavigationMenu
+                    :collapsed="collapsed"
+                    :items="secondaryLinks"
+                    orientation="vertical"
+                    class="mt-auto"
+                />
+            </template>
+
+            <template #footer="{ collapsed }">
+                <StudentsUserMenu :collapsed="collapsed" :userLabel="userName" :userAvatar="userImg"/>
+            </template>
+        </UDashboardSidebar>
+
+        <slot />
+
+  </UDashboardGroup>
+  <!-- <div class="flex min-h-screen flex-row">
     <div
       :class="styleContainer"
       class="border-border flex h-screen flex-shrink-0 flex-col gap-2 border-r-[1.5px] px-3 pt-4 pb-4 dark:border-neutral-700"
@@ -298,7 +212,7 @@
 
     <main class="flex h-screen flex-1 flex-col">
       <!-- Navbar -->
-      <div
+      <!-- <div
         class="border-border sticky top-0 z-10 flex h-14 w-full items-center justify-between border-b bg-white px-8"
       >
         <div class="flex items-center gap-3">
@@ -322,10 +236,10 @@
         <UIcon name="i-lucide-bell" class="size-5 cursor-pointer" @click="open = true" />
       </div>
 
-      <!-- Content (slot) -->
-      <div class="min-h-0 flex-1 overflow-y-auto">
+       Content (slot) -->
+      <!-- <div class="min-h-0 flex-1 overflow-y-auto">
         <slot />
       </div>
     </main>
-  </div>
+  </div> --> 
 </template>
