@@ -12,31 +12,7 @@
   const data = ref([]);
   const snapshotChange = ref(null);
   const loading = ref(true);
-  const mockData = ref([
-    {
-      id: 1,
-      status: "On Track",
-      username: "johndoe",
-      program: "Web Development",
-      cohort: "Cohort 1",
-      isActive: true,
-      profileImgUrl: "",
-      name: "John Doe",
-      email: "john@example.com",
-    },
-    {
-      id: 2,
-      status: "Behind",
-      username: "janesmith",
-      program: "Web Development",
-      cohort: "Cohort 1",
-      isActive: true,
-      profileImgUrl: "",
-      name: "Jane Smith",
-      email: "jane@example.com",
-    },
-  ])
-
+  
   const getSnapshotChange = async () => {
     try {
       const res = await $fetch("/api/snapshot");
@@ -83,6 +59,7 @@
       username,
       cohorts(name),
       programs(name),
+      points_assigned,
       profile_image_url
   `);
 
@@ -105,6 +82,7 @@
         username: s.username || "",
         cohort: s.cohorts?.name || "",
         isActive: s.is_active,
+        points_assigned: s.points_assigned || 0,
         profileImgUrl: s.profile_image_url || "",
       }));
 

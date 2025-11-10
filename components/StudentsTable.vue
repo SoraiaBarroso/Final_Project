@@ -1,11 +1,78 @@
-<script setup>
+<script setup lang="ts">
 import { getPaginationRowModel } from "@tanstack/vue-table";
 import { resolveComponent, ref, watch } from "vue";
+
+import * as z from 'zod'
+import type { FormSubmitEvent } from '@nuxt/ui'
+const toast = useToast()
 
 const UBadge = resolveComponent("UBadge");
 const UAvatar = resolveComponent("UAvatar");
 const UDropdownMenu = resolveComponent("UDropdownMenu");
 const UButton = resolveComponent("UButton");
+
+const schema = z.object({
+  points: z.number().min(0),
+})
+
+type Schema = z.output<typeof schema>
+
+const state = ref<Schema>({
+  points: 0,
+})
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  if (!selectedStudentId.value) {
+    toast.add({
+      title: 'Error',
+      description: 'No student selected',
+      color: 'error'
+    })
+    return
+  }
+
+  try {
+    // Get current points_assigned value
+    const { data: student, error: fetchError } = await supabase
+      .from('students')
+      .select('points_assigned')
+      .eq('id', selectedStudentId.value)
+      .single()
+
+    if (fetchError) throw fetchError
+
+    const currentPoints = student?.points_assigned || 0
+    const newPoints = currentPoints + event.data.points
+
+    // Update the student's points in the database
+    const { error: updateError } = await supabase
+      .from('students')
+      .update({ points_assigned: newPoints })
+      .eq('id', selectedStudentId.value)
+
+    if (updateError) throw updateError
+
+    toast.add({
+      title: 'Success',
+      description: `Added ${event.data.points} points to ${selectedStudentName.value}. New total: ${newPoints}`,
+      color: 'success'
+    })
+
+    // Reset form and close modal
+    state.value.points = 0
+    open.value = false
+
+    // Emit event to refresh the table data
+    emit('refreshData')
+  } catch (error) {
+    console.error('Error adding points:', error)
+    toast.add({
+      title: 'Error',
+      description: 'Failed to add points. Please try again.',
+      color: 'error'
+    })
+  }
+}
 
 const props = defineProps({
   data: {
@@ -18,7 +85,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["toggleActiveStatus"]);
+const emit = defineEmits(["toggleActiveStatus", "refreshData"]);
 
 const table = useTemplateRef("table");
 
@@ -43,6 +110,11 @@ const statusFilter = ref("");
 const programFilter = ref("");
 const cohortFilter = ref("");
 const cohortItems = ref([]);
+const open = ref(false)
+const value = ref(0)
+const selectedStudentId = ref(null)
+const selectedStudentName = ref('')
+const supabase = useSupabaseClient()
 
 watch(
   () => props.data,
@@ -143,6 +215,7 @@ const columns = [
   { accessorKey: "email", header: "Email" },
   { accessorKey: "program", header: "Program" },
   { accessorKey: "cohort", header: "Cohort" },
+  { accessorKey: "points_assigned", header: "Points",  },
   {
     accessorKey: "status",
     header: "Status",
@@ -221,12 +294,47 @@ function getRowItems(row) {
         emit("toggleActiveStatus", row.original.id, isActive);
       },
     },
+    {
+      label: "Add points",
+      onSelect: () => {
+        selectedStudentId.value = row.original.id
+        selectedStudentName.value = row.original.name
+        state.value.points = 0 // Reset form
+        open.value = true
+      },
+    },
   ];
 }
+
 </script>
 
 <template>
   <div class="flex h-full w-full flex-col">
+    <UModal v-model:open="open" :title="`Add Points to ${selectedStudentName}`" :ui="{ footer: 'justify-end' }">
+        <template #body>
+            <UForm :schema="schema" :state="state" class="w-full space-y-4" @submit="onSubmit">
+              <UFormField label="Points to Add" name="points" class="w-full" required>
+                <UInputNumber
+                  v-model="state.points"
+                  class="w-full"
+                  placeholder="Enter points amount"
+                  :min="0"
+                />
+              </UFormField>
+            </UForm>
+        </template>
+
+        <template #footer="{ close }">
+          <UButton label="Cancel" color="neutral" variant="outline" @click="close" />
+          <UButton
+            label="Add Points"
+            color="primary"
+            :disabled="!state.points || state.points <= 0"
+            @click="onSubmit({ data: state })"
+          />
+        </template>
+    </UModal>
+
     <div class="flex w-full items-center justify-between">
       <UInput
         size="md"
