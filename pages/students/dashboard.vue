@@ -38,6 +38,8 @@
   const googleAccessToken = ref(null);
   // Store all seasons for the student's program for id-to-name mapping
   const allProgramSeasons = ref([]);
+  // Store season progress data for display
+  const seasonProgressData = ref([]);
 
   // Get current season name
   const currentSeasonName = computed(() => {
@@ -75,6 +77,31 @@
     const total = data.reduce((sum, row) => sum + parseFloat(row.progress_percentage), 0);
     const avg = total / data.length;
     return Math.round(avg); // or keep as float if you want decimals
+  }
+
+  async function fetchSeasonProgress(studentId) {
+    const { data, error } = await supabase
+      .from("student_season_progress")
+      .select(`
+        season_id,
+        progress_percentage,
+        is_completed,
+        seasons!inner(id, name)
+      `)
+      .eq("student_id", studentId);
+
+    if (error || !data || data.length === 0) {
+      console.error("Error fetching season progress:", error);
+      return [];
+    }
+
+    // Transform the data for the Progress component
+    return data.map(item => ({
+      season_id: item.season_id,
+      season_name: item.seasons?.name || 'Unknown Season',
+      progress_percentage: Math.round(parseFloat(item.progress_percentage)),
+      is_completed: item.is_completed
+    }));
   }
 
   async function fetchProjectsCompleted(studentId) {
@@ -177,6 +204,9 @@
 
     studentData.value.completed_projects = await fetchProjectsCompleted(studentData.value.id);
     studentData.value.progress = await fetchOverallProgress(studentData.value.id);
+
+    // Fetch season progress data for the Progress component
+    seasonProgressData.value = await fetchSeasonProgress(studentData.value.id);
 
     // Fetch all seasons for the student's program (for id-to-name mapping)
     const { data: programSeasons, error: programSeasonsError } = await supabase
@@ -300,19 +330,41 @@
 
               <template #right>
                 <UIcon name="i-game-icons:crown" class="text-primary-500 size-8 mr-1" />
-                {{ studentData.points ?? 0 }} pts
+                {{ studentData.points_assigned ?? 0 }} pts
 
               </template>
           </UDashboardNavbar>
       </template>
 
       <template #body>
-        <div class="w-full">
+        <div class="w-full justify-between items-center flex">
           <StudentDashboardGreetings v-if="studentData.first_name" :first_name="studentData.first_name" />
+
+          <div class="flex gap-8 translate-y-6">
+                
+               <StudentDashboardStatCard
+                  :value="studentData.exercises_completed"
+                  label="Exercises"
+                  icon="i-lucide:clipboard-check"
+                />
+
+                <StudentDashboardStatCard
+                  :value="studentData.completed_projects"
+                  label="Projects"
+                  icon="i-lucide:computer"
+                />
+
+                <StudentDashboardStatCard
+                  :value="studentData.points ?? 0"
+                  label="Qwasar Points"
+                  icon="i-lucide:trophy"
+                  :tooltip="true"
+                />
+          </div>              
         </div>
 
-        <UPageGrid class="h-full grid-cols-1 sm:grid-cols-1 lg:grid-cols-2">
-          <div class="flex flex-col justify-between">            
+        <UPageGrid class="h-full grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 mt-14 gap-10">
+          <div class="flex flex-col gap-6">            
             <StudentDashboardMeetingsDisplay v-if="googleAccessToken" :googleAccessToken="googleAccessToken" />
 
             <StudentDashboardDeadlinesCard
@@ -323,52 +375,30 @@
             />
           </div>
            
-           <div class="flex flex-col justify-between">
+           <div class="flex flex-col gap-6">
               <StudentDashboardProgress
                 v-if="studentData"
                 :status="studentData.status"
                 :progress="studentData.progress"
                 :completedSeasons="completedSeasons"
                 :totalSeasons="totalSeasons"
+                :seasons="seasonProgressData"
               />
 
-              <UPageGrid class="grid-cols-2 lg:grid-cols-2 grid-rows-2 gap-6">
-                 <StudentDashboardStatCard
-                  :value="currentSeasonName"
-                  label="Current Season"
-                  icon="i-lucide:calendar"
+              <UPageGrid class="grid-cols-2 lg:grid-cols-2 gap-6">
+                
+                <StudentDashboardStatCard
+                    :value="currentSeasonName"
+                    label="Current Season"
+                    icon="i-lucide:clipboard-check"
                 />
-
-                 <StudentDashboardStatCard
+                
+                <StudentDashboardStatCard
                   :value="expectedSeasonName"
                   label="Expected Season"
-                  icon="i-lucide:target"
-                />
-
-                <StudentDashboardStatCard
-                  :value="formatLastLogin(studentData.last_login)"
-                  label="Last Login"
-                  icon="i-lucide:clock"
-                />
-
-                <StudentDashboardStatCard
-                  :value="studentData.completed_projects"
-                  label="Projects"
-                  icon="i-lucide:computer"
-                />
-
-                <StudentDashboardStatCard
-                  :value="studentData.exercises_completed"
-                  label="Exercises"
                   icon="i-lucide:clipboard-check"
                 />
 
-                <StudentDashboardStatCard
-                  :value="studentData.points ?? 0"
-                  label="Qwasar Points"
-                  icon="i-lucide:trophy"
-                  :tooltip="true"
-                />
               </UPageGrid>
            </div>
         </UPageGrid>

@@ -1,5 +1,15 @@
 <template>
-  <div class="flex h-full flex-col rounded-xl bg-slate-50 p-6 font-sans">
+      <UDashboardPanel id="calendar">
+      <template #header>
+          <UDashboardNavbar title="Calendar" >
+              <template #leading>
+                  <UDashboardSidebarCollapse />
+              </template>
+          </UDashboardNavbar>
+      </template>
+
+      <template #body>
+         <div class="flex h-full flex-col rounded-xl  font-sans">
     <!-- Header with month/year and navigation -->
     <div class="mb-6 flex items-center justify-between">
       <div class="flex items-center gap-2">
@@ -17,7 +27,7 @@
         >
           <UIcon name="lucide:chevron-left" />
         </UButton>
-        <UButton @click="goToToday" size="xl"> Today </UButton>
+        <UButton @click="goToToday" size="xl" color="neutral" variant="outline"> Today </UButton>
         <UButton
           color="neutral"
           variant="link"
@@ -182,12 +192,10 @@
         </div>
       </div>
     </div>
-
-    <!-- Scroll indicator -->
-    <!-- <div class="flex items-center justify-center mt-2 flex-1 text-xs text-slate-500">
-      <span>Scroll horizontally to see more days</span>
-    </div> -->
   </div>
+      </template>
+  </UDashboardPanel>
+ 
 </template>
 
 <script setup lang="ts">
@@ -259,108 +267,166 @@
     timelineContainer.value.scrollTo({ left: scrollLeft, behavior: "smooth" });
   };
 
-  // Fetch projects for a given season and program
+  // Fetch projects for a given season using program_cohort_season_projects table
   const loadProjectsForSeason = async (seasonId: string) => {
-    if (!seasonId) return;
+    console.log("🔍 loadProjectsForSeason called with seasonId:", seasonId);
+
+    if (!seasonId) {
+      console.warn("❌ No seasonId provided");
+      return;
+    }
+
     const programId = studentProgramId.value;
-    if (!programId) return;
+    const cohortId = studentCohortId.value;
 
-    // Find the selected season to get its start date
-    const selectedSeason = cohortSeasonsDeadlines.value.find((season) => season.id === seasonId);
-    if (!selectedSeason) return;
+    console.log("📋 Student info:", { programId, cohortId, seasonId });
 
-    const seasonStartDate = new Date(selectedSeason.start_date);
+    if (!programId || !cohortId) {
+      console.warn("❌ Missing programId or cohortId");
+      return;
+    }
+
     const year = currentDate.value.getFullYear();
     const month = currentDate.value.getMonth();
     const monthStart = new Date(year, month, 1);
     const monthEnd = new Date(year, month + 1, 0);
 
-    const { data: projects, error } = await supabase
-      .from("projects")
-      .select("*")
+    console.log("📅 Current month:", { year, month, monthStart, monthEnd });
+
+    // First, get the program_cohort_season_id for this season, cohort, and program
+    const { data: pcsData, error: pcsError } = await supabase
+      .from("program_cohort_seasons")
+      .select("id")
       .eq("season_id", seasonId)
-      .eq("program_id", programId);
+      .eq("cohort_id", cohortId)
+      .eq("program_id", programId)
+      .single();
 
-    const projectsData = (projects || []) as any[];
-    if (projectsData.length) {
-      // Sort all projects by offset_days ascending
-      const sortedProjects = [...projectsData].sort(
-        (a: any, b: any) => (a.offset_days || 0) - (b.offset_days || 0)
-      );
-      // Separate projects with description (e.g., Bootcamp) and others
-      const withDescription = sortedProjects.filter((p: any) =>
-        p.description && String(p.description).toLowerCase().includes("bootcamp")
-      );
-      const withoutDescription = sortedProjects.filter(
-        (p: any) => !p.description || !String(p.description).toLowerCase().includes("bootcamp")
-      );
+    console.log("🔗 program_cohort_seasons query result:", { pcsData, pcsError });
 
-      let timelineProjects: any[] = [];
+    if (pcsError || !pcsData) {
+      console.error("❌ Error fetching program_cohort_season:", pcsError);
+      return;
+    }
 
-      // Grouped block for "Bootcamp" or similar
-      if (withDescription.length > 0) {
-        const minOffset = Math.min(...withDescription.map((p: any) => p.offset_days || 0));
-        const totalDuration = withDescription.reduce((sum, p) => sum + (p.duration_days || 1), 0);
-        const start = new Date(seasonStartDate);
-        start.setDate(start.getDate() + minOffset);
-        const end = new Date(start);
-        end.setDate(start.getDate() + totalDuration - 1);
+    const programCohortSeasonId = pcsData.id;
+    console.log("✅ Found program_cohort_season_id:", programCohortSeasonId);
 
-        // Only show if overlaps with this month
-        if (!(end < monthStart || start > monthEnd)) {
-          const startDay = Math.max(1, start > monthStart ? start.getDate() : 1);
-          const endDay = Math.min(
-            monthEnd.getDate(),
-            end < monthEnd ? end.getDate() : monthEnd.getDate()
-          );
+    // Now fetch all projects for this program_cohort_season with their actual dates
+    const { data: projectSchedules, error: scheduleError } = await supabase
+      .from("program_cohort_season_projects")
+      .select(`
+        id,
+        start_date,
+        end_date,
+        projects!inner (
+          id,
+          name,
+          description
+        )
+      `)
+      .eq("program_cohort_season_id", programCohortSeasonId);
 
-          timelineProjects.push({
-            title: withDescription[0].description,
-            type: 4,
-            startDate: startDay,
-            endDate: endDay,
-            season: withDescription[0].season_name,
-            seasonColor: "#3b82f6",
-            id: `grouped-${seasonId}`,
-            crossMonth: end > monthEnd,
-            avatars: [],
-          });
-        }
-      }
+    console.log("📦 Project schedules query result:", { projectSchedules, scheduleError });
 
-      // Individual blocks for the rest, sorted by offset_days
-      withoutDescription.forEach((p: any) => {
-        const offset = p.offset_days || 0;
-        const start = new Date(seasonStartDate);
-        start.setDate(start.getDate() + offset);
-        const end = new Date(start);
-        end.setDate(start.getDate() + ((p.duration_days ? p.duration_days : 1) - 1));
+    if (scheduleError) {
+      console.error("❌ Error fetching project schedules:", scheduleError);
+      return;
+    }
 
-        // Only show if overlaps with this month
-        if (end < monthStart || start > monthEnd) return;
+    const schedules = (projectSchedules || []) as any[];
+    console.log(`📊 Found ${schedules.length} project schedules`);
 
-        // Calculate the day in the current month for the timeline
-        const startDay = Math.max(1, start > monthStart ? start.getDate() : 1);
+    if (schedules.length === 0) {
+      console.warn("⚠️ No projects found for this season");
+      projectItems.value = [];
+      return;
+    }
+
+    // Get season info for color
+    const selectedSeason = cohortSeasonsDeadlines.value.find((season) => season.id === seasonId);
+    const seasonName = selectedSeason?.name || "Unknown Season";
+
+    let timelineProjects: any[] = [];
+
+    // Check for bootcamp projects (can be grouped)
+    const bootcampProjects = schedules.filter((s: any) =>
+      s.projects.description && String(s.projects.description).toLowerCase().includes("bootcamp")
+    );
+    const regularProjects = schedules.filter((s: any) =>
+      !s.projects.description || !String(s.projects.description).toLowerCase().includes("bootcamp")
+    );
+
+    // Handle bootcamp projects (group them together)
+    if (bootcampProjects.length > 0) {
+      // Find the earliest start and latest end for bootcamp projects
+      const bootcampStart = new Date(Math.min(...bootcampProjects.map((p: any) => new Date(p.start_date).getTime())));
+      const bootcampEnd = new Date(Math.max(...bootcampProjects.map((p: any) => new Date(p.end_date).getTime())));
+
+      // Only show if overlaps with current month
+      if (!(bootcampEnd < monthStart || bootcampStart > monthEnd)) {
+        const startDay = Math.max(1, bootcampStart > monthStart ? bootcampStart.getDate() : 1);
         const endDay = Math.min(
           monthEnd.getDate(),
-          end < monthEnd ? end.getDate() : monthEnd.getDate()
+          bootcampEnd < monthEnd ? bootcampEnd.getDate() : monthEnd.getDate()
         );
 
         timelineProjects.push({
-          title: p.name,
+          title: bootcampProjects[0].projects.description,
           type: 4,
           startDate: startDay,
           endDate: endDay,
-          season: p.season_name,
+          season: seasonName,
           seasonColor: "#3b82f6",
-          crossMonth: end > monthEnd,
-          id: `proj-${p.id}`,
+          id: `grouped-bootcamp-${programCohortSeasonId}`,
+          crossMonth: bootcampEnd > monthEnd,
           avatars: [],
         });
+      }
+    }
+
+    // Handle regular projects individually
+    regularProjects.forEach((schedule: any) => {
+      const start = new Date(schedule.start_date);
+      const end = new Date(schedule.end_date);
+
+      console.log(`📌 Processing project: ${schedule.projects.name}`, {
+        start: start.toISOString(),
+        end: end.toISOString(),
+        monthStart: monthStart.toISOString(),
+        monthEnd: monthEnd.toISOString(),
       });
 
-      projectItems.value = calculateNonOverlappingPositions(timelineProjects);
-    }
+      // Only show if overlaps with current month
+      if (end < monthStart || start > monthEnd) {
+        console.log(`⏭️ Skipping (no overlap with current month)`);
+        return;
+      }
+
+      const startDay = Math.max(1, start > monthStart ? start.getDate() : 1);
+      const endDay = Math.min(
+        monthEnd.getDate(),
+        end < monthEnd ? end.getDate() : monthEnd.getDate()
+      );
+
+      console.log(`✅ Adding project to timeline: ${schedule.projects.name} (days ${startDay}-${endDay})`);
+
+      timelineProjects.push({
+        title: schedule.projects.name,
+        type: 4,
+        startDate: startDay,
+        endDate: endDay,
+        season: seasonName,
+        seasonColor: "#3b82f6",
+        crossMonth: end > monthEnd,
+        id: `proj-${schedule.id}`,
+        avatars: [],
+      });
+    });
+
+    console.log(`🎯 Total timeline projects to display: ${timelineProjects.length}`);
+    projectItems.value = calculateNonOverlappingPositions(timelineProjects);
+    console.log("✨ Final projectItems:", projectItems.value);
   };
 
   interface ProjectItem {
@@ -401,64 +467,123 @@
     ],
   };
 
-  // Function to add seasons array to timeline
-  const addSeasonsToTimeline = (
+  // Function to add seasons array to timeline (for overview mode without season filter)
+  const addSeasonsToTimeline = async (
     seasons: Array<{ id: any; name: string; start_date: string; end_date: string }>
   ) => {
+    console.log("🌟 addSeasonsToTimeline called with", seasons.length, "seasons");
     const timelineProjects: Record<string, any[]> = {};
 
     // Group seasons by base name (e.g., "Season 03") to consolidate specializations
     const groupedSeasons = groupSeasonsByBaseName(seasons);
+    console.log("📚 Grouped seasons:", groupedSeasons);
 
-    groupedSeasons.forEach((seasonGroup, seasonIndex) => {
+    for (const seasonGroup of groupedSeasons) {
       const startDate = new Date(seasonGroup.start_date);
       const endDate = new Date(seasonGroup.end_date);
 
-      console.log(`Processing season group: ${seasonGroup.displayName}`, {
+      console.log(`🔄 Processing season group: ${seasonGroup.displayName}`, {
         seasonStart: seasonGroup.start_date,
         seasonEnd: seasonGroup.end_date,
         specializations: seasonGroup.specializations,
+        ids: seasonGroup.ids,
       });
 
-      // Create timeline items for each month the season spans
-      let currentDate = new Date(startDate);
-      while (currentDate <= endDate) {
-        const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}`;
+      // For each season, fetch its projects from program_cohort_season_projects
+      for (const seasonId of seasonGroup.ids) {
+        console.log(`  🔍 Fetching projects for seasonId: ${seasonId}`);
 
-        if (!timelineProjects[monthKey]) {
-          timelineProjects[monthKey] = [];
+        // Get program_cohort_season_id
+        const { data: pcsData, error: pcsError } = await supabase
+          .from("program_cohort_seasons")
+          .select("id")
+          .eq("season_id", seasonId)
+          .eq("cohort_id", studentCohortId.value)
+          .eq("program_id", studentProgramId.value)
+          .maybeSingle();
+
+        console.log(`    🔗 PCS lookup result:`, { pcsData, pcsError });
+
+        if (!pcsData) {
+          console.log(`    ⏭️ No program_cohort_season found, skipping`);
+          continue;
         }
 
-        const monthStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
-        const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+        console.log(`    ✅ Found program_cohort_season_id: ${pcsData.id}`);
 
-        const itemStartInMonth = Math.max(startDate.getTime(), monthStart.getTime());
-        const itemEndInMonth = Math.min(endDate.getTime(), monthEnd.getTime());
+        // Fetch projects for this season
+        const { data: projectSchedules, error: projError } = await supabase
+          .from("program_cohort_season_projects")
+          .select(`
+            id,
+            start_date,
+            end_date,
+            projects!inner (
+              id,
+              name,
+              description
+            )
+          `)
+          .eq("program_cohort_season_id", pcsData.id);
 
-        const startDay = new Date(itemStartInMonth).getDate();
-        const endDay = new Date(itemEndInMonth).getDate();
-        const crossMonth = endDate > monthEnd;
+        console.log(`    📦 Project schedules result:`, { count: projectSchedules?.length || 0, projError });
 
-        // Use the consolidated display name with specializations
-        const title = seasonGroup.displayName;
+        if (!projectSchedules || projectSchedules.length === 0) {
+          console.log(`    ⚠️ No projects found for this season`);
+          continue;
+        }
 
-        timelineProjects[monthKey].push({
-          title: title,
-          type: Math.min(4, seasonIndex + 1) as 1 | 2 | 3 | 4,
-          startDate: startDay,
-          endDate: endDay,
-          crossMonth: crossMonth,
-          season: seasonGroup.baseName, // Use base name for season initials
-          seasonColor: getSeasonColorByIndex(seasonIndex),
+        // Add each project to the appropriate month(s)
+        console.log(`    📝 Processing ${projectSchedules.length} projects`);
+        projectSchedules.forEach((schedule: any) => {
+          const projStart = new Date(schedule.start_date);
+          const projEnd = new Date(schedule.end_date);
+
+          console.log(`      📌 Project: ${schedule.projects.name} (${schedule.start_date} to ${schedule.end_date})`);
+
+          // Create entries for each month this project spans
+          let currentMonth = new Date(projStart.getFullYear(), projStart.getMonth(), 1);
+          const lastMonth = new Date(projEnd.getFullYear(), projEnd.getMonth(), 1);
+
+          while (currentMonth <= lastMonth) {
+            const monthKey = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, "0")}`;
+
+            if (!timelineProjects[monthKey]) {
+              timelineProjects[monthKey] = [];
+            }
+
+            const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+            const monthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+
+            const itemStartInMonth = Math.max(projStart.getTime(), monthStart.getTime());
+            const itemEndInMonth = Math.min(projEnd.getTime(), monthEnd.getTime());
+
+            const startDay = new Date(itemStartInMonth).getDate();
+            const endDay = new Date(itemEndInMonth).getDate();
+            const crossMonth = projEnd > monthEnd;
+
+            console.log(`        ➕ Adding to month ${monthKey}: days ${startDay}-${endDay}`);
+
+            timelineProjects[monthKey].push({
+              title: schedule.projects.name,
+              type: 4,
+              startDate: startDay,
+              endDate: endDay,
+              crossMonth: crossMonth,
+              season: seasonGroup.baseName,
+              seasonColor: getSeasonColorByIndex(groupedSeasons.indexOf(seasonGroup)),
+              id: `proj-${schedule.id}-${monthKey}`,
+            });
+
+            // Move to next month
+            currentMonth.setMonth(currentMonth.getMonth() + 1);
+          }
         });
-
-        // Move to next month
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        currentDate.setDate(1);
       }
-    });
+    }
 
-    console.log("Generated timeline projects:", timelineProjects);
+    console.log("✅ Generated timeline projects from actual dates:", timelineProjects);
+    console.log(`📊 Total months with projects: ${Object.keys(timelineProjects).length}`);
 
     // Clear existing templates and update with real data
     Object.keys(projectTemplates).forEach((key) => {
@@ -466,6 +591,7 @@
     });
     Object.assign(projectTemplates, timelineProjects);
 
+    console.log("🔄 Reloading current month view");
     // Reload current month view to show new data
     loadProjectsForCurrentMonth();
   };
@@ -608,15 +734,23 @@
   const loadProjectsForCurrentMonth = () => {
     const year = currentDate.value.getFullYear();
     const month = currentDate.value.getMonth();
+    const monthKey = `${year}-${String(month + 1).padStart(2, "0")}`;
+
+    console.log(`📆 loadProjectsForCurrentMonth: ${monthKey}`);
 
     const projects = generateProjectsForMonth(year, month);
+    console.log(`📋 Generated projects for ${monthKey}:`, projects);
+
     const processedProjects = calculateNonOverlappingPositions(projects);
+    console.log(`🎨 Processed projects (with positions):`, processedProjects);
 
     projectItems.value = processedProjects.map((project: any, index: number) => ({
       ...project,
       id: `${year}-${month}-${index}`,
       avatars: ["/avatar1.jpg", "/avatar2.jpg"], // Default avatars
     }));
+
+    console.log(`✨ Final projectItems.value (${projectItems.value.length} items):`, projectItems.value);
   };
 
   // Function to calculate non-overlapping positions for timeline items
@@ -970,9 +1104,9 @@
     cohortSeasonsDeadlines.value = seasons || [];
     console.log("Cohort season deadlines:", cohortSeasonsDeadlines.value);
 
-    // Process seasons and add to timeline
+    // Process seasons and add to timeline using actual project dates
     if (seasons) {
-      addSeasonsToTimeline(seasons);
+      await addSeasonsToTimeline(seasons);
     }
   };
 

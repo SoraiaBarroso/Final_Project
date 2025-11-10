@@ -4,7 +4,8 @@
     createViewDay,
     createViewMonthAgenda,
     createViewMonthGrid,
-    createViewWeek,
+    
+    viewMonthGrid 
   } from "@schedule-x/calendar";
   import { ScheduleXCalendar } from "@schedule-x/vue";
 
@@ -34,6 +35,7 @@
   });
 
   const config = {
+    defaultView: viewMonthGrid.name,
     calendars: {
       meetings: {
         colorName: "meetings",
@@ -85,7 +87,7 @@
         }
       },
     },
-    views: [createViewDay(), createViewWeek(), createViewMonthGrid(), createViewMonthAgenda()],
+    views: [createViewDay(), createViewMonthGrid(),],
   };
 
   let calendarApp;
@@ -208,18 +210,30 @@
 </script>
 
 <template>
-  <div id="calendar-wrapper" class="flex h-full items-center justify-center px-8">
-    <!-- Ensure the calendar is rendered only on the client side -->
-    <ClientOnly>
-      <ScheduleXCalendar :calendar-app="calendarApp" />
-    </ClientOnly>
-  </div>
+    <UDashboardPanel id="calendar">
+      <template #header>
+          <UDashboardNavbar title="Calendar" >
+              <template #leading>
+                  <UDashboardSidebarCollapse />
+              </template>
+          </UDashboardNavbar>
+      </template>
+
+      <template #body>
+         <div id="calendar-wrapper" class="flex h-full items-center justify-center px-8">
+          <!-- Ensure the calendar is rendered only on the client side -->
+          <ClientOnly>
+            <ScheduleXCalendar :calendar-app="calendarApp" />
+          </ClientOnly>
+        </div>
+      </template>
+  </UDashboardPanel>
 </template>
 
 <style scoped>
   .sx-vue-calendar-wrapper {
     width: 100%;
-    height: 90%;
+    height: 100%;
   }
 
   .sx__time-grid-event-inner {

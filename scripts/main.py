@@ -67,8 +67,11 @@ class DataPipelineOrchestrator:
         
         # 2. Student Management
         operations.append(("Student Management", "student_management.py", ["--all"]))
-        
-        # 3. Analytics
+
+        # 3. Points Assignment Update
+        operations.append(("Points Assignment", "update_points_assigned.py", []))
+
+        # 4. Analytics
         operations.append(("Analytics Generation", "analytics.py", ["--all"]))
         
         self.total_operations = len(operations)
@@ -117,12 +120,23 @@ class DataPipelineOrchestrator:
     def run_analytics_only(self):
         """Run only analytics generation"""
         print_step("ANALYTICS PIPELINE", "Running analytics generation only")
-        
+
         if self.run_script("analytics.py", ["--all"]):
             print("✅ Analytics generation completed successfully")
             return True
         else:
             print("❌ Analytics generation failed")
+            return False
+
+    def run_points_only(self):
+        """Run only points assignment update"""
+        print_step("POINTS PIPELINE", "Running points assignment update only")
+
+        if self.run_script("update_points_assigned.py", []):
+            print("✅ Points assignment update completed successfully")
+            return True
+        else:
+            print("❌ Points assignment update failed")
             return False
 
 def main():
@@ -137,8 +151,9 @@ Examples:
   python main.py --data                 # Process data only
   python main.py --data --scrape        # Scrape and process data
   python main.py --management           # Run student management only
+  python main.py --points               # Update points assignment only
   python main.py --analytics            # Run analytics only
-  python main.py --quick                # Quick update (management + analytics)
+  python main.py --quick                # Quick update (management + points + analytics)
         """
     )
     
@@ -149,10 +164,12 @@ Examples:
                        help='Run data processing only')
     parser.add_argument('--management', action='store_true', 
                        help='Run student management only')
-    parser.add_argument('--analytics', action='store_true', 
+    parser.add_argument('--analytics', action='store_true',
                        help='Run analytics generation only')
-    parser.add_argument('--quick', action='store_true', 
-                       help='Quick update: management + analytics (no data processing)')
+    parser.add_argument('--points', action='store_true',
+                       help='Update points assignment only')
+    parser.add_argument('--quick', action='store_true',
+                       help='Quick update: management + points + analytics (no data processing)')
     
     # Options
     parser.add_argument('--scrape', action='store_true', 
@@ -163,7 +180,7 @@ Examples:
     args = parser.parse_args()
     
     # Validate arguments
-    if not any([args.full, args.data, args.management, args.analytics, args.quick]):
+    if not any([args.full, args.data, args.management, args.analytics, args.points, args.quick]):
         parser.print_help()
         return
     
@@ -188,12 +205,16 @@ Examples:
         
         elif args.analytics:
             success = orchestrator.run_analytics_only()
-        
+
+        elif args.points:
+            success = orchestrator.run_points_only()
+
         elif args.quick:
-            print_step("QUICK UPDATE", "Running management and analytics")
+            print_step("QUICK UPDATE", "Running management, points, and analytics")
             mgmt_success = orchestrator.run_management_only()
+            points_success = orchestrator.run_points_only()
             analytics_success = orchestrator.run_analytics_only()
-            success = mgmt_success and analytics_success
+            success = mgmt_success and points_success and analytics_success
         
         # Exit with appropriate code
         if success:

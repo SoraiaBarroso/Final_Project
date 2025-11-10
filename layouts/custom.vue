@@ -16,9 +16,6 @@
       tooltip: {
         text: "Home",
       },
-      ui: {
-        linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
-      },
     },
     {
       label: "Calendar",
@@ -28,9 +25,17 @@
       tooltip: {
         text: "Calendar",
       },
-      ui: {
-        linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
-      },
+      children: [
+        {
+          label: "My Calendar",
+          to: "/students/calendarNuxtUI",
+          icon: "i-lucide-calendar-check",
+          tooltip: {
+            text: "My Calendar",
+          },
+        },
+       
+      ],
     },
     {
       label: "Timeline",
@@ -40,9 +45,6 @@
       tooltip: {
         text: "Timeline",
       },
-      ui: {
-        linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
-      },
     },
     {
       label: "Roadmap",
@@ -50,9 +52,6 @@
       icon: "i-lucide-map",
       tooltip: {
         text: "Roadmap",
-      },
-      ui: {
-        linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
       },
     },
   ];
@@ -66,9 +65,6 @@
       tooltip: {
         text: "Go to Notion docs",
       },
-      ui: {
-        linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
-      },
     },
     {
       label: "Recordings",
@@ -77,9 +73,6 @@
       target: "_blank",
       tooltip: {
         text: "Workshop Recordings",
-      },
-      ui: {
-        linkLabel: "xl:text-sm 2xl:text-base", // Responsive text size
       },
     },
   ];
