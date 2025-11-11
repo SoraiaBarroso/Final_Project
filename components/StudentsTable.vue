@@ -284,8 +284,13 @@ function getRowItems(row) {
     },
     {
       label: "View student",
-      onSelect: () => {
-        useRouter().push(`/admin/students/${row.original.id}`);
+      onSelect: async () => {
+        await navigateTo(`/admin/students/${row.original.id}`, {
+          open: {
+            target: "_blank",
+          }
+        });
+        // useRouter().push(`/admin/students/${row.original.id}`);
       },
     },
     {
