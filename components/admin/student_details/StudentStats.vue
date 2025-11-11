@@ -6,7 +6,24 @@ const props = defineProps({
   }
 })
 
+console.log(props.student)
 const stats = computed(() => [
+  {
+    icon: 'i-lucide-book-open',
+    label: 'Current Season',
+    value: props.student.current_season.name || 0,
+    bgColor: 'bg-info/10',
+    borderColor: 'border-info',
+    textColor: 'text-info'
+  },
+  {
+    icon: 'i-lucide-activity',
+    label: 'Expected Season',
+    value: props.student.expected_season.name || 0,
+    bgColor: 'bg-info/10',
+    borderColor: 'border-info',
+    textColor: 'text-info'
+  },
     {
     icon: 'i-lucide-users',
     label: 'Status',
@@ -49,7 +66,7 @@ const stats = computed(() => [
       :key="stat.label"
       :ui="{
         header: 'border-none',
-        body: 'flex justify-between items-center !pt-0 w-full',
+        body: 'flex justify-between items-center !pt-0 !pb-1.5 w-full',
       }"
       class="h-full"
     >

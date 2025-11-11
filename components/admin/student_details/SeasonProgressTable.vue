@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { resolveComponent, computed, h } from 'vue'
+import { resolveComponent, computed, h, ref } from 'vue'
 import type { TableColumn } from '@nuxt/ui'
 
 const props = defineProps({
@@ -23,18 +23,33 @@ interface SeasonProgress {
   progress_percentage: number
   is_completed: boolean
   status: 'On Going' | 'Completed' | 'Not Started'
+  variants?: SeasonProgress[]  // For seasons with multiple variants
+  hasVariants?: boolean  // Flag to indicate this row has variants
 }
-
 
 const UAvatar = resolveComponent('UAvatar')
 const UBadge = resolveComponent('UBadge')
+const UButton = resolveComponent('UButton')
 
 onMounted(() => {
   console.log('SeasonProgressTable received data:', props.seasonProgress)
 })
 
-// Normalize incoming prop data into the shape used by the table
-const data = computed<SeasonProgress[]>(() =>
+// Extract base season name (e.g., "Season 03 Software Engineer" from "Season 03 Software Engineer Cpp")
+function getBaseName(name: string): string {
+  // Match pattern like "Season 03 Software Engineer" before the variant
+  const match = name.match(/^(Season\s+\d+\s+Software Engineer)/)
+  return match ? match[1] : name
+}
+
+// Extract variant name (e.g., "Cpp" from "Season 03 Software Engineer Cpp")
+function getVariant(name: string): string {
+  const baseName = getBaseName(name)
+  return name.replace(baseName, '').trim()
+}
+
+// Normalize incoming prop data
+const normalizedData = computed<SeasonProgress[]>(() =>
   (props.seasonProgress || []).map((item: any) => {
     // incoming shapes vary; prefer nested objects when available
     const season = item.seasons || {}
@@ -71,31 +86,113 @@ const data = computed<SeasonProgress[]>(() =>
   })
 )
 
+// Group seasons by base name and create expandable rows
+const data = computed<SeasonProgress[]>(() => {
+  const grouped = new Map<string, SeasonProgress[]>()
+
+  // Group seasons by base name only (not by order_in_program)
+  for (const season of normalizedData.value) {
+    const baseName = getBaseName(season.name)
+    const variant = getVariant(season.name)
+
+    if (variant) {
+      // This season has a variant, add to group by base name only
+      if (!grouped.has(baseName)) {
+        grouped.set(baseName, [])
+      }
+      grouped.get(baseName)!.push(season)
+    }
+  }
+
+  // Build the final data array
+  const result: SeasonProgress[] = []
+  const processedIds = new Set<string>()
+
+  for (const season of normalizedData.value) {
+    if (processedIds.has(season.id)) continue
+
+    const baseName = getBaseName(season.name)
+    const variant = getVariant(season.name)
+
+    if (variant && grouped.has(baseName)) {
+      const variants = grouped.get(baseName)!
+
+      // Only add the parent row once (for the first variant encountered)
+      if (!processedIds.has(baseName)) {
+        // Use the minimum order_in_program from all variants
+        const minOrder = Math.min(...variants.map(v => v.order_in_program))
+
+        // Calculate aggregated values
+        const avgProgress = Math.round(
+          variants.reduce((sum, v) => sum + v.progress_percentage, 0) / variants.length
+        )
+
+        const hasCompleted = variants.some(v => v.status === 'Completed')
+        const hasOngoing = variants.some(v => v.status === 'On Going')
+        const status = hasCompleted ? 'Completed' : hasOngoing ? 'On Going' : 'Not Started'
+
+        result.push({
+          id: baseName,
+          name: baseName,
+          avatar: season.avatar,
+          start_date: season.start_date,
+          end_date: season.end_date,
+          order_in_program: minOrder,
+          progress_percentage: avgProgress,
+          is_completed: variants.every(v => v.is_completed),
+          status: status as SeasonProgress['status'],
+          variants: variants,
+          hasVariants: true
+        })
+
+        console.log('Added parent row for:', baseName, 'with', variants.length, 'variants')
+        processedIds.add(baseName)
+        // Mark all variants as processed
+        variants.forEach(v => processedIds.add(v.id))
+      }
+    } else if (!variant) {
+      // Standalone season without variants
+      result.push(season)
+      processedIds.add(season.id)
+    }
+  }
+
+  return result.sort((a, b) => a.order_in_program - b.order_in_program)
+})
+
+const expanded = ref({})
+
 const columns: TableColumn<SeasonProgress>[] = [
-  {
-    accessorKey: 'order_in_program',
-    header: 'Order',
-    cell: ({ row }) => row.original.order_in_program
-  },
-  {
+{
     accessorKey: 'name',
     header: 'Name',
     cell: ({ row }) => {
+      const hasVariants = row.original.hasVariants
       const avatarProps = row.original.avatar || {}
 
-      const content = [
-        h('div', undefined, [
-          h('p', { class: 'font-medium text-highlighted' }, row.original.name),
-          h('p', { class: '' }, `Start date: ${row.original.start_date}`)
-        ])
-      ]
-
-      // If avatar is provided and has a src, render it before the text
-      if (avatarProps && avatarProps.src) {
-        content.unshift(h(UAvatar, { ...avatarProps, size: 'lg' }))
-      }
-
-      return h('div', { class: 'flex items-center gap-3' }, content)
+      return h('div', { class: 'flex items-center gap-3' }, [
+         // Show expand button only for rows with variants
+         hasVariants && h(UButton, {
+            color: "neutral",
+            variant: "ghost",
+            size: "xs",
+            icon: row.getIsExpanded() ? "i-lucide-chevron-down" : "i-lucide-chevron-right",
+            ui: {
+              base: "p-0 rounded-sm",
+              leadingIcon: "size-4"
+            },
+            onClick: () => row.toggleExpanded()
+          }),
+          // Avatar for non-variant rows
+          !hasVariants && avatarProps && avatarProps.src && h(UAvatar, { ...avatarProps, size: 'lg' }),
+          // Season name and start date
+          h('div', {}, [
+            h('p', {
+              class: 'font-medium text-highlighted'
+            }, row.original.name),
+            !hasVariants && h('p', { class: 'text-sm' }, `Start date: ${row.original.start_date}`)
+          ])
+      ])
     }
   },
   {
@@ -132,11 +229,75 @@ const columns: TableColumn<SeasonProgress>[] = [
   {
     accessorKey: 'progress_percentage',
     header: 'Progress',
-    cell: ({ row }) => `${row.original.progress_percentage}%`
+    cell: ({ row }) => {
+      const progress = row.original.progress_percentage
+      // Show "avg" for rows with variants
+  
+      return `${progress}%`
+    }
+  },
+    {
+    accessorKey: 'order_in_program',
+    header: 'Order',
+    cell: ({ row }) => row.original.order_in_program
   },
 ]
 </script>
 
 <template>
-  <UTable :data="data" :columns="columns" />
+  <UTable
+    v-model:expanded="expanded"
+    :data="data"
+    :columns="columns"
+     :ui="{
+        base: 'border-separate border-spacing-0',
+        thead: '[&>tr]:bg-elevated/50 h-10 [&>tr]:after:content-none',
+        tbody: '[&>tr]:last:[&>td]:border-b-0',
+        tr: 'group',
+        th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
+        td: 'empty:p-0 group-has-[td:not(:empty)]:border-b border-default',
+      }"
+  >
+    <template #expanded="{ row }">
+      <div v-if="row.original.variants" class="px-4 py-3">
+        <div class="grid grid-cols-3 gap-4">
+          <div
+            v-for="variant in row.original.variants"
+            :key="variant.id"
+            class="p-3 rounded-lg border border-default hover:border-highlighted transition-colors"
+          >
+            <div class="flex items-center justify-between mb-2">
+              <span class="font-semibold text-highlighted">{{ variant.name }}</span>
+              <UBadge
+                :color="{
+                  'On Going': 'info',
+                  'Completed': 'success',
+                  'Not Started': 'neutral'
+                }[variant.status]"
+                variant="subtle"
+                size="xs"
+                class="capitalize"
+              >
+                {{ variant.status }}
+              </UBadge>
+            </div>
+            <!-- <div class="space-y-1 text-xs">
+              <div class="flex justify-between">
+                <span class="text-muted">Start:</span>
+                <span class="font-medium">{{ variant.start_date ? new Date(variant.start_date).toLocaleDateString() : '-' }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-muted">End:</span>
+                <span class="font-medium">{{ variant.end_date ? new Date(variant.end_date).toLocaleDateString() : '-' }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-muted">Progress:</span>
+                <span class="font-medium">{{ variant.progress_percentage }}%</span>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+    </template>
+  </UTable>
 </template>

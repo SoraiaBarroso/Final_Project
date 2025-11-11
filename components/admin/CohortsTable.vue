@@ -226,12 +226,11 @@ function getRowItems(row) {
     <UTable
       ref="table"
       v-model:expanded="expanded"
-      class="h-full"
       :data="treeData"
       :columns="columns"
       :loading="loading"
       sticky
-       v-model:sorting="sorting" 
+      v-model:sorting="sorting" 
       :get-sub-rows="(row) => row.children"
       :ui="{
         base: 'border-separate border-spacing-0',
