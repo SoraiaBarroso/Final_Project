@@ -639,63 +639,73 @@ class StudentDataProcessor:
             # Handle current season - infer from season_progress
             season_progress = student_data.get("season_progress", {})
             if season_progress:
-                # Seasons are listed in chronological order in the dict
-                # The LAST season (not 100% complete) is the current one
-                # If all are 100%, use the last one anyway
-                current_season_name = None
-                last_season_name = None
+                # Get student's program to filter seasons correctly
+                student_program_id = self.student_program_map.get(student_id)
 
-                # Python 3.7+ maintains dict insertion order, so we can rely on it
-                # Find the last season that's not 100% complete
-                for season_name, progress_str in season_progress.items():
-                    last_season_name = season_name  # Always track the last season
-
-                    try:
-                        # Parse percentage string like "3%" or "75%"
-                        if isinstance(progress_str, str):
-                            if progress_str == 'Unknown':
-                                progress_value = 0
-                            elif progress_str.endswith('%'):
-                                progress_value = float(progress_str[:-1])
-                            else:
-                                progress_value = float(progress_str)
-                        else:
-                            progress_value = float(progress_str)
-
-                        # Keep updating to the latest season that's not completed
-                        if progress_value < 100:
-                            current_season_name = season_name
-                    except (ValueError, TypeError):
-                        # If we can't parse, still consider it as potential current season
-                        current_season_name = season_name
-                        continue
-
-                # If no season < 100% was found, use the last season in the list
-                if not current_season_name and last_season_name:
-                    current_season_name = last_season_name
-                    print(f"All seasons 100% complete for {username}, using last season: {current_season_name}")
-
-                # Map and set current season
-                if current_season_name:
-                    mapped_season = map_season_name_to_db(current_season_name)
-
-                    # Get student's program to match correct season
-                    student_program_id = self.student_program_map.get(student_id)
-                    if student_program_id and student_program_id in self.seasons_by_program:
-                        season_id = self.seasons_by_program[student_program_id].get(mapped_season)
-                        if season_id:
-                            update_record["current_season_id"] = season_id
-                            print(f"Set current season for {username}: {current_season_name} (progress: {season_progress.get(current_season_name)})")
-                        else:
-                            print(f"Warning: Season '{mapped_season}' not found in program {student_program_id} for student {username}")
-                    else:
-                        # Fallback to old method if program mapping not available
-                        season_id = self.season_id_map.get(mapped_season)
-                        if season_id:
-                            update_record["current_season_id"] = season_id
-                            print(f"Set current season for {username}: {current_season_name} (using fallback)")
+                if not student_program_id:
+                    print(f"Warning: No program found for student {username}, cannot determine current season")
+                elif student_program_id not in self.seasons_by_program:
+                    print(f"Warning: No seasons found for program {student_program_id}")
                 else:
-                    print(f"Warning: Could not determine current season for {username} from season_progress: {season_progress}")
+                    # Get seasons that belong to this student's program
+                    program_seasons = self.seasons_by_program[student_program_id]
+
+                    # Filter season_progress to only include seasons from the student's program
+                    filtered_season_progress = {}
+                    for season_name, progress_str in season_progress.items():
+                        mapped_season = map_season_name_to_db(season_name)
+                        if mapped_season and mapped_season in program_seasons:
+                            filtered_season_progress[season_name] = progress_str
+
+                    if not filtered_season_progress:
+                        print(f"Warning: No program-relevant seasons found for {username} in season_progress: {season_progress}")
+                    else:
+                        # Seasons are listed in chronological order in the dict
+                        # The LAST season (not 100% complete) is the current one
+                        # If all are 100%, use the last one anyway
+                        current_season_name = None
+                        last_season_name = None
+
+                        # Python 3.7+ maintains dict insertion order, so we can rely on it
+                        # Find the last season that's not 100% complete
+                        for season_name, progress_str in filtered_season_progress.items():
+                            last_season_name = season_name  # Always track the last season
+
+                            try:
+                                # Parse percentage string like "3%" or "75%"
+                                if isinstance(progress_str, str):
+                                    if progress_str == 'Unknown':
+                                        progress_value = 0
+                                    elif progress_str.endswith('%'):
+                                        progress_value = float(progress_str[:-1])
+                                    else:
+                                        progress_value = float(progress_str)
+                                else:
+                                    progress_value = float(progress_str)
+
+                                # Keep updating to the latest season that's not completed
+                                if progress_value < 100:
+                                    current_season_name = season_name
+                            except (ValueError, TypeError):
+                                # If we can't parse, still consider it as potential current season
+                                current_season_name = season_name
+                                continue
+
+                        # If no season < 100% was found, use the last season in the list
+                        if not current_season_name and last_season_name:
+                            current_season_name = last_season_name
+                            print(f"All seasons 100% complete for {username}, using last season: {current_season_name}")
+
+                        # Map and set current season
+                        if current_season_name:
+                            mapped_season = map_season_name_to_db(current_season_name)
+                            season_id = program_seasons.get(mapped_season)
+
+                            if season_id:
+                                update_record["current_season_id"] = season_id
+                                print(f"Set current season for {username}: {current_season_name} (progress: {filtered_season_progress.get(current_season_name)})")
+                            else:
+                                print(f"Warning: Season '{mapped_season}' not found in program {student_program_id} for student {username}")
             
             # Handle other fields
             if "img_url" in student_data:
