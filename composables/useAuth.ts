@@ -89,10 +89,10 @@ export const useAuth = () => {
     }
 
     // Initialize user state when composable is first used
-    onMounted(async () => {
-        await getUser()
-        console.log("Initial user state set:", user || 'null')
-    })
+    // onMounted(async () => {
+    //     await getUser()
+    //     console.log("Initial user state set:", user || 'null')
+    // })
 
     // Watch for changes in the supabase user state and sync with our local state
     watch(supabaseUser, (newUser) => {

@@ -18,9 +18,7 @@
       const res = await $fetch("/api/snapshot");
       // some handlers return { data: { value } } while others may return the value directly
       const payload = res?.data?.value ?? res?.data ?? res
-      console.log("Raw snapshot payload:", payload);
       snapshotChange.value = payload;
-      console.log("Snapshot change data:", snapshotChange.value);
       return snapshotChange.value;
     } catch (err) {
       console.error('Failed to fetch snapshot:', err);
@@ -63,8 +61,6 @@
       profile_image_url
   `);
 
-    console.log("Fetched students:", students);
-
     if (error) {
       console.error("Error fetching students:", error);
       loading.value = false;
@@ -86,7 +82,7 @@
         profileImgUrl: s.profile_image_url || "",
       }));
 
-    console.log("Processed student data:", data.value);
+    console.log("Processed student data for table:", data.value);
     loading.value = false;
   };
 

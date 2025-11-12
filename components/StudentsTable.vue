@@ -85,6 +85,7 @@ const props = defineProps({
   },
 });
 
+console.log("StudentsTable received data:", props.data);
 const emit = defineEmits(["toggleActiveStatus", "refreshData"]);
 
 const table = useTemplateRef("table");
@@ -111,7 +112,6 @@ const programFilter = ref("");
 const cohortFilter = ref("");
 const cohortItems = ref([]);
 const open = ref(false)
-const value = ref(0)
 const selectedStudentId = ref(null)
 const selectedStudentName = ref('')
 const supabase = useSupabaseClient()
@@ -125,7 +125,6 @@ watch(
       value: cohort,
     }));
     cohortItems.value.unshift({ label: 'All', value: 'all' });
-    console.log("Cohort items updated:", cohortItems.value);
   },
   { immediate: true }
 );
@@ -271,8 +270,8 @@ const columns = [
   },
 ];
 
-function getRowItems(row) {
-  const isActive = row.original.is_active;
+function getRowItems(row: any) {
+  const isActive = row.original.isActive;
 
   return [
     {
@@ -310,7 +309,6 @@ function getRowItems(row) {
     },
   ];
 }
-
 </script>
 
 <template>
@@ -383,7 +381,7 @@ function getRowItems(row) {
           size="md"
           v-model="statusFilter"
           :items="[
-            { label: 'All', value: 'all', chip },
+            { label: 'All', value: 'all' },
             { label: 'On Track', value: 'on track', chip: { color: 'success' } },
             { label: 'At Risk', value: 'at risk', chip: { color: 'error' } },
             { label: 'Monitor', value: 'monitor', chip: { color: 'warning' } },
