@@ -282,17 +282,6 @@ function getRowItems(row: any) {
       type: "separator",
     },
     {
-      label: "View student",
-      onSelect: async () => {
-        await navigateTo(`/admin/students/${row.original.id}`, {
-          open: {
-            target: "_blank",
-          }
-        });
-        // useRouter().push(`/admin/students/${row.original.id}`);
-      },
-    },
-    {
       label: isActive ? "Set Inactive" : "Set Active",
       onSelect: () => {
         emit("toggleActiveStatus", row.original.id, isActive);
@@ -309,6 +298,15 @@ function getRowItems(row: any) {
     },
   ];
 }
+
+const onSelect = async (selectedRows: any[]) => {
+  console.log("Selected rows:", selectedRows.original);
+  await navigateTo(`/admin/students/${selectedRows.original.id}`, {
+    open: {
+      target: "_blank",
+    }
+  });
+}; 
 </script>
 
 <template>
@@ -401,6 +399,7 @@ function getRowItems(row: any) {
       v-model:column-filters="columnFilters"
       v-model:pagination="pagination"
       v-model:sorting="sorting"
+      @select="onSelect"
       :pagination-options="{
         getPaginationRowModel: getPaginationRowModel(),
       }"
