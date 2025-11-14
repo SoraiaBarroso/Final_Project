@@ -197,7 +197,7 @@
       variant="outline"
       class="flex w-full items-center justify-center"
       :ui="{
-        body: 'w-full 2xl:!py-6 flex flex-col items-center justify-center gap-4',
+        body: 'w-full 2xl:!py-4 flex flex-col items-center justify-center gap-4',
       }"
     >
       <div class="flex flex-col items-center justify-center text-center text-gray-500">

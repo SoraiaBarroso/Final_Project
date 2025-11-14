@@ -342,32 +342,30 @@
 
           <div class="flex gap-8 translate-y-6">
                 
+                <StudentDashboardStatCard
+                  :value="'On Track'"
+                  label="Status"
+                  icon="i-lucide:computer"
+                />
+
                <StudentDashboardStatCard
-                  :value="studentData.exercises_completed"
-                  label="Exercises"
+                  :value="'10h'"
+                  label="Activity Platform"
                   icon="i-lucide:clipboard-check"
                 />
 
                 <StudentDashboardStatCard
-                  :value="studentData.completed_projects"
-                  label="Projects"
+                  :value="'1 day ago'"
+                  label="Last Login Platform"
                   icon="i-lucide:computer"
                 />
 
-                <StudentDashboardStatCard
-                  :value="studentData.points ?? 0"
-                  label="Qwasar Points"
-                  icon="i-lucide:trophy"
-                  :tooltip="true"
-                />
-
-
                  <StudentDashboardStatCard
-                  :value="formatLastLogin(studentData.last_login)"
-                  label="Last Login"
-                  icon="i-lucide:trophy"
-                  :tooltip="true"
+                  :value="'90'"
+                  label="Earned Points"
+                  icon="i-lucide:computer"
                 />
+
           </div>              
         </div>
 
@@ -407,6 +405,26 @@
                   icon="i-lucide:clipboard-check"
                 />
 
+                   <StudentDashboardStatCard
+                  :value="studentData.exercises_completed"
+                  label="Exercises"
+                  icon="i-lucide:clipboard-check"
+                />
+                   <StudentDashboardStatCard
+                  :value="studentData.completed_projects"
+                  label="Projects"
+                  icon="i-lucide:clipboard-check"
+                />
+                   <StudentDashboardStatCard
+                  :value="studentData.points ?? 0"
+                  label="Qwasar Points"
+                  icon="i-lucide:clipboard-check"
+                />
+                   <StudentDashboardStatCard
+                  :value="formatLastLogin(studentData.last_login)"
+                  label="Last Login"
+                  icon="i-lucide:clipboard-check"
+                />
               </UPageGrid>
            </div>
         </UPageGrid>
