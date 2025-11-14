@@ -30,12 +30,12 @@ const mainLinks: NavigationMenuItem[] = [
     },
     children: [
       {
-        label: 'Overall ',
+        label: 'Attendance Overall ',
         description: 'Overall attendance analytics among all students.',
         to: '/admin/analytics/overall',
       },
       {
-        label: 'Cohort ',
+        label: 'Attendance Cohort ',
         description: 'Cohort-based attendance analytics.',
         to: '/admin/analytics/cohort',
       },

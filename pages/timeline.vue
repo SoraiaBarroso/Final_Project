@@ -1,7 +1,7 @@
 <template>
-      <UDashboardPanel id="calendar">
+      <UDashboardPanel id="timeline">
       <template #header>
-          <UDashboardNavbar title="Calendar" >
+          <UDashboardNavbar title="Timeline" >
               <template #leading>
                   <UDashboardSidebarCollapse />
               </template>
@@ -9,190 +9,180 @@
       </template>
 
       <template #body>
-         <div class="flex h-full flex-col rounded-xl  font-sans">
-    <!-- Header with month/year and navigation -->
-    <div class="mb-6 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <UButton
-          @click="previousMonth"
-          color="neutral"
-          variant="link"
-          size="xl"
-          class="cursor-pointer"
-          :disabled="
-            allowedStartDate &&
-            currentDate.getFullYear() === allowedStartDate.getFullYear() &&
-            currentDate.getMonth() === allowedStartDate.getMonth()
-          "
-        >
-          <UIcon name="lucide:chevron-left" />
-        </UButton>
-        <UButton @click="goToToday" size="xl" color="neutral" variant="outline"> Today </UButton>
-        <UButton
-          color="neutral"
-          variant="link"
-          size="xl"
-          @click="nextMonth"
-          class="cursor-pointer"
-          :disabled="
-            allowedEndDate &&
-            currentDate.getFullYear() === allowedEndDate.getFullYear() &&
-            currentDate.getMonth() === allowedEndDate.getMonth()
-          "
-        >
-          <UIcon name="lucide:chevron-right" />
-        </UButton>
-      </div>
-      <h2 class="m-0 text-2xl font-semibold text-slate-800">
-        {{ formatMonthYear(currentDate) }}
-      </h2>
-      <!-- Season dropdown -->
-      <USelect
-        size="xl"
-        v-model="selectedSeasonId"
-        :items="studentSeasons"
-        :ui="{
-          trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
-        }"
-        placeholder="Filter by Seasons"
-        class="min-w-28"
-      />
-    </div>
-
-    <!-- Scrollable timeline container -->
-    <div class="relative h-full overflow-hidden rounded-lg border border-slate-200 bg-white">
-      <!-- Timeline wrapper with horizontal scroll -->
-      <div ref="timelineContainer" class="timeline h-full overflow-x-auto overflow-y-hidden">
-        <div
-          class="relative h-full"
-          :style="{ width: timelineWidth + 'px', minHeight: dynamicTimelineHeight + 'px' }"
-        >
-          <div
-            v-if="todayLinePosition !== null"
-            :style="{
-              left: todayLinePosition + 30 + 'px',
-              height: '92%',
-              width: '2px',
-            }"
-            class="pointer-events-none absolute bottom-0 bg-blue-500/80"
-          ></div>
-          <!-- Column borders background -->
-          <div class="pointer-events-none absolute inset-0 flex">
-            <div
-              v-for="day in daysInMonth"
-              :key="`border-${day}`"
-              :style="{ width: columnWidth + 'px' }"
+        <!-- Header with month/year and navigation -->
+        <div class="flex items-center justify-center relative">
+            <UFieldGroup size="xl" class="absolute left-0">
+              <UButton
+                @click="previousMonth"
+                color="neutral"
+                variant="outline"
+                icon="i-lucide:chevron-left"
+                class="text-muted"
             />
-          </div>
 
-          <!-- Days header row -->
-          <div class="sticky top-0 z-10">
-            <div class="flex">
-              <div
-                v-for="day in daysInMonth"
-                :key="day"
-                class="rounded-md p-2 text-center"
-                :style="{ width: columnWidth + 'px' }"
+              <UButton
+                @click="goToToday"
+                color="neutral"
+                variant="outline"
+                class="text-muted"
               >
-                <div
-                  :class="[
-                    isToday(day) ? 'bg-blue-600/70 font-semibold text-white' : '',
-                    !isToday(day) && !isWeekend(day) ? 'bg-white' : '',
-                  ]"
-                  class="flex flex-row-reverse items-center justify-center gap-1.5 rounded-md px-1 py-1"
-                >
-                  <div
-                    :class="{ 'text-white': isToday(day), 'text-gray-400': !isToday(day) }"
-                    class="text-sm uppercase"
-                  >
-                    {{ getDayOfWeek(day) }}
-                  </div>
-                  <div class="text-sm font-semibold">{{ day }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
+                Today
+              </UButton>
 
-          <!-- Timeline content area -->
-          <div class="relative" style="height: 100%; padding-top: 16px">
-            <div class="pointer-events-none absolute inset-0 flex" style="z-index: 0">
-              <div
-                v-for="day in daysInMonth"
-                :key="`bg-${day}`"
-                class="border-r border-slate-200"
-                :style="{ width: columnWidth + 'px', height: '100%' }"
-              >
-                <svg height="100%" width="100%" v-if="isWeekend(day)">
-                  <defs>
-                    <pattern
-                      id="doodad"
-                      width="16"
-                      height="16"
-                      viewBox="0 0 40 40"
-                      patternUnits="userSpaceOnUse"
-                      patternTransform="rotate(135)"
-                    >
-                      <rect width="100%" height="100%" fill="rgba(255, 255, 255,1)" />
-                      <path d="M-10 30h60v1h-60zM-10-10h60v1h-60" fill="rgba(203, 213, 224,1)" />
-                      <path d="M-10 10h60v1h-60zM-10-30h60v1h-60z" fill="rgba(203, 213, 224,1)" />
-                    </pattern>
-                  </defs>
-                  <rect fill="url(#doodad)" height="200%" width="200%" />
-                </svg>
-              </div>
-            </div>
-            <!-- Project items -->
+              <UButton
+                @click="nextMonth"
+                color="neutral"
+                variant="outline"
+                icon="i-lucide:chevron-right"
+                class="text-muted"
+              />
+            </UFieldGroup>
+            <h2 class="text-2xl font-semibold">{{ formatMonthYear(currentDate) }}</h2>
+            <USelect
+                size="xl"
+                v-model="selectedSeasonId"
+                :items="studentSeasons"
+                :ui="{
+                  trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
+                }"
+                class="absolute right-0"
+                placeholder="Filter by Seasons"
+            />
+        </div>
+
+        <!-- Scrollable timeline container -->
+        <div class="relative h-full overflow-hidden rounded-lg border border-slate-200 bg-white">
+          <!-- Timeline wrapper with horizontal scroll -->
+          <div ref="timelineContainer" class="timeline h-full overflow-x-auto overflow-y-hidden">
             <div
-              v-for="item in projectItems"
-              :key="item.id"
-              class="absolute flex h-14 cursor-pointer items-center justify-between bg-white px-3 py-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
-              :class="[
-                item.crossMonth
-                  ? 'rounded-l-lg border-r-2 border-dashed border-gray-300'
-                  : 'rounded-lg',
-                item.title?.includes('(cont.)')
-                  ? 'rounded-l-none rounded-r-lg border-l-2 border-dashed border-gray-300'
-                  : '',
-              ]"
-              :style="getItemStyle(item)"
+              class="relative h-full"
+              :style="{ width: timelineWidth + 'px', minHeight: dynamicTimelineHeight + 'px' }"
             >
-              <div class="flex min-w-0 flex-1 items-center gap-3">
-                <!-- Season color indicator -->
+              <div
+                v-if="todayLinePosition !== null"
+                :style="{
+                  left: todayLinePosition + 30 + 'px',
+                  height: '92%',
+                  width: '2px',
+                }"
+                class="pointer-events-none absolute bottom-0 bg-blue-500/80"
+              ></div>
+              <!-- Column borders background -->
+              <div class="pointer-events-none absolute inset-0 flex">
                 <div
-                  :class="getItemClasses(item.type)"
-                  :style="{ backgroundColor: item.seasonColor }"
-                ></div>
-                <div class="flex w-full min-w-0 items-center justify-between">
-                  <span
-                    class="overflow-hidden text-sm font-medium text-ellipsis whitespace-nowrap text-gray-700"
+                  v-for="day in daysInMonth"
+                  :key="`border-${day}`"
+                  :style="{ width: columnWidth + 'px' }"
+                />
+              </div>
+
+              <!-- Days header row -->
+              <div class="sticky top-0 z-10">
+                <div class="flex">
+                  <div
+                    v-for="day in daysInMonth"
+                    :key="day"
+                    class="rounded-md p-2 text-center"
+                    :style="{ width: columnWidth + 'px' }"
                   >
-                    {{ item.title }}
-                  </span>
-                  <!-- Season badge with initials -->
-                  <span
-                    v-if="item.season"
-                    class="w-fit rounded-full px-2 py-0.5 text-xs font-semibold text-white"
-                    :style="{ backgroundColor: item.seasonColor + '90' }"
-                  >
-                    {{ getSeasonInitials(item.season) }}
-                  </span>
+                    <div
+                      :class="[
+                        isToday(day) ? 'bg-blue-600/70 font-semibold text-white' : '',
+                        !isToday(day) && !isWeekend(day) ? 'bg-white' : '',
+                      ]"
+                      class="flex flex-row-reverse items-center justify-center gap-1.5 rounded-md px-1 py-1"
+                    >
+                      <div
+                        :class="{ 'text-white': isToday(day), 'text-gray-400': !isToday(day) }"
+                        class="text-sm uppercase"
+                      >
+                        {{ getDayOfWeek(day) }}
+                      </div>
+                      <div class="text-sm font-semibold">{{ day }}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <!-- Cross-month indicator -->
-              <div v-if="item.crossMonth" class="ml-2 flex items-center text-xs text-gray-400">
-                <UIcon
-                  v-if="item.title.includes('(cont.)')"
-                  name="lucide:chevron-left"
-                  class="size-4"
-                />
-                <UIcon v-else name="lucide:chevron-right" class="size-4" />
+
+              <!-- Timeline content area -->
+              <div class="relative" style="height: 100%; padding-top: 16px">
+                <div class="pointer-events-none absolute inset-0 flex" style="z-index: 0">
+                  <div
+                    v-for="day in daysInMonth"
+                    :key="`bg-${day}`"
+                    class="border-r border-slate-200"
+                    :style="{ width: columnWidth + 'px', height: '100%' }"
+                  >
+                    <svg height="100%" width="100%" v-if="isWeekend(day)">
+                      <defs>
+                        <pattern
+                          id="doodad"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 40 40"
+                          patternUnits="userSpaceOnUse"
+                          patternTransform="rotate(135)"
+                        >
+                          <rect width="100%" height="100%" fill="rgba(255, 255, 255,1)" />
+                          <path d="M-10 30h60v1h-60zM-10-10h60v1h-60" fill="rgba(203, 213, 224,1)" />
+                          <path d="M-10 10h60v1h-60zM-10-30h60v1h-60z" fill="rgba(203, 213, 224,1)" />
+                        </pattern>
+                      </defs>
+                      <rect fill="url(#doodad)" height="200%" width="200%" />
+                    </svg>
+                  </div>
+                </div>
+                <!-- Project items -->
+                <div
+                  v-for="item in projectItems"
+                  :key="item.id"
+                  class="absolute flex h-14 cursor-pointer items-center justify-between bg-white px-3 py-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                  :class="[
+                    item.crossMonth
+                      ? 'rounded-l-lg border-r-2 border-dashed border-gray-300'
+                      : 'rounded-lg',
+                    item.title?.includes('(cont.)')
+                      ? 'rounded-l-none rounded-r-lg border-l-2 border-dashed border-gray-300'
+                      : '',
+                  ]"
+                  :style="getItemStyle(item)"
+                >
+                  <div class="flex min-w-0 flex-1 items-center gap-3">
+                    <!-- Season color indicator -->
+                    <div
+                      :class="getItemClasses(item.type)"
+                      :style="{ backgroundColor: item.seasonColor }"
+                    ></div>
+                    <div class="flex w-full min-w-0 items-center justify-between">
+                      <span
+                        class="overflow-hidden text-sm font-medium text-ellipsis whitespace-nowrap text-gray-700"
+                      >
+                        {{ item.title }}
+                      </span>
+                      <!-- Season badge with initials -->
+                      <span
+                        v-if="item.season"
+                        class="w-fit rounded-full px-2 py-0.5 text-xs font-semibold text-white"
+                        :style="{ backgroundColor: item.seasonColor + '90' }"
+                      >
+                        {{ getSeasonInitials(item.season) }}
+                      </span>
+                    </div>
+                  </div>
+                  <!-- Cross-month indicator -->
+                  <div v-if="item.crossMonth" class="ml-2 flex items-center text-xs text-gray-400">
+                    <UIcon
+                      v-if="item.title.includes('(cont.)')"
+                      name="lucide:chevron-left"
+                      class="size-4"
+                    />
+                    <UIcon v-else name="lucide:chevron-right" class="size-4" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
       </template>
   </UDashboardPanel>
  
@@ -227,6 +217,11 @@
 
   // Go to today: show previous, current, and next month
   const goToToday = () => {
+    // Clear season filter to show overview
+    selectedSeasonId.value = undefined;
+    allowedStartDate.value = undefined;
+    allowedEndDate.value = undefined;
+
     currentDate.value = new Date(today.getFullYear(), today.getMonth(), 1);
     loadProjectsForCurrentMonth();
   };
@@ -293,10 +288,17 @@
 
     console.log("📅 Current month:", { year, month, monthStart, monthEnd });
 
+    // Get season info to check if it's a Final Project season
+    const selectedSeason = cohortSeasonsDeadlines.value.find((season) => season.id === seasonId);
+    const seasonName = selectedSeason?.name || "Unknown Season";
+    const isFinalProjectSeason = seasonName.toLowerCase().includes("final project");
+
+    console.log("🎯 Season info:", { seasonName, isFinalProjectSeason });
+
     // First, get the program_cohort_season_id for this season, cohort, and program
     const { data: pcsData, error: pcsError } = await supabase
       .from("program_cohort_seasons")
-      .select("id")
+      .select("id, start_date, end_date")
       .eq("season_id", seasonId)
       .eq("cohort_id", cohortId)
       .eq("program_id", programId)
@@ -310,7 +312,42 @@
     }
 
     const programCohortSeasonId = pcsData.id;
+    const seasonStartDate = new Date(pcsData.start_date);
+    const seasonEndDate = new Date(pcsData.end_date);
     console.log("✅ Found program_cohort_season_id:", programCohortSeasonId);
+
+    // If this is a Final Project season, create a single item spanning the entire season
+    if (isFinalProjectSeason) {
+      console.log("🎓 Creating Final Project item spanning entire season");
+
+      // Only show if the season overlaps with current month
+      if (!(seasonEndDate < monthStart || seasonStartDate > monthEnd)) {
+        const startDay = Math.max(1, seasonStartDate > monthStart ? seasonStartDate.getDate() : 1);
+        const endDay = Math.min(
+          monthEnd.getDate(),
+          seasonEndDate < monthEnd ? seasonEndDate.getDate() : monthEnd.getDate()
+        );
+
+        const timelineProjects = [{
+          title: seasonName,
+          type: 4,
+          startDate: startDay,
+          endDate: endDay,
+          season: seasonName,
+          seasonColor: "#3b82f6",
+          id: `final-project-${programCohortSeasonId}`,
+          crossMonth: seasonEndDate > monthEnd,
+          avatars: [],
+        }];
+
+        projectItems.value = calculateNonOverlappingPositions(timelineProjects);
+        console.log("✨ Final Project item created:", projectItems.value);
+      } else {
+        projectItems.value = [];
+        console.log("⏭️ Final Project season doesn't overlap with current month");
+      }
+      return;
+    }
 
     // Now fetch all projects for this program_cohort_season with their actual dates
     const { data: projectSchedules, error: scheduleError } = await supabase
@@ -327,6 +364,7 @@
       `)
       .eq("program_cohort_season_id", programCohortSeasonId);
 
+    console.log("🔍 Fetching projects for program_cohort_season_id:", programCohortSeasonId);
     console.log("📦 Project schedules query result:", { projectSchedules, scheduleError });
 
     if (scheduleError) {
@@ -343,56 +381,18 @@
       return;
     }
 
-    // Get season info for color
-    const selectedSeason = cohortSeasonsDeadlines.value.find((season) => season.id === seasonId);
-    const seasonName = selectedSeason?.name || "Unknown Season";
-
     let timelineProjects: any[] = [];
 
-    // Check for bootcamp projects (can be grouped)
-    const bootcampProjects = schedules.filter((s: any) =>
-      s.projects.description && String(s.projects.description).toLowerCase().includes("bootcamp")
-    );
-    const regularProjects = schedules.filter((s: any) =>
-      !s.projects.description || !String(s.projects.description).toLowerCase().includes("bootcamp")
-    );
-
-    // Handle bootcamp projects (group them together)
-    if (bootcampProjects.length > 0) {
-      // Find the earliest start and latest end for bootcamp projects
-      const bootcampStart = new Date(Math.min(...bootcampProjects.map((p: any) => new Date(p.start_date).getTime())));
-      const bootcampEnd = new Date(Math.max(...bootcampProjects.map((p: any) => new Date(p.end_date).getTime())));
-
-      // Only show if overlaps with current month
-      if (!(bootcampEnd < monthStart || bootcampStart > monthEnd)) {
-        const startDay = Math.max(1, bootcampStart > monthStart ? bootcampStart.getDate() : 1);
-        const endDay = Math.min(
-          monthEnd.getDate(),
-          bootcampEnd < monthEnd ? bootcampEnd.getDate() : monthEnd.getDate()
-        );
-
-        timelineProjects.push({
-          title: bootcampProjects[0].projects.description,
-          type: 4,
-          startDate: startDay,
-          endDate: endDay,
-          season: seasonName,
-          seasonColor: "#3b82f6",
-          id: `grouped-bootcamp-${programCohortSeasonId}`,
-          crossMonth: bootcampEnd > monthEnd,
-          avatars: [],
-        });
-      }
-    }
-
-    // Handle regular projects individually
-    regularProjects.forEach((schedule: any) => {
+    // Handle all projects individually with their actual dates
+    schedules.forEach((schedule: any) => {
       const start = new Date(schedule.start_date);
       const end = new Date(schedule.end_date);
 
       console.log(`📌 Processing project: ${schedule.projects.name}`, {
         start: start.toISOString(),
         end: end.toISOString(),
+        startDate: start.getDate(),
+        endDate: end.getDate(),
         monthStart: monthStart.toISOString(),
         monthEnd: monthEnd.toISOString(),
       });
@@ -403,11 +403,25 @@
         return;
       }
 
-      const startDay = Math.max(1, start > monthStart ? start.getDate() : 1);
-      const endDay = Math.min(
-        monthEnd.getDate(),
-        end < monthEnd ? end.getDate() : monthEnd.getDate()
-      );
+      // Calculate the actual day numbers within the current month
+      let startDay: number;
+      let endDay: number;
+
+      // If project starts before this month, start at day 1 of this month
+      if (start < monthStart) {
+        startDay = 1;
+      } else {
+        // Project starts within this month, use the actual start date
+        startDay = start.getDate();
+      }
+
+      // If project ends after this month, end at last day of this month
+      if (end > monthEnd) {
+        endDay = monthEnd.getDate();
+      } else {
+        // Project ends within this month, use the actual end date
+        endDay = end.getDate();
+      }
 
       console.log(`✅ Adding project to timeline: ${schedule.projects.name} (days ${startDay}-${endDay})`);
 
@@ -481,13 +495,61 @@
     for (const seasonGroup of groupedSeasons) {
       const startDate = new Date(seasonGroup.start_date);
       const endDate = new Date(seasonGroup.end_date);
+      const isFinalProjectSeason = seasonGroup.baseName.toLowerCase().includes("final project");
 
       console.log(`🔄 Processing season group: ${seasonGroup.displayName}`, {
         seasonStart: seasonGroup.start_date,
         seasonEnd: seasonGroup.end_date,
         specializations: seasonGroup.specializations,
         ids: seasonGroup.ids,
+        isFinalProjectSeason,
       });
+
+      // If this is a Final Project season, create a single item spanning the entire season
+      if (isFinalProjectSeason) {
+        console.log(`🎓 Creating Final Project item for entire season duration`);
+
+        // Create entries for each month this season spans
+        let currentMonth = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+        const lastMonth = new Date(endDate.getFullYear(), endDate.getMonth(), 1);
+
+        while (currentMonth <= lastMonth) {
+          const monthKey = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, "0")}`;
+
+          if (!timelineProjects[monthKey]) {
+            timelineProjects[monthKey] = [];
+          }
+
+          const monthStart = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+          const monthEnd = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+
+          const itemStartInMonth = Math.max(startDate.getTime(), monthStart.getTime());
+          const itemEndInMonth = Math.min(endDate.getTime(), monthEnd.getTime());
+
+          const startDay = new Date(itemStartInMonth).getDate();
+          const endDay = new Date(itemEndInMonth).getDate();
+          const crossMonth = endDate > monthEnd;
+
+          console.log(`  ➕ Adding Final Project to month ${monthKey}: days ${startDay}-${endDay}`);
+
+          timelineProjects[monthKey].push({
+            title: seasonGroup.baseName,
+            type: 4,
+            startDate: startDay,
+            endDate: endDay,
+            crossMonth: crossMonth,
+            season: seasonGroup.baseName,
+            seasonColor: getSeasonColorByIndex(groupedSeasons.indexOf(seasonGroup)),
+            id: `final-project-${seasonGroup.ids.join("-")}-${monthKey}`,
+          });
+
+          // Move to next month
+          currentMonth.setMonth(currentMonth.getMonth() + 1);
+        }
+
+        // Skip fetching individual projects for Final Project seasons
+        continue;
+      }
 
       // For each season, fetch its projects from program_cohort_season_projects
       for (const seasonId of seasonGroup.ids) {
@@ -1040,40 +1102,7 @@
       studentProgramId.value = student.program_id;
       studentCohortId.value = student.cohort_id;
     }
-
-    // fetch seasons for dropdown seasons
-    const { data: seasonsList, error: seasonsError } = await supabase
-      .from("seasons")
-      .select("id, name, order_in_program")
-      .eq("program_id", studentProgramId.value ?? "");
-
-    if (seasonsList) {
-      type SeasonListItem = { id: string | number; name: string; order_in_program?: number };
-      const typedSeasonsList = seasonsList as SeasonListItem[];
-      const sortedSeasons = [...typedSeasonsList].sort(
-        (a, b) => (a.order_in_program ?? 0) - (b.order_in_program ?? 0)
-      );
-      // Remove the first season from the list
-      // Remove the first season from the list
-      const filteredSeasons = sortedSeasons.slice(1);
-      filteredSeasons.pop();
-
-      studentSeasons.value = filteredSeasons.map((season) => {
-        // If the name starts with "Season XX Software Engineer", remove "Software Engineer" and trim
-        let label = season.name;
-        const match = label.match(/^(Season \d+)\s+Software Engineer\s*(.*)$/i);
-        if (match) {
-          // If there is a specialization (Cpp, Rust, Go), append it; otherwise, just "Season XX"
-          label = match[2] ? `${match[1]} ${match[2]}`.trim() : match[1];
-        }
-        return {
-          label,
-          value: String(season.id),
-        };
-      });
-      console.log("Student seasons:", studentSeasons.value);
-    }
-
+    
     // Now, use the cohort ID to query program_cohort_seasons
     const { data: seasonsProgress, error: progressError } = await supabase
       .from("program_cohort_seasons")
@@ -1093,6 +1122,14 @@
       .eq("program_id", (student as any)?.program_id)
       .order("start_date", { ascending: true, nullsFirst: false }); // Filter by the cohort ID you just fetched
 
+    studentSeasons .value = seasonsProgress
+      ? seasonsProgress.map((season) => ({
+          label: season.seasons.name,
+          value: String(season.seasons.id),
+        }))
+      : [];
+
+    console.log("Fetched seasons progress:", { seasonsProgress, progressError });
     const seasons = seasonsProgress?.map((season: any) => ({
       id: season.seasons.id,
       name: season.seasons.name,

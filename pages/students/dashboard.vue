@@ -360,6 +360,14 @@
                   icon="i-lucide:trophy"
                   :tooltip="true"
                 />
+
+
+                 <StudentDashboardStatCard
+                  :value="formatLastLogin(studentData.last_login)"
+                  label="Last Login"
+                  icon="i-lucide:trophy"
+                  :tooltip="true"
+                />
           </div>              
         </div>
 
