@@ -93,16 +93,19 @@ const stats = computed(() => [
       v-for="stat in stats"
       :key="stat.label"
       :ui="{
-        header: 'border-none flex items-center gap-2 mt-1',
-        body: 'mt-2'
+        header: 'border-none flex items-center gap-3 mt-1',
+        body: 'mt-2 flex justify-between items-center'
       }"
       class="h-full"
     >
       <template #header>
-        <div class="h-2 w-2 rounded-full bg-[#00DC82]"></div>
+        <div class="h-2 w-2 rounded-full bg-info-400"></div>
         <h1 class="xl:text-lg font-medium">{{ stat.label }}</h1>
       </template>
-      <p class="text-lg lg:text-lg xl:text-2xl text-highlighted font-semibold">{{ stat.value }}</p>
+      <p class="text-lg lg:text-xl xl:text-2xl text-highlighted font-semibold">{{ stat.value }}</p>
+      <UIcon v-if="stat.value == 'On Track'" name="i-lucide:check-circle" class="text-green-500 size-8" />
+      <UIcon v-else-if="stat.value == 'At Risk'" name="i-lucide:alert-circle" class="text-red-500 size-8" />
+      <UIcon v-else-if="stat.value == 'Monitor'" name="i-lucide:x-circle" class="text-yellow-500 size-8" />
     </UCard>
   </div>
 </template>

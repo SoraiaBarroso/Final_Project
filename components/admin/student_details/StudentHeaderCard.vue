@@ -123,14 +123,14 @@ const handleSendSlackMessage = () => {
       body: 'h-full flex flex-col justify-between gap-5',
     }"
   >
-      <div class="flex gap-4 items-start">
+      <div class="flex gap-4 items-center">
          <UAvatar
           :src="student.profile_image_url"
           :alt="`${student.first_name} ${student.last_name}`"
-          class="h-16 w-16 flex-shrink-0"
+          class="h-12 w-12 flex-shrink-0 mt-1"
         />
 
-        <div class="flex flex-col gap-1 min-w-0 mt-1">
+        <div class="flex flex-col min-w-0">
             <h2 class="text-xl font-bold truncate">{{ student.first_name }} {{ student.last_name }}</h2>
             <p class="text-muted text-sm truncate">{{ student.email || 'N/A' }}</p>
         </div>

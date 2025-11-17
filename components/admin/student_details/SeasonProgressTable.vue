@@ -231,8 +231,17 @@ const columns: TableColumn<SeasonProgress>[] = [
     accessorKey: 'progress_percentage',
     header: 'Progress',
     cell: ({ row }) => {
+      const hasVariants = row.original.hasVariants
+
+      if (hasVariants && row.original.variants) {
+        // Show all variant progress percentages
+        const progressValues = row.original.variants.map(v => `${v.progress_percentage}%`).filter(v => v !== '0%')
+
+        return progressValues.length > 0 ? progressValues.join(' / ') : '0%'
+       
+      }
+
       const progress = row.original.progress_percentage
-      // show progress of that seasons
       return `${progress}%`
     }
   },
@@ -268,20 +277,22 @@ const columns: TableColumn<SeasonProgress>[] = [
             :key="variant.id"
             class="p-3 rounded-lg border border-default hover:border-highlighted transition-colors"
           >
-            <div class="flex items-center justify-between mb-2">
-              <span class="font-semibold text-highlighted">{{ variant.name }}</span>
-              <UBadge
-                :color="{
-                  'On Going': 'info',
-                  'Completed': 'success',
-                  'Not Started': 'neutral'
-                }[variant.status]"
-                variant="subtle"
-                size="sm"
-                class="capitalize"
-              >
-                {{ variant.status }}
-              </UBadge>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <span class="font-semibold text-highlighted">{{ variant.name }}</span>
+                <UBadge
+                  :color="{
+                    'On Going': 'info',
+                    'Completed': 'success',
+                    'Not Started': 'neutral'
+                  }[variant.status]"
+                  variant="subtle"
+                  size="md"
+                  class="capitalize"
+                >
+                  {{ variant.status }}
+                </UBadge>
+              </div>
             </div>
           </div>
         </div>
