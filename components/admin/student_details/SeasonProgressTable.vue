@@ -59,7 +59,7 @@ const normalizedData = computed<SeasonProgress[]>(() =>
     const progress_percentage = Number(item.progress_percentage ?? 0)
     const is_completed = Boolean(item.is_completed)
 
-    const status: SeasonProgress['status'] = is_completed
+    const status: SeasonProgress['status'] = progress_percentage >= 75
       ? 'Completed'
       : progress_percentage > 0
       ? 'On Going'
@@ -123,9 +123,11 @@ const data = computed<SeasonProgress[]>(() => {
           variants.reduce((sum, v) => sum + v.progress_percentage, 0) / variants.length
         )
 
-        const hasCompleted = variants.some(v => v.status === 'Completed')
-        const hasOngoing = variants.some(v => v.status === 'On Going')
-        const status = hasCompleted ? 'Completed' : hasOngoing ? 'On Going' : 'Not Started'
+        const status = avgProgress >= 70
+          ? 'Completed'
+          : avgProgress > 0
+          ? 'On Going'
+          : 'Not Started'
 
         result.push({
           id: baseName,
@@ -208,7 +210,7 @@ const columns: TableColumn<SeasonProgress>[] = [
     }
   },
   {
-     accessorKey: 'status',
+    accessorKey: 'status',
     header: 'Status',
     cell: ({ row }) => {
       const color = {
@@ -249,7 +251,7 @@ const columns: TableColumn<SeasonProgress>[] = [
 </script>
 
 <template>
-  <div class="h-full w-full">
+  <div class="w-full">
     <UTable
     v-model:expanded="expanded"
     :data="data"
@@ -265,7 +267,7 @@ const columns: TableColumn<SeasonProgress>[] = [
   >
     <template #expanded="{ row }">
       <div v-if="row.original.variants" class="px-4 py-3">
-        <div class="grid grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
           <div
             v-for="variant in row.original.variants"
             :key="variant.id"
