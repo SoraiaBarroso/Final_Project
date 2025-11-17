@@ -120,7 +120,24 @@ watch(
   () => props.data,
   (newData) => {
     const cohorts = [...new Set(newData.map(item => item.cohort))];
-    cohortItems.value = cohorts.map(cohort => ({
+
+    // Sort cohorts by date (e.g., "Sep 22", "Mar 25")
+    const sortedCohorts = cohorts.sort((a, b) => {
+      const monthMap = {
+        'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+        'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+      };
+
+      const [monthA, yearA] = a.split(' ');
+      const [monthB, yearB] = b.split(' ');
+
+      const dateA = new Date(2000 + parseInt(yearA), monthMap[monthA]);
+      const dateB = new Date(2000 + parseInt(yearB), monthMap[monthB]);
+
+      return dateA - dateB;
+    });
+
+    cohortItems.value = sortedCohorts.map(cohort => ({
       label: cohort,
       value: cohort,
     }));
@@ -151,6 +168,7 @@ watch(
     if (!table?.value?.tableApi) return;
 
     const programColumn = table.value.tableApi.getColumn("program");
+
     if (!programColumn) return;
 
     if (newVal === "all") {
