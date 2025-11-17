@@ -1,8 +1,5 @@
 <script setup>
 import { resolveComponent } from 'vue'
-import StudentHeaderCard from '~/components/admin/student_details/StudentHeaderCard.vue'
-import StudentStats from '~/components/admin/student_details/StudentStats.vue'
-import SeasonProgressTable from '~/components/admin/student_details/SeasonProgressTable.vue'
 
 definePageMeta({
   layout: 'default',
@@ -207,7 +204,9 @@ const handleSendSlackMessage = (student) => {
 </script>
 
 <template>
-  <UDashboardPanel id="student-detail">
+  <UDashboardPanel id="student-detail"
+    :ui="{body: 'overflow-auto'}"
+  >
     <template #header>
       <UDashboardNavbar title="Students Details">
         <template #leading>
@@ -217,28 +216,25 @@ const handleSendSlackMessage = (student) => {
     </template>
 
     <template #body>
-        <div v-if="loading" class="flex justify-center items-center h-64">
-          <ULoadingSpinner size="lg" />
-        </div> 
+        <!-- Header and Stats Section -->
+          <div class="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-6" v-if="!loading">
+              <!-- Student Header Card - takes 1 column on large screens -->
+              <div class="lg:col-span-4 xl:col-span-1">
+                <AdminStudentDetailsStudentHeaderCard
+                  :student="student"
+                  @send-email="handleSendEmail"
+                  @send-slack-message="handleSendSlackMessage"
+                />
+              </div>
 
-        <div v-else class="flex flex-col gap-10 h-full">
-
-          <div class="flex gap-6 h-fit">
-            <!-- Student Header Card -->
-            <StudentHeaderCard
-              :student="student"
-              @send-email="handleSendEmail"
-              @send-slack-message="handleSendSlackMessage"
-            />
-
-            <!-- Stats Cards -->
-            <StudentStats :student="student" />
+              <!-- Stats Cards - takes 3 columns on large screens -->
+              <div class="lg:col-span-4 xl:col-span-3 h-full w-full">
+                <AdminStudentDetailsStudentStats :student="student" />
+              </div>
           </div>
 
-        
           <!-- Season Progress -->
-          <SeasonProgressTable :season-progress="seasonProgress" />
-        </div>
+          <AdminStudentDetailsSeasonProgressTable :season-progress="seasonProgress" />
     </template>
   </UDashboardPanel>
 </template>

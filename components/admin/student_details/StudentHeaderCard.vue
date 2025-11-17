@@ -17,14 +17,11 @@ const selectedCohortId = ref(null)
 onMounted(async () => {
   // Fetch cohorts filtered by the student's program
   await fetchCohorts({ program_id: props.student.program_id })
-  console.log("Filtered cohorts for program:", cohorts.value)
 
   items.value = cohorts.value.map(cohort => ({
     label: cohort.name,
     value: cohort.cohort_ids?.find(id => cohort.programs?.find(p => p.id === props.student.program_id && p.cohort_id === id))
   }))
-
-  console.log("Dropdown items:", items.value)
 
   // Set initial selected cohort
   selectedCohortId.value = props.student.cohort_id
@@ -112,18 +109,20 @@ const formatDateTime = (iso) => {
 const emit = defineEmits(['send-email', 'send-slack-message'])
 
 const handleSendEmail = () => {
-  emit('send-email', props.student)
+  window.location.href = `mailto:${props.student.email}`
 }
 
 const handleSendSlackMessage = () => {
-  emit('send-slack-message', props.student)
+  window.open(`https://slack.com/app_redirect?channel=${props.student.slack_id}`, '_blank')
 }
 </script>
 
 <template>
-  <UCard class="w-full max-w-md">
-    <div class="flex flex-col gap-6">
-
+  <UCard class="w-full h-full"
+    :ui="{
+      body: 'h-full flex flex-col justify-between gap-5',
+    }"
+  >
       <div class="flex gap-4 items-start">
          <UAvatar
           :src="student.profile_image_url"
@@ -131,13 +130,13 @@ const handleSendSlackMessage = () => {
           class="h-16 w-16 flex-shrink-0"
         />
 
-        <div class="flex flex-col gap-1 min-w-0">
+        <div class="flex flex-col gap-1 min-w-0 mt-1">
             <h2 class="text-xl font-bold truncate">{{ student.first_name }} {{ student.last_name }}</h2>
             <p class="text-muted text-sm truncate">{{ student.email || 'N/A' }}</p>
         </div>
       </div>
 
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-4">
            <div class="flex gap-2">
             <p class="text-highlighted text-sm font-medium whitespace-nowrap">Username:</p>
             <p class="text-muted text-sm truncate">{{ student.username || 'N/A' }}</p>
@@ -189,12 +188,11 @@ const handleSendSlackMessage = () => {
           </div>
         </div>
 
-        <div class="w-full flex gap-2">
+        <div class="w-full mt-auto flex gap-2">
           <UButton
             color="neutral"
             variant="outline"
-            size="sm"
-            class="flex-1"
+            class="flex-1 justify-center"
             @click="handleSendEmail"
           >
             Send Email
@@ -202,13 +200,11 @@ const handleSendSlackMessage = () => {
           <UButton
             color="neutral"
             variant="outline"
-            class="flex-1"
-            size="sm"
+            class="flex-1 justify-center"
             @click="handleSendSlackMessage"
           >
             Slack Message
           </UButton>
         </div>
-    </div>
   </UCard>
 </template>

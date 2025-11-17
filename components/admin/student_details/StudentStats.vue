@@ -6,12 +6,48 @@ const props = defineProps({
   }
 })
 
-console.log(props.student)
+// Format season name to shorter version (e.g., "Season 03 Software Engineer Cpp" -> "Season 03 SE")
+const formatSeasonName = (fullName) => {
+  if (!fullName) return 'N/A'
+
+  // Extract season number/identifier (e.g., "Season 03")
+  const seasonMatch = fullName.match(/^(Season\s+\d+)/i)
+  const seasonPart = seasonMatch ? seasonMatch[1] : ''
+
+  // Abbreviate program names
+  const abbreviations = {
+    'Software Engineer': 'SE',
+    'Data Science': 'DS',
+    'Machine Learning': 'ML',
+    'Cpp': '',  // Remove language suffix
+    'Go': '',
+    'Rust': '',
+  }
+
+  let abbreviated = fullName
+  for (const [full, abbr] of Object.entries(abbreviations)) {
+    abbreviated = abbreviated.replace(new RegExp(full, 'gi'), abbr)
+  }
+
+  // Clean up extra spaces
+  abbreviated = abbreviated.replace(/\s+/g, ' ').trim()
+
+  return abbreviated
+}
+
 const stats = computed(() => [
+  {
+    icon: 'i-lucide-users',
+    label: 'Status',
+    value: props.student.status || 'N/A',
+    bgColor: 'bg-info/10',
+    borderColor: 'border-info',
+    textColor: 'text-info'
+  },
   {
     icon: 'i-lucide-book-open',
     label: 'Current Season',
-    value: props.student.current_season.name || 0,
+    value: formatSeasonName(props.student.current_season?.name),
     bgColor: 'bg-info/10',
     borderColor: 'border-info',
     textColor: 'text-info'
@@ -19,15 +55,7 @@ const stats = computed(() => [
   {
     icon: 'i-lucide-activity',
     label: 'Expected Season',
-    value: props.student.expected_season.name || 0,
-    bgColor: 'bg-info/10',
-    borderColor: 'border-info',
-    textColor: 'text-info'
-  },
-    {
-    icon: 'i-lucide-users',
-    label: 'Status',
-    value: props.student.status || 'N/A',
+    value: formatSeasonName(props.student.expected_season?.name),
     bgColor: 'bg-info/10',
     borderColor: 'border-info',
     textColor: 'text-info'
@@ -60,29 +88,21 @@ const stats = computed(() => [
 </script>
 
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 h-full">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 h-full">
     <UCard
       v-for="stat in stats"
       :key="stat.label"
       :ui="{
-        header: 'border-none',
-        body: 'flex justify-between items-center !pt-0 !pb-1.5 w-full',
+        header: 'border-none flex items-center gap-2 mt-1',
+        body: 'mt-2'
       }"
       class="h-full"
     >
       <template #header>
-          <h1 class="text-muted text-sm font-medium">{{ stat.label }}</h1>
+        <div class="h-2 w-2 rounded-full bg-[#00DC82]"></div>
+        <h1 class="xl:text-lg font-medium">{{ stat.label }}</h1>
       </template>
-      <p class="text-xl font-bold">{{ stat.value }}</p>
-      <div
-        :class="[
-            stat.bgColor,
-            stat.borderColor,
-            'flex h-10 w-10 items-center justify-center rounded-full flex-shrink-0'
-        ]"
-        >
-            <UIcon :name="stat.icon" :class="[stat.textColor, 'size-5']" />
-        </div>
+      <p class="text-lg lg:text-lg xl:text-2xl text-highlighted font-semibold">{{ stat.value }}</p>
     </UCard>
   </div>
 </template>

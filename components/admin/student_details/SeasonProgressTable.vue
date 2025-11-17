@@ -161,6 +161,7 @@ const data = computed<SeasonProgress[]>(() => {
 })
 
 const expanded = ref({})
+const table = useTemplateRef("table");
 
 const columns: TableColumn<SeasonProgress>[] = [
 {
@@ -231,8 +232,7 @@ const columns: TableColumn<SeasonProgress>[] = [
     header: 'Progress',
     cell: ({ row }) => {
       const progress = row.original.progress_percentage
-      // Show "avg" for rows with variants
-  
+      // show progress of that seasons
       return `${progress}%`
     }
   },
@@ -245,18 +245,20 @@ const columns: TableColumn<SeasonProgress>[] = [
 </script>
 
 <template>
-  <UTable
+  <div class="h-full w-full">
+     <UTable
     v-model:expanded="expanded"
     :data="data"
+    sticky
+    ref="table"
     :columns="columns"
-     :ui="{
-        base: 'border-separate border-spacing-0',
-        thead: '[&>tr]:bg-elevated/50 h-10 [&>tr]:after:content-none',
-        tbody: '[&>tr]:last:[&>td]:border-b-0',
-        tr: 'group',
-        th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
-        td: 'empty:p-0 group-has-[td:not(:empty)]:border-b border-default',
-      }"
+    :ui="{
+      base: 'border-separate border-spacing-0',
+      thead: '[&>tr]:bg-elevated/50 h-10 [&>tr]:after:content-none',
+      tbody: '[&>tr]:last:[&>td]:border-b-0',
+      th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
+      td: 'border-b border-default',
+    }"
   >
     <template #expanded="{ row }">
       <div v-if="row.original.variants" class="px-4 py-3">
@@ -275,29 +277,16 @@ const columns: TableColumn<SeasonProgress>[] = [
                   'Not Started': 'neutral'
                 }[variant.status]"
                 variant="subtle"
-                size="xs"
+                size="sm"
                 class="capitalize"
               >
                 {{ variant.status }}
               </UBadge>
             </div>
-            <!-- <div class="space-y-1 text-xs">
-              <div class="flex justify-between">
-                <span class="text-muted">Start:</span>
-                <span class="font-medium">{{ variant.start_date ? new Date(variant.start_date).toLocaleDateString() : '-' }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-muted">End:</span>
-                <span class="font-medium">{{ variant.end_date ? new Date(variant.end_date).toLocaleDateString() : '-' }}</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-muted">Progress:</span>
-                <span class="font-medium">{{ variant.progress_percentage }}%</span>
-              </div>
-            </div> -->
           </div>
         </div>
       </div>
     </template>
   </UTable>
+  </div>
 </template>
