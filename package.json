@@ -8,7 +8,8 @@
     "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "update-slack-ids": "node scripts/update_slack_ids.js"
   },
   "dependencies": {
     "@nuxt/fonts": "^0.11.4",

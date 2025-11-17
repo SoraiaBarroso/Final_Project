@@ -35,77 +35,104 @@ const formatSeasonName = (fullName) => {
   return abbreviated
 }
 
+// Get color type based on student status
+const getStatusColor = (status) => {
+  const statusColors = {
+    'On Track': 'success',
+    'Monitor': 'warning',
+    'At Risk': 'error',
+  }
+  return statusColors[status] || 'info'
+}
+
+const getIconByStatus = (status) => {
+  const statusIcons = {
+    'On Track': 'i-pajamas:partner-verified',
+    'Monitor': 'i-pajamas:eye',
+    'At Risk': 'i-pajamas:status-alert',
+  }
+  return statusIcons[status] || 'i-lucide-help-circle'
+}
+
 const stats = computed(() => [
   {
-    icon: 'i-lucide-users',
+    icon: getIconByStatus(props.student.status),
     label: 'Status',
     value: props.student.status || 'N/A',
-    bgColor: 'bg-info/10',
-    borderColor: 'border-info',
-    textColor: 'text-info'
+    colorType: getStatusColor(props.student.status)
   },
   {
     icon: 'i-lucide-book-open',
     label: 'Current Season',
     value: formatSeasonName(props.student.current_season?.name),
-    bgColor: 'bg-info/10',
-    borderColor: 'border-info',
-    textColor: 'text-info'
+    colorType: 'info'
   },
   {
     icon: 'i-lucide-activity',
     label: 'Expected Season',
     value: formatSeasonName(props.student.expected_season?.name),
-    bgColor: 'bg-info/10',
-    borderColor: 'border-info',
-    textColor: 'text-info'
+    colorType: 'info'
   },
 {
     icon: 'i-lucide-presentation',
     label: 'Completed Projects',
     value: props.student.completed_projects || 0,
-    bgColor: 'bg-info/10',
-    borderColor: 'border-info',
-    textColor: 'text-info'
+    colorType: 'info'
   },
   {
     icon: 'i-lucide-check-circle',
     label: 'Completed Exercises',
     value: props.student.exercises_completed || 0,
-    bgColor: 'bg-info/10',
-    borderColor: 'border-info',
-    textColor: 'text-info'
+    colorType: 'info'
   },
    {
     icon: 'i-lucide-trophy',
     label: 'Qwasar Points',
     value: props.student.points || 0,
-    bgColor: 'bg-info/10',
-    borderColor: 'border-info',
-    textColor: 'text-info'
+    colorType: 'info'
   },
 ])
+
+
+const getIconColor = (iconColor) => {
+  const colorMap = {
+    info: 'text-blue-500',
+    success: 'text-green-500',
+    error: 'text-red-500',
+    warning: 'text-yellow-500',
+  };
+  return colorMap[iconColor] || 'text-purple-500';
+};
+
+const getIconColorClass = (iconColor) => {
+  const colorMap = {
+    info: 'bg-info/10 ring-info/25 text-blue-500',
+    success: 'bg-success/10 ring-success/25 text-green-500',
+    error: 'bg-error/10 ring-error/25 text-red-500',
+    warning: 'bg-warning/10 ring-warning/25 text-yellow-500',
+  };
+  return colorMap[iconColor] || 'bg-primary/10 ring-primary/25 text-purple-500';
+};
 </script>
 
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 h-full">
-    <UCard
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
+    <UPageCard
       v-for="stat in stats"
       :key="stat.label"
+      :title="stat.label"
+      variant="subtle"
+      :icon="stat.icon"
       :ui="{
-        header: 'border-none flex items-center gap-3 mt-1',
-        body: 'mt-2 flex justify-between items-center'
+        leadingIcon: `${getIconColor(stat.colorType)} `,
+        container: 'gap-y-1.5',
+        wrapper: 'items-start',
+        title: 'font-medium text-muted text-xs uppercase',
+        leading: `p-2.5 rounded-full ${getIconColorClass(stat.colorType)} ring ring-inset flex-col`,
       }"
-      class="h-full"
+      class="hover:z-1 hover:bg-elevated"
     >
-      <template #header>
-        <div class="h-2 w-2 rounded-full bg-info-400"></div>
-        <h1 class="xl:text-lg font-medium">{{ stat.label }}</h1>
-      </template>
-      <p class="text-lg lg:text-xl xl:text-2xl text-highlighted font-semibold">{{ stat.value }}</p>
-      <UIcon v-if="stat.value == 'On Track'" name="i-lucide:check-circle" class="text-green-500 size-8" />
-      <UIcon v-else-if="stat.value == 'At Risk'" name="i-lucide:alert-circle" class="text-red-500 size-8" />
-      <UIcon v-else-if="stat.value == 'Monitor'" name="i-lucide:x-circle" class="text-yellow-500 size-8" />
-    </UCard>
+      <p class="text-lg lg:text-xl xl:text-xl text-highlighted font-semibold">{{ stat.value }}</p>
+    </UPageCard>
   </div>
 </template>

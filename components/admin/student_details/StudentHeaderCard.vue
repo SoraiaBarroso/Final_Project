@@ -119,6 +119,7 @@ const handleSendSlackMessage = () => {
 
 <template>
   <UCard class="w-full h-full"
+    
     :ui="{
       body: 'h-full flex flex-col justify-between gap-5',
     }"

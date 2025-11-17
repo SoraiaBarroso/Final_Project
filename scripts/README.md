@@ -229,3 +229,57 @@ The new scripts maintain all functionality from the original files:
 
 ### Backward Compatibility
 Individual operations can still be run separately, but using the new consolidated scripts is recommended for better maintainability and features.
+
+---
+
+## 🔧 Additional Utilities
+
+### Update Slack IDs Script (`update_slack_ids.js`)
+
+A Node.js script that updates the `students` table with Slack IDs from a CSV file.
+
+#### Prerequisites
+- Ensure your `.env` file contains:
+  - `SUPABASE_URL`
+  - `SUPABASE_KEY`
+
+#### Usage
+
+Run from the project root:
+
+```bash
+npm run update-slack-ids
+```
+
+Or directly:
+
+```bash
+node scripts/update_slack_ids.js
+```
+
+#### CSV Format
+
+The script reads from `scripts/user_slack_ids.csv` with the following format:
+
+```csv
+username,slack_id
+example_user,U12345ABC
+another_user,U67890XYZ
+```
+
+#### What the script does
+
+1. Reads the CSV file containing username and slack_id pairs
+2. For each row:
+   - Finds the student by username in the `students` table
+   - Updates their `slack_id` field
+3. Provides a summary of:
+   - Successfully updated records
+   - Students not found in database
+   - Any errors encountered
+
+#### Notes
+
+- Rows with missing username or slack_id are skipped
+- Rows with username "-" are skipped
+- The script shows detailed progress for each student
