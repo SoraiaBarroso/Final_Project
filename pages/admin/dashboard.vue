@@ -132,7 +132,7 @@
                 :change="snapshotChange?.monitor_change"
                 :invert-colors="true"
                 :percent-change="snapshotChange?.monitor_pct_change"
-                rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg lg:rounded-l-none"
+                rounded-class="rounded-lg xl:rounded-none xl:rounded-r-none lg:rounded-none"
               />
 
               <StudentStatCard
@@ -143,7 +143,7 @@
                 :invert-colors="true"
                 :change="snapshotChange?.at_risk_change"
                 :percent-change="snapshotChange?.at_risk_pct_change"
-                rounded-class="rounded-lg xl:rounded-none lg:rounded-none"
+                rounded-class="rounded-lg xl:rounded-r-lg lg:rounded-r-lg lg:rounded-l-none"
               />
             </UPageGrid>
        

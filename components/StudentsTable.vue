@@ -336,7 +336,7 @@ const onSelect = async (selectedRows: any[]) => {
         </template>
     </UModal>
 
-    <div class="flex w-full items-center justify-between">
+    <div class="flex flex-col lg:flex-row w-full items-start gap-4 lg:items-center justify-between">
       <UInput
         size="md"
         color="info"
@@ -347,7 +347,7 @@ const onSelect = async (selectedRows: any[]) => {
         @update:model-value="table?.tableApi?.getColumn('name')?.setFilterValue($event)"
       />
 
-      <div class="flex items-center gap-4">
+      <div class="flex flex-col lg:flex-row items-center gap-4">
         <USelect
           size="md"
           v-model="cohortFilter"
@@ -414,7 +414,7 @@ const onSelect = async (selectedRows: any[]) => {
         thead: '[&>tr]:bg-elevated/50 h-10 [&>tr]:after:content-none',
         tbody: '[&>tr]:last:[&>td]:border-b-0',
         th: 'py-2 first:rounded-l-lg last:rounded-r-lg border-y border-default first:border-l last:border-r',
-        td: 'border-b border-default',
+        td: 'border-b border-default cursor-pointer',
       }"
     />
     <div class="border-default flex items-center justify-between border-t pt-4">
