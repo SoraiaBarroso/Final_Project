@@ -216,25 +216,74 @@ const handleSendSlackMessage = (student) => {
     </template>
 
     <template #body>
-        <!-- Header and Stats Section -->
-          <div class="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-6" v-if="!loading">
-              <!-- Student Header Card - takes 1 column on large screens -->
-              <div class="lg:col-span-4 xl:col-span-1">
-                <AdminStudentDetailsStudentHeaderCard
-                  :student="student"
-                  @send-email="handleSendEmail"
-                  @send-slack-message="handleSendSlackMessage"
-                />
-              </div>
+        <!-- Loading Skeletons -->
+        <div v-if="loading" class="space-y-6">
+          <!-- Header and Stats Section Skeleton -->
+          <div class="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+            <!-- Student Header Card Skeleton -->
+            <div class="lg:col-span-4 xl:col-span-1">
+              <UPageCard>
+                <div class="flex flex-col items-center space-y-4 p-4">
+                  <USkeleton class="h-24 w-24 rounded-full" />
+                  <USkeleton class="h-6 w-32" />
+                  <USkeleton class="h-4 w-40" />
+                  <div class="w-full space-y-2">
+                    <USkeleton class="h-10 w-full" />
+                    <USkeleton class="h-10 w-full" />
+                  </div>
+                </div>
+              </UPageCard>
+            </div>
 
-              <!-- Stats Cards - takes 3 columns on large screens -->
-              <div class="lg:col-span-4 xl:col-span-3 h-full w-full">
-                <AdminStudentDetailsStudentStats :student="student" />
+            <!-- Stats Cards Skeleton -->
+            <div class="lg:col-span-4 xl:col-span-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
+                <UPageCard v-for="i in 6" :key="i">
+                  <div class="space-y-3 p-4">
+                    <div class="flex items-center gap-3">
+                      <USkeleton class="h-10 w-10 rounded-full" />
+                      <USkeleton class="h-4 w-24" />
+                    </div>
+                    <USkeleton class="h-8 w-16" />
+                  </div>
+                </UPageCard>
               </div>
+            </div>
+          </div>
+
+          <!-- Season Progress Table Skeleton -->
+          <UPageCard>
+            <div class="space-y-4 p-4">
+              <USkeleton class="h-6 w-48" />
+              <div class="space-y-3">
+                <USkeleton v-for="i in 5" :key="i" class="h-16 w-full" />
+              </div>
+            </div>
+          </UPageCard>
+        </div>
+
+        <!-- Actual Content -->
+        <div v-else class="space-y-6">
+          <!-- Header and Stats Section -->
+          <div class="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+            <!-- Student Header Card - takes 1 column on large screens -->
+            <div class="lg:col-span-4 xl:col-span-1">
+              <AdminStudentDetailsStudentHeaderCard
+                :student="student"
+                @send-email="handleSendEmail"
+                @send-slack-message="handleSendSlackMessage"
+              />
+            </div>
+
+            <!-- Stats Cards - takes 3 columns on large screens -->
+            <div class="lg:col-span-4 xl:col-span-3 h-full w-full">
+              <AdminStudentDetailsStudentStats :student="student" />
+            </div>
           </div>
 
           <!-- Season Progress -->
           <AdminStudentDetailsSeasonProgressTable :season-progress="seasonProgress" />
+        </div>
     </template>
   </UDashboardPanel>
 </template>

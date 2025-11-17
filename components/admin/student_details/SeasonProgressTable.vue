@@ -31,10 +31,6 @@ const UAvatar = resolveComponent('UAvatar')
 const UBadge = resolveComponent('UBadge')
 const UButton = resolveComponent('UButton')
 
-onMounted(() => {
-  console.log('SeasonProgressTable received data:', props.seasonProgress)
-})
-
 // Extract base season name (e.g., "Season 03 Software Engineer" from "Season 03 Software Engineer Cpp")
 function getBaseName(name: string): string {
   // Match pattern like "Season 03 Software Engineer" before the variant
@@ -161,7 +157,6 @@ const data = computed<SeasonProgress[]>(() => {
 })
 
 const expanded = ref({})
-const table = useTemplateRef("table");
 
 const columns: TableColumn<SeasonProgress>[] = [
 {
@@ -255,11 +250,10 @@ const columns: TableColumn<SeasonProgress>[] = [
 
 <template>
   <div class="h-full w-full">
-     <UTable
+    <UTable
     v-model:expanded="expanded"
     :data="data"
     sticky
-    ref="table"
     :columns="columns"
     :ui="{
       base: 'border-separate border-spacing-0',

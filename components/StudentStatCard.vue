@@ -10,7 +10,7 @@ const props = defineProps({
   },
   count: {
     type: Number,
-    required: true,
+    default: null,
   },
   icon: {
     type: String,
@@ -38,6 +38,8 @@ const props = defineProps({
     default: false,
   },
 });
+
+const isLoading = computed(() => props.count === null || props.count === undefined || props.count === 0);
 
 const getBadgeColor = (change, invertColors) => {
   if (change === 0) return "neutral";
@@ -83,27 +85,33 @@ const getIconColorClass = (iconColor) => {
     :class="`${roundedClass} hover:z-1 hover:bg-elevated`"
   >
     <div class="flex items-center gap-2">
-      <span class="text-2xl font-semibold text-highlighted">
-        {{ count }}
-      </span>
+      <template v-if="isLoading">
+        <USkeleton class="h-8 w-16" />
+        <USkeleton v-if="change !== undefined" class="h-5 w-12" />
+      </template>
+      <template v-else>
+        <span class="text-2xl font-semibold text-highlighted">
+          {{ count }}
+        </span>
 
-      <UBadge
-        v-if="change !== undefined"
-        :color="getBadgeColor(change, invertColors)"
-        variant="subtle"
-        class="text-xs mt-1"
-      >
-        <span v-if="change === 0" class="text-muted">
-          0%
-        </span>
-        <span v-else>
-          {{ change > 0 ? '+' : '' }}{{ change }}
-          <span v-if="percentChange !== null">
-            ({{ Math.abs(percentChange).toFixed(1) }}%)
+        <UBadge
+          v-if="change !== undefined"
+          :color="getBadgeColor(change, invertColors)"
+          variant="subtle"
+          class="text-xs mt-1"
+        >
+          <span v-if="change === 0" class="text-muted">
+            0%
           </span>
-          <span v-else> (new)</span>
-        </span>
-      </UBadge>
+          <span v-else>
+            {{ change > 0 ? '+' : '' }}{{ change }}
+            <span v-if="percentChange !== null">
+              ({{ Math.abs(percentChange).toFixed(1) }}%)
+            </span>
+            <span v-else> (new)</span>
+          </span>
+        </UBadge>
+      </template>
     </div>
   </UPageCard>
 </template>

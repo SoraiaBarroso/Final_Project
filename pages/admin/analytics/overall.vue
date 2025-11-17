@@ -55,7 +55,7 @@ onMounted(async () => {
     <div class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px">
         <StudentStatCard
             title="Average Attendance"
-            :count="attendanceOverall !== null ? attendanceOverall + '%' : (attendanceLoading ? '0' : '—')"
+            :count="attendanceOverall"
             icon="i-pajamas:users"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none xl:rounded-l-lg"
@@ -63,7 +63,7 @@ onMounted(async () => {
 
         <StudentStatCard
             title="Workshops"
-            :count="attendanceWorkshop !== null ? attendanceWorkshop + '%' : (attendanceLoading ? '0' : '—')"
+            :count="attendanceWorkshop"
             icon="i-pajamas:terminal"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none"
@@ -71,7 +71,7 @@ onMounted(async () => {
 
         <StudentStatCard
             title="Mentorings"
-            :count="attendanceMentoring !== null ? attendanceMentoring + '%' : (attendanceLoading ? '0' : '—')"
+            :count="attendanceMentoring"
             icon="i-lucide:graduation-cap"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none"
@@ -79,7 +79,7 @@ onMounted(async () => {
 
         <StudentStatCard
             title="Stand-Ups"
-            :count="attendanceStandup !== null ? attendanceStandup + '%' : (attendanceLoading ? '0' : '—')"
+            :count="attendanceStandup"
             icon="i-lucide:scan-face"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg"
