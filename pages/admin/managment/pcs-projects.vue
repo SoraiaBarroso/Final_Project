@@ -1,29 +1,111 @@
 <template>
-  <div class="p-6">
-    <h1 class="text-2xl font-semibold mb-4">Assign Projects to Cohort Season</h1>
+  <div class="mt-6 w-full lg:max-w-xl mx-auto !gap-0">
 
-    <div class="grid grid-cols-1 gap-4 max-w-2xl">
-  <USelect multiple v-model="selectedProgram" :items="programOptions" label="Program(s)" placeholder="Select one or more programs" />
-  <USelect multiple v-model="selectedCohort" :items="cohortOptions" label="Cohort(s)" placeholder="Select one or more cohorts" />
-
-  <!-- Allow selecting multiple PCS entries when multiple programs are chosen -->
-  <USelect multiple v-model="selectedPCS" :items="pcsOptions" label="Program Cohort Season(s)" placeholder="Select one or more cohort seasons" />
-
-  <!-- Allow selecting multiple projects to assign the same start/end dates -->
-  <USelect multiple v-model="selectedProject" :items="projectOptions" label="Project(s)" placeholder="Select one or more projects" />
-
-      <div class="flex gap-2">
-        <UInput v-model="startDate" type="date" label="Start date" />
-        <UInput v-model="endDate" type="date" label="End date" />
+    <div class="flex justify-between">
+      <div>
+        <h1 class="text-highlighted font-medium text-left w-full">Assign Projects to Cohort Season</h1>
+        <p class="text-muted text-[15px] text-pretty mt-1">Assign projects start and end date by program cohort season.</p>
       </div>
-
-      <div class="flex items-center gap-2">
-        <UButton :loading="loading" color="primary" @click="addPCSProject">Add</UButton>
-        <UButton variant="outline" color="neutral" @click="clearForm">Clear</UButton>
-      </div>
-
-      <div v-if="message" :class="messageClass">{{ message }}</div>
     </div>
+
+    <UCard
+      variant="subtle"
+      class="mt-4 flex justify-center"
+      :ui="{
+        body: '!py-4 w-full !px-8'
+      }"
+    >
+      <div class="space-y-6">
+        <UFormField label="Program(s)" name="program" required>
+          <USelect
+            multiple
+            v-model="selectedProgram"
+            :items="programOptions"
+            placeholder="Select one or more programs"
+            class="w-full"
+          />
+        </UFormField>
+
+        <UFormField label="Cohort(s)" name="cohort" required>
+          <USelect
+            multiple
+            v-model="selectedCohort"
+            :items="cohortOptions"
+            placeholder="Select one or more cohorts"
+            :disabled="!selectedProgram || selectedProgram.length === 0 || cohortOptions.length === 0"
+            class="w-full"
+          />
+          <template #hint v-if="selectedProgram && selectedProgram.length > 0 && cohortOptions.length === 0">
+            <span class="text-sm text-gray-500">No cohorts available for selected program(s)</span>
+          </template>
+        </UFormField>
+
+        <UFormField label="Program Cohort Season(s)" name="pcs" required>
+          <USelect
+            multiple
+            v-model="selectedPCS"
+            :items="pcsOptions"
+            placeholder="Select one or more cohort seasons"
+            :disabled="!selectedCohort || selectedCohort.length === 0 || pcsOptions.length === 0"
+            class="w-full"
+          />
+          <template #hint v-if="selectedCohort && selectedCohort.length > 0 && pcsOptions.length === 0">
+            <span class="text-sm text-gray-500">No cohort seasons available for selected cohort(s)</span>
+          </template>
+        </UFormField>
+
+        <UFormField label="Project(s)" name="project" required>
+          <USelect
+            multiple
+            v-model="selectedProject"
+            :items="projectOptions"
+            placeholder="Select one or more projects"
+            class="w-full"
+          />
+        </UFormField>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <UFormField label="Start Date" name="startDate">
+            <UInput
+              v-model="startDate"
+              type="date"
+              class="w-full"
+            />
+          </UFormField>
+
+          <UFormField label="End Date" name="endDate">
+            <UInput
+              v-model="endDate"
+              type="date"
+              class="w-full"
+            />
+          </UFormField>
+        </div>
+
+        <div class="flex gap-3">
+          <UButton
+            color="primary"
+            variant="soft"
+            :loading="loading"
+            :disabled="loading"
+            @click="addPCSProject"
+          >
+            Add Assignment
+          </UButton>
+
+          <UButton
+            color="neutral"
+            variant="outline"
+            @click="clearForm"
+            :disabled="loading"
+          >
+            Reset
+          </UButton>
+        </div>
+
+        <div v-if="message" :class="messageClass">{{ message }}</div>
+      </div>
+    </UCard>
   </div>
 </template>
 

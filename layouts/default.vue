@@ -63,14 +63,19 @@ const mainLinks: NavigationMenuItem[] = [
     children: [
       {
         label: 'Students ',
-        description: 'Overall attendance analytics among all students.',
+        description: 'Manage students information and details.',
         to: '/admin/managment/students',
       },
       {
         label: 'Seasons ',
-        description: 'Cohort-based attendance analytics.',
+        description: 'Manage seasons start and end date.',
         to: '/admin/managment/seasons',
       },
+      {
+        label: 'Projects',
+        description: 'Manage projects start and end date.',
+        to: '/admin/managment/pcs-projects',
+      }
     ],
   },
 {
