@@ -14,7 +14,12 @@ const links = [[ {
   label: 'Seasons',
   icon: 'i-lucide-bell',
   to: '/admin/managment/seasons'
-},],] satisfies NavigationMenuItem[][]
+},
+{
+    label: 'Projects',
+    icon: 'i-lucide-book-open',
+    to: '/admin/managment/pcs-projects'
+}],] satisfies NavigationMenuItem[][]
 </script>
 
 <template>

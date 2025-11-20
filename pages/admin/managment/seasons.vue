@@ -296,13 +296,11 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="mt-6 w-full lg:max-w-xl mx-auto !gap-0">
+  <div class="mt-6 w-full lg:max-w-xl mx-auto gap-0">
     
-    <div class="flex justify-between">
-        <div>
-            <h1 class="text-highlighted font-medium text-left w-full">Season Management</h1>
-            <p class="text-muted text-[15px] text-pretty mt-1">Manage seasons for each cohort and program.</p>
-        </div>
+    <div>
+        <h1 class="text-highlighted font-medium text-left w-full">Season Management</h1>
+        <p class="text-muted text-[15px] text-pretty mt-1">Manage seasons for each cohort and program.</p>
     </div>
         
     <UCard
@@ -385,5 +383,5 @@ onMounted(async () => {
         </div>
         </UForm>
     </UCard>
-</div>
+    </div>
 </template>
