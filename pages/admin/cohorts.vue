@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { ref, onMounted, watch, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useCohorts } from '~/composables/useCohorts'
+import { usePrograms } from '~/composables/usePrograms'
+import { useNotifications } from '~/composables/useNotifications'
+import { useValidation } from '~/composables/useValidation'
 import CohortsTable from '~/components/admin/CohortsTable.vue'
 import * as z from 'zod'
 
@@ -9,14 +12,14 @@ definePageMeta({
     middleware: ["admin"],
 });
 
-const { cohorts, loading, error, fetchCohorts, createCohort, toggleCohortStatus } = useCohorts()
-const isModalOpen = ref(false)
-const toast = useToast()
-const formRef = ref(null)
+// Use composables
+const { cohorts, loading, fetchCohorts, createCohort, toggleCohortStatus } = useCohorts()
+const { programs, programOptions, fetchPrograms } = usePrograms()
+const { showSuccess, showError } = useNotifications()
+const { validateRequiredFields, validateDateRange } = useValidation()
 
-// Fetch programs
-const programs = ref<any[]>([])
-const programItems = ref(<any[]>([]))
+const isModalOpen = ref(false)
+const formRef = ref(null)
 
 const selectedPrograms = ref<string[]>([])
 const programDates = ref<Record<string, { start_date: string; end_date: string }>>({})
@@ -39,30 +42,8 @@ const state = ref<Schema>({
   isActive: true,
 })
 
-async function fetchPrograms() {
-  try {
-    const response = await $fetch('/api/programs')
-    programs.value = response?.data || []
-    programItems.value = programs.value.map((program: any) => ({
-      label: program.name,
-      value: program.id,
-    }))
-  } catch (err) {
-    console.error('Error fetching programs:', err)
-    toast.add({
-      title: 'Error',
-      description: 'Failed to fetch programs',
-      color: 'error',
-      icon: 'i-lucide-alert-circle',
-    })
-  }
-}
-
 onMounted(async () => {
-  await fetchCohorts()
-  await fetchPrograms()
-  console.log('Programs fetched:', programs.value)
-  console.log('Cohorts fetched:', cohorts.value)
+  await Promise.all([fetchCohorts(), fetchPrograms()])
 })
 
 function openModal() {
@@ -86,34 +67,45 @@ function closeModal() {
 async function handleToggleStatus({ cohortName, isActive }: { cohortName: string, isActive: boolean }) {
   try {
     const response = await toggleCohortStatus(cohortName, isActive)
-
-    toast.add({
-      title: 'Success',
-      description: response.message || `Cohort ${isActive ? 'activated' : 'deactivated'} successfully`,
-      color: 'success',
-      icon: 'i-lucide-check-circle',
-    })
+    showSuccess(
+      'Success',
+      response.message || `Cohort ${isActive ? 'activated' : 'deactivated'} successfully`,
+      'i-lucide-check-circle'
+    )
   } catch (err: any) {
-    toast.add({
-      title: 'Error',
-      description: err?.data?.statusMessage || 'Failed to update cohort status',
-      color: 'error',
-      icon: 'i-lucide-x-circle',
-    })
+    showError(
+      'Error',
+      err?.data?.statusMessage || 'Failed to update cohort status',
+      'i-lucide-x-circle'
+    )
   }
 }
 
 const submitForm = async () => {
   try {
-    // basic client-side validation
-    if (!state.value.cohortName) throw new Error('Cohort name is required')
-    if (!state.value.startDate) throw new Error('Start date is required')
-    if (!state.value.endDate) throw new Error('End date is required')
-    if (!selectedPrograms.value || selectedPrograms.value.length === 0) throw new Error('Select at least one program')
+    // Validate required fields
+    const validation = validateRequiredFields(
+      {
+        cohortName: state.value.cohortName,
+        startDate: state.value.startDate,
+        endDate: state.value.endDate,
+        programs: selectedPrograms.value
+      },
+      ['cohortName', 'startDate', 'endDate', 'programs']
+    )
+
+    if (!validation.isValid) {
+      throw new Error(`Missing required fields: ${validation.missingFields.join(', ')}`)
+    }
+
+    // Validate date range
+    const dateValidation = validateDateRange(state.value.startDate, state.value.endDate)
+    if (!dateValidation.isValid) {
+      throw new Error(dateValidation.error)
+    }
 
     // Extract program IDs from the selected objects
     const programsPayload = selectedPrograms.value.map((item: any) => {
-      // Handle both string IDs and objects with value property
       const programId = typeof item === 'string' ? item : item.value
       return {
         program_id: programId,
@@ -129,26 +121,18 @@ const submitForm = async () => {
       programs: programsPayload,
     }
 
-    console.log('Creating cohort with payload:', payload)
-    const response = await createCohort(payload)
+    await createCohort(payload)
+    showSuccess('Cohort created', 'Cohort(s) created successfully', 'i-lucide-check-circle')
 
-    toast.add({
-      title: 'Cohort created',
-      description: 'Cohort(s) created successfully',
-      color: 'success',
-      icon: 'i-lucide-check-circle',
-    })
-
-    // refresh cohorts and close modal
+    // Refresh cohorts and close modal
     await fetchCohorts()
     closeModal()
   } catch (err: any) {
-    toast.add({
-      title: 'Error',
-      description: err?.message || err?.data?.statusMessage || 'Failed to create cohort',
-      color: 'error',
-      icon: 'i-lucide-x-circle',
-    })
+    showError(
+      'Error',
+      err?.message || err?.data?.statusMessage || 'Failed to create cohort',
+      'i-lucide-x-circle'
+    )
     throw err
   }
 }
@@ -214,8 +198,8 @@ const submitForm = async () => {
                 <UFormField label="Programs" description="Select programs for this cohort" required>
                   <USelectMenu
                     v-model="selectedPrograms"
-                    multiple 
-                    :items="programItems"  
+                    multiple
+                    :items="programOptions"
                     placeholder="Select programs"
                     class="w-full"
                   />

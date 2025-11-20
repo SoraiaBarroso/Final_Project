@@ -1,13 +1,22 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, computed } from 'vue'
 import * as z from 'zod'
+import { usePrograms } from '~/composables/usePrograms'
+import { useSeasons } from '~/composables/useSeasons'
+import { useNotifications } from '~/composables/useNotifications'
+import { useValidation } from '~/composables/useValidation'
 
 definePageMeta({
     layout: "default",
     middleware: ["admin"],
 });
 
-const toast = useToast()
+// Use composables
+const { programs, programOptions, fetchPrograms } = usePrograms()
+const { seasons, seasonOptions: baseSeasonOptions, fetchSeasonsByProgram, createSeason } = useSeasons()
+const { showSuccess, showError, showWarning } = useNotifications()
+const { validateDateRange, validateRequiredFields } = useValidation()
+
 const supabase = useSupabaseClient()
 
 // Form state
@@ -16,21 +25,12 @@ const selectedCohort = ref<string | null>(null)
 const selectedSeasons = ref<string[]>([])
 const startDate = ref<string>('')
 const endDate = ref<string>('')
-
-// Data arrays
-const programs = ref<any[]>([])
-const cohorts = ref<any[]>([])
-const seasons = ref<any[]>([])
 const loading = ref(false)
 
-// Dropdown options
-const programOptions = computed(() =>
-    programs.value.map(p => ({
-        label: p.name,
-        value: p.id
-    }))
-)
+// Data arrays
+const cohorts = ref<any[]>([])
 
+// Dropdown options
 const cohortOptions = computed(() =>
     cohorts.value.map(c => ({
         label: c.name,
@@ -38,12 +38,8 @@ const cohortOptions = computed(() =>
     }))
 )
 
-const seasonOptions = computed(() =>
-    seasons.value.map(s => ({
-        label: s.name,
-        value: s.id
-    }))
-)
+// Use the seasons from the composable
+const seasonOptions = computed(() => baseSeasonOptions.value)
 
 // Zod validation schema
 const schema = z.object({
@@ -64,23 +60,6 @@ const state = ref<Schema>({
     endDate: '',
 })
 
-// Fetch programs
-async function fetchPrograms() {
-    try {
-        const response = await $fetch('/api/programs')
-        programs.value = response?.data || []
-        console.log('Programs loaded:', programs.value)
-    } catch (err) {
-        console.error('Error fetching programs:', err)
-        toast.add({
-            title: 'Error',
-            description: 'Failed to fetch programs',
-            color: 'error',
-            icon: 'i-lucide-alert-circle',
-        })
-    }
-}
-
 // Fetch cohorts filtered by program
 async function fetchCohortsByProgram(programId: string) {
     try {
@@ -91,7 +70,6 @@ async function fetchCohortsByProgram(programId: string) {
             .order('name', { ascending: true })
 
         if (error) throw error
-        console.log('Fetched cohorts:', data)
         cohorts.value = data || []
 
         // Reset cohort selection if it's no longer valid
@@ -101,44 +79,18 @@ async function fetchCohortsByProgram(programId: string) {
         }
     } catch (err) {
         console.error('Error fetching cohorts:', err)
-        toast.add({
-            title: 'Error',
-            description: 'Failed to fetch cohorts',
-            color: 'error',
-            icon: 'i-lucide-alert-circle',
-        })
+        showError('Error', 'Failed to fetch cohorts', 'i-lucide-alert-circle')
     }
 }
 
-// Fetch seasons filtered by program
-async function fetchSeasonsByProgram(programId: string) {
-    try {
-        // Get seasons for the selected program through program_cohort_seasons
-        const { data, error } = await supabase
-            .from('program_cohort_seasons')
-            .select(`
-                season_id,
-                seasons (
-                    id,
-                    name
-                )
-            `)
-            .eq('program_id', programId)
-
-        if (error) throw error
-
-        // Extract unique seasons (avoid duplicates)
-        const uniqueSeasons = new Map()
-        data?.forEach((item: any) => {
-            if (item.seasons) {
-                uniqueSeasons.set(item.seasons.id, {
-                    id: item.seasons.id,
-                    name: item.seasons.name
-                })
-            }
-        })
-
-        seasons.value = Array.from(uniqueSeasons.values())
+// Watch for program selection changes
+watch(selectedProgram, async (newProgramId) => {
+    if (newProgramId) {
+        await Promise.all([
+            fetchCohortsByProgram(newProgramId),
+            fetchSeasonsByProgram(newProgramId)
+        ])
+        state.value.program = newProgramId
 
         // Reset season selection if any selected seasons are no longer valid
         if (selectedSeasons.value.length > 0) {
@@ -147,23 +99,6 @@ async function fetchSeasonsByProgram(programId: string) {
             )
             state.value.seasons = selectedSeasons.value
         }
-    } catch (err) {
-        console.error('Error fetching seasons:', err)
-        toast.add({
-            title: 'Error',
-            description: 'Failed to fetch seasons',
-            color: 'error',
-            icon: 'i-lucide-alert-circle',
-        })
-    }
-}
-
-// Watch for program selection changes
-watch(selectedProgram, async (newProgramId) => {
-    if (newProgramId) {
-        await fetchCohortsByProgram(newProgramId)
-        await fetchSeasonsByProgram(newProgramId)
-        state.value.program = newProgramId
     } else {
         cohorts.value = []
         seasons.value = []
@@ -196,39 +131,36 @@ async function onSubmit() {
     loading.value = true
 
     try {
-        // Validate form
-        if (!selectedProgram.value) {
-            throw new Error('Please select a program')
-        }
-        if (!selectedCohort.value) {
-            throw new Error('Please select a cohort')
-        }
-        if (!selectedSeasons.value || selectedSeasons.value.length === 0) {
-            throw new Error('Please select at least one season')
-        }
-        if (!startDate.value) {
-            throw new Error('Please enter a start date')
-        }
-        if (!endDate.value) {
-            throw new Error('Please enter an end date')
+        // Validate required fields
+        const validation = validateRequiredFields(
+            {
+                program: selectedProgram.value,
+                cohort: selectedCohort.value,
+                seasons: selectedSeasons.value,
+                startDate: startDate.value,
+                endDate: endDate.value
+            },
+            ['program', 'cohort', 'seasons', 'startDate', 'endDate']
+        )
+
+        if (!validation.isValid) {
+            throw new Error(`Missing required fields: ${validation.missingFields.join(', ')}`)
         }
 
-        // Validate dates
-        if (new Date(endDate.value) <= new Date(startDate.value)) {
-            throw new Error('End date must be after start date')
+        // Validate date range
+        const dateValidation = validateDateRange(startDate.value, endDate.value)
+        if (!dateValidation.isValid) {
+            throw new Error(dateValidation.error)
         }
 
         // Create an entry for each selected season
         const promises = selectedSeasons.value.map(seasonId =>
-            $fetch('/api/program-cohort-seasons/create', {
-                method: 'POST',
-                body: {
-                    program_id: selectedProgram.value,
-                    cohort_id: selectedCohort.value,
-                    season_id: seasonId,
-                    start_date: startDate.value,
-                    end_date: endDate.value,
-                }
+            createSeason({
+                program_id: selectedProgram.value!,
+                cohort_id: selectedCohort.value!,
+                season_id: seasonId,
+                start_date: startDate.value,
+                end_date: endDate.value,
             })
         )
 
@@ -244,31 +176,28 @@ async function onSubmit() {
         }
 
         if (failures.length > 0) {
-            toast.add({
-                title: 'Partial Success',
-                description: `${successes.length} season(s) created successfully, ${failures.length} failed`,
-                color: 'warning',
-                icon: 'i-lucide-alert-triangle',
-            })
+            showWarning(
+                'Partial Success',
+                `${successes.length} season(s) created successfully, ${failures.length} failed`,
+                'i-lucide-alert-triangle'
+            )
         } else {
-            toast.add({
-                title: 'Success',
-                description: `${successes.length} season(s) created successfully for the cohort and program`,
-                color: 'success',
-                icon: 'i-lucide-check-circle',
-            })
+            showSuccess(
+                'Success',
+                `${successes.length} season(s) created successfully for the cohort and program`,
+                'i-lucide-check-circle'
+            )
         }
 
         // Reset form
         resetForm()
     } catch (err: any) {
         console.error('Error creating program cohort season:', err)
-        toast.add({
-            title: 'Error',
-            description: err?.data?.statusMessage || err?.message || 'Failed to create season',
-            color: 'error',
-            icon: 'i-lucide-alert-circle',
-        })
+        showError(
+            'Error',
+            err?.data?.statusMessage || err?.message || 'Failed to create season',
+            'i-lucide-alert-circle'
+        )
     } finally {
         loading.value = false
     }

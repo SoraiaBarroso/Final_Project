@@ -108,6 +108,26 @@ jobs:
             echo "✅ Successfully updated student_grades.json"
           fi
 
+      - name: Check for student status changes and send notifications
+        if: success()
+        run: |
+          echo "🔍 Checking for student status changes..."
+          RESPONSE=$(curl -s -X POST ${{ secrets.APP_URL }}/api/notifications/monitor-status \
+            -H "Content-Type: application/json" \
+            -w "\nHTTP_STATUS:%{http_code}")
+
+          HTTP_STATUS=$(echo "$RESPONSE" | grep "HTTP_STATUS" | cut -d: -f2)
+          BODY=$(echo "$RESPONSE" | sed '/HTTP_STATUS/d')
+
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Status monitoring completed successfully"
+            echo "$BODY" | jq -r '.changes_detected as $count | if $count > 0 then "📧 Sent notifications for \($count) student(s) with status changes" else "ℹ️ No status changes detected" end'
+          else
+            echo "⚠️ Status monitoring failed with HTTP $HTTP_STATUS"
+            echo "$BODY"
+            # Don't fail the entire workflow, just log the error
+          fi
+
       - name: Clean up sensitive files
         if: always()
         run: |

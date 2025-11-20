@@ -1,11 +1,17 @@
 <script setup lang="ts">
+import * as z from 'zod'
+import type { FormSubmitEvent } from '@nuxt/ui'
+import { useStudents } from '~/composables/useStudents'
+import { useNotifications } from '~/composables/useNotifications'
+
 definePageMeta({
     layout: "default",
     middleware: ["admin"],
 });
 
-import * as z from 'zod'
-import type { FormSubmitEvent } from '@nuxt/ui'
+// Use composables
+const { parseCSV, importStudents, loading } = useStudents()
+const { showSuccess, showError } = useNotifications()
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024 // 2MB
 const ACCEPTED_FILE_TYPES = ['text/csv', 'application/vnd.ms-excel']
@@ -40,73 +46,31 @@ const state = reactive<Partial<Schema>>({
   csvFile: undefined
 })
 
-const toast = useToast()
-const isUploading = ref(false)
 const uploadResult = ref<any>(null)
 
-// Parse CSV file
-function parseCSV(text: string) {
-  const lines = text.split('\n').filter(line => line.trim())
-  const headers = lines[0].split(',').map(h => h.trim())
-
-  const students = []
-  for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(',').map(v => v.trim())
-    students.push({
-      name: values[0] || '',
-      qwasarId: values[1] || null,
-      email: values[2] || '',
-      programme: values[3] || '',
-      cohort: values[4] || ''
-    })
-  }
-
-  return students
-}
-
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  isUploading.value = true
   uploadResult.value = null
 
   try {
     const file = event.data.csvFile
-
-    // Read file content
     const text = await file.text()
-
-    // Parse CSV
     const students = parseCSV(text)
-
-    // Send to API
-    const data = await $fetch('/api/students/import', {
-      method: 'POST',
-      body: { students }
-    })
+    const data = await importStudents(students)
 
     uploadResult.value = data
 
     const message = data.skipped > 0
       ? `Imported ${data.inserted} students, skipped ${data.skipped} duplicates`
       : `Successfully imported ${data.inserted} students`
-    
-      toast.add({
-      title: 'Import Complete',
-      description: message,
-      color: 'success'
-    })
+
+    showSuccess('Import Complete', message)
 
     // Reset form
     state.csvFile = undefined
 
   } catch (error: any) {
     console.error('Upload error:', error)
-    toast.add({
-      title: 'Import Failed',
-      description: error.message || 'An error occurred during import',
-      color: 'error'
-    })
-  } finally {
-    isUploading.value = false
+    showError('Import Failed', error.message || 'An error occurred during import')
   }
 }
 </script>
@@ -148,8 +112,8 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             label="Import Students"
             color="primary"
             variant="soft"
-            :loading="isUploading"
-            :disabled="isUploading || !state.csvFile"
+            :loading="loading"
+            :disabled="loading || !state.csvFile"
         />
       </UForm>
     </UCard>
