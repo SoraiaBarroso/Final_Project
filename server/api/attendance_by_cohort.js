@@ -108,9 +108,9 @@ export default defineEventHandler(async (event) => {
             const sumStandupAttended = info.totals.standups
             const sumMentoringAttended = info.totals.mentoring
 
-            const cohortWorkshopRecordings = expected_workshops
-            const cohortStandupRecordings = expected_standups
-            const cohortMentoringRecordings = expected_mentoring
+            const cohortWorkshopRecordings = expected_workshops * studentsList.length
+            const cohortStandupRecordings = expected_standups * studentsList.length
+            const cohortMentoringRecordings = expected_mentoring * studentsList.length
 
             const workshop_attended_vs_recorded_pct = cohortWorkshopRecordings > 0 ? Math.round((sumWorkshopAttended / cohortWorkshopRecordings) * 10000) / 100 : null
             const standup_attended_vs_recorded_pct = cohortStandupRecordings > 0 ? Math.round((sumStandupAttended / cohortStandupRecordings) * 10000) / 100 : null

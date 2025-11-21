@@ -38,13 +38,13 @@ onMounted(async () => {
     if (m.metric === 'workshop') attendanceWorkshop.value = m.percentage
     if (m.metric === 'mentoring') attendanceMentoring.value = m.percentage
     if (m.metric === 'standup') attendanceStandup.value = m.percentage
-    if (m.metric === 'workshop_recordings') SumWorkshops.value = m.percentage
-    if (m.metric === 'mentoring_recordings') SumMentorings.value = m.percentage
-    if (m.metric === 'standup_recordings') SumStandups.value = m.percentage
-    if (m.metric === 'workshop_attended') SumWorkshopAttended.value = m.percentage
-    if (m.metric === 'mentoring_attended') SumMentoringAttended.value = m.percentage
-    if (m.metric === 'standup_attended') SumStandupAttended.value = m.percentage
-    if (m.metric === 'student_count') studentCount.value = m.percentage
+    if (m.metric === 'workshop_recordings') SumWorkshops.value = m.count
+    if (m.metric === 'mentoring_recordings') SumMentorings.value = m.count
+    if (m.metric === 'standup_recordings') SumStandups.value = m.count
+    if (m.metric === 'workshop_attended') SumWorkshopAttended.value = m.count
+    if (m.metric === 'mentoring_attended') SumMentoringAttended.value = m.count
+    if (m.metric === 'standup_attended') SumStandupAttended.value = m.count
+    if (m.metric === 'student_count') studentCount.value = m.count
   }
   isDataFetched.value = true
   console.log('Fetched attendance metrics:', SumWorkshops, SumMentorings, SumStandups, SumWorkshopAttended, SumMentoringAttended, SumStandupAttended, attendanceOverall, attendanceWorkshop, attendanceMentoring, attendanceStandup)
@@ -55,15 +55,15 @@ onMounted(async () => {
     <div class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px">
         <StudentStatCard
             title="Average Attendance"
-            :count="attendanceOverall"
-            icon="i-pajamas:users"
+            :count="attendanceOverall + '%'"
+            icon="i-pajamas:tachometer"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none xl:rounded-l-lg"
         />
 
         <StudentStatCard
             title="Workshops"
-            :count="attendanceWorkshop"
+            :count="attendanceWorkshop + '%'"
             icon="i-pajamas:terminal"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none"
@@ -71,16 +71,16 @@ onMounted(async () => {
 
         <StudentStatCard
             title="Mentorings"
-            :count="attendanceMentoring"
-            icon="i-lucide:graduation-cap"
+            :count="attendanceMentoring + '%'"
+            icon="i-pajamas:issue-type-enhancement"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none"
         />
 
         <StudentStatCard
             title="Stand-Ups"
-            :count="attendanceStandup"
-            icon="i-lucide:scan-face"
+            :count="attendanceStandup + '%'"
+            icon="i-pajamas:image-comment-light"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg"
         />

@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
                 if (currentStatus === 'At Risk' || currentStatus === 'Monitor') {
                     statusChanges.push({
                         student_id: student.id,
-                        name: student.name,
+                        name: student.first_name,
                         email: student.email,
                         cohort: student.cohort,
                         program: student.program,

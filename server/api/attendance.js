@@ -100,13 +100,13 @@ export default defineEventHandler(async (event) => {
             { metric: 'workshop', percentage: workshopAvg },
             { metric: 'standup', percentage: standupAvg },
             { metric: 'mentoring', percentage: mentoringAvg },
-            { metric: 'workshop_recordings', percentage: sumWorkshopRecordings },
-            { metric: 'standup_recordings', percentage: sumStandupRecordings },
-            { metric: 'mentoring_recordings', percentage: sumMentoringRecordings },
-            { metric: 'workshop_attended', percentage: sumWorkshopAttended },
-            { metric: 'standup_attended', percentage: sumStandupAttended },
-            { metric: 'mentoring_attended', percentage: sumMentoringAttended },
-            { metric: 'student_count', percentage: students.length },
+            { metric: 'workshop_recordings', count: sumWorkshopRecordings },
+            { metric: 'standup_recordings', count: sumStandupRecordings },
+            { metric: 'mentoring_recordings', count: sumMentoringRecordings },
+            { metric: 'workshop_attended', count: sumWorkshopAttended },
+            { metric: 'standup_attended', count: sumStandupAttended },
+            { metric: 'mentoring_attended', count: sumMentoringAttended },
+            { metric: 'student_count', count: students.length },
         ]
 
         return { data: { value: result } }

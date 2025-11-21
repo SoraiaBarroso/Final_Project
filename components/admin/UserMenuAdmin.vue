@@ -20,7 +20,18 @@ const items = computed<DropdownMenuItem[][]>(() => ([[{
 }], [ {
   label: 'Settings',
   icon: 'i-lucide-settings',
-  to: '/admin/settings'
+  to: '/admin/settings',
+  type: 'trigger',
+  children: [{
+    label: 'Admin',
+    icon: 'i-pajamas:users',
+    to: '/admin/settings/admins'
+  }, {
+    label: 'Notifications',
+    icon: 'i-pajamas:group',
+    to: '/admin/settings/notifications'
+  }]
+
 }], [{
   label: 'Appearance',
   icon: 'i-lucide-sun-moon',

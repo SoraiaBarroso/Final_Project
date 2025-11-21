@@ -8,16 +8,16 @@ import type { NavigationMenuItem } from '@nuxt/ui'
 
 const links = [[ {
   label: 'Students',
-  icon: 'i-lucide-users',
+  icon: 'i-pajamas:users',
   to: '/admin/managment/students'
 }, {
   label: 'Seasons',
-  icon: 'i-lucide-bell',
+  icon: 'i-pajamas:issue-type-objective',
   to: '/admin/managment/seasons'
 },
 {
     label: 'Projects',
-    icon: 'i-lucide-book-open',
+    icon: 'i-pajamas:book',
     to: '/admin/managment/pcs-projects'
 }],] satisfies NavigationMenuItem[][]
 </script>

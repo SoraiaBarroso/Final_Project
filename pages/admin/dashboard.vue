@@ -127,7 +127,7 @@
               <StudentStatCard
                 title="MONITOR"
                 :count="data.filter((item) => item.status === 'Monitor').length"
-                icon="i-pajamas:eye"
+                icon="i-pajamas:warning"
                 icon-color="warning"
                 :change="snapshotChange?.monitor_change"
                 :invert-colors="true"

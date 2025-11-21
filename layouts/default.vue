@@ -52,10 +52,10 @@ const mainLinks: NavigationMenuItem[] = [
   },
     {
     label: "Managment",
-    icon: "i-pajamas:chart",
+    icon: "i-pajamas:issue-type-maintenance",
     ariaLabel: "Managment",
     defaultOpen: true,
-    to: '/admin/managment',
+    to: '/admin/managment/students',
     type: 'trigger',
     tooltip: {
       text: "Managment",

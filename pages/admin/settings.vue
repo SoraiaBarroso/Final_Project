@@ -6,23 +6,21 @@ definePageMeta({
 
 import type { NavigationMenuItem } from '@nuxt/ui'
 
-const open = ref(false)
-
 const links = [[ {
-  label: 'Overall',
+  label: 'Admin',
   icon: 'i-pajamas:users',
-  to: '/admin/analytics/overall'
+  to: '/admin/settings/admins'
 }, {
-  label: 'Cohort',
+  label: 'Notifications',
   icon: 'i-pajamas:group',
-  to: '/admin/analytics/cohort'
+  to: '/admin/settings/notifications'
 },],] satisfies NavigationMenuItem[][]
 </script>
 
 <template>
-    <UDashboardPanel id="analytics">
+    <UDashboardPanel id="settings">
         <template #header>
-            <UDashboardNavbar title="Analytics" >
+            <UDashboardNavbar title="Settings" >
                 <template #leading>
                     <UDashboardSidebarCollapse />
                 </template>
