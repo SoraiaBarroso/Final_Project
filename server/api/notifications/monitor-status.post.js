@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
         // Get all students with their current status
         const { data: currentStudents, error: studentsError } = await client
             .from('students')
-            .select('id, name, email, status, cohort, program, previous_status')
+            .select('id, first_name, email, status, cohort, program, previous_status')
 
         if (studentsError) throw studentsError
 
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
                 if (currentStatus === 'At Risk' || currentStatus === 'Monitor') {
                     statusChanges.push({
                         student_id: student.id,
-                        name: student.first_name,
+                        first_name: student.first_name,
                         email: student.email,
                         cohort: student.cohort,
                         program: student.program,
