@@ -68,7 +68,7 @@
     },
     {
       label: "Recordings",
-      icon: "i-solar:videocamera-record-outline",
+      icon: "i-lineicons:notion",
       to: "https://reka-ui.com/",
       target: "_blank",
       tooltip: {

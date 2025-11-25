@@ -97,14 +97,6 @@ const overallStats = computed(() => {
   };
 });
 
-// Helper function to get color based on percentage
-const getAttendanceColor = (percentage) => {
-  if (percentage == null) return 'gray';
-  if (percentage >= 80) return 'green';
-  if (percentage >= 60) return 'yellow';
-  if (percentage >= 40) return 'orange';
-  return 'red';
-};
 
 // Format percentage for display
 const formatPercentage = (value) => {
@@ -157,115 +149,45 @@ const formatPercentage = (value) => {
       <p class="text-muted">No cohorts found</p>
     </div>
 
-    <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <UCard
         v-for="cohort in filteredCohorts"
         :key="cohort.cohort_name"
         :ui="{
-          header: 'border-b border-border',
-          body: 'space-y-4'
+          header: '!border-noner flex justify-between items-center',
+          root: 'w-fit',
+          body: '!px-8'
         }"
       >
         <template #header>
-          <div class="flex items-center justify-between">
-            <div>
-              <h3 class="text-lg font-semibold text-highlighted">{{ cohort.cohort_name }}</h3>
-              <p class="text-sm text-muted mt-1">
-                {{ cohort.students_count }} student{{ cohort.students_count !== 1 ? 's' : '' }}
-              </p>
-            </div>
-            <UBadge
-              :color="getAttendanceColor(cohort.averages?.overall)"
-              variant="subtle"
-              size="lg"
-            >
-              {{ formatPercentage(cohort.averages?.overall) }}
-            </UBadge>
-          </div>
+          <h3 class="text-lg font-semibold text-highlighted">{{ cohort.cohort_name }}</h3>
+          <p class="text-sm text-muted mt-1">
+            {{ cohort.students_count }} student{{ cohort.students_count !== 1 ? 's' : '' }}
+          </p>
         </template>
 
         <!-- Attendance Averages -->
-        <div>
-          <h4 class="text-sm font-medium text-muted mb-3">Attendance Averages</h4>
-          <div class="grid grid-cols-3 gap-3">
-            <div class="text-center">
-              <p class="text-xs text-muted mb-1">Workshop</p>
-              <UBadge
-                :color="getAttendanceColor(cohort.averages?.workshop)"
-                variant="subtle"
-                class="w-full"
-              >
-                {{ formatPercentage(cohort.averages?.workshop) }}
-              </UBadge>
+        <div class="flex gap-18">
+          <ProgressCircle
+              :percentage="cohort.averages?.overall"
+              :size="160"
+              :stroke-width="15"
+          />
+
+          <div class="flex flex-col space-y-4">
+            <div>
+                <p class="text-toned dark:text-muted">Workshops</p>
+                <p class="text-2xl font-bold">{{ cohort.averages?.workshop }}%</p>
             </div>
-            <div class="text-center">
-              <p class="text-xs text-muted mb-1">Standup</p>
-              <UBadge
-                :color="getAttendanceColor(cohort.averages?.standup)"
-                variant="subtle"
-                class="w-full"
-              >
-                {{ formatPercentage(cohort.averages?.standup) }}
-              </UBadge>
+            <div>
+                <p class="text-toned dark:text-muted">Mentoring</p>
+                <p class="text-2xl font-bold">{{ cohort.averages?.mentoring }}%</p>
             </div>
-            <div class="text-center">
-              <p class="text-xs text-muted mb-1">Mentoring</p>
-              <UBadge
-                :color="getAttendanceColor(cohort.averages?.mentoring)"
-                variant="subtle"
-                class="w-full"
-              >
-                {{ formatPercentage(cohort.averages?.mentoring) }}
-              </UBadge>
+            <div>
+                <p class="text-toned dark:text-muted">Standup</p>
+                <p class="text-2xl font-bold">{{ cohort.averages?.standup }}%</p>
             </div>
           </div>
-        </div>
-
-        <!-- Recordings vs Attended -->
-        <div>
-          <h4 class="text-sm font-medium text-muted mb-3">Recordings vs Attended</h4>
-          <div class="space-y-2">
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-muted">Workshops:</span>
-              <span class="font-medium">
-                {{ cohort.attended?.workshop || 0 }} / {{ cohort.recordings?.workshop || 0 }}
-                <span class="text-muted ml-1">
-                  ({{ formatPercentage(cohort.attended_vs_recorded_pct?.workshop) }})
-                </span>
-              </span>
-            </div>
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-muted">Standups:</span>
-              <span class="font-medium">
-                {{ cohort.attended?.standup || 0 }} / {{ cohort.recordings?.standup || 0 }}
-                <span class="text-muted ml-1">
-                  ({{ formatPercentage(cohort.attended_vs_recorded_pct?.standup) }})
-                </span>
-              </span>
-            </div>
-            <div class="flex items-center justify-between text-sm">
-              <span class="text-muted">Mentoring:</span>
-              <span class="font-medium">
-                {{ cohort.attended?.mentoring || 0 }} / {{ cohort.recordings?.mentoring || 0 }}
-                <span class="text-muted ml-1">
-                  ({{ formatPercentage(cohort.attended_vs_recorded_pct?.mentoring) }})
-                </span>
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Cohort IDs (for debugging/reference) -->
-        <div v-if="cohort.cohort_ids && cohort.cohort_ids.length > 1" class="pt-2 border-t border-border">
-          <UTooltip
-            :text="`This cohort spans ${cohort.cohort_ids.length} programs`"
-            :delay-duration="0"
-          >
-            <div class="flex items-center gap-2 text-xs text-muted">
-              <UIcon name="i-lucide:info" class="size-4" />
-              <span>{{ cohort.cohort_ids.length }} program{{ cohort.cohort_ids.length !== 1 ? 's' : '' }}</span>
-            </div>
-          </UTooltip>
         </div>
       </UCard>
     </div>
