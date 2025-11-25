@@ -6,6 +6,7 @@ export default defineEventHandler(async (event) => {
   try {
     const client = await serverSupabaseClient(event)
 
+    // Get the two most recent snapshots
     const { data, error } = await client
       .from('progress_snapshots')
       .select('*')
@@ -34,6 +35,7 @@ export default defineEventHandler(async (event) => {
     }
 
     const [latest, previous] = data
+    const latestDate = new Date(latest.snapshot_date)
 
     function pctChange(curr, prev) {
       if (!prev || prev === 0) return curr > 0 ? 100 : 0
@@ -42,6 +44,8 @@ export default defineEventHandler(async (event) => {
 
     const result = {
       snapshot_date: latest.snapshot_date,
+      comparison_date: previous.snapshot_date,
+      days_compared: Math.round((latestDate - new Date(previous.snapshot_date)) / (1000 * 60 * 60 * 24)),
       total_change: latest.total_students - previous.total_students,
       total_pct_change: pctChange(latest.total_students, previous.total_students),
       on_track_change: latest.on_track - previous.on_track,

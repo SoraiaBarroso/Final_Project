@@ -18,14 +18,30 @@ class ProgressAnalytics:
         self.supabase = supabase_client
     
     def create_progress_snapshot(self):
-        """Create a snapshot of current student progress statistics"""
+        """Create a snapshot of current student progress statistics (max once per week)"""
         print_step("PROGRESS SNAPSHOT", "Creating analytics snapshot of student progress")
-        
+
         try:
+            # Check if a snapshot was already created this week
+            latest_snapshot_response = self.supabase.table('progress_snapshots') \
+                .select('snapshot_date') \
+                .order('snapshot_date', desc=True) \
+                .limit(1) \
+                .execute()
+
+            if latest_snapshot_response.data:
+                latest_date = datetime.fromisoformat(latest_snapshot_response.data[0]['snapshot_date'].replace('Z', '+00:00'))
+                days_since_last = (datetime.now(latest_date.tzinfo) - latest_date).days
+
+                if days_since_last < 7:
+                    print(f"ℹ️  Snapshot already created {days_since_last} day(s) ago. Skipping.")
+                    print(f"   Next snapshot will be created in {7 - days_since_last} day(s).")
+                    return True  # Not an error, just skipping
+
             # Query student table and count statuses
             students_response = self.supabase.table('students').select('status').execute()
             students = students_response.data
-            
+
             if not students:
                 print("No student data found")
                 return False
