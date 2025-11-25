@@ -149,14 +149,13 @@ const formatPercentage = (value) => {
       <p class="text-muted">No cohorts found</p>
     </div>
 
-    <div v-else class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <UCard
         v-for="cohort in filteredCohorts"
         :key="cohort.cohort_name"
         :ui="{
           header: '!border-noner flex justify-between items-center',
-          root: 'w-fit',
-          body: '!px-8'
+          body: '!px-6',
         }"
       >
         <template #header>
@@ -167,13 +166,12 @@ const formatPercentage = (value) => {
         </template>
 
         <!-- Attendance Averages -->
-        <div class="flex gap-18">
+        <div class="flex  gap-14">
           <ProgressCircle
               :percentage="cohort.averages?.overall"
               :size="160"
               :stroke-width="15"
           />
-
           <div class="flex flex-col space-y-4">
             <div>
                 <p class="text-toned dark:text-muted">Workshops</p>
@@ -183,10 +181,11 @@ const formatPercentage = (value) => {
                 <p class="text-toned dark:text-muted">Mentoring</p>
                 <p class="text-2xl font-bold">{{ cohort.averages?.mentoring }}%</p>
             </div>
+            
+          </div>
             <div>
-                <p class="text-toned dark:text-muted">Standup</p>
-                <p class="text-2xl font-bold">{{ cohort.averages?.standup }}%</p>
-            </div>
+              <p class="text-toned dark:text-muted">Standup</p>
+              <p class="text-2xl font-bold">{{ cohort.averages?.standup }}%</p>
           </div>
         </div>
       </UCard>
