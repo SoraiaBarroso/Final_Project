@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
         // Get all students with their current status
         const { data: currentStudents, error: studentsError } = await client
             .from('students')
-            .select('id, first_name, email, status, cohort, program, previous_status')
+            .select('id, first_name, email, status, cohort_id, program_id, previous_status')
 
         if (studentsError) throw studentsError
 
@@ -26,8 +26,8 @@ export default defineEventHandler(async (event) => {
                         student_id: student.id,
                         first_name: student.first_name,
                         email: student.email,
-                        cohort: student.cohort,
-                        program: student.program,
+                        cohort_id: student.cohort_id,
+                        program_id: student.program_id,
                         previous_status: previousStatus,
                         current_status: currentStatus,
                         changed_at: new Date().toISOString()
