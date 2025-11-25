@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "@nuxt/fonts",
     "@nuxt/image",
+    "nuxt-nodemailer",
   ],
   plugins: [],
   css: ["~/assets/css/main.css"],
@@ -30,6 +31,17 @@ export default defineNuxtConfig({
       include: undefined, // Routes to include in the redirect. ['/admin(/*)?'] will enable the redirect only for the admin page and all sub-pages.
       exclude: ["/"],
       cookieRedirect: false,
+    },
+  },
+
+  nodemailer: {
+    from: process.env.NUXT_NODEMAILER_FROM || '"Student Management System" <notifications@yourdomain.com>',
+    host: process.env.NUXT_NODEMAILER_HOST || 'smtp.gmail.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.NUXT_NODEMAILER_AUTH_USER || '',
+      pass: process.env.NUXT_NODEMAILER_AUTH_PASS || '',
     },
   },
 

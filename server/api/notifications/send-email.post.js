@@ -126,34 +126,25 @@ This is an automated notification from the Student Management System.
 Generated on: ${new Date().toLocaleString()}
         `
 
-        // Here you would integrate with your email service (e.g., SendGrid, AWS SES, Resend, etc.)
-        // For now, we'll log it and prepare the payload
+        // Send email using nuxt-nodemailer
+        const { sendMail } = useNodeMailer()
+
         console.log('Sending email to:', recipients)
         console.log('Changes:', changes.length)
 
-        // Example using Resend (uncomment and install 'resend' package if you want to use it):
-        /*
-        const config = useRuntimeConfig()
-        const resend = new Resend(config.resendApiKey)
-
-        const { data, error } = await resend.emails.send({
-            from: 'Student System <notifications@yourdomain.com>',
-            to: recipients,
+        const result = await sendMail({
+            to: recipients.join(', '),
             subject: `🚨 Student Status Alert - ${changes.length} student(s) need attention`,
             html: htmlContent,
             text: textContent
         })
 
-        if (error) throw error
-        */
-
         return {
             success: true,
-            message: `Email notification prepared for ${recipients.length} recipient(s)`,
+            message: `Email notification sent successfully to ${recipients.length} recipient(s)`,
             recipients,
             changes_count: changes.length,
-            // Uncomment when using real email service:
-            // email_id: data?.id
+            messageId: result.messageId
         }
 
     } catch (err) {
