@@ -172,7 +172,7 @@ const formatPercentage = (value) => {
               :size="160"
               :stroke-width="15"
           />
-          <div class="flex flex-col space-y-4">
+          <div class="flex flex-col space-y-4 mt-2">
             <div>
                 <p class="text-toned dark:text-muted">Workshops</p>
                 <p class="text-2xl font-bold">{{ cohort.averages?.workshop }}%</p>
@@ -183,7 +183,7 @@ const formatPercentage = (value) => {
             </div>
             
           </div>
-            <div>
+          <div class="mt-2">
               <p class="text-toned dark:text-muted">Standup</p>
               <p class="text-2xl font-bold">{{ cohort.averages?.standup }}%</p>
           </div>

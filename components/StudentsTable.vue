@@ -21,6 +21,36 @@ const state = ref<Schema>({
   points: 0,
 })
 
+const changeStatus = async (studentId: number, newStatus: string) => {
+  try {
+    const { error } = await supabase
+      .from('students')
+      .update({ account_status: newStatus })
+      .eq('id', studentId)
+
+    if (error) throw error
+
+    toast.add({
+      title: 'Success',
+      description: `Account status updated to ${newStatus}`,
+      color: 'success'
+    })
+
+    // Close modal
+    openModal.value = false
+
+    // Emit event to refresh the table data
+    emit('refreshData')
+  } catch (error) {
+    console.error('Error changing account status:', error)
+    toast.add({
+      title: 'Error',
+      description: 'Failed to change account status. Please try again.',
+      color: 'error'
+    })
+  }
+}
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   if (!selectedStudentId.value) {
     toast.add({
@@ -112,9 +142,13 @@ const programFilter = ref("");
 const cohortFilter = ref("");
 const cohortItems = ref([]);
 const open = ref(false)
+const openModal = ref(false)
 const selectedStudentId = ref(null)
 const selectedStudentName = ref('')
 const supabase = useSupabaseClient()
+
+const items = ref(['Active', 'Inactive', 'Frozen', 'Graduated'])
+const value = ref('Backlog')
 
 watch(
   () => props.data,
@@ -250,13 +284,18 @@ const columns = [
     },
   },
   {
-    accessorKey: "isActive",
-    header: "Is Active",
+    accessorKey: "accountStatus",
+    header: "Account Status",
     cell: ({ row }) => {
-      const isActive = row.getValue("isActive");
-      return h(UBadge, { variant: "subtle", color: isActive ? "success" : "neutral" }, () =>
-        isActive ? "Active" : "Inactive"
-      );
+      const accountStatus = row.getValue("accountStatus");
+      const color = {
+        "Active": "success",
+        "Inactive": "neutral",
+        "Frozen": "info",
+        "Graduated": "success"
+      }[accountStatus] || "neutral";
+
+      return h(UBadge, { variant: "subtle", color }, () => accountStatus);
     },
   },
   {
@@ -289,8 +328,6 @@ const columns = [
 ];
 
 function getRowItems(row: any) {
-  const isActive = row.original.isActive;
-
   return [
     {
       type: "label",
@@ -300,9 +337,12 @@ function getRowItems(row: any) {
       type: "separator",
     },
     {
-      label: isActive ? "Set Inactive" : "Set Active",
+      label: "Change Status",
       onSelect: () => {
-        emit("toggleActiveStatus", row.original.id, isActive);
+        selectedStudentId.value = row.original.id
+        selectedStudentName.value = row.original.name
+        value.value = row.original.accountStatus
+        openModal.value = true
       },
     },
     {
@@ -329,6 +369,21 @@ const onSelect = async (selectedRows: any[]) => {
 
 <template>
   <div class="flex h-full w-full flex-col">
+
+    <UModal v-model:open="openModal" :title="`Change Account Status for ${selectedStudentName}`" :ui="{ footer: 'justify-end' }">
+      <template #body>
+        <USelectMenu v-model="value" :items="items" class="w-full" />
+      </template>  
+       <template #footer="{ close }">
+          <UButton label="Cancel" color="neutral" variant="outline" @click="close" />
+          <UButton
+            label="Change Status"
+            color="primary"
+            @click="changeStatus(selectedStudentId, value);"
+          />
+        </template>
+    </UModal>
+
     <UModal v-model:open="open" :title="`Add Points to ${selectedStudentName}`" :ui="{ footer: 'justify-end' }">
         <template #body>
             <UForm :schema="schema" :state="state" class="w-full space-y-4" @submit="onSubmit">

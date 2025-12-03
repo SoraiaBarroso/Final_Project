@@ -27,25 +27,6 @@
     }
   };
 
-  const toggleStudentActiveStatus = async (studentId, currentStatus) => {
-    try {
-      const { error } = await supabase
-        .from("students")
-        .update({ is_active: !currentStatus })
-        .eq("id", studentId);
-
-      if (error) {
-        console.error("Error updating student status:", error);
-        return;
-      }
-
-      // Refresh the students list after update
-      await fetchStudents();
-    } catch (err) {
-      console.error("Failed to toggle student status:", err);
-    }
-  };
-
   const fetchStudents = async () => {
     const { data: students, error } = await supabase.from("students").select(`
       id,
@@ -53,7 +34,7 @@
       last_name,
       email,
       status,
-      is_active,
+      account_status,
       username,
       cohorts(name),
       programs(name),
@@ -77,7 +58,7 @@
         program: s.programs?.name || "",
         username: s.username || "",
         cohort: s.cohorts?.name || "",
-        isActive: s.is_active,
+        accountStatus: s.account_status || 'Active',
         points_assigned: s.points_assigned || 0,
         profileImgUrl: s.profile_image_url || "",
       }));
@@ -151,7 +132,7 @@
             <StudentsTable
               :data="data"
               :loading="loading"
-              @toggle-active-status="toggleStudentActiveStatus"
+              @refresh-data="fetchStudents"
             />
         </template>
     </UDashboardPanel>
