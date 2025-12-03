@@ -1,5 +1,5 @@
 <script setup>
-  import { onMounted } from "vue";
+  import { onMounted, computed } from "vue";
 
   // Page that cannot be accessed without authentication and has logic to log-out a user.
   definePageMeta({
@@ -12,6 +12,13 @@
   const data = ref([]);
   const snapshotChange = ref(null);
   const loading = ref(true);
+
+  // Filter to only include active students for stats
+  const activeStudents = computed(() => {
+    return data.value.filter(student =>
+      student.accountStatus === 'Active'
+    );
+  });
   
   const getSnapshotChange = async () => {
     try {
@@ -88,7 +95,7 @@
             <UPageGrid class="lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-px">
                 <StudentStatCard
                 title="STUDENTS"
-                :count="data.length"
+                :count="activeStudents.length"
                 icon="i-pajamas:users"
                 icon-color="info"
                 :change="snapshotChange?.total_change"
@@ -97,7 +104,7 @@
 
               <StudentStatCard
                 title="ON TRACK"
-                :count="data.filter((item) => item.status === 'On Track').length"
+                :count="activeStudents.filter((item) => item.status === 'On Track').length"
                 icon="i-pajamas:partner-verified"
                 icon-color="success"
                 :change="snapshotChange?.on_track_change"
@@ -107,7 +114,7 @@
 
               <StudentStatCard
                 title="MONITOR"
-                :count="data.filter((item) => item.status === 'Monitor').length"
+                :count="activeStudents.filter((item) => item.status === 'Monitor').length"
                 icon="i-pajamas:warning"
                 icon-color="warning"
                 :change="snapshotChange?.monitor_change"
@@ -118,7 +125,7 @@
 
               <StudentStatCard
                 title="AT RISK"
-                :count="data.filter((item) => item.status === 'At Risk').length"
+                :count="activeStudents.filter((item) => item.status === 'At Risk').length"
                 icon="i-pajamas:status-alert"
                 icon-color="error"
                 :invert-colors="true"
