@@ -380,7 +380,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAA1UlEQVR4nO3aPQ6CQBAGUMXGziPgTfRoHE1vgjfA0sKfhiHBFWMIhQtvyi/zyG45OxTPEdUUqzFFURRFUQtTl3Vbx8G+fksm96IoiqIoiqIoiqJmrM4xqUZwi2CfqjIejavBr++i5TTVCSmKoiiKoiiKoqiFq27JWkUcwTaC65c97KEdVB8RbGJ0rac6IUVRFEVRFEVRFEW9qdjDdundHpaiKIqiKIqiKIr6K5XuYZP6ZQ+bVj3VCSmKoiiKoiiKoiiKoihqrqrs/QjysfotmdyLyka9AHL7owUzxBfHAAAAAElFTkSuQmCC",
-    "last_login": "December  6, 2025  6:56pm",
+    "last_login": "December  7, 2025  5:13pm",
     "ongoing_projects": [],
     "completed_projects": [
       "Python Quest02",
@@ -427,7 +427,7 @@
       "My Roman Numerals Converter"
     ],
     "exercises_completed": "81",
-    "points": "5490",
+    "points": "5525",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -438,13 +438,14 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAApUlEQVR4nO3csQ5AMBAAUCw+g0/x6fUp/sBqYuAGEQtCGu/Gu3tpb2zTtJovxFgVV4KiKIqifqaGcovutG/fkslcFEVRFEVRFEVRFLWqJi6N02nfviWTuSiKoiiKoiiKoiiKoiiKoiiKoiiKou4rb4kpiqIoiqIoiqKo7FQfJ9VITJFoH1+LoiiKoiiKoiiKol5TzeE3xSjXh0r6ZIcURVEU9ZlaAH/GcwW9j8VuAAAAAElFTkSuQmCC",
-    "last_login": "December  2, 2025  5:25pm",
+    "last_login": "December  7, 2025  9:26pm",
     "ongoing_projects": [
+      "My Blockchain",
       "My Ls",
-      "My Readline",
       "My Tar"
     ],
     "completed_projects": [
+      "Quest08",
       "Quest07",
       "Python Quest06",
       "Quest05",
@@ -467,19 +468,19 @@
       "My Christmas Tree",
       "Quest04",
       "Python Quest05",
+      "My Readline",
       "My Imdb Api",
       "Quest09",
       "Quest00",
-      "My Ls",
-      "Quest08"
+      "My Ls"
     ],
     "exercises_completed": "95",
-    "points": "180",
+    "points": "270",
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Data": "98%",
       "Season 01 Arc 01": "98%",
-      "Season 01 Arc 02": "49%"
+      "Season 01 Arc 02": "64%"
     },
     "name": "hopp_h"
   },
@@ -564,7 +565,7 @@
     "name": "larsen-d_n"
   },
   {
-    "last_modified": "2025-12-07 06:20:28",
+    "last_modified": "2025-12-08 06:25:59",
     "total_students": 14
   }
 ]
