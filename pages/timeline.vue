@@ -39,13 +39,13 @@
             </UFieldGroup>
             <h2 class="text-2xl font-semibold">{{ formatMonthYear(currentDate) }}</h2>
             <USelect
-                size="xl"
+                size="lg"
                 v-model="selectedSeasonId"
                 :items="studentSeasons"
                 :ui="{
                   trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
                 }"
-                class="absolute right-0"
+                class="absolute right-0 !w-90"
                 placeholder="Filter by Seasons"
             />
         </div>
@@ -65,7 +65,7 @@
                   height: '92%',
                   width: '2px',
                 }"
-                class="pointer-events-none absolute bottom-0 bg-blue-500/80"
+                class="pointer-events-none absolute bottom-0 bg-primary-500"
               ></div>
               <!-- Column borders background -->
               <div class="pointer-events-none absolute inset-0 flex">
@@ -87,7 +87,7 @@
                   >
                     <div
                       :class="[
-                        isToday(day) ? 'bg-blue-600/70 font-semibold text-white' : '',
+                        isToday(day) ? 'bg-primary-500 font-semibold text-white' : '',
                         !isToday(day) && !isWeekend(day) ? 'bg-white' : '',
                       ]"
                       class="flex flex-row-reverse items-center justify-center gap-1.5 rounded-md px-1 py-1"

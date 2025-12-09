@@ -25,17 +25,6 @@
       tooltip: {
         text: "Calendar",
       },
-      children: [
-        {
-          label: "My Calendar",
-          to: "/students/calendarNuxtUI",
-          icon: "i-lucide-calendar-check",
-          tooltip: {
-            text: "My Calendar",
-          },
-        },
-       
-      ],
     },
     {
       label: "Timeline",
