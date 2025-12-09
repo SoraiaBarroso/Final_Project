@@ -51,7 +51,7 @@
         </div>
 
         <!-- Scrollable timeline container -->
-        <div class="relative h-full overflow-hidden rounded-lg border border-slate-200 bg-white">
+        <div class="relative h-full overflow-hidden rounded-lg border border-neutral-200 bg-white dark:border-neutral-700 dark:bg-neutral-900">
           <!-- Timeline wrapper with horizontal scroll -->
           <div ref="timelineContainer" class="timeline h-full overflow-x-auto overflow-y-hidden">
             <div
@@ -87,18 +87,17 @@
                   >
                     <div
                       :class="[
-                        isToday(day) ? 'bg-primary-500 font-semibold text-white' : '',
-                        !isToday(day) && !isWeekend(day) ? 'bg-white' : '',
+                        isToday(day) ? 'bg-primary-100 font-semibold text-primary-600' : 'font-semibold text-primary-600',
+                        !isToday(day) && !isWeekend(day) ? 'bg-white dark:bg-transparent' : '',
                       ]"
                       class="flex flex-row-reverse items-center justify-center gap-1.5 rounded-md px-1 py-1"
                     >
                       <div
-                        :class="{ 'text-white': isToday(day), 'text-gray-400': !isToday(day) }"
-                        class="text-sm uppercase"
+                        class="text-sm uppercase text-primary-400"
                       >
                         {{ getDayOfWeek(day) }}
                       </div>
-                      <div class="text-sm font-semibold">{{ day }}</div>
+                      <div class="text-sm font-semibold" :class="{ 'text-gray-900 dark:text-primary-800': !isToday(day) }">{{ day }}</div>
                     </div>
                   </div>
                 </div>
@@ -110,7 +109,7 @@
                   <div
                     v-for="day in daysInMonth"
                     :key="`bg-${day}`"
-                    class="border-r border-slate-200"
+                    class="border-r border-neutral-200 dark:border-neutral-700"
                     :style="{ width: columnWidth + 'px', height: '100%' }"
                   >
                     <svg height="100%" width="100%" v-if="isWeekend(day)">
@@ -122,13 +121,28 @@
                           viewBox="0 0 40 40"
                           patternUnits="userSpaceOnUse"
                           patternTransform="rotate(135)"
+                          class="dark:hidden"
                         >
-                          <rect width="100%" height="100%" fill="rgba(255, 255, 255,1)" />
+                          <rect width="100%" height="100%" class="fill-white dark:fill-[#18181b]" />
                           <path d="M-10 30h60v1h-60zM-10-10h60v1h-60" fill="rgba(203, 213, 224,1)" />
                           <path d="M-10 10h60v1h-60zM-10-30h60v1h-60z" fill="rgba(203, 213, 224,1)" />
                         </pattern>
+                        <pattern
+                          id="doodad-dark"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 40 40"
+                          patternUnits="userSpaceOnUse"
+                          patternTransform="rotate(135)"
+                          class="hidden dark:block"
+                        >
+                          <rect width="100%" height="100%" class="fill-white dark:fill-[#18181b]" />
+                          <path d="M-10 30h60v1h-60zM-10-10h60v1h-60" fill="rgba(51, 65, 85,1)" />
+                          <path d="M-10 10h60v1h-60zM-10-30h60v1h-60z" fill="rgba(51, 65, 85,1)" />
+                        </pattern>
                       </defs>
-                      <rect fill="url(#doodad)" height="200%" width="200%" />
+                      <rect fill="url(#doodad)" height="200%" width="200%" class="dark:hidden" />
+                      <rect fill="url(#doodad-dark)" height="200%" width="200%" class="hidden dark:block" />
                     </svg>
                   </div>
                 </div>
@@ -136,13 +150,13 @@
                 <div
                   v-for="item in projectItems"
                   :key="item.id"
-                  class="absolute flex h-14 cursor-pointer items-center justify-between bg-white px-3 py-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                  class="absolute flex h-14 cursor-pointer items-center justify-between bg-white dark:bg-neutral-800 px-3 py-2 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
                   :class="[
                     item.crossMonth
-                      ? 'rounded-l-lg border-r-2 border-dashed border-gray-300'
+                      ? 'rounded-l-lg border-r-2 border-dashed border-gray-300 dark:border-gray-600'
                       : 'rounded-lg',
                     item.title?.includes('(cont.)')
-                      ? 'rounded-l-none rounded-r-lg border-l-2 border-dashed border-gray-300'
+                      ? 'rounded-l-none rounded-r-lg border-l-2 border-dashed border-gray-300 dark:border-gray-600'
                       : '',
                   ]"
                   :style="getItemStyle(item)"
@@ -155,7 +169,7 @@
                     ></div>
                     <div class="flex w-full min-w-0 items-center justify-between">
                       <span
-                        class="overflow-hidden text-sm font-medium text-ellipsis whitespace-nowrap text-gray-700"
+                        class="overflow-hidden text-sm font-medium text-ellipsis whitespace-nowrap text-gray-700 dark:text-white"
                       >
                         {{ item.title }}
                       </span>
@@ -1073,15 +1087,6 @@
     } else {
       loadProjectsForCurrentMonth();
     }
-  };
-
-  // Method to add new project items (for future use)
-  const addProjectItem = (item: Omit<ProjectItem, "id">) => {
-    const newItem: ProjectItem = {
-      ...item,
-      id: Date.now().toString(),
-    };
-    projectItems.value.push(newItem);
   };
 
   const supabase = useSupabaseClient();

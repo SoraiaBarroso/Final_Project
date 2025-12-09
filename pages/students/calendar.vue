@@ -346,7 +346,7 @@ watch([currentMonth, currentYear], async () => {
                   :class="[
                     'text-sm mr-auto w-6 h-6 flex justify-center items-center rounded-full z-10 relative',
                     {
-                      'text-primary-600 font-bold bg-primary-200': isToday(dayInfo.date),
+                      'text-primary-600 font-bold bg-primary-500': isToday(dayInfo.date),
                       'text-gray-400': !dayInfo.isCurrentMonth,
                       'text-muted': dayInfo.isCurrentMonth && !isToday(dayInfo.date),
                     }
