@@ -58,7 +58,7 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/migkas_s/vrac/profile_picture_migkas_s_16093_profile_picture_2025_03_29_18_07.jpg",
-    "last_login": "November 14, 2025  1:00pm",
+    "last_login": "December  8, 2025  1:37pm",
     "ongoing_projects": [
       "My Mastermind",
       "My Printf"
@@ -102,7 +102,7 @@
       "Python Quest02"
     ],
     "exercises_completed": "81",
-    "points": "985",
+    "points": "1000",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -200,8 +200,9 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/tofan_c/vrac/profile_picture_tofan_c_16063_profile_picture_2025_03_25_11_45.jpg",
-    "last_login": "December  3, 2025  7:59pm",
+    "last_login": "December  8, 2025  7:15pm",
     "ongoing_projects": [
+      "My Blockchain",
       "My Ls",
       "Quest09"
     ],
@@ -232,9 +233,12 @@
       "My Cat",
       "Js Quest03",
       "My Moving Box Realtime",
+      "Python Quest02",
       "Quest05",
+      "Python Quest01",
       "Js Quest06",
       "Js Quest02",
+      "Python Quest03",
       "My Printf",
       "My First Backend",
       "Quest04",
@@ -243,11 +247,11 @@
       "Quest00",
       "Quest05"
     ],
-    "exercises_completed": "97",
-    "points": "90",
+    "exercises_completed": "98",
+    "points": "30",
     "season_progress": {
       "Onboarding": "97%",
-      "Preseason Data": "54%",
+      "Preseason Data": "61%",
       "Preseason Web": "100%",
       "Season 01 Arc 01": "100%",
       "Season 01 Arc 02": "69%"
@@ -380,7 +384,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAA1UlEQVR4nO3aPQ6CQBAGUMXGziPgTfRoHE1vgjfA0sKfhiHBFWMIhQtvyi/zyG45OxTPEdUUqzFFURRFUQtTl3Vbx8G+fksm96IoiqIoiqIoiqJmrM4xqUZwi2CfqjIejavBr++i5TTVCSmKoiiKoiiKoqiFq27JWkUcwTaC65c97KEdVB8RbGJ0rac6IUVRFEVRFEVRFEW9qdjDdundHpaiKIqiKIqiKIr6K5XuYZP6ZQ+bVj3VCSmKoiiKoiiKoiiKoihqrqrs/QjysfotmdyLyka9AHL7owUzxBfHAAAAAElFTkSuQmCC",
-    "last_login": "December  7, 2025  5:13pm",
+    "last_login": "December  8, 2025  8:36pm",
     "ongoing_projects": [],
     "completed_projects": [
       "Python Quest02",
@@ -427,7 +431,7 @@
       "My Roman Numerals Converter"
     ],
     "exercises_completed": "81",
-    "points": "5525",
+    "points": "5560",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -528,7 +532,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVymc3w8PCneQbOAAAA2UlEQVR4nO3cQQ7BUBAGYC0JO0fgJtyMo3ETbmBJgtq8aUJCmrZvUf1mOZmv87r8m5eWVYu6lJM2RVEURVEjU+ci1TZ1q2jMYu59ZCDvRVEURVEURVEURf2xOqagWncfEV3XTXbFV+RrvhNSFEVRFEVRFEVR1EdFdF00UZsUXZ/RmEaYPeU7IUVRFEVRFEVRFEV1UEVE13v+XRRFURRFURRFUdTYVdwlLqJx+3GXeBWRdf/16csYOfR1QoqiKIqiKIqiKIrqonaRVKMxr3+v2PsuiqIoihqGegEiiIUFF5NBtgAAAABJRU5ErkJggg==",
-    "last_login": "December  1, 2025  8:13pm",
+    "last_login": "December  8, 2025  7:10pm",
     "ongoing_projects": [
       "My Printf"
     ],
@@ -556,7 +560,7 @@
       "Python Quest06"
     ],
     "exercises_completed": "77",
-    "points": "1045",
+    "points": "1080",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -565,7 +569,7 @@
     "name": "larsen-d_n"
   },
   {
-    "last_modified": "2025-12-08 06:25:59",
+    "last_modified": "2025-12-09 06:23:34",
     "total_students": 14
   }
 ]
