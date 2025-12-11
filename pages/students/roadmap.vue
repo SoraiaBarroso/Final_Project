@@ -45,7 +45,7 @@ const formatDate = (dateString) => {
 const fetchSeasonData = async () => {
   try {
     loading.value = true;
-    
+
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -59,6 +59,23 @@ const fetchSeasonData = async () => {
 
     if (studentError) throw studentError;
     console.log('Student Data:', studentData);
+
+    // Get student season progress first to determine which Season 03 track they're in
+    const { data: progressData, error: progressError } = await supabase
+      .from('student_season_progress')
+      .select('*, seasons(id, name)')
+      .eq('student_id', studentData.id);
+
+    if (progressError) throw progressError;
+    console.log('Progress Data:', progressData);
+
+    // Find which Season 03 specialization the student has progress in
+    const season03Progress = progressData.find(p =>
+      p.seasons?.name?.match(/^Season 03 Software Engineer/)
+    );
+    const studentSeason03Track = season03Progress?.seasons?.name;
+    console.log('Student Season 03 Track:', studentSeason03Track);
+
     // Get program cohort seasons
     const { data: cohortSeasons, error: seasonsError } = await supabase
       .from('program_cohort_seasons')
@@ -72,18 +89,24 @@ const fetchSeasonData = async () => {
       .order('start_date', { ascending: true });
 
     if (seasonsError) throw seasonsError;
-    
-    // Get student season progress
-    const { data: progressData, error: progressError } = await supabase
-      .from('student_season_progress')
-      .select('*')
-      .eq('student_id', studentData.id);
+    console.log('Cohort Seasons:', cohortSeasons);
 
-    if (progressError) throw progressError;
-    console.log('Progress Data:', progressData);
+    // Filter and merge data
+    // Filter out Season 03 tracks that don't match the student's track
+    const filteredSeasons = cohortSeasons.filter((season) => {
+      const seasonName = season.seasons?.name;
+      const isSeason03SE = seasonName?.match(/^Season 03 Software Engineer/);
 
-    // Merge data
-    seasons.value = cohortSeasons.map((season) => {
+      // If it's a Season 03 SE track, only include it if it matches the student's track
+      if (isSeason03SE) {
+        return studentSeason03Track && seasonName === studentSeason03Track;
+      }
+
+      // Include all other seasons
+      return true;
+    });
+
+    seasons.value = filteredSeasons.map((season) => {
       const progress = progressData.find(p => p.season_id === season.season_id);
       return {
         ...season,
@@ -110,7 +133,7 @@ onMounted(() => {
 <template>
   <UDashboardPanel id="roadmap">
     <template #header>
-      <UDashboardNavbar title="My Roadmap">
+      <UDashboardNavbar title="Roadmap">
         <template #leading>
           <UDashboardSidebarCollapse />
         </template>
@@ -118,7 +141,6 @@ onMounted(() => {
     </template>
 
     <template #body>
-      <div class="p-6">
         <!-- Loading State -->
         <div v-if="loading" class="flex justify-center items-center h-64">
           <USkeleton class="h-12 w-12" :ui="{ rounded: 'rounded-full' }" />
@@ -129,67 +151,61 @@ onMounted(() => {
           <UCard
             v-for="(season, index) in seasons"
             :key="season.id"
+            :ui="{
+              header: '!p-1 border-none',
+              body: '!px-4 !py-1'
+            }"
             class="overflow-hidden hover:shadow-lg transition-shadow duration-300"
           >
             <!-- Header with random color -->
             <template #header>
-              <div :class="[getSeasonColor(index), 'p-4 -m-4 mb-4']">
-                <div class="flex items-center justify-between">
-                  <h3 class="text-white font-bold text-lg">{{ season.name }}</h3>
+              <div :class="[getSeasonColor(index), 'h-34 w-full rounded-lg flex justify-end items-start ']">
                   <UBadge
                     v-if="season.is_completed"
-                    color="white"
                     variant="solid"
-                    size="xs"
-                  >
-                    Completed
-                  </UBadge>
-                </div>
+                    color="neutral"
+                    size="sm"
+                    label="Completed"
+                    class="m-2"
+                  />
+                  <UBadge
+                    v-else
+                    variant="solid"
+                    color="neutral"
+                    size="sm"
+                    label="In Progress"
+                    class="m-2"
+                  />
               </div>
             </template>
 
             <!-- Body -->
             <div class="space-y-4">
-              <!-- Progress Bar -->
-              <div class="space-y-2">
-                <div class="flex justify-between items-center">
-                  <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Progress</span>
-                  <span class="text-sm font-bold text-gray-900 dark:text-gray-100">
-                    {{ parseFloat(season.progress_percentage).toFixed(0) }}%
-                  </span>
-                </div>
-                <UProgress
-                  :value="parseFloat(season.progress_percentage)"
-                  :max="100"
-                  size="md"
-                  :color="season.is_completed ? 'green' : 'primary'"
-                />
-              </div>
-
+              
+              <h3 class="text-highlighted font-bold text-lg">{{ season.name }}</h3>
+              
               <!-- Dates -->
               <div class="space-y-2 text-sm">
                 <div class="flex items-center justify-between">
-                  <span class="text-gray-600 dark:text-gray-400">Start Date:</span>
+                  <span class="text-muted">Start Date:</span>
                   <span class="font-medium text-gray-900 dark:text-gray-100">
                     {{ formatDate(season.start_date) }}
                   </span>
                 </div>
                 <div class="flex items-center justify-between">
-                  <span class="text-gray-600 dark:text-gray-400">End Date:</span>
+                  <span class="text-muted">End Date:</span>
                   <span class="font-medium text-gray-900 dark:text-gray-100">
                     {{ formatDate(season.end_date) }}
                   </span>
                 </div>
-                <div v-if="season.is_completed && season.completion_date" class="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-                  <span class="text-gray-600 dark:text-gray-400">Completed:</span>
-                  <span class="font-medium text-green-600 dark:text-green-400">
-                    {{ formatDate(season.completion_date) }}
-                  </span>
+                <div v-if="season.is_completed && season.completion_date" class="flex items-center justify-between pt-2">
+                  <span class="text-muted">Completition:</span>
+                  <UProgress v-if="season.name !== 'Final Project'" :model-value="parseFloat(season.progress_percentage)" class="ml-6"/>
                 </div>
               </div>
 
               <!-- Description (if available) -->
-              <p v-if="season.description" class="text-sm text-gray-600 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-700">
+              <p v-if="season.description" class="text-sm text-muted pt-2">
                 {{ season.description }}
               </p>
             </div>
@@ -200,7 +216,6 @@ onMounted(() => {
         <div v-if="!loading && seasons.length === 0" class="text-center py-12">
           <p class="text-gray-500 dark:text-gray-400">No seasons found for your program.</p>
         </div>
-      </div>
     </template>
   </UDashboardPanel>
 </template>

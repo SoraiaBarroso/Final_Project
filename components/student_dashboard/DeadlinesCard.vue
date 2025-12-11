@@ -120,7 +120,7 @@
 <template>
   <div class="mt-4 flex flex-col">
     <div class="flex items-center justify-between">
-      <h2 class="font-semibold text-black/80 text-lg 2xl:text-xl">Upcoming deadlines</h2>
+      <h2 class="font-semibold text-highlighted text-lg 2xl:text-xl">Upcoming deadlines</h2>
       <nuxtLink to="/timeline" class="text-primary-800 underline hover:text-primary-600">
         View Timeline
       </nuxtLink>
@@ -134,8 +134,8 @@
           :class="[
             'relative w-full overflow-hidden',
             idx === 1
-              ? 'bg-primary-300 border-primary-400 border-1'
-              : 'bg-primary-200 border-primary-300 border-1',
+              ? 'bg-primary-300 dark:bg-primary-100 border-primary-400  dark:border-primary-300 border-1'
+              : 'bg-primary-200 dark:bg-primary-100 border-primary-300  dark:border-primary-300 border-1',
           ]"
           variant="none"
           :ui="{
@@ -224,7 +224,7 @@
     </div>
 
     <UCard
-      class="event_card bg-primary-400 border-primary-500 relative mt-4 w-full overflow-hidden border-1"
+      class="event_card bg-primary-400 dark:bg-primary-100 border-primary-500 dark:border-primary-300 relative mt-4 w-full overflow-hidden border-1"
       variant="none"
       :ui="{
         body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-4 flex flex-col items-start h-34 relative z-10',

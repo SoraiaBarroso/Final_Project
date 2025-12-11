@@ -255,6 +255,7 @@
 
       currentDate.value = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
 
+      console.log("🔍 Season selected:", selectedSeason);
       // Load projects for this season
       await loadProjectsForSeason(selectedSeason.id);
 
@@ -308,7 +309,7 @@
     const isFinalProjectSeason = seasonName.toLowerCase().includes("final project");
 
     console.log("🎯 Season info:", { seasonName, isFinalProjectSeason });
-
+    console.log("📋 SeasonId, cohortId, programId:", seasonId, cohortId, programId);
     // First, get the program_cohort_season_id for this season, cohort, and program
     const { data: pcsData, error: pcsError } = await supabase
       .from("program_cohort_seasons")

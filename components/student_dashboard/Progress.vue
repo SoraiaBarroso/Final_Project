@@ -33,17 +33,21 @@ const launchConfetti = () => {
 
 <template>
     <div class="flex flex-col gap-1">
-        <h2 class="font-semibold text-black/80 2xl:text-xl">Progress</h2>
+        <h2 class="font-semibold text-highlighted 2xl:text-xl">Progress</h2>
         
-        <p v-if="props.status == 'On Track'" class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">Congratulations! You're currently <span class="text-green-500 font-semibold cursor-pointer" @click="launchConfetti">on track</span></p>
-        <p v-else-if="props.status == 'At Risk'" class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">You're currently <span class="text-yellow-500">at risk</span>, please check your tasks</p>
-        <p v-else class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">You're currently <span class="text-red-500 text-semi">off track</span>, please reach out for help</p>
+        <div class="flex justify-between items-center">
+            <p v-if="props.status == 'On Track'" class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">Congratulations! You're currently <span class="text-green-500 font-semibold">on track</span></p>
+            <p v-else-if="props.status == 'At Risk'" class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">You're currently <span class="text-yellow-500">at risk</span>, please check your tasks</p>
+            <p v-else class="text-muted text-base xl:mt-2 2xl:mt-2 2xl:text-lg">You're currently <span class="text-red-500 text-semi">off track</span>, please reach out for help</p>
+
+            <UButton v-if="props.status == 'On Track'" variant="subtle" icon="i-streamline:entertainment-party-popper-hobby-entertainment-party-popper-confetti-event" class="rounded-full p-2" @click="launchConfetti"/>
+        </div>
 
         <UCard
         class="mt-2.5" 
         >
             <template #header>
-                <h3 class="font-semibold text-black/80 2xl:text-lg">Seasons Progress</h3>
+                <h3 class="font-semibold text-highlighted 2xl:text-lg">Seasons Progress</h3>
             </template>
             <UProgress
                 v-model="value"

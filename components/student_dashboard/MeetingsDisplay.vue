@@ -96,14 +96,14 @@
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex items-center justify-between">
-      <h2 class="flex items-center gap-2 font-semibold text-black/80 text-lg 2xl:text-xl ">
+      <h2 class="flex items-center gap-2 font-semibold text-highlighted text-lg 2xl:text-xl ">
         Today's meetings
       </h2>
 
       <div class="flex gap-4" v-if="calendarEvents.length > 2">
         <button
           @click="scrollMeetings('left')"
-          class="bg-primary-200 hover:bg-primary-200/50 border-primary-300 ml-2 cursor-pointer rounded-full border-1 p-1 transition-all duration-300"
+          class="bg-primary-200 dark:bg-primary-100 hover:bg-primary-200/50 border-primary-300 ml-2 cursor-pointer rounded-full border-1 p-1 transition-all duration-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -112,12 +112,12 @@
             fill="none"
             viewBox="0 0 24 24"
           >
-            <path stroke="var(--color-primary-400)" stroke-width="2" d="M15 19l-7-7 7-7" />
+            <path stroke="var(--color-primary-400) " stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
         <button
           @click="scrollMeetings('right')"
-          class="bg-primary-200 hover:bg-primary-200/50 border-primary-300 ml-1 cursor-pointer rounded-full border-1 p-1 transition-all duration-300"
+          class="bg-primary-200 dark:bg-primary-100 hover:bg-primary-200/50 border-primary-300 ml-1 cursor-pointer rounded-full border-1 p-1 transition-all duration-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -147,7 +147,7 @@
           ]"
           variant="outline"
           :ui="{
-            root: 'w-full border-l-5 border-primary',
+            root: 'w-full border-l-5 border-primary dark:border-primary-200',
             body: 'xl:!px-6 px-6 xl:!py-4 2xl:!py-4 h-full flex',
           }"
         >
@@ -202,14 +202,14 @@
     >
       <div class="flex flex-col items-center justify-center text-center text-gray-500">
         <div
-          class="bg-primary-200 border-primary-300 mb-4 flex items-center justify-center rounded-full border-1 p-3"
+          class="bg-primary-200  border-primary-300 mb-4 flex items-center justify-center rounded-full border-1 p-3"
         >
           <UIcon name="i-lucide-lab:mailbox-flag" size="30" class="text-primary-800" />
         </div>
-        <p class="text-lg font-semibold text-black/80">No events today</p>
+        <p class="text-lg font-semibold text-highlighted">No events today</p>
         <p class="mt-1">Perfect time to focus on your projects</p>
         <UButton
-          class="border-muted hover:bg-elevated/60 mt-6 cursor-pointer rounded-lg border-1 bg-white px-4 py-2 text-black/80 transition"
+          class="border-muted hover:bg-elevated/60 mt-6 cursor-pointer rounded-lg border-1 bg-white px-4 py-2 text-highlighted transition"
           @click="$router.push('/students/calendar')"
         >
           View Calendar

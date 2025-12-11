@@ -95,7 +95,7 @@ onMounted(async () => {
       }"
     >
       <template #header>
-          <h1 class="text-black/80 text-lg font-semibold">Attendance Overview</h1>
+          <h1 class="text-highlighted text-lg font-semibold">Attendance Overview</h1>
 
           <UTooltip arrow text="Shows the total number of scheduled meetings versus the number of meetings students actually attended, for each meeting type." :delay-duration="0">
               <UIcon name="i-lucide-info" class="text-muted text-currentColor size- cursor-pointer" />

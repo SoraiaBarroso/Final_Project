@@ -114,12 +114,9 @@ const goToToday = () => {
 // Fetch calendar events from Google Calendar API
 async function fetchCalendarEvents(accessToken) {
     try {
-        console.log("Fetching calendar events with token: ", accessToken);
         // Get the first and last day of the current month
         const timeMin = new Date(currentYear.value, currentMonth.value, 1).toISOString();
         const timeMax = new Date(currentYear.value, currentMonth.value + 1, 0, 23, 59, 59).toISOString();
-
-        console.log("Time range:", timeMin, "to", timeMax);
 
         const res = await fetch(
             `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(
@@ -132,28 +129,14 @@ async function fetchCalendarEvents(accessToken) {
             }
         );
 
-        if (!res.ok) {
-            console.error("Failed to fetch calendar events. Status:", res.status);
-            if (res.status === 401) {
-                // Token expired, try to refresh
-                console.log("Token expired, attempting to refresh...");
-                const newToken = await refreshGoogleToken();
-                if (newToken) {
-                    return await fetchCalendarEvents(newToken);
-                }
-            }
-            throw new Error(`Failed to fetch calendar events: ${res.status}`);
-        }
+      if (!res.ok) {
+        toast.error("Failed to fetch calendar events");
+        console.error("Failed to fetch calendar events:", res.statusText);
+        return;
+      }
 
         const data = await res.json();
-        console.log("Fetched calendar events:", data);
-        console.log("Number of events:", data.items?.length || 0);
         calendarEvents.value = data.items || [];
-
-        // Log events for debugging
-        if (calendarEvents.value.length > 0) {
-            console.log("Sample event:", calendarEvents.value[0]);
-        }
     } catch (error) {
         console.error("Error fetching calendar events:", error);
         calendarEvents.value = [];
@@ -211,27 +194,36 @@ const getEventsForDate = (date) => {
 
 // Initialize and fetch calendar data
 onMounted(async () => {
-    console.log("Component mounted, fetching session...");
     const {
         data: { session },
     } = await supabase.auth.getSession();
+
     googleAccessToken.value = session?.provider_token || null;
 
     console.log("Google access token:", googleAccessToken.value ? "Found" : "Not found");
 
     if (googleAccessToken.value) {
+        console.log("Fetching calendar events with token:", googleAccessToken.value);
         await fetchCalendarEvents(googleAccessToken.value);
-    } else {
-        console.warn("No Google access token available. User may not be authenticated with Google.");
-    }
+    } 
 });
 
 // Watch for token changes and re-fetch events
-watch(googleAccessToken, async (newToken) => {
-    if (newToken) {
-        await fetchCalendarEvents(newToken);
-    }
-});
+watch(
+    googleAccessToken,
+    async (newToken) => {
+      if (!newToken) {
+        console.log("Access token is undefined, refreshing...");
+        try {
+          await refreshGoogleToken();
+          await fetchCalendarEvents(googleAccessToken.value);
+        } catch (error) {
+          console.error("Failed to refresh Google token", error);
+        }
+      }
+    },
+    { immediate: true }
+);
 
 // Re-fetch events when month changes
 watch([currentMonth, currentYear], async () => {
@@ -346,7 +338,7 @@ watch([currentMonth, currentYear], async () => {
                   :class="[
                     'text-sm mr-auto w-6 h-6 flex justify-center items-center rounded-full z-10 relative',
                     {
-                      'text-primary-600 font-bold bg-primary-500': isToday(dayInfo.date),
+                      'text-primary-600 font-bold bg-primary-100': isToday(dayInfo.date),
                       'text-gray-400': !dayInfo.isCurrentMonth,
                       'text-muted': dayInfo.isCurrentMonth && !isToday(dayInfo.date),
                     }

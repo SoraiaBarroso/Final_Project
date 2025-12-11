@@ -115,7 +115,7 @@
   }
 
   
-  async function fetchCalendarEvents(accessToken, period = 'today') {
+async function fetchCalendarEvents(accessToken, period = 'today') {
     const { timeMin, timeMax } = getTimeRange(period);
 
     const res = await fetch(
@@ -246,7 +246,7 @@
     console.log("Fetched student data:", studentData.value);
   }
 
-  async function refreshGoogleToken() {
+async function refreshGoogleToken() {
     const storedRefreshToken = window.localStorage.getItem("oauth_provider_refresh_token");
 
     const response = await fetch("https://www.googleapis.com/oauth2/v3/token", {
@@ -342,11 +342,11 @@
 
           <div class="flex gap-8 translate-y-6">
                 
-                <StudentDashboardStatCard
+                <!-- <StudentDashboardStatCard
                   :value="'On Track'"
                   label="Status"
                   icon="i-lucide:computer"
-                />
+                /> -->
 
                <StudentDashboardStatCard
                   :value="'10h'"
@@ -391,7 +391,7 @@
                 :seasons="seasonProgressData"
               />
 
-              <UPageGrid class="grid-cols-2 lg:grid-cols-2 gap-6">
+              <UPageGrid class="grid-cols-2 lg:grid-cols-2 gap-4">
                 
                 <StudentDashboardStatCard
                     :value="currentSeasonName"
@@ -407,12 +407,12 @@
 
                    <StudentDashboardStatCard
                   :value="studentData.exercises_completed"
-                  label="Exercises"
+                  label="Exercises Completed"
                   icon="i-lucide:clipboard-check"
                 />
                    <StudentDashboardStatCard
                   :value="studentData.completed_projects"
-                  label="Projects"
+                  label="Projects Completed"
                   icon="i-lucide:clipboard-check"
                 />
                    <StudentDashboardStatCard
