@@ -106,7 +106,7 @@
         const { data: projectData, error } = await supabase
           .from("projects")
           .select("*")
-          .eq("season_id", "f21625b7-9328-4bbb-8336-00fe68249513")
+          .eq("season_id", props.seasonId)
           .eq("program_id", props.programId);
 
         projects.value = Array.isArray(projectData) ? projectData : [];

@@ -29,7 +29,6 @@
     {
       label: "Timeline",
       to: "/timeline",
-      badge: "3",
       icon: "i-lucide:folder-clock",
       tooltip: {
         text: "Timeline",
@@ -53,15 +52,6 @@
       target: "_blank",
       tooltip: {
         text: "Go to Notion docs",
-      },
-    },
-    {
-      label: "Recordings",
-      icon: "i-lineicons:notion",
-      to: "https://reka-ui.com/",
-      target: "_blank",
-      tooltip: {
-        text: "Workshop Recordings",
       },
     },
   ];

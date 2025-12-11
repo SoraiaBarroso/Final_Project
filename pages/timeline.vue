@@ -349,7 +349,7 @@
           startDate: startDay,
           endDate: endDay,
           season: seasonName,
-          seasonColor: "#3b82f6",
+          seasonColor: "var(--color-primary-500)",
           id: `final-project-${programCohortSeasonId}`,
           crossMonth: seasonEndDate > monthEnd,
           avatars: [],
@@ -446,7 +446,7 @@
         startDate: startDay,
         endDate: endDay,
         season: seasonName,
-        seasonColor: "#3b82f6",
+        seasonColor: "var(--color-primary-500)",
         crossMonth: end > monthEnd,
         id: `proj-${schedule.id}`,
         avatars: [],
@@ -491,7 +491,7 @@
         startDate: 4,
         endDate: 9,
         season: "Loading...",
-        seasonColor: "#3b82f6",
+        seasonColor: "var(--color-primary-500)",
       },
     ],
   };
@@ -554,7 +554,7 @@
             endDate: endDay,
             crossMonth: crossMonth,
             season: seasonGroup.baseName,
-            seasonColor: getSeasonColorByIndex(groupedSeasons.indexOf(seasonGroup)),
+            seasonColor: "var(--color-primary-500)",
             id: `final-project-${seasonGroup.ids.join("-")}-${monthKey}`,
           });
 
@@ -648,7 +648,7 @@
               endDate: endDay,
               crossMonth: crossMonth,
               season: seasonGroup.baseName,
-              seasonColor: getSeasonColorByIndex(groupedSeasons.indexOf(seasonGroup)),
+              seasonColor: "var(--color-primary-500)",
               id: `proj-${schedule.id}-${monthKey}`,
             });
 
@@ -786,20 +786,6 @@
     };
   };
 
-  // Helper function to get season colors by index
-  const getSeasonColorByIndex = (index: number) => {
-    const colors = [
-      "#3b82f6",
-      "#10b981",
-      "#f59e0b",
-      "#ef4444",
-      "#8b5cf6",
-      "#06b6d4",
-      "#ec4899",
-      "#84cc16",
-    ];
-    return colors[index % colors.length];
-  };
 
   // Function to generate projects for a given month/year
   const generateProjectsForMonth = (year: number, month: number) => {
