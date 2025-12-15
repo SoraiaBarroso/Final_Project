@@ -10,6 +10,7 @@
   const calendarEvents = ref([]);
   const toast = useToast();
   const tipsRead = ref(0);
+  const isLoading = ref(true);
 
   const totalSeasons = ref(0);
   // Helper: filtered and deduplicated seasons for progress count
@@ -298,6 +299,7 @@ async function refreshGoogleToken() {
     }
 
     await fetchStudentData();
+    isLoading.value = false;
   });
 
   // Format last_login as 'x days/hours/minutes ago'
@@ -322,6 +324,9 @@ async function refreshGoogleToken() {
 
 <template>
     <UDashboardPanel id="home" 
+    :ui="{
+      body: '2xl:overflow-hidden'
+    }"
     >
       <template #header>
           <UDashboardNavbar title="Dashboard" >
@@ -332,7 +337,37 @@ async function refreshGoogleToken() {
       </template>
 
       <template #body>
-        <div class="w-full justify-between items-center flex">
+        <!-- Loading Skeletons -->
+        <div v-if="isLoading">
+          <div class="w-full justify-between items-center flex mb-14">
+            <div class="space-y-2">
+              <USkeleton class="h-8 w-64" />
+              <USkeleton class="h-4 w-48" />
+            </div>
+
+            <div class="flex gap-8 translate-y-6">
+              <USkeleton class="h-24 w-32" v-for="n in 3" :key="n" />
+            </div>
+          </div>
+
+          <UPageGrid class="h-full grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-10">
+            <div class="flex flex-col gap-4">
+              <USkeleton class="h-64 w-full" />
+              <USkeleton class="h-48 w-full" />
+            </div>
+
+            <div class="flex flex-col gap-4">
+              <USkeleton class="h-48 w-full" />
+              <div class="grid grid-cols-2 gap-4">
+                <USkeleton class="h-24 w-full" v-for="n in 6" :key="n" />
+              </div>
+            </div>
+          </UPageGrid>
+        </div>
+
+        <!-- Actual Content -->
+        <div v-else>
+        <div class="w-full justify-between items-start lg:items-center flex flex-col lg:flex-row">
           <StudentDashboardGreetings v-if="studentData.first_name" :first_name="studentData.first_name" />
 
           <div class="flex gap-8 translate-y-6">
@@ -354,10 +389,10 @@ async function refreshGoogleToken() {
                   icon="i-lucide:star"
                 />
 
-          </div>              
+          </div>
         </div>
 
-        <UPageGrid class="h-full grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 mt-14 gap-10">
+        <UPageGrid class="h-full grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 mt-14 lg:gap-10">
           <div class="flex flex-col gap-1">            
             <StudentDashboardMeetingsDisplay v-if="googleAccessToken" :googleAccessToken="googleAccessToken" />
 
@@ -369,7 +404,7 @@ async function refreshGoogleToken() {
             />
           </div>
            
-           <div class="flex flex-col 2xl:gap-6">
+           <div class="flex flex-col gap-6 2xl:gap-6">
               <StudentDashboardProgress
                 v-if="studentData"
                 :status="studentData.status"
@@ -422,6 +457,7 @@ async function refreshGoogleToken() {
               </UPageGrid>
            </div>
         </UPageGrid>
+        </div>
       </template>
   </UDashboardPanel>
 </template>

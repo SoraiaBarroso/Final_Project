@@ -67,14 +67,12 @@ const fetchSeasonData = async () => {
       .eq('student_id', studentData.id);
 
     if (progressError) throw progressError;
-    console.log('Progress Data:', progressData);
 
     // Find which Season 03 specialization the student has progress in
     const season03Progress = progressData.find(p =>
       p.seasons?.name?.match(/^Season 03 Software Engineer/)
     );
     const studentSeason03Track = season03Progress?.seasons?.name;
-    console.log('Student Season 03 Track:', studentSeason03Track);
 
     // Get program cohort seasons
     const { data: cohortSeasons, error: seasonsError } = await supabase
@@ -89,7 +87,6 @@ const fetchSeasonData = async () => {
       .order('start_date', { ascending: true });
 
     if (seasonsError) throw seasonsError;
-    console.log('Cohort Seasons:', cohortSeasons);
 
     // Filter and merge data
     // Filter out Season 03 tracks that don't match the student's track
