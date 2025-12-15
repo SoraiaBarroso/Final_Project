@@ -139,7 +139,7 @@
           ]"
           variant="none"
           :ui="{
-            body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-5 flex flex-col items-start w-full h-34 relative z-10',
+            body: 'xl:!px-4 xl:!py-4 2xl:!py-1 2xl:!px-5 flex flex-col items-start w-full h-34 relative z-10',
           }"
         >
           <div class="pointer-events-none absolute inset-0 z-0 h-full w-full">
@@ -204,7 +204,7 @@
       </template>
 
       <template v-else>
-        <UCard class="flex h-34 w-full items-center justify-center bg-white">
+        <UCard class="flex h-30 w-full items-center justify-center bg-white">
           <div
             class="bg-elevated/60 m-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
           >
@@ -212,7 +212,7 @@
           </div>
           <p class="text-center text-gray-500">No upcoming project</p>
         </UCard>
-        <UCard class="flex h-34 w-full items-center justify-center bg-white">
+        <UCard class="flex h-30 w-full items-center justify-center bg-white">
           <div
             class="bg-elevated/60 m-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
           >

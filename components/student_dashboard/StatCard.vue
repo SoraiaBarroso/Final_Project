@@ -1,22 +1,26 @@
 <template>
   <UCard
     class="card flex flex-col items-center justify-center"
+    :class=styles
     :ui="{
-      body: '2xl:!px-4 2xl:!py-3 xl:!px-6 !py-3 w-full flex flex-col gap-8',
+      body: '2xl:!px-4 2xl:!py-3 xl:!px-6 !py-3 w-full flex items-center gap-4 min-w-[140px]',
     }"
   >
-    <div class="flex items-center gap-4">
-      <div class="text-primary-900 font-semibold xl:text-base 2xl:text-lg">
+   <div class="flex justify-center items-center bg-primary-100 w-fit h-fit p-3 rounded-lg">
+      <UIcon
+        :name="icon"
+        class="text-primary-500 dark:text-primary-600 size-6"
+      />
+    </div>
+    <div class="flex flex-col gap-1">
+      <div class="text-primary-900 font-semibold text-sm 2xl:text-base">
         {{ label }}
       </div>
-    </div>
-    <div class="flex w-full items-center justify-between gap-3">
-      <p class="text-primary-900 font-semibold 2xl:text-lg">{{ value }}</p>
-      <div v-if="percentage" class="flex items-center gap-2">
-        <p class="text-muted text-base">progress</p>
-        <UBadge color="primary" variant="subtle">{{ percentage }}</UBadge>
-      </div>
-      <!-- <p v-if="!percentage" class="text-muted text-base mt-1">completed</p> -->
+       <p class="text-primary-900 font-semibold text-xs 2xl:text-sm">{{ displayValue }}</p>
+        <div v-if="percentage" class="flex items-center gap-2">
+          <p class="text-muted text-base">progress</p>
+          <UBadge color="primary" variant="subtle">{{ percentage }}</UBadge>
+        </div>
     </div>
   </UCard>
 </template>
@@ -24,6 +28,8 @@
 
 </div>
 <script setup>
+import { computed } from 'vue';
+
   const props = defineProps({
     value: {
       type: [String, Number],
@@ -40,5 +46,30 @@
     percentage: {
       type: String,
     },
+    styles: {
+      type: String,
+      default: '',
+    },
+  });
+
+  const displayValue = computed(() => {
+    if (typeof props.value !== 'string') return props.value;
+
+    // Match pattern like "Season 03 Software Engineer Cpp"
+    const match = props.value.match(/^(Season \d+)\s+(.+)$/);
+    if (match) {
+      const seasonPart = match[1]; // "Season 03"
+      const titlePart = match[2]; // "Software Engineer Cpp"
+
+      // Get initials from the title part
+      const initials = titlePart
+        .split(' ')
+        .map(word => word.charAt(0).toUpperCase())
+        .join('');
+
+      return `${seasonPart} ${initials}`;
+    }
+
+    return props.value;
   });
 </script>

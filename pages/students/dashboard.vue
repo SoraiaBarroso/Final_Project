@@ -321,17 +321,12 @@ async function refreshGoogleToken() {
 </script>
 
 <template>
-    <UDashboardPanel id="home">
+    <UDashboardPanel id="home" 
+    >
       <template #header>
           <UDashboardNavbar title="Dashboard" >
               <template #leading>
                   <UDashboardSidebarCollapse />
-              </template>
-
-              <template #right>
-                <UIcon name="i-game-icons:crown" class="text-primary-500 size-8 mr-1" />
-                {{ studentData.points_assigned ?? 0 }} pts
-
               </template>
           </UDashboardNavbar>
       </template>
@@ -341,36 +336,29 @@ async function refreshGoogleToken() {
           <StudentDashboardGreetings v-if="studentData.first_name" :first_name="studentData.first_name" />
 
           <div class="flex gap-8 translate-y-6">
-                
-                <!-- <StudentDashboardStatCard
-                  :value="'On Track'"
-                  label="Status"
-                  icon="i-lucide:computer"
-                /> -->
-
                <StudentDashboardStatCard
-                  :value="'10h'"
-                  label="Activity Platform"
-                  icon="i-lucide:clipboard-check"
+                  :value="'X'"
+                  label="Activity"
+                  icon="i-lucide:activity"
                 />
 
                 <StudentDashboardStatCard
-                  :value="'1 day ago'"
-                  label="Last Login Platform"
-                  icon="i-lucide:computer"
+                  :value="'X'"
+                  label="Last Login"
+                  icon="i-lucide:clock-1"
                 />
 
                  <StudentDashboardStatCard
                   :value="'90'"
                   label="Earned Points"
-                  icon="i-lucide:computer"
+                  icon="i-lucide:star"
                 />
 
           </div>              
         </div>
 
         <UPageGrid class="h-full grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 mt-14 gap-10">
-          <div class="flex flex-col gap-6">            
+          <div class="flex flex-col gap-1">            
             <StudentDashboardMeetingsDisplay v-if="googleAccessToken" :googleAccessToken="googleAccessToken" />
 
             <StudentDashboardDeadlinesCard
@@ -381,7 +369,7 @@ async function refreshGoogleToken() {
             />
           </div>
            
-           <div class="flex flex-col gap-6">
+           <div class="flex flex-col 2xl:gap-6">
               <StudentDashboardProgress
                 v-if="studentData"
                 :status="studentData.status"
@@ -391,39 +379,45 @@ async function refreshGoogleToken() {
                 :seasons="seasonProgressData"
               />
 
-              <UPageGrid class="grid-cols-2 lg:grid-cols-2 gap-4">
+              <UPageGrid class="grid-cols-2 lg:grid-cols-2 2xl:gap-4">
                 
                 <StudentDashboardStatCard
                     :value="currentSeasonName"
                     label="Current Season"
                     icon="i-lucide:clipboard-check"
+                    styles=" 2xl:min-h-[100px]"
                 />
                 
                 <StudentDashboardStatCard
                   :value="expectedSeasonName"
                   label="Expected Season"
                   icon="i-lucide:clipboard-check"
+                  styles=" 2xl:min-h-[100px]"
                 />
 
                    <StudentDashboardStatCard
                   :value="studentData.exercises_completed"
                   label="Exercises Completed"
                   icon="i-lucide:clipboard-check"
+                  styles=" 2xl:min-h-[100px]"
                 />
                    <StudentDashboardStatCard
                   :value="studentData.completed_projects"
                   label="Projects Completed"
                   icon="i-lucide:clipboard-check"
+                  styles=" 2xl:min-h-[100px]"
                 />
                    <StudentDashboardStatCard
                   :value="studentData.points ?? 0"
                   label="Qwasar Points"
                   icon="i-lucide:clipboard-check"
+                  styles=" 2xl:min-h-[100px]"
                 />
                    <StudentDashboardStatCard
                   :value="formatLastLogin(studentData.last_login)"
                   label="Last Login"
                   icon="i-lucide:clipboard-check"
+                  styles=" 2xl:min-h-[100px]"
                 />
               </UPageGrid>
            </div>

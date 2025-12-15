@@ -17,7 +17,7 @@ const props = defineProps({
         </h1>
 
         <div>
-            <p class="text-muted text-base xl:mt-2 2xl:mt-1 2xl:text-lg">Nice to have you back, what an exciting day!, Get ready and check your projects today</p>
+            <p class="text-muted xl:mt-2 2xl:mt-1 text-sm 2xl:text-base">Nice to have you back, what an exciting day!, Get ready and check your projects today</p>
         </div>
     </div>
 </template>

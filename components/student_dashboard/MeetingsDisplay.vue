@@ -96,11 +96,11 @@
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex items-center justify-between">
-      <h2 class="flex items-center gap-2 font-semibold text-highlighted text-lg 2xl:text-xl ">
+      <h2 class="flex items-center gap-2 font-semibold text-highlighted text-sm 2xl:text-xl">
         Today's meetings
       </h2>
 
-      <div class="flex gap-4" v-if="calendarEvents.length > 2">
+      <div class="flex gap-4" v-if="calendarEvents.length >= 2">
         <button
           @click="scrollMeetings('left')"
           class="bg-primary-200 dark:bg-primary-100 hover:bg-primary-200/50 border-primary-300 ml-2 cursor-pointer rounded-full border-1 p-1 transition-all duration-300"
@@ -154,10 +154,10 @@
           <template #default>
             <div class="flex w-full flex-1 flex-col justify-between gap-2">
               <div class="flex flex-col gap-2">
-                <h1 class="text-primary-950 font-medium xl:text-base 2xl:text-lg">
+                <h1 class="text-primary-950 font-medium xl:text-base 2xl:text-base">
                   {{ events.summary }}
                 </h1>
-                <p class="text-primary-950 xl:text-sm 2xl:text-base">
+                <p class="text-primary-950 xl:text-sm 2xl:text-sm">
                   {{
                     formatEventTime(events.start?.dateTime || events.originalStartTime?.dateTime)
                   }}
