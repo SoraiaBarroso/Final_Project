@@ -13,10 +13,20 @@ const calendarEvents = ref([]);
 
 // Current date tracking
 const currentDate = ref(new Date());
+const selectedDay = ref(new Date());
 
 // Computed properties
 const currentMonth = computed(() => currentDate.value.getMonth());
 const currentYear = computed(() => currentDate.value.getFullYear());
+
+const selectedDayFormatted = computed(() => {
+    return selectedDay.value.toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+});
 
 const monthName = computed(() => {
     return currentDate.value.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
@@ -109,6 +119,20 @@ const nextMonth = () => {
 
 const goToToday = () => {
     currentDate.value = new Date();
+    selectedDay.value = new Date();
+};
+
+// Day view navigation (for mobile)
+const previousDay = () => {
+    const newDay = new Date(selectedDay.value);
+    newDay.setDate(newDay.getDate() - 1);
+    selectedDay.value = newDay;
+};
+
+const nextDay = () => {
+    const newDay = new Date(selectedDay.value);
+    newDay.setDate(newDay.getDate() + 1);
+    selectedDay.value = newDay;
 };
 
 // Fetch calendar events from Google Calendar API
@@ -243,9 +267,10 @@ watch([currentMonth, currentYear], async () => {
           </UDashboardNavbar>
       </template>
 
-      <template #body>    
-          <!-- Calendar Header with Navigation -->
-          <div class="flex items-center justify-center mx-6 relative">
+      <template #body>
+          <div class="overflow-y-auto h-full pb-4">
+          <!-- Month View Navigation (hidden on small screens) -->
+          <div class="hidden lg:flex items-center justify-center mx-6 relative my-4">
             <UFieldGroup size="xl" class="absolute left-0">
                 <UButton
                 @click="previousMonth"
@@ -275,13 +300,43 @@ watch([currentMonth, currentYear], async () => {
             <h2 class="text-2xl font-semibold">{{ monthName }}</h2>
           </div>
 
-          <!-- Calendar Grid -->
+          <!-- Day View Navigation (visible on small screens) -->
+          <div class="lg:hidden flex items-center justify-center mx-6 relative my-4 mb-10">
+            <UFieldGroup size="xl" class="absolute left-0">
+                <UButton
+                @click="previousDay"
+                color="neutral"
+                variant="outline"
+                icon="i-lucide:chevron-left"
+                class="text-muted"
+            />
+
+              <UButton
+                @click="goToToday"
+                color="neutral"
+                variant="outline"
+                class="text-muted"
+              >
+                Today
+              </UButton>
+
+              <UButton
+                @click="nextDay"
+                color="neutral"
+                variant="outline"
+                icon="i-lucide:chevron-right"
+                class="text-muted"
+              />
+            </UFieldGroup>
+            <h2 class="text-lg font-semibold text-center">{{ selectedDayFormatted }}</h2>
+          </div>
+
+          <!-- Month View Calendar Grid (hidden on small screens) -->
           <UCard
-            class="h-full ring-0"
+            class="ring-0 hidden lg:block mx-6"
             :ui="{
-                body: 'p-4',
-                header: 'grid grid-cols-7 !gap-0 !pb-0 !px-0 mx-5.5',
-                body: ' !pt-0'
+                header: 'grid grid-cols-7 !gap-0 !pb-0 !px-0',
+                body: ' !pt-0 !p-0 border border-muted/20'
             }"
           >
             <!-- Day Names Header -->
@@ -294,7 +349,7 @@ watch([currentMonth, currentYear], async () => {
                     {{ dayName }}
                   </div>
              </template>
-           
+
             <!-- Calendar Days Grid -->
             <div class="grid grid-cols-7 gap-0">
               <UCard
@@ -364,6 +419,95 @@ watch([currentMonth, currentYear], async () => {
               </UCard>
             </div>
           </UCard>
+
+          <!-- Day View (visible on small screens) -->
+          <UCard class="lg:hidden mx-6">
+            <template #header>
+              <div class="flex items-center gap-3">
+                <div
+                  :class="[
+                    'w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg',
+                    {
+                      'bg-primary-100 text-primary-600': isToday(selectedDay),
+                      'bg-muted text-muted': !isToday(selectedDay)
+                    }
+                  ]"
+                >
+                  {{ selectedDay.getDate() }}
+                </div>
+                <div>
+                  <h3 class="font-semibold">
+                    {{ selectedDay.toLocaleDateString('en-US', { weekday: 'long' }) }}
+                  </h3>
+                  <p class="text-sm text-muted">
+                    {{ selectedDay.toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) }}
+                  </p>
+                </div>
+              </div>
+            </template>
+
+            <div class="space-y-4">
+              <div v-if="getEventsForDate(selectedDay).length === 0" class="text-center py-8 text-muted">
+                <Icon name="i-lucide:calendar-x" class="w-12 h-12 mx-auto mb-2 opacity-50" />
+                <p>No events scheduled for this day</p>
+              </div>
+
+              <UCard
+                v-for="event in getEventsForDate(selectedDay)"
+                :key="event.id"
+                class="border-l-4 border-primary-600"
+              >
+                <div class="space-y-2">
+                  <h4 class="font-semibold">{{ event.summary }}</h4>
+
+                  <div v-if="event.start?.dateTime" class="flex items-center gap-2 text-sm text-muted">
+                    <Icon name="i-lucide:clock" class="w-4 h-4" />
+                    <span>
+                      {{ new Date(event.start.dateTime).toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit'
+                      }) }}
+                      <span v-if="event.end?.dateTime">
+                        - {{ new Date(event.end.dateTime).toLocaleTimeString('en-US', {
+                          hour: 'numeric',
+                          minute: '2-digit'
+                        }) }}
+                      </span>
+                    </span>
+                  </div>
+
+                  <div v-if="event.description" class="text-sm text-muted">
+                    {{ event.description }}
+                  </div>
+
+                  <div v-if="event.location || event.hangoutLink" class="flex gap-2 mt-3">
+                    <UButton
+                      v-if="event.location"
+                      :href="event.location"
+                      target="_blank"
+                      size="xs"
+                      color="neutral"
+                      variant="outline"
+                      icon="i-lucide:map-pin"
+                    >
+                      Location
+                    </UButton>
+                    <UButton
+                      v-if="event.hangoutLink"
+                      :href="event.hangoutLink"
+                      target="_blank"
+                      size="xs"
+                      color="primary"
+                      icon="i-lucide:video"
+                    >
+                      Join Meeting
+                    </UButton>
+                  </div>
+                </div>
+              </UCard>
+            </div>
+          </UCard>
+          </div>
       </template>
   </UDashboardPanel>
 </template>
