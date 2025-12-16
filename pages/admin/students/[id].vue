@@ -7,9 +7,7 @@ definePageMeta({
 })
 
 const route = useRoute()
-const router = useRouter()
 const supabase = useSupabaseClient()
-const UBadge = resolveComponent('UBadge')
 
 const studentId = route.params.id
 const student = ref(null)
@@ -61,6 +59,7 @@ const fetchStudentDetails = async () => {
 
 // Fetch student project completions
 const projectCompletions = ref([])
+
 const fetchProjectCompletions = async () => {
   const { data, error: fetchError } = await supabase
     .from('student_project_completion')
@@ -156,41 +155,6 @@ onMounted(async () => {
   await fetchProjectCompletions()
   await fetchSeasonProgress()
 })
-
-const getStatusColor = (status) => {
-  const colors = {
-    'On Track': 'success',
-    'At Risk': 'error',
-    'Monitor': 'warning',
-    'Unknown': 'neutral'
-  }
-  return colors[status] || 'neutral'
-}
-
-// Format ISO datetime to human friendly: "28 Oct, 2024 at 23:20"
-const formatDateTime = (iso) => {
-  if (!iso) return null
-  try {
-    const d = new Date(iso)
-    if (isNaN(d.getTime())) return null
-
-    const day = String(d.getDate()).padStart(2, '0')
-    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    const month = monthNames[d.getMonth()]
-    const year = d.getFullYear()
-
-    const hours = String(d.getHours()).padStart(2, '0')
-    const minutes = String(d.getMinutes()).padStart(2, '0')
-
-    return `${day} ${month}, ${year} at ${hours}:${minutes}`
-  } catch (e) {
-    return null
-  }
-}
-
-const goBack = () => {
-  router.push('/admin/dashboard')
-}
 
 const handleSendEmail = (student) => {
   // TODO: Implement email functionality

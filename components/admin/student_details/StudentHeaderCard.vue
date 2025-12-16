@@ -9,10 +9,14 @@ const props = defineProps({
 const supabase = useSupabaseClient()
 const toast = useToast()
 const {cohorts, fetchCohorts} = useCohorts()
+const {programs, programOptions, fetchPrograms} = usePrograms()
 const items = ref([])
 const isUpdating = ref(false)
 const isModalOpen = ref(false)
 const selectedCohortId = ref(null)
+const isProgramModalOpen = ref(false)
+const selectedProgramId = ref(null)
+const isUpdatingProgram = ref(false)
 
 onMounted(async () => {
   // Fetch cohorts filtered by the student's program
@@ -23,14 +27,16 @@ onMounted(async () => {
     value: cohort.cohort_ids?.find(id => cohort.programs?.find(p => p.id === props.student.program_id && p.cohort_id === id))
   }))
 
-  // Set initial selected cohort
+  // Fetch all programs
+  await fetchPrograms()
+
+  // Set initial selected values
   selectedCohortId.value = props.student.cohort_id
+  selectedProgramId.value = props.student.program_id
 })
 
 // Handle cohort change
 const handleCohortChange = async () => {
-  console.log("Selected cohort ID:", selectedCohortId.value)
-
   if (!selectedCohortId.value || selectedCohortId.value === props.student.cohort_id) {
     // No change needed
     isModalOpen.value = false
@@ -68,11 +74,7 @@ const handleCohortChange = async () => {
     // Close modal
     isModalOpen.value = false
 
-    // Reload the page to reflect changes
-    setTimeout(() => {
-      window.location.reload()
-    }, 1000)
-
+    props.student.cohort_id = selectedCohortId.value
   } catch (error) {
     console.error('Error updating cohort:', error)
     toast.add({
@@ -82,6 +84,65 @@ const handleCohortChange = async () => {
     })
   } finally {
     isUpdating.value = false
+  }
+}
+
+// Handle program change
+const handleProgramChange = async () => {
+  console.log("Selected program ID:", selectedProgramId.value)
+
+  if (!selectedProgramId.value || selectedProgramId.value === props.student.program_id) {
+    // No change needed
+    isProgramModalOpen.value = false
+    return
+  }
+
+  try {
+    isUpdatingProgram.value = true
+
+    // Update student's program in the database
+    const { error } = await supabase
+      .from('students')
+      .update({ program_id: selectedProgramId.value})
+      .eq('id', props.student.id)
+
+    if (error) throw error
+
+    // Update the local student object
+    props.student.program_id = selectedProgramId.value
+
+    // Find and update the program name for display
+    const selectedProgram = programs.value.find(p => p.id === selectedProgramId.value)
+    if (selectedProgram && props.student.programs) {
+      props.student.programs.name = selectedProgram.name
+    }
+
+    toast.add({
+      title: 'Success',
+      description: 'Student program updated successfully.',
+      color: 'green'
+    })
+
+    // Close modal
+    isProgramModalOpen.value = false
+
+    // Re-fetch cohorts for the new program
+    await fetchCohorts({ program_id: selectedProgramId.value })
+
+    // Update cohort items dropdown
+    items.value = cohorts.value.map(cohort => ({
+      label: cohort.name,
+      value: cohort.cohort_ids?.find(id => cohort.programs?.find(p => p.id === selectedProgramId.value && p.cohort_id === id))
+    }))
+  } catch (error) {
+    console.error('Error updating program:', error)
+    toast.add({
+      title: 'Error',
+      description: 'Failed to update student program',
+      color: 'red'
+    })
+  } finally {
+    isUpdatingProgram.value = false
   }
 }
 
@@ -178,9 +239,41 @@ const handleSendSlackMessage = () => {
               </template>
             </UModal>
           </div>
-          <div class="flex gap-2">
+
+          <div class="flex gap-2 items-center">
             <p class="text-highlighted text-sm font-medium whitespace-nowrap">Program:</p>
             <p class="text-muted text-sm truncate">{{ student.programs?.name || 'N/A' }}</p>
+            <UModal v-model:open="isProgramModalOpen" title="Change Program" :ui="{ footer: 'justify-end' }" class="ml-auto">
+              <UButton color="neutral" icon="i-lucide-edit" variant="soft" />
+
+              <template #body>
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium mb-2">Select New Program</label>
+                    <USelect
+                      v-model="selectedProgramId"
+                      :items="programOptions"
+                      :disabled="isUpdatingProgram"
+                      :loading="isUpdatingProgram"
+                      placeholder="Select Program"
+                      class="w-full"
+                    />
+                  </div>
+                </div>
+              </template>
+
+              <template #footer="{ close }">
+                <UButton label="Cancel" color="neutral" variant="outline" @click="close" :disabled="isUpdatingProgram" />
+                <UButton
+                  label="Save"
+                  variant="subtle"
+                  color="primary"
+                  @click="handleProgramChange"
+                  :loading="isUpdatingProgram"
+                  :disabled="isUpdatingProgram || !selectedProgramId"
+                />
+              </template>
+            </UModal>
           </div>
 
           <div class="flex gap-2">
