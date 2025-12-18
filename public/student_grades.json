@@ -255,7 +255,8 @@
       "Preseason Data": "68%",
       "Preseason Web": "100%",
       "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "100%"
+      "Season 01 Arc 02": "100%",
+      "Season 02 Software Engineer": "0%"
     },
     "name": "tofan_c"
   },
@@ -385,7 +386,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAA1UlEQVR4nO3aPQ6CQBAGUMXGziPgTfRoHE1vgjfA0sKfhiHBFWMIhQtvyi/zyG45OxTPEdUUqzFFURRFUQtTl3Vbx8G+fksm96IoiqIoiqIoiqJmrM4xqUZwi2CfqjIejavBr++i5TTVCSmKoiiKoiiKoqiFq27JWkUcwTaC65c97KEdVB8RbGJ0rac6IUVRFEVRFEVRFEW9qdjDdundHpaiKIqiKIqiKIr6K5XuYZP6ZQ+bVj3VCSmKoiiKoiiKoiiKoihqrqrs/QjysfotmdyLyka9AHL7owUzxBfHAAAAAElFTkSuQmCC",
-    "last_login": "December 16, 2025  7:09pm",
+    "last_login": "December 17, 2025  7:50pm",
     "ongoing_projects": [],
     "completed_projects": [
       "Python Quest02",
@@ -432,18 +433,18 @@
       "My Roman Numerals Converter"
     ],
     "exercises_completed": "81",
-    "points": "5785",
+    "points": "5820",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
       "Season 01 Arc 01": "100%",
-      "Season 02 Data Science": "0%"
+      "Season 02 Data Science": "14%"
     },
     "name": "martens_h"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAApUlEQVR4nO3csQ5AMBAAUCw+g0/x6fUp/sBqYuAGEQtCGu/Gu3tpb2zTtJovxFgVV4KiKIqifqaGcovutG/fkslcFEVRFEVRFEVRFLWqJi6N02nfviWTuSiKoiiKoiiKoiiKoiiKoiiKoiiKou4rb4kpiqIoiqIoiqKo7FQfJ9VITJFoH1+LoiiKoiiKoiiKol5TzeE3xSjXh0r6ZIcURVEU9ZlaAH/GcwW9j8VuAAAAAElFTkSuQmCC",
-    "last_login": "December 11, 2025  9:45pm",
+    "last_login": "December 17, 2025  9:42am",
     "ongoing_projects": [
       "My Blockchain",
       "My Ls",
@@ -480,7 +481,7 @@
       "My Ls"
     ],
     "exercises_completed": "95",
-    "points": "300",
+    "points": "315",
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Data": "98%",
@@ -570,7 +571,7 @@
     "name": "larsen-d_n"
   },
   {
-    "last_modified": "2025-12-17 06:24:19",
+    "last_modified": "2025-12-18 06:24:27",
     "total_students": 14
   }
 ]
