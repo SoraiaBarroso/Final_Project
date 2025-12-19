@@ -53,7 +53,7 @@ const fetchSeasonData = async () => {
     // Get student's cohort
     const { data: studentData, error: studentError } = await supabase
       .from('students')
-      .select('id, cohort_id')
+      .select('id, cohort_id, program_id')
       .eq('email', session?.user?.email)
       .single();
 
@@ -88,6 +88,28 @@ const fetchSeasonData = async () => {
 
     if (seasonsError) throw seasonsError;
 
+    // Fetch all projects for the student's program
+    const { data: projectsData, error: projectsError } = await supabase
+      .from('projects')
+      .select('id, name, season_id')
+      .eq('program_id', studentData.program_id);
+
+    if (projectsError) throw projectsError;
+
+    // Fetch student's completed projects
+    const { data: completedProjectsData, error: completedError } = await supabase
+      .from('student_project_completion')
+      .select('project_id, is_completed')
+      .eq('student_id', studentData.id)
+      .eq('is_completed', true);
+
+    if (completedError) throw completedError;
+
+    // Create a set of completed project IDs for quick lookup
+    const completedProjectIds = new Set(
+      completedProjectsData?.map(cp => cp.project_id) || []
+    );
+
     // Filter and merge data
     // Filter out Season 03 tracks that don't match the student's track
     const filteredSeasons = cohortSeasons.filter((season) => {
@@ -105,6 +127,15 @@ const fetchSeasonData = async () => {
 
     seasons.value = filteredSeasons.map((season) => {
       const progress = progressData.find(p => p.season_id === season.season_id);
+
+      // Get projects for this season and mark completion status
+      const seasonProjects = (projectsData || [])
+        .filter(p => p.season_id === season.season_id)
+        .map(project => ({
+          ...project,
+          is_completed: completedProjectIds.has(project.id)
+        }));
+
       return {
         ...season,
         name: season.seasons?.name || 'Season',
@@ -112,6 +143,7 @@ const fetchSeasonData = async () => {
         progress_percentage: progress?.progress_percentage || '0.00',
         is_completed: progress?.is_completed || false,
         completion_date: progress?.completion_date || null,
+        projects: seasonProjects,
       };
     });
 
@@ -178,9 +210,9 @@ onMounted(() => {
 
             <!-- Body -->
             <div class="space-y-4">
-              
+
               <h3 class="text-highlighted font-bold text-lg">{{ season.name }}</h3>
-              
+
               <!-- Dates -->
               <div class="space-y-2 text-sm">
                 <div class="flex items-center justify-between">
@@ -200,6 +232,47 @@ onMounted(() => {
                   <UProgress v-if="season.name !== 'Final Project'" :model-value="parseFloat(season.progress_percentage)" class="ml-6"/>
                 </div>
               </div>
+
+              <!-- Projects Collapsible -->
+              <UCollapsible v-if="season.projects && season.projects.length > 0" class="pt-2">
+                <UButton
+                  color="neutral"
+                  variant="ghost"
+                  size="sm"
+                  class="w-full justify-between group"
+                >
+                  <span class="flex items-center gap-2">
+                    <span class="text-muted text-sm font-medium">Projects</span>
+                    <UBadge size="xs" color="neutral" variant="subtle">
+                      {{ season.projects.filter(p => p.is_completed).length }}/{{ season.projects.length }}
+                    </UBadge>
+                  </span>
+                  <UIcon name="i-lucide-chevron-down" class="size-4 text-muted transition-transform group-data-[state=open]:rotate-180" />
+                </UButton>
+                <template #content>
+                  <ul class="mt-2 space-y-1.5 pl-2">
+                    <li
+                      v-for="project in season.projects"
+                      :key="project.id"
+                      class="flex items-center gap-2 text-sm"
+                    >
+                      <UIcon
+                        v-if="project.is_completed"
+                        name="i-lucide-circle-check"
+                        class="text-green-500 shrink-0 size-4"
+                      />
+                      <UIcon
+                        v-else
+                        name="i-lucide-circle"
+                        class="text-muted shrink-0 size-4"
+                      />
+                      <span :class="project.is_completed ? 'text-green-600 dark:text-green-400' : 'text-gray-700 dark:text-gray-300'">
+                        {{ project.name }}
+                      </span>
+                    </li>
+                  </ul>
+                </template>
+              </UCollapsible>
 
               <!-- Description (if available) -->
               <p v-if="season.description" class="text-sm text-muted pt-2">
