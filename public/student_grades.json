@@ -444,7 +444,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAApUlEQVR4nO3csQ5AMBAAUCw+g0/x6fUp/sBqYuAGEQtCGu/Gu3tpb2zTtJovxFgVV4KiKIqifqaGcovutG/fkslcFEVRFEVRFEVRFLWqJi6N02nfviWTuSiKoiiKoiiKoiiKoiiKoiiKoiiKou4rb4kpiqIoiqIoiqKo7FQfJ9VITJFoH1+LoiiKoiiKoiiKol5TzeE3xSjXh0r6ZIcURVEU9ZlaAH/GcwW9j8VuAAAAAElFTkSuQmCC",
-    "last_login": "December 17, 2025  9:42am",
+    "last_login": "December 18, 2025  4:55pm",
     "ongoing_projects": [
       "My Blockchain",
       "My Ls",
@@ -481,7 +481,7 @@
       "My Ls"
     ],
     "exercises_completed": "95",
-    "points": "315",
+    "points": "330",
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Data": "98%",
@@ -571,7 +571,7 @@
     "name": "larsen-d_n"
   },
   {
-    "last_modified": "2025-12-18 06:24:27",
+    "last_modified": "2025-12-19 06:23:58",
     "total_students": 14
   }
 ]
