@@ -1,19 +1,19 @@
 <template>
   <UCard
-    class="card flex flex-col items-center justify-center"
+    class="flex flex-col items-center justify-center"
     :class=styles
     :ui="{
-      body: '2xl:!px-4 2xl:!py-3 xl:!px-6 !py-3 w-full flex items-center gap-4 min-w-[140px]',
+      body: '2xl:!px-4 2xl:!py-3 xl:!px-6 !px-4 !py-2 w-full flex items-center gap-4 xl:min-w-[140px]',
     }"
   >
-   <div class="flex justify-center items-center bg-primary-100 w-fit h-fit p-3 rounded-lg">
+   <div class="flex justify-center items-center bg-primary-100 w-fit h-fit p-2 xl:p-3 rounded-sm xl:rounded-lg">
       <UIcon
         :name="icon"
-        class="text-primary-500 dark:text-primary-600 size-6"
+        class="text-primary-500 dark:text-primary-600 size-4 xl:size-6"
       />
     </div>
     <div class="flex flex-col gap-1">
-      <div class="text-primary-900 font-semibold text-sm 2xl:text-base">
+      <div class="text-primary-900 font-semibold text-xs text-nowrap xl:text-base">
         {{ label }}
       </div>
        <p class="text-primary-900 font-semibold text-xs 2xl:text-sm">{{ displayValue }}</p>

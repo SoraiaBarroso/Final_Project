@@ -96,7 +96,7 @@
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex items-center justify-between">
-      <h2 class="flex items-center gap-2 font-semibold text-highlighted text-sm 2xl:text-xl">
+      <h2 class="flex items-center gap-2 font-semibold text-highlighted text-base 2xl:text-xl">
         Today's meetings
       </h2>
 
@@ -197,19 +197,21 @@
       variant="outline"
       class="flex w-full items-center justify-center"
       :ui="{
-        body: 'w-full 2xl:!py-4 flex flex-col items-center justify-center gap-4',
+        body: 'w-full 2xl:!py-4 !py-3 flex flex-col items-center justify-center gap-4',
       }"
     >
       <div class="flex flex-col items-center justify-center text-center text-gray-500">
         <div
-          class="bg-primary-200  border-primary-300 mb-4 flex items-center justify-center rounded-full border-1 p-3"
+          class="bg-primary-200 dark:bg-primary-100 border-primary-300 mb-4 flex items-center justify-center rounded-full border-1 p-2 xl:p-3"
         >
-          <UIcon name="i-lucide-lab:mailbox-flag" size="30" class="text-primary-800" />
+          <UIcon name="i-lucide-lab:mailbox-flag"  class="text-primary-800 size-6 xl:size-8" />
         </div>
-        <p class="text-lg font-semibold text-highlighted">No events today</p>
-        <p class="mt-1">Perfect time to focus on your projects</p>
+        <p class="text-sm xl:text-lg font-semibold text-highlighted">No events today</p>
+        <p class="mt-1 xl:text-base text-xs">Perfect time to focus on your projects</p>
         <UButton
-          class="border-muted hover:bg-elevated/60 mt-6 cursor-pointer rounded-lg border-1 bg-white px-4 py-2 text-highlighted transition"
+          variant="outline"
+          color="neutral"
+          class="mt-4"
           @click="$router.push('/students/calendar')"
         >
           View Calendar

@@ -78,7 +78,7 @@ const launchConfetti = () => {
         </div>
 
         <UCard
-        class="mt-2.5" 
+        class="mt-3" 
         :ui="{
             header: 'border-none !pb-0'
         }"
@@ -89,12 +89,6 @@ const launchConfetti = () => {
             <UProgress
                 v-model="value"
                 size="lg"
-                :ui="{
-                    height: 'h-4',
-                    bg: 'bg-gray-200 dark:bg-gray-700',
-                    bar: 'bg-blue-600',
-                    rounded: 'rounded-lg',
-                }"
             />
             <p class="text-sm text-muted mt-2 2xl:text-base text-right w-full">{{ props.completedSeasons }} out of {{ props.totalSeasons }} seasons completed</p>
         </UCard>

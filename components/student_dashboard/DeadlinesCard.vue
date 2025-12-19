@@ -120,8 +120,8 @@
 <template>
   <div class="mt-4 flex flex-col">
     <div class="flex items-center justify-between">
-      <h2 class="font-semibold text-highlighted text-lg 2xl:text-xl">Upcoming deadlines</h2>
-      <nuxtLink to="/timeline" class="text-primary-800 underline hover:text-primary-600">
+      <h2 class="font-semibold text-highlighted text-base 2xl:text-xl">Upcoming deadlines</h2>
+      <nuxtLink to="/timeline" class="text-primary-800 underline text-sm 2xl:text-base hover:text-primary-600">
         View Timeline
       </nuxtLink>
     </div>
@@ -187,10 +187,10 @@
               </defs>
             </svg>
           </div>
-          <h3 :class="['text-primary-950 relative z-10 font-semibold 2xl:text-xl']">
+          <h3 :class="['text-primary-950 relative z-10 font-semibold text-xl xl:text-2xl']">
             {{ project.name }}
           </h3>
-          <p :class="['text-primary-950 relative z-10 pt-1 text-sm']">
+          <p :class="['text-primary-950 relative z-10 pt-1 text-sm xl:text-sm']">
             {{ project.deadline.toLocaleDateString() }}
           </p>
           <p
@@ -204,30 +204,29 @@
       </template>
 
       <template v-else>
-        <UCard class="flex h-30 w-full items-center justify-center bg-white">
+        <UCard class="flex h-24 xl:h-30 w-full items-center justify-center ">
           <div
-            class="bg-elevated/60 m-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
+            class="bg-primary-200 dark:bg-primary-100 border border-primary-300 m-auto mb-4 flex p-2 xl:p-3 w-fit items-center justify-center rounded-full"
           >
-            <UIcon name="emojione:file-cabinet" class="h-8 w-8" />
+            <UIcon name="i-pajamas:doc-code" class="size-6 xl:size-8 text-primary-800" />
           </div>
-          <p class="text-center text-gray-500">No upcoming project</p>
+          <p class="text-center text-muted text-sm xl:text-base">No upcoming project</p>
         </UCard>
-        <UCard class="flex h-30 w-full items-center justify-center bg-white">
+        <UCard class="flex h-24 xl:h-30 w-full items-center justify-center">
           <div
-            class="bg-elevated/60 m-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full"
+            class="bg-primary-200 dark:bg-primary-100 border border-primary-300 m-auto mb-4 flex p-2 xl:p-3 w-fit items-center justify-center rounded-full"
           >
-            <UIcon name="emojione:file-cabinet" class="h-8 w-8" />
+            <UIcon name="i-pajamas:doc-code" class="size-6 xl:size-8 text-primary-800" />
           </div>
-          <p class="text-center text-gray-500">No upcoming project</p>
+          <p class="text-center text-muted text-sm xl:text-base">No upcoming project</p>
         </UCard>
       </template>
     </div>
 
     <UCard
-      class="event_card bg-primary-400 dark:bg-primary-100 border-primary-500 dark:border-primary-300 relative mt-4 w-full overflow-hidden border-1"
-      variant="none"
+      class="bg-primary-400 dark:bg-primary-100 border-primary-500 dark:border-primary-300 relative mt-4 w-full overflow-hidden border-1"
       :ui="{
-        body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-4 flex flex-col items-start h-34 relative z-10',
+        body: 'xl:!px-4 xl:!py-4 2xl:!py-3 2xl:!px-4 !py-2 !px-3 flex flex-col items-start h-26 xl:h-34 relative z-10',
       }"
     >
       <div class="pointer-events-none absolute inset-0 z-0 h-full w-full">
@@ -266,15 +265,15 @@
           </defs>
         </svg>
       </div>
-      <h3 class="text-primary-950 relative z-10 font-semibold 2xl:text-2xl">
+      <h3 class="text-primary-950 relative z-10 font-semibold text-lg xl:text-2xl">
         {{ (season && season[0]?.name) || "Season" }}
       </h3>
-      <p v-if="seasonDeadline" class="text-primary-950 relative z-10 pt-2 text-sm">
+      <p v-if="seasonDeadline" class="text-primary-950 relative z-10 xl:pt-2 text-sm xl:text-sm">
         {{ seasonDeadline.toLocaleDateString() }}
       </p>
       <p
         v-if="daysToSeasonDeadline !== null"
-        class="text-primary-950 relative z-10 mt-3 ml-auto text-xl font-semibold 2xl:text-3xl"
+        class="text-primary-950 z-10 mt-3 ml-auto text-lg font-semibold 2xl:text-3xl"
       >
         {{ daysToSeasonDeadline }} days
       </p>

@@ -4,7 +4,8 @@ import type { DropdownMenuItem } from '@nuxt/ui'
 const props = defineProps<{
   collapsed?: boolean,
   userLabel?: any,
-  userAvatar?: any
+  userAvatar?: any,
+  student?: any
 }>()
 
 const supabase = useSupabaseClient();
@@ -13,6 +14,9 @@ const appConfig = useAppConfig();
 
 const userLabel = computed(() => props.userLabel ?? 'Guest')
 const userAvatar = computed(() => props.userAvatar ? { src: props.userAvatar } : undefined)
+
+// Student card modal state
+const isCardModalOpen = ref(false)
 
 const colors = [
     "gray",
@@ -35,6 +39,13 @@ const items = computed<DropdownMenuItem[][]>(() => ([[{
   label: userLabel.value,
   avatar: userAvatar.value
 }],    [
+      {
+        label: "Student Card",
+        icon: "i-lucide-id-card",
+        onSelect: () => {
+          isCardModalOpen.value = true
+        }
+      },
       {
         label: "Theme",
         icon: "i-lucide-palette",
@@ -126,4 +137,20 @@ const items = computed<DropdownMenuItem[][]>(() => ([[{
       />
     </template>
   </UDropdownMenu>
+
+  <!-- Student Card Modal -->
+  <UModal v-model:open="isCardModalOpen" title="Student Card" :ui="{ footer: 'justify-end' }">
+    <template #body>
+      <div v-if="student" class="flex flex-col items-center gap-4">
+        <StudentsStudentCard :student="student" />
+        <p class="text-sm text-muted">Click the button above to download your student ID card</p>
+      </div>
+      <div v-else class="text-center text-muted">
+        <p>Loading student data...</p>
+      </div>
+    </template>
+    <template #footer="{ close }">
+      <UButton label="Close" color="neutral" variant="outline" @click="close" />
+    </template>
+  </UModal>
 </template>

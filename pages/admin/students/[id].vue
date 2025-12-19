@@ -1,159 +1,25 @@
 <script setup>
-import { resolveComponent } from 'vue'
-
 definePageMeta({
   layout: 'default',
   middleware: ['admin']
 })
 
 const route = useRoute()
-const supabase = useSupabaseClient()
-
 const studentId = route.params.id
-const student = ref(null)
-const loading = ref(true)
-const error = ref(null)
 
-async function fetchProjectsCompleted(studentId) {
-  const { count, error } = await supabase
-    .from("student_project_completion")
-    .select("*", { count: "exact", head: true })
-    .eq("student_id", studentId)
-    .eq("is_completed", true);
+// Use the new composable for data fetching
+const {
+  student,
+  projectCompletions,
+  seasonProgress,
+  loading,
+  error,
+  fetchAllStudentData
+} = useStudentDetails()
 
-  return count || 0;
-}
-
-// Fetch student data with all related information
-const fetchStudentDetails = async () => {
-  try {
-    loading.value = true
-    error.value = null
-
-    const { data, error: fetchError } = await supabase
-      .from('students')
-      .select(`
-        *,
-        cohorts(id, name, start_date, end_date),
-        programs(id, name, description),
-        current_season:seasons!students_current_season_id_fkey(id, name, order_in_program),
-        expected_season:seasons!students_expected_season_id_fkey(id, name, order_in_program)
-      `)
-      .eq('id', studentId)
-      .single()
-
-    if (fetchError) throw fetchError
-
-    // Fetch and add completed projects count
-    const completedProjects = await fetchProjectsCompleted(studentId);
-    data.completed_projects = completedProjects;
-    console.log("Completed Projects:", data);
-    student.value = data
-  } catch (err) {
-    console.error('Error fetching student:', err)
-    error.value = err.message
-  } finally {
-    loading.value = false
-  }
-}
-
-// Fetch student project completions
-const projectCompletions = ref([])
-
-const fetchProjectCompletions = async () => {
-  const { data, error: fetchError } = await supabase
-    .from('student_project_completion')
-    .select(`
-      *,
-      projects(id, name, description, duration_days)
-    `)
-    .eq('student_id', studentId)
-    .order('created_at', { ascending: false })
-
-  if (!fetchError) {
-    projectCompletions.value = data || []
-  }
-}
-
-// Fetch student season progress
-const seasonProgress = ref([])
-
-const fetchSeasonProgress = async () => {
-  // First, get the student's cohort and program info
-  const { data: studentData } = await supabase
-    .from('students')
-    .select('cohort_id, program_id')
-    .eq('id', studentId)
-    .single()
-
-  if (!studentData) return
-
-  // Fetch ALL seasons for the program (to show complete list)
-  const { data: allSeasons, error: seasonsError } = await supabase
-    .from('seasons')
-    .select('id, name, order_in_program')
-    .eq('program_id', studentData.program_id)
-    .order('order_in_program', { ascending: true })
-
-  if (seasonsError) {
-    console.error("Error fetching all seasons:", seasonsError)
-    return
-  }
-
-  // Fetch student's actual progress
-  const { data: progressData, error: progressError } = await supabase
-    .from('student_season_progress')
-    .select('*')
-    .eq('student_id', studentId)
-
-  if (progressError) {
-    console.error("Error fetching season progress:", progressError)
-    return
-  }
-
-  // Fetch program_cohort_seasons for date information
-  const { data: cohortSeasonsData, error: cohortSeasonsError } = await supabase
-    .from('program_cohort_seasons')
-    .select('season_id, start_date, end_date')
-    .eq('cohort_id', studentData.cohort_id)
-    .eq('program_id', studentData.program_id)
-
-  if (cohortSeasonsError) {
-    console.error("Error fetching cohort seasons:", cohortSeasonsError)
-    return
-  }
-
-  // Create complete list: for each season, merge with student progress (if exists)
-  const mergedData = allSeasons?.map(season => {
-    // Find student's progress for this season (if any)
-    const progress = progressData?.find(p => p.season_id === season.id)
-
-    // Find cohort season dates
-    const cohortSeason = cohortSeasonsData?.find(cs => cs.season_id === season.id)
-
-    // If student has progress, use it; otherwise create default "Not Started" entry
-    return {
-      id: progress?.id || `placeholder-${season.id}`,
-      student_id: studentId,
-      season_id: season.id,
-      progress_percentage: progress?.progress_percentage || 0,
-      is_completed: progress?.is_completed || false,
-      completion_date: progress?.completion_date || null,
-      created_at: progress?.created_at || null,
-      updated_at: progress?.updated_at || null,
-      seasons: season,
-      program_cohort_seasons: cohortSeason || null
-    }
-  })
-
-  console.log("Merged Season Progress:", mergedData)
-  seasonProgress.value = mergedData || []
-}
-
+// Fetch all data when component mounts
 onMounted(async () => {
-  await fetchStudentDetails()
-  await fetchProjectCompletions()
-  await fetchSeasonProgress()
+  await fetchAllStudentData(studentId)
 })
 
 const handleSendEmail = (student) => {
@@ -226,8 +92,22 @@ const handleSendSlackMessage = (student) => {
           </UPageCard>
         </div>
 
+        <!-- Error State -->
+        <div v-else-if="error" class="flex items-center justify-center h-64">
+          <UCard class="max-w-md">
+            <div class="text-center space-y-3">
+              <div class="text-red-500 text-4xl">⚠️</div>
+              <h3 class="text-lg font-semibold">Error Loading Student</h3>
+              <p class="text-muted text-sm">{{ error }}</p>
+              <UButton @click="fetchAllStudentData(studentId)" variant="outline">
+                Try Again
+              </UButton>
+            </div>
+          </UCard>
+        </div>
+
         <!-- Actual Content -->
-        <div v-else class="space-y-6">
+        <div v-else-if="student" class="space-y-6">
           <!-- Header and Stats Section -->
           <div class="grid grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 gap-6">
             <!-- Student Header Card - takes 1 column on large screens -->

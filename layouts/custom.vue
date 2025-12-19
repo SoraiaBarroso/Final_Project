@@ -7,6 +7,7 @@
   const userName = ref("");
   const userImg = ref("");
   const userLoading = ref(true);
+  const studentData = ref(null);
 
   const mainLinks: NavigationMenuItem[] = [
     {
@@ -63,6 +64,24 @@
     } = await supabase.auth.getUser();
     userName.value = user?.user_metadata?.full_name || "Unknown User";
     userImg.value = user?.user_metadata?.picture;
+
+    // Fetch student data for the student card feature
+    if (user?.email) {
+      const { data, error } = await supabase
+        .from("students")
+        .select(`
+          *,
+          programs:program_id ( name ),
+          cohorts:cohort_id ( name )
+        `)
+        .eq("email", user.email)
+        .single();
+
+      if (!error && data) {
+        studentData.value = data;
+      }
+    }
+
     userLoading.value = false;
   });
 </script>
@@ -102,7 +121,7 @@
             </template>
 
             <template #footer="{ collapsed }">
-                <StudentsUserMenu :collapsed="collapsed" :userLabel="userName" :userAvatar="userImg"/>
+                <StudentsUserMenu :collapsed="collapsed" :userLabel="userName" :userAvatar="userImg" :student="studentData"/>
             </template>
         </UDashboardSidebar>
 

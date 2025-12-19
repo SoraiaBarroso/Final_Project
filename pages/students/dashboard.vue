@@ -366,11 +366,11 @@ async function refreshGoogleToken() {
         </div>
 
         <!-- Actual Content -->
-        <div v-else>
+        <div v-else class="flex flex-col h-full 2xl:justify-between">
         <div class="w-full justify-between items-start lg:items-center flex flex-col lg:flex-row">
           <StudentDashboardGreetings v-if="studentData.first_name" :first_name="studentData.first_name" />
 
-          <div class="flex gap-8 translate-y-6">
+          <div class="flex gap-8 translate-y-4 xl:translate-y-6">
                <StudentDashboardStatCard
                   :value="'X'"
                   label="Activity"
@@ -380,7 +380,7 @@ async function refreshGoogleToken() {
                 <StudentDashboardStatCard
                   :value="'X'"
                   label="Last Login"
-                  icon="i-lucide:clock-1"
+                  icon="i-pajamas:hourglass"
                 />
 
                  <StudentDashboardStatCard
@@ -392,7 +392,7 @@ async function refreshGoogleToken() {
           </div>
         </div>
 
-        <UPageGrid class="h-full grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 mt-14 lg:gap-10">
+        <UPageGrid class="grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 mt-14 lg:gap-10">
           <div class="flex flex-col gap-1">            
             <StudentDashboardMeetingsDisplay v-if="googleAccessToken" :googleAccessToken="googleAccessToken" />
 
@@ -404,7 +404,7 @@ async function refreshGoogleToken() {
             />
           </div>
            
-           <div class="flex flex-col gap-6 2xl:gap-6">
+           <div class="flex flex-col justify-between">
               <StudentDashboardProgress
                 v-if="studentData"
                 :status="studentData.status"
@@ -414,45 +414,45 @@ async function refreshGoogleToken() {
                 :seasons="seasonProgressData"
               />
 
-              <UPageGrid class="grid-cols-2 lg:grid-cols-2 2xl:gap-4">
+              <UPageGrid class="grid-cols-2 lg:grid-cols-2 gap-3  2xl:gap-4">
                 
                 <StudentDashboardStatCard
                     :value="currentSeasonName"
                     label="Current Season"
-                    icon="i-lucide:clipboard-check"
-                    styles=" 2xl:min-h-[100px]"
+                    icon="i-pajamas:planning"
+                    styles=" 2xl:min-h-[100px] lg:min-h-[80px]"
                 />
                 
                 <StudentDashboardStatCard
                   :value="expectedSeasonName"
                   label="Expected Season"
-                  icon="i-lucide:clipboard-check"
-                  styles=" 2xl:min-h-[100px]"
+                  icon="i-pajamas:timer"
+                  styles=" 2xl:min-h-[100px] lg:min-h-[80px]"
                 />
 
                    <StudentDashboardStatCard
                   :value="studentData.exercises_completed"
                   label="Exercises Completed"
-                  icon="i-lucide:clipboard-check"
-                  styles=" 2xl:min-h-[100px]"
+                  icon="i-pajamas:issue-type-requirements"
+                  styles=" 2xl:min-h-[100px] lg:min-h-[80px]"
                 />
                    <StudentDashboardStatCard
                   :value="studentData.completed_projects"
                   label="Projects Completed"
-                  icon="i-lucide:clipboard-check"
-                  styles=" 2xl:min-h-[100px]"
+                  icon="i-pajamas:monitor"
+                  styles=" 2xl:min-h-[100px] lg:min-h-[80px]"
                 />
                    <StudentDashboardStatCard
                   :value="studentData.points ?? 0"
                   label="Qwasar Points"
-                  icon="i-lucide:clipboard-check"
-                  styles=" 2xl:min-h-[100px]"
+                  icon="i-pajamas:work-item-feature"
+                  styles=" 2xl:min-h-[100px] lg:min-h-[80px]"
                 />
                    <StudentDashboardStatCard
                   :value="formatLastLogin(studentData.last_login)"
                   label="Last Login"
-                  icon="i-lucide:clipboard-check"
-                  styles=" 2xl:min-h-[100px]"
+                  icon="i-pajamas:hourglass"
+                  styles="2xl:min-h-[100px] lg:min-h-[80px]"
                 />
               </UPageGrid>
            </div>
