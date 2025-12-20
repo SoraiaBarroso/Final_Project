@@ -349,7 +349,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXAVlLw8PB+HTpIAAAArUlEQVR4nO3csQ3CMBAFUHBFmQ0yCowWNssoZANSUkGTKygsJGMhHL8rT//p7MaSZcnpWVD3dCgpiqIoiupVXY9bReMRjaH6LIqiKIqiKIqiKIqqouLqevrBLIqiKIqiKIqiKIqiKIqiKIqiKIqiqP2pJZ5dp2xujcjly1kURVEURVEURVEURVEURVEURVEURVHUR3XOfq94+5MVUhTVoRrjJJqzufdII/uimlEvV+NoBXBAWeIAAAAASUVORK5CYII=",
-    "last_login": "December  1, 2025  8:29pm",
+    "last_login": "December 19, 2025  8:25pm",
     "ongoing_projects": [
       "My Printf"
     ],
@@ -375,8 +375,8 @@
       "My Cat",
       "Quest05"
     ],
-    "exercises_completed": "79",
-    "points": "2255",
+    "exercises_completed": "80",
+    "points": "1970",
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Data": "100%",
@@ -571,7 +571,7 @@
     "name": "larsen-d_n"
   },
   {
-    "last_modified": "2025-12-19 06:23:58",
+    "last_modified": "2025-12-20 06:22:12",
     "total_students": 14
   }
 ]
