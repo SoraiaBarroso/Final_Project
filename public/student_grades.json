@@ -58,10 +58,11 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/migkas_s/vrac/profile_picture_migkas_s_16093_profile_picture_2025_03_29_18_07.jpg",
-    "last_login": "December  8, 2025  1:37pm",
+    "last_login": "December 20, 2025 12:57pm",
     "ongoing_projects": [
       "My Mastermind",
-      "My Printf"
+      "My Printf",
+      "Quest06"
     ],
     "completed_projects": [
       "Python Quest03",
@@ -101,12 +102,13 @@
       "Quest02",
       "Python Quest02"
     ],
-    "exercises_completed": "81",
-    "points": "1000",
+    "exercises_completed": "82",
+    "points": "715",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
-      "Season 01 Arc 01": "82%"
+      "Season 01 Arc 01": "82%",
+      "Season 01 Arc 02": "20%"
     },
     "name": "migkas_s"
   },
@@ -571,7 +573,7 @@
     "name": "larsen-d_n"
   },
   {
-    "last_modified": "2025-12-20 06:22:12",
+    "last_modified": "2025-12-21 06:22:16",
     "total_students": 14
   }
 ]
