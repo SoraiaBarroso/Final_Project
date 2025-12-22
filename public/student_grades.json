@@ -352,9 +352,7 @@
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXAVlLw8PB+HTpIAAAArUlEQVR4nO3csQ3CMBAFUHBFmQ0yCowWNssoZANSUkGTKygsJGMhHL8rT//p7MaSZcnpWVD3dCgpiqIoiupVXY9bReMRjaH6LIqiKIqiKIqiKIqqouLqevrBLIqiKIqiKIqiKIqiKIqiKIqiKIqiqP2pJZ5dp2xujcjly1kURVEURVEURVEURVEURVEURVEURVHUR3XOfq94+5MVUhTVoRrjJJqzufdII/uimlEvV+NoBXBAWeIAAAAASUVORK5CYII=",
     "last_login": "December 19, 2025  8:25pm",
-    "ongoing_projects": [
-      "My Printf"
-    ],
+    "ongoing_projects": [],
     "completed_projects": [
       "Python Quest03",
       "Quest01",
@@ -362,6 +360,7 @@
       "My Roman Numerals Converter",
       "Python Quest01",
       "Quest00",
+      "My Printf",
       "My Square",
       "My Ngram",
       "Quest04",
@@ -378,11 +377,11 @@
       "Quest05"
     ],
     "exercises_completed": "80",
-    "points": "1970",
+    "points": "2045",
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Data": "100%",
-      "Season 01 Arc 01": "82%"
+      "Season 01 Arc 01": "100%"
     },
     "name": "suarez_g"
   },
@@ -573,7 +572,7 @@
     "name": "larsen-d_n"
   },
   {
-    "last_modified": "2025-12-21 06:22:16",
+    "last_modified": "2025-12-22 06:25:58",
     "total_students": 14
   }
 ]
