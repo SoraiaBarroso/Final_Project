@@ -381,7 +381,8 @@
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Data": "100%",
-      "Season 01 Arc 01": "100%"
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "19%"
     },
     "name": "suarez_g"
   },
@@ -572,7 +573,7 @@
     "name": "larsen-d_n"
   },
   {
-    "last_modified": "2025-12-22 06:25:58",
+    "last_modified": "2025-12-23 06:25:00",
     "total_students": 14
   }
 ]
