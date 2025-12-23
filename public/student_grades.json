@@ -58,10 +58,11 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/migkas_s/vrac/profile_picture_migkas_s_16093_profile_picture_2025_03_29_18_07.jpg",
-    "last_login": "December  8, 2025  1:37pm",
+    "last_login": "December 20, 2025 12:57pm",
     "ongoing_projects": [
       "My Mastermind",
-      "My Printf"
+      "My Printf",
+      "Quest06"
     ],
     "completed_projects": [
       "Python Quest03",
@@ -101,12 +102,13 @@
       "Quest02",
       "Python Quest02"
     ],
-    "exercises_completed": "81",
-    "points": "1000",
+    "exercises_completed": "82",
+    "points": "715",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
-      "Season 01 Arc 01": "82%"
+      "Season 01 Arc 01": "82%",
+      "Season 01 Arc 02": "20%"
     },
     "name": "migkas_s"
   },
@@ -349,10 +351,8 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXAVlLw8PB+HTpIAAAArUlEQVR4nO3csQ3CMBAFUHBFmQ0yCowWNssoZANSUkGTKygsJGMhHL8rT//p7MaSZcnpWVD3dCgpiqIoiupVXY9bReMRjaH6LIqiKIqiKIqiKIqqouLqevrBLIqiKIqiKIqiKIqiKIqiKIqiKIqiqP2pJZ5dp2xujcjly1kURVEURVEURVEURVEURVEURVEURVHUR3XOfq94+5MVUhTVoRrjJJqzufdII/uimlEvV+NoBXBAWeIAAAAASUVORK5CYII=",
-    "last_login": "December  1, 2025  8:29pm",
-    "ongoing_projects": [
-      "My Printf"
-    ],
+    "last_login": "December 19, 2025  8:25pm",
+    "ongoing_projects": [],
     "completed_projects": [
       "Python Quest03",
       "Quest01",
@@ -360,6 +360,7 @@
       "My Roman Numerals Converter",
       "Python Quest01",
       "Quest00",
+      "My Printf",
       "My Square",
       "My Ngram",
       "Quest04",
@@ -375,12 +376,13 @@
       "My Cat",
       "Quest05"
     ],
-    "exercises_completed": "79",
-    "points": "2255",
+    "exercises_completed": "80",
+    "points": "2045",
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Data": "100%",
-      "Season 01 Arc 01": "82%"
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "19%"
     },
     "name": "suarez_g"
   },
@@ -571,7 +573,7 @@
     "name": "larsen-d_n"
   },
   {
-    "last_modified": "2025-12-19 06:23:58",
+    "last_modified": "2025-12-23 06:25:00",
     "total_students": 14
   }
 ]
