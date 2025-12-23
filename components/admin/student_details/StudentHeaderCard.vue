@@ -100,16 +100,43 @@ const handleProgramChange = async () => {
   try {
     isUpdatingProgram.value = true
 
-    // Update student's program in the database
+    // Get the current cohort name
+    const currentCohortName = props.student.cohorts?.name
+
+    // Find the cohort with the same name but for the new program
+    let newCohortId = null
+    if (currentCohortName) {
+      const { data: matchingCohort } = await supabase
+        .from('cohorts')
+        .select('id')
+        .eq('name', currentCohortName)
+        .eq('program_id', selectedProgramId.value)
+        .single()
+
+      if (matchingCohort) {
+        newCohortId = matchingCohort.id
+      }
+    }
+
+    // Update student's program and cohort in the database
+    const updateData = { program_id: selectedProgramId.value }
+    if (newCohortId) {
+      updateData.cohort_id = newCohortId
+    }
+
     const { error } = await supabase
       .from('students')
-      .update({ program_id: selectedProgramId.value})
+      .update(updateData)
       .eq('id', props.student.id)
 
     if (error) throw error
 
     // Update the local student object
     props.student.program_id = selectedProgramId.value
+    if (newCohortId) {
+      props.student.cohort_id = newCohortId
+      selectedCohortId.value = newCohortId
+    }
 
     // Find and update the program name for display
     const selectedProgram = programs.value.find(p => p.id === selectedProgramId.value)
@@ -119,7 +146,9 @@ const handleProgramChange = async () => {
 
     toast.add({
       title: 'Success',
-      description: 'Student program updated successfully.',
+      description: newCohortId
+        ? 'Student program and cohort updated successfully.'
+        : 'Student program updated. Please update the cohort manually.',
       color: 'green'
     })
 
