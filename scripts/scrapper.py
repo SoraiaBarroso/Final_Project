@@ -10,6 +10,7 @@ import requests
 from datetime import datetime, timedelta
 import humanize
 from dotenv import load_dotenv
+from utils import get_supabase_client
 
 # Load environment variables from .env file
 load_dotenv()
@@ -19,6 +20,18 @@ password = os.getenv('SCRAPER_PASSWORD')
 
 if not username or not password:
     raise ValueError("Environment variables SCRAPER_USERNAME and SCRAPER_PASSWORD are not set.")
+
+def get_student_usernames_from_supabase():
+    """Fetch all student usernames from Supabase students table"""
+    try:
+        supabase = get_supabase_client()
+        response = supabase.from_('students').select('username').execute()
+        usernames = [row['username'] for row in response.data if row['username']]
+        print(f"Fetched {len(usernames)} student usernames from Supabase")
+        return usernames
+    except Exception as e:
+        print(f"Error fetching student usernames from Supabase: {e}")
+        return []
 
 def getAuthToken():
     url = "https://casapp.us.qwasar.io/login"
@@ -260,7 +273,14 @@ def scrape(text, id):
 def scrape_and_save():
     print("Scheduled task triggered!")
     cookies=getTokens()
-    studentIds = ["moreira_t", "miasko_j", "bizimung_j", "migkas_s", "zaid-wak_a", "martine_fe", "shittu_i", "tofan_c", "araujo-c_d", "tickaite_e","suarez_g",  "martens_h","hopp_h","abdulla_ma","larsen-d_n","pattes_p","muzyka_v","ribberin_k","van-den-_m","dusoruth_n","tavares_c","cahill_d","jose-san_f","kaheel_h","castro-d_i","jegorovs_k","salem_m","mahmud-h_m","antoni_o","davies_s", "malatant_h", "najjar_a", "amein_a", "sardinat_a", "poggio_a", "loginov_a", "markov_a", "kalinina_a", "sinharoy_a", "monchuk_a", "ita_b", "van-niek_b", "nechtan_d", "corley_d", "schmidt_d", "landim_e", "fokke_g", "oga_gr", "costa_g", "kader_h", "mustafa_h", "bugra-na_h", "santos_j", "ramon-ga_j", "kostadin_k", "dow_k", "blanc_la", "tavares-_m", "turkishv_m", "lafaille_m", "mullins_m", "plomp_m", "mykyta_m", "toweett_n", "alkinani_r", "christop_r", "butler_s", "moustafa_s", "ilenloa_s", "aksoy_s", "lima-cid_s", "pezzini_s", "lomidze_t", "parvanov_v", "doynov_v", "musombi_w", "geldenhu_w", "omonzokp_w", "pakhaliu_y", "samodid_y", "andreas_a", "kashkina_a", "van-zyl_c", "kautzman_c", "oliveira_d", "grabek_d", "malac_e", "sezgin_e", "olivier_e", "parra-ci_e", "bozkurt_e", "demir_f", "vilnoiu_g", "danylova_h", "barman_h", "anan_i", "markelis_i", "hilbolli_i", "dudas_j", "hoang_k", "alsleima_l", "palacios_m", "kirsch_m", "sletterh_m", "daoud_me", "morzy_m", "zvirblyt_m", "theron_n", "kirilov_n", "alonge_o", "barrient_p", "sieradzk_p", "amankwa_p", "morgan_r", "caliskan_s", "anan_s", "serdechn_s", "cvetko_t", "rietveld_w", "pashko_y", "bartalo_y", "zaki-_z"]
+
+    # Fetch student usernames from Supabase instead of hardcoded list
+    studentIds = get_student_usernames_from_supabase()
+
+    if not studentIds:
+        print("No student usernames found. Exiting.")
+        return
+
     url = "https://upskill.us.qwasar.io/users/"
     i = 0 
     finalDic = {}
