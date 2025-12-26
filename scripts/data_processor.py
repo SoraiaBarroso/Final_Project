@@ -172,48 +172,45 @@ class QwasarScraper:
         """Fetch student usernames from Supabase database"""
         try:
             print("📋 Fetching student usernames from database...")
-            
-            # Build query - get username and optionally filter active students
-            query = self.supabase.from_('students').select('username, is_active')
-            
-            # Optional: Filter out inactive students
+
+            # Build query - get username and account_status
+            query = self.supabase.from_('students').select('username, account_status')
+
+            # Optional: Filter out inactive students based on account_status
             if exclude_inactive:
-                query = query.neq('is_active', False)
-            
+                # Only include students with 'Active' account_status
+                query = query.eq('account_status', 'Active')
+
             # Optional: Limit number of students (useful for testing)
             if limit:
                 query = query.limit(limit)
-            
+
             response = query.execute()
-            
+
             if response.data:
-                usernames = [student['username'] for student in response.data 
+                usernames = [student['username'] for student in response.data
                            if student.get('username') and student.get('username').strip()]
-                
+
                 # Remove any None or empty usernames
                 usernames = [u for u in usernames if u]
-                
+
                 print(f"✓ Found {len(usernames)} student usernames in database")
-                
+
                 # Log first few usernames for verification
                 if usernames:
                     preview = usernames[:5]
                     print(f"  Preview: {', '.join(preview)}{'...' if len(usernames) > 5 else ''}")
-                
+
                 return usernames
             else:
                 print("⚠️  No students found in database")
                 return []
-                
+
         except Exception as e:
             print(f"❌ Error fetching student usernames: {e}")
-            # Fallback to hardcoded list if database fetch fails
-            print("🔄 Falling back to hardcoded student list...")
-            return [
-                "moreira_t", "miasko_j", "bizimung_j", "migkas_s", "zaid-wak_a", 
-                "martine_fe", "shittu_i", "tofan_c", "araujo-c_d", "tickaite_e",
-                "suarez_g", "martens_h", "hopp_h", "abdulla_ma", "larsen-d_n"
-            ]  # Shortened fallback list
+            import traceback
+            traceback.print_exc()
+            return []
     
     def extract_student_data(self, html_content, student_id):
         """Extract data from a student's profile page using original working logic"""
