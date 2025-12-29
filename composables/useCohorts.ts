@@ -1,89 +1,111 @@
+import { CACHE_KEYS } from './useCacheInvalidation'
+
 export function useCohorts() {
-    const cohorts = ref<any[]>([])
-    const loading = ref(false)
-    const error = ref<string | null>(null)
+  const nuxtApp = useNuxtApp()
 
-    async function fetchCohorts(filters?: { program_id?: string }) {
-        loading.value = true
-        error.value = null
-        try {
-            const response = await $fetch('/api/cohorts')
-            let fetchedCohorts = response?.data || []
-            console.log('Fetched cohorts:', fetchedCohorts)
+  // Use Nuxt's useFetch with caching
+  const { data: cohortsData, refresh, status, error: fetchError } = useFetch('/api/cohorts', {
+    key: CACHE_KEYS.COHORTS,
+    getCachedData(key) {
+      return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+    }
+  })
 
-            // Apply filters if provided
-            if (filters?.program_id) {
-                fetchedCohorts = fetchedCohorts.filter((cohort: any) => {
-                    // Check if any program in the programs array matches the filter
-                    return cohort.programs?.some((program: any) => program.id === filters.program_id)
-                })
-                console.log('Filtered cohorts by program_id:', filters.program_id, fetchedCohorts)
-            }
+  // Local filtered state (for when filters are applied)
+  const filteredCohorts = ref<any[]>([])
+  const hasActiveFilter = ref(false)
 
-            cohorts.value = fetchedCohorts
-        } catch (err: any) {
-            error.value = err?.message || 'Failed to fetch cohorts'
-            console.error('Error fetching cohorts:', err)
-        } finally {
-            loading.value = false
+  // Computed properties
+  const cohorts = computed(() => {
+    if (hasActiveFilter.value) {
+      return filteredCohorts.value
+    }
+    return cohortsData.value?.data || []
+  })
+  const loading = computed(() => status.value === 'pending')
+  const error = computed(() => fetchError.value?.message || null)
+
+  /**
+   * Fetch cohorts with optional filtering
+   * Filters are applied client-side to preserve caching benefits
+   */
+  async function fetchCohorts(filters?: { program_id?: string }) {
+    // Ensure data is loaded
+    if (!cohortsData.value) {
+      await refresh()
+    }
+
+    const allCohorts = cohortsData.value?.data || []
+
+    // Apply filters if provided
+    if (filters?.program_id) {
+      hasActiveFilter.value = true
+      filteredCohorts.value = allCohorts.filter((cohort: any) => {
+        return cohort.programs?.some((program: any) => program.id === filters.program_id)
+      })
+    } else {
+      hasActiveFilter.value = false
+      filteredCohorts.value = []
+    }
+  }
+
+  /**
+   * Create a new cohort
+   */
+  async function createCohort(cohortData: {
+    name: string;
+    meeting_id?: string;
+    is_active?: boolean;
+    programs: Array<{ program_id: string; start_date: string; end_date: string }>
+  }) {
+    try {
+      const response = await $fetch('/api/cohorts/create', {
+        method: 'POST',
+        body: cohortData
+      })
+
+      // Invalidate cache and refresh
+      await refreshNuxtData(CACHE_KEYS.COHORTS)
+
+      return response
+    } catch (err: any) {
+      const errorMessage = err?.data?.statusMessage || err?.message || 'Failed to create cohort'
+      console.error('Error creating cohort:', err)
+      throw new Error(errorMessage)
+    }
+  }
+
+  /**
+   * Toggle cohort active status
+   */
+  async function toggleCohortStatus(cohortName: string, isActive: boolean) {
+    try {
+      const response = await $fetch('/api/cohorts/update-status', {
+        method: 'POST',
+        body: {
+          cohort_name: cohortName,
+          is_active: isActive
         }
-    }
+      })
 
-    async function createCohort(cohortData: {
-        name: string;
-        meeting_id?: string;
-        is_active?: boolean;
-        programs: Array<{ program_id: string; start_date: string; end_date: string }>
-    }) {
-        loading.value = true
-        error.value = null
-        console.log('Creating cohort with data:', cohortData)
-        try {
-            const response = await $fetch('/api/cohorts/create', {
-                method: 'POST',
-                body: cohortData
-            })
-            // Refresh the cohorts list after creation
-            await fetchCohorts()
-            return response
-        } catch (err: any) {
-            error.value = err?.data?.statusMessage || err?.message || 'Failed to create cohort'
-            console.error('Error creating cohort:', err)
-            throw err
-        } finally {
-            loading.value = false
-        }
-    }
+      // Invalidate cache and refresh
+      await refreshNuxtData(CACHE_KEYS.COHORTS)
 
-    async function toggleCohortStatus(cohortName: string, isActive: boolean) {
-        loading.value = true
-        error.value = null
-        try {
-            const response = await $fetch('/api/cohorts/update-status', {
-                method: 'POST',
-                body: {
-                    cohort_name: cohortName,
-                    is_active: isActive
-                }
-            })
-            // Refresh the cohorts list after update
-            await fetchCohorts()
-            return response
-        } catch (err: any) {
-            error.value = err?.data?.statusMessage || err?.message || 'Failed to update cohort status'
-            console.error('Error updating cohort status:', err)
-            throw err
-        } finally {
-            loading.value = false
-        }
+      return response
+    } catch (err: any) {
+      const errorMessage = err?.data?.statusMessage || err?.message || 'Failed to update cohort status'
+      console.error('Error updating cohort status:', err)
+      throw new Error(errorMessage)
     }
+  }
 
-    return {
-        cohorts,
-        loading,
-        error,
-        fetchCohorts,
-        createCohort,
-        toggleCohortStatus
-    }
+  return {
+    cohorts,
+    loading,
+    error,
+    fetchCohorts,
+    refresh,
+    createCohort,
+    toggleCohortStatus
+  }
 }

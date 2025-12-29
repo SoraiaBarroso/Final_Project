@@ -1,53 +1,60 @@
+import { CACHE_KEYS } from './useCacheInvalidation'
+
 export function useSeasons() {
   const supabase = useSupabaseClient()
-  const seasons = ref<any[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+  const nuxtApp = useNuxtApp()
+
+  // Use Nuxt's useFetch with caching for the main seasons list
+  const { data: seasonsData, refresh, status, error: fetchError } = useFetch('/api/seasons', {
+    key: CACHE_KEYS.SEASONS,
+    getCachedData(key) {
+      return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+    }
+  })
+
+  // Local state for filtered seasons (by program)
+  const filteredSeasons = ref<any[]>([])
+  const hasActiveFilter = ref(false)
+
+  // Computed properties
+  const seasons = computed(() => {
+    if (hasActiveFilter.value) {
+      return filteredSeasons.value
+    }
+    return seasonsData.value?.data || []
+  })
+  const loading = computed(() => status.value === 'pending')
+  const error = computed(() => fetchError.value?.message || null)
 
   /**
    * Computed property to get seasons as dropdown options
    */
   const seasonOptions = computed(() =>
-    seasons.value.map(s => ({
+    seasons.value.map((s: any) => ({
       label: s.name,
       value: s.id
     }))
   )
 
   /**
-   * Fetch all seasons from the database
+   * Fetch all seasons (uses cache, call refresh() to force refetch)
    */
   async function fetchSeasons() {
-    loading.value = true
-    error.value = null
-    try {
-      const { data, error: fetchError } = await supabase
-        .from('seasons')
-        .select('id, name')
-        .order('name', { ascending: true })
-
-      if (fetchError) throw fetchError
-
-      seasons.value = data || []
-      return data
-    } catch (err: any) {
-      error.value = err?.message || 'Failed to fetch seasons'
-      console.error('Error fetching seasons:', err)
-      throw err
-    } finally {
-      loading.value = false
+    hasActiveFilter.value = false
+    if (!seasonsData.value) {
+      await refresh()
     }
+    return seasonsData.value?.data || []
   }
 
   /**
    * Fetch seasons filtered by program
+   * Note: This uses direct Supabase query as it's a dynamic filter
    */
   async function fetchSeasonsByProgram(programId: string) {
-    loading.value = true
-    error.value = null
+    hasActiveFilter.value = true
     try {
-      // Get seasons for the selected program through program_cohort_seasons
-      const { data, error: fetchError } = await supabase
+      const { data, error: fetchErr } = await supabase
         .from('program_cohort_seasons')
         .select(`
           season_id,
@@ -58,9 +65,9 @@ export function useSeasons() {
         `)
         .eq('program_id', programId)
 
-      if (fetchError) throw fetchError
+      if (fetchErr) throw fetchErr
 
-      // Extract unique seasons (avoid duplicates)
+      // Extract unique seasons
       const uniqueSeasons = new Map()
       data?.forEach((item: any) => {
         if (item.seasons) {
@@ -71,19 +78,16 @@ export function useSeasons() {
         }
       })
 
-      seasons.value = Array.from(uniqueSeasons.values())
-      return seasons.value
+      filteredSeasons.value = Array.from(uniqueSeasons.values())
+      return filteredSeasons.value
     } catch (err: any) {
-      error.value = err?.message || 'Failed to fetch seasons by program'
       console.error('Error fetching seasons by program:', err)
-      throw err
-    } finally {
-      loading.value = false
+      throw new Error(err?.message || 'Failed to fetch seasons by program')
     }
   }
 
   /**
-   * Create a new season
+   * Create a new season assignment
    */
   async function createSeason(seasonData: {
     program_id: string
@@ -92,20 +96,23 @@ export function useSeasons() {
     start_date: string
     end_date: string
   }) {
-    loading.value = true
-    error.value = null
     try {
       const response = await $fetch('/api/program-cohort-seasons/create', {
         method: 'POST',
         body: seasonData
       })
+
+      // Invalidate related caches
+      await Promise.all([
+        refreshNuxtData(CACHE_KEYS.SEASONS),
+        refreshNuxtData(CACHE_KEYS.COHORTS)
+      ])
+
       return response
     } catch (err: any) {
-      error.value = err?.data?.statusMessage || err?.message || 'Failed to create season'
+      const errorMessage = err?.data?.statusMessage || err?.message || 'Failed to create season'
       console.error('Error creating season:', err)
-      throw err
-    } finally {
-      loading.value = false
+      throw new Error(errorMessage)
     }
   }
 
@@ -113,7 +120,7 @@ export function useSeasons() {
    * Get a single season by ID
    */
   function getSeasonById(id: string) {
-    return seasons.value.find(s => s.id === id)
+    return seasons.value.find((s: any) => s.id === id)
   }
 
   return {
@@ -124,6 +131,7 @@ export function useSeasons() {
     fetchSeasons,
     fetchSeasonsByProgram,
     createSeason,
-    getSeasonById
+    getSeasonById,
+    refresh
   }
 }

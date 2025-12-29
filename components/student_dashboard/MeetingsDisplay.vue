@@ -1,8 +1,29 @@
 <script setup>
   import { ref } from "vue";
+  import { CACHE_KEYS } from '~/composables/useCacheInvalidation';
 
+  const props = defineProps({
+    googleAccessToken: { type: String, required: true },
+  });
+
+  const nuxtApp = useNuxtApp();
   const meetingsScroll = ref(null);
-  const calendarEvents = ref([]);
+
+  // Use cached fetch for calendar events
+  const { data: calendarData } = useFetch('/api/student/calendar-events', {
+    key: CACHE_KEYS.STUDENT_CALENDAR_TODAY,
+    query: { period: 'today' },
+    headers: {
+      'x-google-token': props.googleAccessToken
+    },
+    getCachedData(key) {
+      return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+    },
+    // Only fetch if we have a token
+    immediate: !!props.googleAccessToken
+  });
+
+  const calendarEvents = computed(() => calendarData.value?.data || []);
 
   function scrollMeetings(direction) {
     const el = meetingsScroll.value;
@@ -24,60 +45,6 @@
     });
   }
 
-  function getTimeRange(period = "week") {
-    let timeMin = new Date();
-    let timeMax = new Date();
-
-    if (period === "week") {
-      // Set to Monday of current week (start of week)
-      timeMin.setDate(timeMin.getDate() - timeMin.getDay() + 1);
-      timeMin.setHours(0, 0, 0, 0);
-
-      // Set to Monday of next week (end of current week)
-      timeMax.setDate(timeMax.getDate() - timeMax.getDay() + 8);
-      timeMax.setHours(0, 0, 0, 0);
-    } else if (period === "month") {
-      // Set to beginning of current month
-      timeMin.setDate(1);
-      timeMin.setHours(0, 0, 0, 0);
-
-      // Set to beginning of next month
-      timeMax.setMonth(timeMax.getMonth() + 1, 1);
-      timeMax.setHours(0, 0, 0, 0);
-    } else if (period === "today") {
-      timeMin.setHours(0, 0, 0, 0);
-      timeMax.setHours(23, 59, 59, 999);
-    }
-
-    return {
-      timeMin: timeMin.toISOString(),
-      timeMax: timeMax.toISOString(),
-    };
-  }
-
-  async function fetchCalendarEvents(accessToken, period = "today") {
-    const { timeMin, timeMax } = getTimeRange(period);
-
-    const res = await fetch(
-      `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(
-        timeMin
-      )}&timeMax=${encodeURIComponent(timeMax)}&singleEvents=true&orderBy=startTime`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    const data = await res.json();
-    calendarEvents.value = data.items || [];
-    console.log("Current calendar home:", calendarEvents.value);
-  }
-
-  const props = defineProps({
-    googleAccessToken: { type: Number, required: true },
-  });
-
   const openLocation = (url) => {
     if (url) {
       window.open(url, "_blank", "noopener");
@@ -85,12 +52,6 @@
       console.warn("No location provided for this event");
     }
   };
-
-  onMounted(() => {
-    if (props.googleAccessToken) {
-      fetchCalendarEvents(props.googleAccessToken);
-    }
-  });
 </script>
 
 <template>

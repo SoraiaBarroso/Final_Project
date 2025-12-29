@@ -1,17 +1,58 @@
 <script setup>
-  import { onMounted, computed } from "vue";
+  import { computed } from "vue";
+  import { CACHE_KEYS } from '~/composables/useCacheInvalidation';
 
   // Page that cannot be accessed without authentication and has logic to log-out a user.
   definePageMeta({
     layout: "default",
-    middleware: ["admin"], // check if user has admin role (auth is checked globally)
+    middleware: ["admin"], 
   });
 
-  const supabase = useSupabaseClient();
+  const nuxtApp = useNuxtApp();
 
-  const data = ref([]);
-  const snapshotChange = ref(null);
-  const loading = ref(true);
+  // Use cached fetch for snapshot data
+  const { data: snapshotData, status: snapshotStatus } = useFetch('/api/snapshot', {
+    key: CACHE_KEYS.SNAPSHOT,
+    getCachedData(key) {
+      return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+    }
+  });
+
+  // Use cached fetch for students data
+  const { data: studentsData, status: studentsStatus, refresh: refreshStudents } = useFetch('/api/dashboard-students', {
+    key: CACHE_KEYS.DASHBOARD_STUDENTS,
+    getCachedData(key) {
+      return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+    }
+  });
+
+  // Computed loading state
+  const loading = computed(() =>
+    snapshotStatus.value === 'pending' || studentsStatus.value === 'pending'
+  );
+
+  // Process snapshot data
+  const snapshotChange = computed(() => {
+    const res = snapshotData.value;
+    return res?.data?.value ?? res?.data ?? res ?? null;
+  });
+
+  // Process students data for the table
+  const data = computed(() => {
+    const students = studentsData.value?.data || [];
+    return students.map((s) => ({
+      id: s.id,
+      status: s.status || "Unknown",
+      name: `${s.first_name} ${s.last_name}`,
+      email: s.email,
+      program: s.programs?.name || "",
+      username: s.username || "",
+      cohort: s.cohorts?.name || "",
+      accountStatus: s.account_status || 'Active',
+      points_assigned: s.points_assigned || 0,
+      profileImgUrl: s.profile_image_url || "",
+    }));
+  });
 
   // Filter to only include active students for stats
   const activeStudents = computed(() => {
@@ -19,66 +60,14 @@
       student.accountStatus === 'Active'
     );
   });
-  
-  const getSnapshotChange = async () => {
-    try {
-      const res = await $fetch("/api/snapshot");
-      // some handlers return { data: { value } } while others may return the value directly
-      const payload = res?.data?.value ?? res?.data ?? res
-      snapshotChange.value = payload;
-      return snapshotChange.value;
-    } catch (err) {
-      console.error('Failed to fetch snapshot:', err);
-      snapshotChange.value = null;
-      return null;
-    }
-  };
 
+  // Function to force refresh (used by StudentsTable @refresh-data event)
   const fetchStudents = async () => {
-    const { data: students, error } = await supabase.from("students").select(`
-      id,
-      first_name,
-      last_name,
-      email,
-      status,
-      account_status,
-      username,
-      cohorts(name),
-      programs(name),
-      points_assigned,
-      profile_image_url
-  `);
-
-    if (error) {
-      console.error("Error fetching students:", error);
-      loading.value = false;
-      return;
-    }
-
-    // show all students (both active and inactive)
-    data.value = (students || [])
-      .map((s) => ({
-        id: s.id,
-        status: s.status || "Unknown",
-        name: `${s.first_name} ${s.last_name}`,
-        email: s.email,
-        program: s.programs?.name || "",
-        username: s.username || "",
-        cohort: s.cohorts?.name || "",
-        accountStatus: s.account_status || 'Active',
-        points_assigned: s.points_assigned || 0,
-        profileImgUrl: s.profile_image_url || "",
-      }));
-
-    console.log("Processed student data for table:", data.value);
-    loading.value = false;
+    // Clear the cache first so getCachedData returns nothing
+    delete nuxtApp.payload.data[CACHE_KEYS.DASHBOARD_STUDENTS];
+    // Then refresh to get fresh data
+    await refreshStudents();
   };
-
-  onMounted(async () => {
-    console.log("Admin dashboard mounted");
-    await getSnapshotChange();
-    await fetchStudents();
-  });
 </script>
 
 <template>
@@ -93,7 +82,7 @@
 
         <template #body>
             <UPageGrid class="lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-px">
-                <StudentStatCard
+              <StudentStatCard
                 title="STUDENTS"
                 :count="activeStudents.length"
                 icon="i-pajamas:users"

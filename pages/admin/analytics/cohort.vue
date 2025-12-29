@@ -22,7 +22,6 @@ const sortOptions = [
 
 onMounted(async () => {
   await fetchAttendanceByCohort();
-  console.log('Cohort analytics data:', dataByCohort.value);
 });
 
 // Computed property for filtered and sorted cohorts
@@ -96,99 +95,89 @@ const overallStats = computed(() => {
     avgWorkshopAttendance: workshopWeight > 0 ? Math.round((workshopSum / workshopWeight) * 100) / 100 : null,
   };
 });
-
-
-// Format percentage for display
-const formatPercentage = (value) => {
-  if (value == null) return 'N/A';
-  return `${value.toFixed(1)}%`;
-};
 </script>
 
 <template>
   <div class="space-y-6">
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 lg:gap-px">
-        <StudentStatCard
-          title="Total Cohorts"
-          :count="overallStats.totalCohorts"
-          icon="i-pajamas:users"
-          icon-color="info"
-          rounded-class="rounded-lg xl:rounded-none xl:rounded-l-lg"
-        />
+      <StudentStatCard
+        title="Total Cohorts"
+        :count="overallStats.totalCohorts"
+        icon="i-pajamas:users"
+        icon-color="info"
+        rounded-class="rounded-lg xl:rounded-none xl:rounded-l-lg"
+      />
 
-       <StudentStatCard
-            title="Total Students"
-            :count="overallStats.totalStudents"
-            icon="i-lucide:graduation-cap"
-            icon-color="success"
-            rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg"
-        />
+      <StudentStatCard
+        title="Total Students"
+        :count="overallStats.totalStudents"
+        icon="i-lucide:graduation-cap"
+        icon-color="success"
+        rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg"
+      />
     </div>
 
     <!-- Filters and Search -->
-    <UInput
-      v-model="searchQuery"
-      icon="i-lucide:search"
-      placeholder="Search cohorts..."
-      class="w-full sm:w-64"
-    />
+    <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+      <UInput
+        v-model="searchQuery"
+        icon="i-lucide-search"
+        placeholder="Search cohorts..."
+        class="w-full sm:w-72"
+      />
 
-    <!-- Cohort Cards -->
-    <div v-if="attendanceLoading" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <USkeleton class="h-64" v-for="i in 4" :key="i" />
+      <USelect
+        v-model="selectedSortOption"
+        :items="sortOptions"
+        placeholder="Sort by..."
+        class="w-full sm:w-48"
+      />
     </div>
 
-    <div v-else-if="attendanceError" class="text-center py-8">
-      <UIcon name="i-lucide:alert-circle" class="text-red-500 size-12 mx-auto mb-4" />
-      <p class="text-muted">Error loading cohort data: {{ attendanceError }}</p>
+    <!-- Loading State -->
+    <div v-if="attendanceLoading" class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+      <USkeleton class="h-48 rounded-lg" v-for="i in 6" :key="i" />
     </div>
 
-    <div v-else-if="filteredCohorts.length === 0" class="text-center py-8">
-      <UIcon name="i-lucide:inbox" class="text-muted size-12 mx-auto mb-4" />
-      <p class="text-muted">No cohorts found</p>
-    </div>
+    <!-- Error State -->
+    <UCard v-else-if="attendanceError" class="text-center py-12">
+      <div class="flex flex-col items-center gap-4">
+        <div class="flex size-16 items-center justify-center rounded-full bg-error/10">
+          <UIcon name="i-lucide-alert-circle" class="size-8 text-error" />
+        </div>
+        <div>
+          <p class="text-lg font-medium text-highlighted">Error Loading Data</p>
+          <p class="text-sm text-muted mt-1">{{ attendanceError }}</p>
+        </div>
+        <UButton color="primary" variant="soft" @click="fetchAttendanceByCohort">
+          Try Again
+        </UButton>
+      </div>
+    </UCard>
 
-    <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <UCard
+    <!-- Empty State -->
+    <UCard v-else-if="filteredCohorts.length === 0" class="text-center py-12">
+      <div class="flex flex-col items-center gap-4">
+        <div class="flex size-16 items-center justify-center rounded-full bg-muted/10">
+          <UIcon name="i-lucide-inbox" class="size-8 text-muted" />
+        </div>
+        <div>
+          <p class="text-lg font-medium text-highlighted">No Cohorts Found</p>
+          <p class="text-sm text-muted mt-1">
+            {{ searchQuery ? 'Try adjusting your search query' : 'No cohort data available' }}
+          </p>
+        </div>
+      </div>
+    </UCard>
+
+    <!-- Cohort Cards Grid -->
+    <div v-else class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+      <CohortAnalyticsCard
         v-for="cohort in filteredCohorts"
         :key="cohort.cohort_name"
-        :ui="{
-          header: '!border-noner flex justify-between items-center',
-          body: '!px-6',
-        }"
-      >
-        <template #header>
-          <h3 class="text-lg font-semibold text-highlighted">{{ cohort.cohort_name }}</h3>
-          <p class="text-sm text-muted mt-1">
-            {{ cohort.students_count }} student{{ cohort.students_count !== 1 ? 's' : '' }}
-          </p>
-        </template>
-
-        <!-- Attendance Averages -->
-        <div class="flex  gap-14">
-          <ProgressCircle
-              :percentage="cohort.averages?.overall"
-              :size="160"
-              :stroke-width="15"
-          />
-          <div class="flex flex-col space-y-4 mt-2">
-            <div>
-                <p class="text-toned dark:text-muted">Workshops</p>
-                <p class="text-2xl font-bold">{{ cohort.averages?.workshop }}%</p>
-            </div>
-            <div>
-                <p class="text-toned dark:text-muted">Mentoring</p>
-                <p class="text-2xl font-bold">{{ cohort.averages?.mentoring }}%</p>
-            </div>
-            
-          </div>
-          <div class="mt-2">
-              <p class="text-toned dark:text-muted">Standup</p>
-              <p class="text-2xl font-bold">{{ cohort.averages?.standup }}%</p>
-          </div>
-        </div>
-      </UCard>
+        :cohort="cohort"
+      />
     </div>
   </div>
 </template>

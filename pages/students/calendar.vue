@@ -1,15 +1,17 @@
 <script setup>
+import { CACHE_KEYS } from '~/composables/useCacheInvalidation';
+
 definePageMeta({
     layout: "custom",
     middleware: ["auth", "student-only"],
 });
 
 const supabase = useSupabaseClient();
+const nuxtApp = useNuxtApp();
 const runtimeConfig = useRuntimeConfig();
 
 // Google Calendar integration
 const googleAccessToken = ref(null);
-const calendarEvents = ref([]);
 
 // Current date tracking
 const currentDate = ref(new Date());
@@ -135,37 +137,25 @@ const nextDay = () => {
     selectedDay.value = newDay;
 };
 
-// Fetch calendar events from Google Calendar API
-async function fetchCalendarEvents(accessToken) {
-    try {
-        // Get the first and last day of the current month
-        const timeMin = new Date(currentYear.value, currentMonth.value, 1).toISOString();
-        const timeMax = new Date(currentYear.value, currentMonth.value + 1, 0, 23, 59, 59).toISOString();
+// Dynamic cache key based on month/year
+const calendarCacheKey = computed(() =>
+    `${CACHE_KEYS.STUDENT_CALENDAR_MONTH}-${currentYear.value}-${currentMonth.value}`
+);
 
-        const res = await fetch(
-            `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(
-                timeMin
-            )}&timeMax=${encodeURIComponent(timeMax)}&singleEvents=true&orderBy=startTime`,
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        );
+// Use cached fetch for calendar events
+const { data: calendarData, refresh: refreshCalendar } = useFetch('/api/student/calendar-events', {
+    key: calendarCacheKey.value,
+    query: { period: 'month', month: currentMonth.value, year: currentYear.value },
+    headers: computed(() => ({
+        'x-google-token': googleAccessToken.value || ''
+    })),
+    getCachedData(key) {
+        return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+    },
+    immediate: false // We'll trigger manually after we have the token
+});
 
-      if (!res.ok) {
-        toast.error("Failed to fetch calendar events");
-        console.error("Failed to fetch calendar events:", res.statusText);
-        return;
-      }
-
-        const data = await res.json();
-        calendarEvents.value = data.items || [];
-    } catch (error) {
-        console.error("Error fetching calendar events:", error);
-        calendarEvents.value = [];
-    }
-}
+const calendarEvents = computed(() => calendarData.value?.data || []);
 
 // Refresh Google token when expired
 async function refreshGoogleToken() {
@@ -224,12 +214,9 @@ onMounted(async () => {
 
     googleAccessToken.value = session?.provider_token || null;
 
-    console.log("Google access token:", googleAccessToken.value ? "Found" : "Not found");
-
     if (googleAccessToken.value) {
-        console.log("Fetching calendar events with token:", googleAccessToken.value);
-        await fetchCalendarEvents(googleAccessToken.value);
-    } 
+        await refreshCalendar();
+    }
 });
 
 // Watch for token changes and re-fetch events
@@ -237,10 +224,11 @@ watch(
     googleAccessToken,
     async (newToken) => {
       if (!newToken) {
-        console.log("Access token is undefined, refreshing...");
         try {
           await refreshGoogleToken();
-          await fetchCalendarEvents(googleAccessToken.value);
+          if (googleAccessToken.value) {
+            await refreshCalendar();
+          }
         } catch (error) {
           console.error("Failed to refresh Google token", error);
         }
@@ -249,10 +237,13 @@ watch(
     { immediate: true }
 );
 
-// Re-fetch events when month changes
+// Re-fetch events when month changes (invalidate cache for new month)
 watch([currentMonth, currentYear], async () => {
     if (googleAccessToken.value) {
-        await fetchCalendarEvents(googleAccessToken.value);
+        // Clear cache for the new month key and refresh
+        const newKey = `${CACHE_KEYS.STUDENT_CALENDAR_MONTH}-${currentYear.value}-${currentMonth.value}`;
+        delete nuxtApp.payload.data[newKey];
+        await refreshCalendar();
     }
 });
 </script>

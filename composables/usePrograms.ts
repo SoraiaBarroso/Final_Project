@@ -1,49 +1,52 @@
+import { CACHE_KEYS } from './useCacheInvalidation'
+
 export function usePrograms() {
-  const programs = ref<any[]>([])
-  const loading = ref(false)
-  const error = ref<string | null>(null)
+  const nuxtApp = useNuxtApp()
+
+  // Use Nuxt's useFetch with caching
+  const { data: programsData, refresh, status, error: fetchError } = useFetch('/api/programs', {
+    key: CACHE_KEYS.PROGRAMS,
+    getCachedData(key) {
+      // Return cached data if available (prevents refetch on navigation)
+      return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+    }
+  })
+
+  // Computed properties for easy access
+  const programs = computed(() => programsData.value?.data || [])
+  const loading = computed(() => status.value === 'pending')
+  const error = computed(() => fetchError.value?.message || null)
 
   /**
    * Computed property to get programs as dropdown options
    */
   const programOptions = computed(() =>
-    programs.value.map(p => ({
+    programs.value.map((p: any) => ({
       label: p.name,
       value: p.id
     }))
   )
 
   /**
-   * Fetch all programs from the database
+   * Force refresh programs data (clears cache and refetches)
    */
   async function fetchPrograms() {
-    loading.value = true
-    error.value = null
-    try {
-      const response = await $fetch('/api/programs')
-      programs.value = response?.data || []
-      return response
-    } catch (err: any) {
-      error.value = err?.message || 'Failed to fetch programs'
-      console.error('Error fetching programs:', err)
-      throw err
-    } finally {
-      loading.value = false
-    }
+    await refresh()
+    return { data: programs.value }
   }
 
   /**
    * Get a single program by ID
    */
   function getProgramById(id: string) {
-    return programs.value.find(p => p.id === id)
+    return programs.value.find((p: any) => p.id === id)
   }
 
   /**
    * Get a single program by name
    */
   function getProgramByName(name: string) {
-    return programs.value.find(p => p.name === name)
+    return programs.value.find((p: any) => p.name === name)
   }
 
   return {
@@ -52,6 +55,7 @@ export function usePrograms() {
     loading,
     error,
     fetchPrograms,
+    refresh,
     getProgramById,
     getProgramByName
   }

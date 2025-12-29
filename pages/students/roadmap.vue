@@ -1,16 +1,26 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { CACHE_KEYS } from '~/composables/useCacheInvalidation';
 
 definePageMeta({
   layout: "custom",
   middleware: ["auth", "student-only"],
 });
 
-const supabase = useSupabaseClient();
-const user = useSupabaseUser();
+const nuxtApp = useNuxtApp();
 
-const seasons = ref([]);
-const loading = ref(true);
+// Use cached fetch for roadmap data
+const { data: roadmapData, status: roadmapStatus } = useFetch('/api/student/roadmap', {
+  key: CACHE_KEYS.STUDENT_ROADMAP,
+  getCachedData(key) {
+    return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+  }
+});
+
+// Computed loading state
+const loading = computed(() => roadmapStatus.value === 'pending');
+
+// Process roadmap data
+const seasons = computed(() => roadmapData.value?.data || []);
 
 // Array of random colors for season cards
 const colors = [
@@ -40,123 +50,6 @@ const formatDate = (dateString) => {
     day: 'numeric'
   });
 };
-
-// Fetch seasons and progress data
-const fetchSeasonData = async () => {
-  try {
-    loading.value = true;
-
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    // Get student's cohort
-    const { data: studentData, error: studentError } = await supabase
-      .from('students')
-      .select('id, cohort_id, program_id')
-      .eq('email', session?.user?.email)
-      .single();
-
-    if (studentError) throw studentError;
-    console.log('Student Data:', studentData);
-
-    // Get student season progress first to determine which Season 03 track they're in
-    const { data: progressData, error: progressError } = await supabase
-      .from('student_season_progress')
-      .select('*, seasons(id, name)')
-      .eq('student_id', studentData.id);
-
-    if (progressError) throw progressError;
-
-    // Find which Season 03 specialization the student has progress in
-    const season03Progress = progressData.find(p =>
-      p.seasons?.name?.match(/^Season 03 Software Engineer/)
-    );
-    const studentSeason03Track = season03Progress?.seasons?.name;
-
-    // Get program cohort seasons
-    const { data: cohortSeasons, error: seasonsError } = await supabase
-      .from('program_cohort_seasons')
-      .select(`
-        *,
-        seasons (
-          name
-        )
-      `)
-      .eq('cohort_id', studentData.cohort_id)
-      .order('start_date', { ascending: true });
-
-    if (seasonsError) throw seasonsError;
-
-    // Fetch all projects for the student's program
-    const { data: projectsData, error: projectsError } = await supabase
-      .from('projects')
-      .select('id, name, season_id')
-      .eq('program_id', studentData.program_id);
-
-    if (projectsError) throw projectsError;
-
-    // Fetch student's completed projects
-    const { data: completedProjectsData, error: completedError } = await supabase
-      .from('student_project_completion')
-      .select('project_id, is_completed')
-      .eq('student_id', studentData.id)
-      .eq('is_completed', true);
-
-    if (completedError) throw completedError;
-
-    // Create a set of completed project IDs for quick lookup
-    const completedProjectIds = new Set(
-      completedProjectsData?.map(cp => cp.project_id) || []
-    );
-
-    // Filter and merge data
-    // Filter out Season 03 tracks that don't match the student's track
-    const filteredSeasons = cohortSeasons.filter((season) => {
-      const seasonName = season.seasons?.name;
-      const isSeason03SE = seasonName?.match(/^Season 03 Software Engineer/);
-
-      // If it's a Season 03 SE track, only include it if it matches the student's track
-      if (isSeason03SE) {
-        return studentSeason03Track && seasonName === studentSeason03Track;
-      }
-
-      // Include all other seasons
-      return true;
-    });
-
-    seasons.value = filteredSeasons.map((season) => {
-      const progress = progressData.find(p => p.season_id === season.season_id);
-
-      // Get projects for this season and mark completion status
-      const seasonProjects = (projectsData || [])
-        .filter(p => p.season_id === season.season_id)
-        .map(project => ({
-          ...project,
-          is_completed: completedProjectIds.has(project.id)
-        }));
-
-      return {
-        ...season,
-        name: season.seasons?.name || 'Season',
-        description: season.seasons?.description || '',
-        progress_percentage: progress?.progress_percentage || '0.00',
-        is_completed: progress?.is_completed || false,
-        completion_date: progress?.completion_date || null,
-        projects: seasonProjects,
-      };
-    });
-
-  } catch (error) {
-    console.error('Error fetching season data:', error);
-  } finally {
-    loading.value = false;
-  }
-};
-
-onMounted(() => {
-  fetchSeasonData();
-});
 </script>
 
 <template>

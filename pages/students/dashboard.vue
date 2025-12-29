@@ -1,46 +1,34 @@
 <script setup>
+  import { CACHE_KEYS } from '~/composables/useCacheInvalidation';
+
   definePageMeta({
     layout: "custom",
     middleware: ["auth", "student-only"],
   });
 
-  const studentData = ref({});
   const supabase = useSupabaseClient();
+  const nuxtApp = useNuxtApp();
   const runtimeConfig = useRuntimeConfig();
-  const calendarEvents = ref([]);
-  const toast = useToast();
   const tipsRead = ref(0);
-  const isLoading = ref(true);
+  const googleAccessToken = ref(null);
 
-  const totalSeasons = ref(0);
-  // Helper: filtered and deduplicated seasons for progress count
-  const filteredSeasons = computed(() => {
-    if (!Array.isArray(allProgramSeasons.value)) return [];
-    // Exclude 'Final Project' and 'Onboarding'
-    let filtered = allProgramSeasons.value.filter(
-      (s) => s.name !== "Final Project" && s.name !== "Onboarding"
-    );
-    // Deduplicate Season 03 (any specialization)
-    const seen = new Set();
-    filtered = filtered.filter((s) => {
-      // Match 'Season 03 Software Engineer ...'
-      const match = s.name.match(/^Season 03 Software Engineer( .+)?$/);
-      if (match) {
-        if (seen.has("Season 03")) return false;
-        seen.add("Season 03");
-        return true;
-      }
-      return true;
-    });
-    return filtered;
+  // Use cached fetch for student dashboard data
+  const { data: dashboardData, status: dashboardStatus } = useFetch('/api/student/dashboard', {
+    key: CACHE_KEYS.STUDENT_DASHBOARD,
+    getCachedData(key) {
+      return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+    }
   });
 
-  const completedSeasons = ref(0);
-  const googleAccessToken = ref(null);
-  // Store all seasons for the student's program for id-to-name mapping
-  const allProgramSeasons = ref([]);
-  // Store season progress data for display
-  const seasonProgressData = ref([]);
+  // Computed loading state
+  const isLoading = computed(() => dashboardStatus.value === 'pending');
+
+  // Process dashboard data
+  const studentData = computed(() => dashboardData.value?.data || {});
+  const seasonProgressData = computed(() => studentData.value.season_progress || []);
+  const allProgramSeasons = computed(() => studentData.value.all_program_seasons || []);
+  const totalSeasons = computed(() => studentData.value.total_seasons || 0);
+  const completedSeasons = computed(() => studentData.value.completed_seasons || 0);
 
   // Get current season name
   const currentSeasonName = computed(() => {
@@ -64,190 +52,7 @@
     }
   });
 
-  async function fetchOverallProgress(studentId) {
-    const { data, error } = await supabase
-      .from("student_season_progress")
-      .select("progress_percentage")
-      .eq("student_id", studentId);
-
-    if (error || !data || data.length === 0) {
-      return 0;
-    }
-
-    // Calculate the average progress
-    const total = data.reduce((sum, row) => sum + parseFloat(row.progress_percentage), 0);
-    const avg = total / data.length;
-    return Math.round(avg); // or keep as float if you want decimals
-  }
-
-  async function fetchSeasonProgress(studentId) {
-    const { data, error } = await supabase
-      .from("student_season_progress")
-      .select(`
-        season_id,
-        progress_percentage,
-        is_completed,
-        seasons!inner(id, name)
-      `)
-      .eq("student_id", studentId);
-
-    if (error || !data || data.length === 0) {
-      console.error("Error fetching season progress:", error);
-      return [];
-    }
-
-    // Transform the data for the Progress component
-    return data.map(item => ({
-      season_id: item.season_id,
-      season_name: item.seasons?.name || 'Unknown Season',
-      progress_percentage: Math.round(parseFloat(item.progress_percentage)),
-      is_completed: item.is_completed
-    }));
-  }
-
-  async function fetchProjectsCompleted(studentId) {
-    const { count, error } = await supabase
-      .from("student_project_completion")
-      .select("*", { count: "exact", head: true })
-      .eq("student_id", studentId)
-      .eq("is_completed", true);
-
-    return count || 0;
-  }
-
-  
-async function fetchCalendarEvents(accessToken, period = 'today') {
-    const { timeMin, timeMax } = getTimeRange(period);
-
-    const res = await fetch(
-      `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(
-        timeMin
-      )}&timeMax=${encodeURIComponent(
-        timeMax
-      )}&singleEvents=true&orderBy=startTime`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    
-    if (!res.ok) {
-      toast.error("Failed to fetch calendar events");
-      console.error("Failed to fetch calendar events:", res.statusText);
-      return;
-    }
-    const data = await res.json();
-    calendarEvents.value = data.items || [];
-    console.log("Current calendar home:", calendarEvents.value);
-  }
-
-  function getTimeRange(period = "week") {
-    let timeMin = new Date();
-    let timeMax = new Date();
-
-    if (period === "week") {
-      // Set to Monday of current week (start of week)
-      timeMin.setDate(timeMin.getDate() - timeMin.getDay() + 1);
-      timeMin.setHours(0, 0, 0, 0);
-
-      // Set to Monday of next week (end of current week)
-      timeMax.setDate(timeMax.getDate() - timeMax.getDay() + 8);
-      timeMax.setHours(0, 0, 0, 0);
-    } else if (period === "month") {
-      // Set to beginning of current month
-      timeMin.setDate(1);
-      timeMin.setHours(0, 0, 0, 0);
-
-      // Set to beginning of next month
-      timeMax.setMonth(timeMax.getMonth() + 1, 1);
-      timeMax.setHours(0, 0, 0, 0);
-    } else if (period === "today") {
-      timeMin.setHours(0, 0, 0, 0);
-      timeMax.setHours(23, 59, 59, 999);
-    }
-
-    return {
-      timeMin: timeMin.toISOString(),
-      timeMax: timeMax.toISOString(),
-    };
-  }
-  
-  async function fetchStudentData() {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    // Fetch student data with program and cohort info using foreign key relationships
-    const { data, error } = await supabase
-      .from("students")
-      .select(
-        `
-      *,
-      programs:program_id ( name ),
-      cohorts:cohort_id ( name )
-    `
-      )
-      .eq("email", session?.user?.email)
-      .single();
-
-    if (error) {
-      console.error("Error fetching student data:", error);
-      return;
-    }
-
-    // Flatten the result for easier access in template
-    studentData.value = {
-      ...data,
-      program_name: data.programs?.name,
-      cohort_name: data.cohorts?.name,
-    };
-
-    studentData.value.completed_projects = await fetchProjectsCompleted(studentData.value.id);
-    studentData.value.progress = await fetchOverallProgress(studentData.value.id);
-
-    // Fetch season progress data for the Progress component
-    seasonProgressData.value = await fetchSeasonProgress(studentData.value.id);
-
-    // Fetch all seasons for the student's program (for id-to-name mapping)
-    const { data: programSeasons, error: programSeasonsError } = await supabase
-      .from("seasons")
-      .select("id, name, program_id")
-      .eq("program_id", studentData.value.program_id);
-    if (programSeasons) {
-      allProgramSeasons.value = programSeasons;
-      console.log("All program seasons:", programSeasons);
-      // Set totalSeasons to filtered count
-      totalSeasons.value = filteredSeasons.value.length;
-    } else {
-      console.error("Error fetching program seasons:", programSeasonsError);
-    }
-
-    console.log("fetched seasons for program:", allProgramSeasons.value);
-    // Fetch all seasons for the student's cohort and program
-    const { data: seasonsData, error: seasonsError } = await supabase
-      .from("program_cohort_seasons")
-      .select("id, start_date, end_date")
-      .eq("cohort_id", studentData.value.cohort_id)
-      .eq("program_id", studentData.value.program_id);
-
-    console.log("Fetched seasons:", seasonsData, seasonsError);
-    // totalSeasons.value is now set from filteredSeasons
-
-    // Fetch completed seasons for the student
-    const { data: completedData, error: completedError } = await supabase
-      .from("student_season_progress")
-      .select("season_id, seasons(name), is_completed")
-      .eq("student_id", studentData.value.id)
-      .eq("is_completed", true);
-
-    console.log("Fetched completed seasons:", completedData);
-    completedSeasons.value = Array.isArray(completedData) ? completedData.length : 0;
-
-    console.log("Fetched student data:", studentData.value);
-  }
-
-async function refreshGoogleToken() {
+  async function refreshGoogleToken() {
     const storedRefreshToken = window.localStorage.getItem("oauth_provider_refresh_token");
 
     const response = await fetch("https://www.googleapis.com/oauth2/v3/token", {
@@ -263,7 +68,6 @@ async function refreshGoogleToken() {
 
     const dataGoogle = await response.json();
     googleAccessToken.value = dataGoogle.access_token;
-    console.log("New access token: ", googleAccessToken.value);
     return dataGoogle.access_token;
   }
 
@@ -272,10 +76,8 @@ async function refreshGoogleToken() {
     googleAccessToken,
     async (newToken) => {
       if (!newToken) {
-        console.log("Access token is undefined, refreshing...");
         try {
           await refreshGoogleToken();
-          // await fetchCalendarEvents(googleAccessToken.value)
         } catch (error) {
           console.error("Failed to refresh Google token", error);
         }
@@ -290,16 +92,6 @@ async function refreshGoogleToken() {
     } = await supabase.auth.getSession();
 
     googleAccessToken.value = session?.provider_token || null;
-    // const { data: { session: newSession } } = await supabase.auth.refreshSession()
-    // console.log("Refreshed session:", newSession)
-
-    if (googleAccessToken.value) {
-      console.log("Fetching calendar events with token:", googleAccessToken.value);
-      await fetchCalendarEvents(googleAccessToken.value);
-    }
-
-    await fetchStudentData();
-    isLoading.value = false;
   });
 
   // Format last_login as 'x days/hours/minutes ago'
@@ -404,7 +196,7 @@ async function refreshGoogleToken() {
             />
           </div>
            
-           <div class="flex flex-col justify-between">
+           <div class="flex flex-col justify-between 2xl:gap-4">
               <StudentDashboardProgress
                 v-if="studentData"
                 :status="studentData.status"
@@ -414,7 +206,7 @@ async function refreshGoogleToken() {
                 :seasons="seasonProgressData"
               />
 
-              <UPageGrid class="grid-cols-2 lg:grid-cols-2 gap-3  2xl:gap-4">
+              <UPageGrid class="grid-cols-2 lg:grid-cols-2 gap-3 2xl:gap-4">
                 
                 <StudentDashboardStatCard
                     :value="currentSeasonName"

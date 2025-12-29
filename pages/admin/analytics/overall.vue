@@ -90,7 +90,7 @@ onMounted(async () => {
       class="flex flex-col items-center overflow-y-auto h-full"
       :ui="{
         root: 'relative sm:min-h-[600px]',
-        header: 'w-full border-b border-border px-4 xl:px-6 flex items-center gap-2 sticky top-0 z-10 bg-white',
+        header: 'w-full border-b border-border px-4 xl:px-6 flex items-center gap-2 sticky top-0 z-10',
         body: 'w-full flex justify-center items-center h-full',
       }"
     >

@@ -1,43 +1,75 @@
-import { ref } from 'vue'
+import { CACHE_KEYS } from './useCacheInvalidation'
 
 export function useAttendance() {
-    const data = ref<any | null>(null)
-    const error = ref<string | null>(null)
-    const loading = ref(false)
-    const dataByCohort = ref<any | null>(null)
+  const nuxtApp = useNuxtApp()
 
-    async function fetchAttendance() {
-        loading.value = true
-        error.value = null
-        try {
-            const res = await $fetch('/api/attendance')
-            if (!res) throw new Error(`Fetch failed: ${res}`)
-            data.value = res?.data?.value ?? null
-        } catch (err: unknown) {
-            // normalize error
-            error.value = err instanceof Error ? err.message : String(err)
-            data.value = null
-        } finally {
-            loading.value = false
-        }
+  // Use Nuxt's useFetch with caching for overall attendance
+  const {
+    data: attendanceData,
+    refresh: refreshAttendance,
+    status: attendanceStatus,
+    error: attendanceError
+  } = useFetch('/api/attendance', {
+    key: CACHE_KEYS.ATTENDANCE,
+    getCachedData(key) {
+      return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
     }
+  })
 
-    async function fetchAttendanceByCohort() {
-        loading.value = true
-        error.value = null
-        try {
-            const res = await $fetch('/api/attendance_by_cohort')
-            if (!res) throw new Error(`Fetch failed: ${res}`)
-            dataByCohort.value = res?.data?.value ?? null
-        } catch (err: unknown) {
-            // normalize error
-            error.value = err instanceof Error ? err.message : String(err)
-            dataByCohort.value = null
-        } finally {
-            loading.value = false
-        }
+  // Use Nuxt's useFetch with caching for attendance by cohort
+  const {
+    data: attendanceByCohortData,
+    refresh: refreshAttendanceByCohort,
+    status: byCohortStatus,
+    error: byCohortError
+  } = useFetch('/api/attendance_by_cohort', {
+    key: CACHE_KEYS.ATTENDANCE_BY_COHORT,
+    getCachedData(key) {
+      return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
     }
+  })
 
+  // Computed properties
+  const data = computed(() => attendanceData.value?.data?.value ?? null)
+  const dataByCohort = computed(() => attendanceByCohortData.value?.data?.value ?? null)
+  const loading = computed(() =>
+    attendanceStatus.value === 'pending' || byCohortStatus.value === 'pending'
+  )
+  const error = computed(() =>
+    attendanceError.value?.message || byCohortError.value?.message || null
+  )
 
-    return { data, dataByCohort, error, loading, fetchAttendance, fetchAttendanceByCohort }
+  /**
+   * Force refresh attendance data
+   */
+  async function fetchAttendance() {
+    await refreshAttendance()
+  }
+
+  /**
+   * Force refresh attendance by cohort data
+   */
+  async function fetchAttendanceByCohort() {
+    await refreshAttendanceByCohort()
+  }
+
+  /**
+   * Refresh all attendance data
+   */
+  async function refreshAll() {
+    await Promise.all([
+      refreshAttendance(),
+      refreshAttendanceByCohort()
+    ])
+  }
+
+  return {
+    data,
+    dataByCohort,
+    error,
+    loading,
+    fetchAttendance,
+    fetchAttendanceByCohort,
+    refreshAll
+  }
 }

@@ -78,25 +78,6 @@ const mainLinks: NavigationMenuItem[] = [
       }
     ],
   },
-{
-    label: "Kanban Test",
-    icon: "i-lucide-settings-2",
-    ariaLabel: "Settings",
-    to: "/test",
-  }
-];
-
-const secondaryLinks: NavigationMenuItem[] = [
-  {
-    label: "Issues",
-    icon: "i-simple-icons-github",
-    ariaLabel: "GitHub Issues",
-    to: "https://github.com/SoraiaBarroso/Final_Project",
-    target: "_blank",
-    tooltip: {
-      text: "Write issue on GitHub",
-    },
-  },
 ];
 
 onMounted(async () => {
@@ -136,13 +117,6 @@ onMounted(async () => {
                       childItem: 'mt-1',
                       link: 'mt-1'
                     }"
-                />
-
-                <UNavigationMenu
-                    :collapsed="collapsed"
-                    :items="secondaryLinks"
-                    orientation="vertical"
-                    class="mt-auto"
                 />
             </template>
 

@@ -111,7 +111,10 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { CACHE_KEYS } from '~/composables/useCacheInvalidation';
+
 const supabase = useSupabaseClient();
+const nuxtApp = useNuxtApp();
 
 const loading = ref(false);
 const message = ref('');
@@ -337,6 +340,11 @@ const addPCSProject = async () => {
       }
       message.value = msg;
       messageClass.value = 'text-sm text-green-600';
+
+      // Invalidate student-related caches since project assignments affect student data
+      delete nuxtApp.payload.data[CACHE_KEYS.STUDENTS];
+      await refreshNuxtData(CACHE_KEYS.STUDENTS).catch(() => {});
+
       // Clear projects/dates but keep program/cohort/pcs selection
       selectedProject.value = [];
       startDate.value = undefined;
