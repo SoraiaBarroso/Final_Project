@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
         cohorts:cohort_id ( id, name )
       `)
       .eq('email', user.email)
-      .single()
+      .maybeSingle()
 
     if (studentError) {
       console.error('Error fetching student data:', studentError)
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     }
 
     if (!studentData) {
-      throw createError({ statusCode: 404, statusMessage: 'Student not found' })
+      throw createError({ statusCode: 404, statusMessage: 'Student not found for this email' })
     }
 
     // Fetch completed projects count

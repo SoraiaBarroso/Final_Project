@@ -53,7 +53,11 @@
   });
 
   async function refreshGoogleToken() {
+    // Only run on client-side where localStorage is available
+    if (import.meta.server) return null;
+
     const storedRefreshToken = window.localStorage.getItem("oauth_provider_refresh_token");
+    if (!storedRefreshToken) return null;
 
     const response = await fetch("https://www.googleapis.com/oauth2/v3/token", {
       method: "POST",
@@ -71,20 +75,22 @@
     return dataGoogle.access_token;
   }
 
-  // Watch the token, refresh if undefined
-  watch(
-    googleAccessToken,
-    async (newToken) => {
-      if (!newToken) {
-        try {
-          await refreshGoogleToken();
-        } catch (error) {
-          console.error("Failed to refresh Google token", error);
+  // Watch the token, refresh if undefined - only on client side
+  if (import.meta.client) {
+    watch(
+      googleAccessToken,
+      async (newToken) => {
+        if (!newToken) {
+          try {
+            await refreshGoogleToken();
+          } catch (error) {
+            console.error("Failed to refresh Google token", error);
+          }
         }
-      }
-    },
-    { immediate: true }
-  );
+      },
+      { immediate: true }
+    );
+  }
 
   onMounted(async () => {
     const {
@@ -109,9 +115,6 @@
     if (diffMin > 0) return diffMin === 1 ? "1 min ago" : `${diffMin}min ago`;
     return "just now";
   }
-
-  const value = computed(() => studentData.value.progress || 0);
-
 </script>
 
 <template>
@@ -163,18 +166,6 @@
           <StudentDashboardGreetings v-if="studentData.first_name" :first_name="studentData.first_name" />
 
           <div class="flex gap-8 translate-y-4 xl:translate-y-6">
-               <StudentDashboardStatCard
-                  :value="'X'"
-                  label="Activity"
-                  icon="i-lucide:activity"
-                />
-
-                <StudentDashboardStatCard
-                  :value="'X'"
-                  label="Last Login"
-                  icon="i-pajamas:hourglass"
-                />
-
                  <StudentDashboardStatCard
                   :value="'90'"
                   label="Earned Points"

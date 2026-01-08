@@ -139,6 +139,17 @@ class DataPipelineOrchestrator:
             print("❌ Points assignment update failed")
             return False
 
+    def run_attendance_only(self):
+        """Run only attendance sync from Google Sheets"""
+        print_step("ATTENDANCE PIPELINE", "Running attendance sync from Google Sheets")
+
+        if self.run_script("update_attendance.py", []):
+            print("✅ Attendance sync completed successfully")
+            return True
+        else:
+            print("❌ Attendance sync failed")
+            return False
+
 def main():
     """Main function with comprehensive CLI options"""
     parser = argparse.ArgumentParser(
@@ -168,6 +179,8 @@ Examples:
                        help='Run analytics generation only')
     parser.add_argument('--points', action='store_true',
                        help='Update points assignment only')
+    parser.add_argument('--attendance', action='store_true',
+                       help='Sync attendance from Google Sheets')
     parser.add_argument('--quick', action='store_true',
                        help='Quick update: management + points + analytics (no data processing)')
     
@@ -180,7 +193,7 @@ Examples:
     args = parser.parse_args()
     
     # Validate arguments
-    if not any([args.full, args.data, args.management, args.analytics, args.points, args.quick]):
+    if not any([args.full, args.data, args.management, args.analytics, args.points, args.attendance, args.quick]):
         parser.print_help()
         return
     
@@ -208,6 +221,9 @@ Examples:
 
         elif args.points:
             success = orchestrator.run_points_only()
+
+        elif args.attendance:
+            success = orchestrator.run_attendance_only()
 
         elif args.quick:
             print_step("QUICK UPDATE", "Running management, points, and analytics")
