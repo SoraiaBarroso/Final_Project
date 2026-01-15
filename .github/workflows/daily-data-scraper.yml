@@ -109,11 +109,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "Update student grades data
-
-          🤖 Generated with [Claude Code](https://claude.com/claude-code)
-
-          Co-Authored-By: Claude <noreply@anthropic.com>"
+            git commit -m "ci: sync student grades data [automated]"
             git push
             echo "✅ Successfully updated student_grades.json"
           fi
