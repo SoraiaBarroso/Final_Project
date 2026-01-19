@@ -7,15 +7,18 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?logo=supabase)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)
 
-A full-stack web application for managing students in an educational program, featuring an admin dashboard for monitoring student progress and a student portal for individual progress tracking.
+A full-stack web application for managing students in an educational program, featuring an admin dashboard for monitoring student progress and a student portal for individual progress tracking. Developed for Amsterdam Tech's coding bootcamp program.
 
 ---
 
 ## Table of Contents
 
+- [Motivation](#motivation)
 - [Problem Statement](#problem-statement)
 - [Features](#features)
+- [Methodology](#methodology)
 - [Architecture](#architecture)
+- [Database Design](#database-design)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
@@ -24,7 +27,8 @@ A full-stack web application for managing students in an educational program, fe
 - [Running the Application](#running-the-application)
 - [Data Pipeline](#data-pipeline)
 - [API Documentation](#api-documentation)
-- [Screenshots](#screenshots)
+- [Impact & Results](#impact--results)
+- [Security & Compliance](#security--compliance)
 - [Future Improvements](#future-improvements)
 - [Contributing](#contributing)
 - [License](#license)
@@ -32,16 +36,34 @@ A full-stack web application for managing students in an educational program, fe
 
 ---
 
+## Motivation
+
+This project stems from personal experience as both a student and mentor at Amsterdam Tech. During my time in the program, I observed a recurring challenge: many students fell behind in their progress without clear visibility into their standing or timely intervention from staff.
+
+As a mentor, I spent considerable time manually tracking student progress across spreadsheets, trying to identify who needed support before it was too late. This fragmented approach meant some students slipped through the cracks, only receiving attention when they were already significantly behind.
+
+The Student Management System was born from the desire to solve this problem systematically—creating a unified platform that provides real-time visibility into student progress, automates early warning detection, and empowers both administrators and students with the information they need to succeed.
+
+---
+
 ## Problem Statement
 
-Educational institutions managing coding bootcamps face challenges in:
+Educational institutions managing coding bootcamps face significant challenges in:
 
 1. **Tracking Student Progress**: Monitoring individual student advancement through multi-season programs with multiple projects
 2. **Early Risk Detection**: Identifying students falling behind before they become at-risk of not completing the program
 3. **Data Aggregation**: Consolidating data from multiple sources (Qwasar platform, attendance records, calendar events)
 4. **Real-time Visibility**: Providing administrators with actionable insights and students with self-service progress tracking
 
-This application solves these challenges by providing a unified platform that:
+### Research Findings
+
+Initial research conducted with Amsterdam Tech revealed:
+- **47%** of students were falling behind their expected progress
+- **50%** were on track with their expected season
+- Only **3%** were ahead of schedule
+- **155 students** tracked across multiple cohorts and programs
+
+This application addresses these challenges by providing a unified platform that:
 - Automatically syncs student data from the Qwasar learning platform
 - Calculates student status based on expected vs actual progress
 - Sends notifications when students fall behind
@@ -86,6 +108,44 @@ This application solves these challenges by providing a unified platform that:
 - Automated status calculations
 - Progress snapshot generation
 - Email and Slack notifications for status changes
+
+---
+
+## Methodology
+
+This project was developed using **Design Thinking** methodology, an iterative human-centered approach consisting of five phases:
+
+### 1. Empathize
+- Conducted user research with Amsterdam Tech staff and students
+- Identified pain points in current progress tracking methods
+- Gathered requirements through interviews and observation
+
+### 2. Define
+- Synthesized research findings into clear problem statements
+- Prioritized features based on user needs and impact
+- Established success metrics for the platform
+
+### 3. Ideate
+- Brainstormed solutions for progress visualization
+- Explored different notification strategies
+- Designed data pipeline approaches
+
+### 4. Prototype
+- Built iterative versions of the dashboard
+- Created wireframes and mockups for user feedback
+- Developed proof-of-concept for data synchronization
+
+### 5. Test
+- Conducted usability testing with admin users
+- Gathered feedback on student portal interface
+- Iterated based on real-world usage data
+
+### Iterative Changes
+Based on user feedback during development:
+- Added cohort filtering to analytics views
+- Implemented snapshot comparison for trend analysis
+- Enhanced student detail pages with visual progress indicators
+- Added CSV import functionality for bulk student management
 
 ---
 
@@ -142,6 +202,46 @@ This application solves these challenges by providing a unified platform that:
 
 ---
 
+## Database Design
+
+The database consists of **18 tables** organized into four main areas:
+
+### Core Tables
+| Table | Description |
+|-------|-------------|
+| `students` | Student profiles and metadata |
+| `cohorts` | Cohort definitions and settings |
+| `programs` | Program configurations |
+| `seasons` | Season/module definitions |
+| `projects` | Project definitions per season |
+
+### Progress Tracking
+| Table | Description |
+|-------|-------------|
+| `student_project_completion` | Individual project completion records |
+| `student_season_progress` | Season-level progress tracking |
+| `progress_snapshots` | Historical progress data for analytics |
+
+### Attendance & Events
+| Table | Description |
+|-------|-------------|
+| `attendance_records` | Workshop/standup attendance |
+| `calendar_events` | Synced Google Calendar events |
+
+### User Management
+| Table | Description |
+|-------|-------------|
+| `admin_users` | Administrator accounts |
+| `user_roles` | Role-based access control |
+
+### Key Relationships
+- Students belong to cohorts and programs
+- Projects belong to seasons
+- Completion records link students to projects
+- Progress snapshots enable historical comparison
+
+---
+
 ## Tech Stack
 
 | Category | Technology | Version |
@@ -150,7 +250,7 @@ This application solves these challenges by providing a unified platform that:
 | **Frontend** | [Vue.js](https://vuejs.org/) | 3.x |
 | **Language** | [TypeScript](https://www.typescriptlang.org/) | 5.x |
 | **Styling** | [TailwindCSS](https://tailwindcss.com/) | 3.x |
-| **UI Components** | [@nuxt/ui](https://ui.nuxt.com/) | Latest |
+| **UI Components** | [Shadcn-vue](https://www.shadcn-vue.com/) | Latest |
 | **Database** | [Supabase](https://supabase.com/) (PostgreSQL) | - |
 | **Authentication** | Supabase Auth + Google OAuth | - |
 | **Charts** | [ApexCharts](https://apexcharts.com/) | - |
@@ -201,7 +301,6 @@ Final_Project/
 │       ├── student/         # Student endpoints
 │       └── notifications/   # Notification endpoints
 ├── utils/                   # Utility functions
-├── .env                     # Environment variables (not committed)
 ├── nuxt.config.ts           # Nuxt configuration
 ├── package.json             # Node.js dependencies
 ├── requirements.txt         # Python dependencies
@@ -345,29 +444,52 @@ For complete API documentation, see [CODEBASE_DOCUMENTATION.md](CODEBASE_DOCUMEN
 
 ---
 
-## Screenshots
+## Impact & Results
 
-### Admin Dashboard
-*Overview of student statistics with status distribution and trends*
+After deployment and data collection, the system demonstrated measurable improvements:
 
-![Admin Dashboard](img/admin-dashboard.png)
+### Key Metrics
 
-### Student Analytics
-*Cohort-level analytics with attendance and progress charts*
+| Metric | Before | After | Change |
+|--------|--------|-------|--------|
+| **On Track** | 50% | 54.7% | +4.7% |
+| **Monitor** | 47% | 23.5% | -50% |
+| **At Risk** | - | 14.1% | New category |
+| **Ahead** | 3% | 7.7% | +156% |
 
-![Analytics](img/analytics.png)
+### Platform Statistics
+- **155 students** tracked across multiple cohorts
+- **4 programs** managed (Full-Stack, AI, Cybersecurity, Data)
+- **18 database tables** supporting comprehensive tracking
+- **Automated daily** data synchronization
 
-### Student Portal - Roadmap
-*Student's program roadmap showing season and project completion*
+### Qualitative Improvements
+- Early identification of struggling students
+- Reduced manual tracking effort for mentors
+- Increased student awareness of their progress
+- Data-driven intervention strategies
 
-![Student Roadmap](img/student-roadmap.png)
+---
 
-### Student Portal - Calendar
-*Integrated Google Calendar view for upcoming events*
+## Security & Compliance
 
-![Student Calendar](img/student-calendar.png)
+### Authentication & Authorization
+- Google OAuth for secure authentication
+- Role-based access control (Admin vs Student)
+- Row Level Security (RLS) policies in Supabase
+- JWT token validation on all API endpoints
 
-> **Note**: Add screenshots to the `img/` folder and update the paths above.
+### Data Protection
+- GDPR compliance considerations
+- Minimal data collection principle
+- Secure credential storage via environment variables
+- No sensitive data in version control
+
+### Risk Mitigation
+- Input validation on all forms
+- SQL injection prevention via parameterized queries
+- XSS protection through Vue's template escaping
+- HTTPS enforcement in production
 
 ---
 
@@ -438,3 +560,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Supabase Documentation](https://supabase.com/docs)
 - [Vue.js Documentation](https://vuejs.org/guide)
 - [TailwindCSS Documentation](https://tailwindcss.com/docs)
+- [Design Thinking - IDEO](https://designthinking.ideo.com/)
