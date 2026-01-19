@@ -843,23 +843,34 @@ class ProjectCompletionProcessor:
         self.student_id_map = get_student_id_map(supabase_client)
         self.project_id_map = get_project_id_map(supabase_client)
     
+    # Projects that appear in multiple seasons and should be marked complete across all
+    MULTI_SEASON_PROJECTS = {"My Css Is Easy I", "My Levenshtein", "My Cat"}
+
     def update_project_completion(self, scraped_data):
         """Update student project completion data"""
         print_step("PROJECT COMPLETION", "Updating student project completion status")
-        
+
         records_dict = {}
-        
+
         for student_data in scraped_data:
             username = student_data.get("name")
             if not username or username not in self.student_id_map:
                 continue
-            
+
             student_id = self.student_id_map[username]
-            
+
             # Process completed projects first (these take priority)
             for project_name in student_data.get("completed_projects", []):
-                project_id = self.project_id_map.get(project_name)
-                if project_id:
+                project_ids = self.project_id_map.get(project_name, [])
+
+                # For multi-season projects, mark ALL IDs as completed
+                # For regular projects, just use the first ID
+                if project_name in self.MULTI_SEASON_PROJECTS:
+                    ids_to_mark = project_ids
+                else:
+                    ids_to_mark = project_ids[:1] if project_ids else []
+
+                for project_id in ids_to_mark:
                     key = (student_id, project_id)
                     records_dict[key] = {
                         "student_id": student_id,
@@ -867,11 +878,19 @@ class ProjectCompletionProcessor:
                         "is_completed": True,
                         "completion_date": datetime.now().date().isoformat()
                     }
-            
+
             # Process ongoing projects (only if not already completed)
             for project_name in student_data.get("ongoing_projects", []):
-                project_id = self.project_id_map.get(project_name)
-                if project_id:
+                project_ids = self.project_id_map.get(project_name, [])
+
+                # For multi-season projects, mark ALL IDs
+                # For regular projects, just use the first ID
+                if project_name in self.MULTI_SEASON_PROJECTS:
+                    ids_to_mark = project_ids
+                else:
+                    ids_to_mark = project_ids[:1] if project_ids else []
+
+                for project_id in ids_to_mark:
                     key = (student_id, project_id)
                     if key not in records_dict:
                         records_dict[key] = {
@@ -880,9 +899,9 @@ class ProjectCompletionProcessor:
                             "is_completed": False,
                             "completion_date": None
                         }
-        
+
         records_to_upsert = list(records_dict.values())
-        
+
         if records_to_upsert:
             safe_upsert(self.supabase, 'student_project_completion', records_to_upsert,
                        on_conflict="student_id, project_id")

@@ -222,10 +222,16 @@ def get_student_id_map(supabase_client):
         return {}
 
 def get_project_id_map(supabase_client):
-    """Get mapping of project names to IDs"""
+    """Get mapping of project names to list of IDs (same project can exist in multiple seasons)"""
     try:
         response = supabase_client.from_('projects').select('id, name').execute()
-        return {row['name']: row['id'] for row in response.data}
+        project_map = {}
+        for row in response.data:
+            name = row['name']
+            if name not in project_map:
+                project_map[name] = []
+            project_map[name].append(row['id'])
+        return project_map
     except Exception as e:
         print(f"Error fetching projects: {e}")
         return {}

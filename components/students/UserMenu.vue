@@ -13,8 +13,12 @@ const colorMode = useColorMode();
 const appConfig = useAppConfig();
 
 const userLabel = computed(() => props.userLabel ?? 'Guest')
-const userAvatar = computed(() => props.userAvatar ? { src: props.userAvatar } : undefined)
-
+const userAvatar = computed(() => {
+  if (props.userAvatar && typeof props.userAvatar === 'string' && props.userAvatar.length > 0) {
+    return { src: props.userAvatar }
+  }
+  return undefined
+})
 // Student card modal state
 const isCardModalOpen = ref(false)
 

@@ -1,17 +1,17 @@
-# Dependencias para scraping y procesamiento de datos de estudiantes
-# Versión optimizada - solo lo estrictamente necesario
+# Python dependencies for student data scraping and processing
+# See scripts/README.md for usage documentation
 
-# Cliente de Supabase
+# Supabase client
 supabase==2.3.4
 
-# Variables de entorno
+# Environment variables
 python-dotenv==1.0.1
 
-# HTTP requests para scraping
+# HTTP requests for web scraping
 requests==2.31.0
 
-# Parsing HTML
+# HTML parsing
 beautifulsoup4==4.12.3
 
-# Opcional pero recomendado: parser más rápido para BeautifulSoup
+# Fast HTML parser for BeautifulSoup
 lxml==5.1.0

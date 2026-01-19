@@ -9,11 +9,9 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/ui",
     "@nuxt/icon",
-    "nuxt-charts",
     "@nuxtjs/supabase",
     "@nuxtjs/color-mode",
     "nuxt-charts",
-    "motion-v/nuxt",
     "@vueuse/nuxt",
     "@nuxt/fonts",
     "@nuxt/image",
