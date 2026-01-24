@@ -7,7 +7,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Database-3ECF8E?logo=supabase)
 ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python)
 
-A full-stack web application for managing students in an educational program, featuring an admin dashboard for monitoring student progress and a student portal for individual progress tracking. Developed for Amsterdam Tech's coding bootcamp program.
+A full-stack web application for managing students in an educational program, featuring an admin dashboard for monitoring student progress and a student portal for individual progress tracking. Developed for Amsterdam Tech.
 
 ---
 
@@ -42,13 +42,13 @@ This project stems from personal experience as both a student and mentor at Amst
 
 As a mentor, I spent considerable time manually tracking student progress across spreadsheets, trying to identify who needed support before it was too late. This fragmented approach meant some students slipped through the cracks, only receiving attention when they were already significantly behind.
 
-The Student Management System was born from the desire to solve this problem systematically—creating a unified platform that provides real-time visibility into student progress, automates early warning detection, and empowers both administrators and students with the information they need to succeed.
+The Student Management System was born from the desire to solve this problem systematically, creating a unified platform that provides real-time visibility into student progress, automates early warning detection, and empowers both administrators and students with the information they need to succeed.
 
 ---
 
 ## Problem Statement
 
-Educational institutions managing coding bootcamps face significant challenges in:
+Educational institutions face significant challenges in:
 
 1. **Tracking Student Progress**: Monitoring individual student advancement through multi-season programs with multiple projects
 2. **Early Risk Detection**: Identifying students falling behind before they become at-risk of not completing the program
@@ -146,6 +146,7 @@ Based on user feedback during development:
 - Implemented snapshot comparison for trend analysis
 - Enhanced student detail pages with visual progress indicators
 - Added CSV import functionality for bulk student management
+- Added update functionality for faculty to modify student data
 
 ---
 
@@ -254,7 +255,6 @@ The database consists of **18 tables** organized into four main areas:
 | **Database** | [Supabase](https://supabase.com/) (PostgreSQL) | - |
 | **Authentication** | Supabase Auth + Google OAuth | - |
 | **Charts** | [ApexCharts](https://apexcharts.com/) | - |
-| **Calendar** | [Schedule-X](https://schedule-x.dev/) | - |
 | **Data Pipeline** | Python | 3.12 |
 | **Web Scraping** | BeautifulSoup4 | - |
 
@@ -450,16 +450,15 @@ After deployment and data collection, the system demonstrated measurable improve
 
 ### Key Metrics
 
-| Metric | Before | After | Change |
-|--------|--------|-------|--------|
-| **On Track** | 50% | 54.7% | +4.7% |
-| **Monitor** | 47% | 23.5% | -50% |
-| **At Risk** | - | 14.1% | New category |
-| **Ahead** | 3% | 7.7% | +156% |
+| Metric | Before (Research Phase) | Now (Live Platform) |
+|--------|-------------------------|---------------------|
+| **Total Students** | 105 | 155 |
+| **On Track** | 51 (49%) | 105 (68%) |
+| **At Risk** | 49 | 46 |
 
 ### Platform Statistics
 - **155 students** tracked across multiple cohorts
-- **4 programs** managed (Full-Stack, AI, Cybersecurity, Data)
+- **3 programs** managed (SE, AI/ML, DS)
 - **18 database tables** supporting comprehensive tracking
 - **Automated daily** data synchronization
 
@@ -498,27 +497,13 @@ After deployment and data collection, the system demonstrated measurable improve
 - [ ] **Real-time Updates**: Implement WebSocket connections for live dashboard updates
 - [ ] **Mobile App**: React Native companion app for students
 - [ ] **Advanced Analytics**: Machine learning predictions for at-risk students
-- [ ] **Multi-language Support**: i18n for internationalization
 - [ ] **Export Features**: PDF reports and CSV exports for administrators
-- [ ] **Notification Preferences**: Allow users to customize notification frequency
 - [ ] **Integration APIs**: Connect with more learning platforms beyond Qwasar
 - [ ] **Gamification**: Add badges and achievements for student motivation
 
 ---
 
 ## Contributing
-
-Contributions are welcome! Please follow these guidelines:
-
-### Branching Strategy
-
-| Branch Type | Naming Convention | Purpose |
-|-------------|-------------------|---------|
-| `main` | - | Production-ready code |
-| `develop` | - | Integration branch |
-| `feature/*` | `feature/add-user-auth` | New features |
-| `bugfix/*` | `bugfix/fix-login-error` | Bug fixes |
-| `hotfix/*` | `hotfix/security-patch` | Urgent production fixes |
 
 ### Commit Messages
 

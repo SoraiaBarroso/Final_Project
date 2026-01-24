@@ -64,27 +64,29 @@ const stats = computed(() => [
     </template>
 
     <!-- Main content with progress circle and stats -->
-    <div class="flex items-center justify-between gap-6">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
       <!-- Progress Circle -->
-      <ProgressCircleGradient
-        :percentage="cohort.averages?.overall"
-        :size="110"
-        :stroke-width="10"
-        label="Overall"
-      />
+      <div class="flex-shrink-0">
+        <ProgressCircleGradient
+          :percentage="cohort.averages?.overall"
+          :size="110"
+          :stroke-width="10"
+          label="Overall"
+        />
+      </div>
 
       <!-- Stats Grid -->
-      <div class="grid grid-cols-2 gap-1">
+      <div class="grid grid-cols-2 gap-1 w-full sm:w-auto">
         <div
           v-for="stat in stats"
           :key="stat.label"
-          class="rounded-lg p-2.5 transition-colors"
+          class="rounded-lg p-2 sm:p-2.5 transition-colors"
         >
           <div class="flex items-center gap-1.5 mb-1">
             <UIcon :name="stat.icon" class="size-3.5 text-muted" />
-            <span class="text-xs text-muted">{{ stat.label }}</span>
+            <span class="text-xs text-muted truncate">{{ stat.label }}</span>
           </div>
-          <p class="text-lg font-semibold">
+          <p class="text-base sm:text-lg font-semibold">
             {{ stat.value != null ? `${Math.round(stat.value)}%` : 'N/A' }}
           </p>
         </div>

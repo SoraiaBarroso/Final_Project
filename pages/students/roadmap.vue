@@ -41,7 +41,6 @@ const getSeasonColor = (index) => {
   return colors[index % colors.length];
 };
 
-console.log(seasons.value);
 // Format date to readable format
 const formatDate = (dateString) => {
   const date = new Date(dateString);

@@ -1,6 +1,8 @@
+import type { NotificationSettings } from '~/types'
+
 export function useNotificationSettings() {
   const supabase = useSupabaseClient()
-  const settings = ref<any>(null)
+  const settings = ref<NotificationSettings | null>(null)
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -31,9 +33,9 @@ export function useNotificationSettings() {
       }
 
       return settings.value
-    } catch (err: any) {
-      error.value = err?.message || 'Failed to fetch notification settings'
-      console.error('Error fetching notification settings:', err)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch notification settings'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false
@@ -43,7 +45,7 @@ export function useNotificationSettings() {
   /**
    * Update notification settings
    */
-  async function updateSettings(newSettings: any) {
+  async function updateSettings(newSettings: Partial<NotificationSettings>) {
     loading.value = true
     error.value = null
     try {
@@ -76,9 +78,9 @@ export function useNotificationSettings() {
 
       settings.value = result.data
       return result.data
-    } catch (err: any) {
-      error.value = err?.message || 'Failed to update notification settings'
-      console.error('Error updating notification settings:', err)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to update notification settings'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false
@@ -97,9 +99,9 @@ export function useNotificationSettings() {
         body: { type }
       })
       return response
-    } catch (err: any) {
-      error.value = err?.message || 'Failed to send test notification'
-      console.error('Error testing notification:', err)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to send test notification'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false

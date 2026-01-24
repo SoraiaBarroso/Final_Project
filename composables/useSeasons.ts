@@ -1,4 +1,5 @@
 import { CACHE_KEYS } from './useCacheInvalidation'
+import type { Season, DropdownOption, ProgramCohortSeason } from '~/types'
 
 export function useSeasons() {
   const supabase = useSupabaseClient()
@@ -13,7 +14,7 @@ export function useSeasons() {
   })
 
   // Local state for filtered seasons (by program)
-  const filteredSeasons = ref<any[]>([])
+  const filteredSeasons = ref<Season[]>([])
   const hasActiveFilter = ref(false)
 
   // Computed properties
@@ -29,8 +30,8 @@ export function useSeasons() {
   /**
    * Computed property to get seasons as dropdown options
    */
-  const seasonOptions = computed(() =>
-    seasons.value.map((s: any) => ({
+  const seasonOptions = computed<DropdownOption[]>(() =>
+    seasons.value.map((s) => ({
       label: s.name,
       value: s.id
     }))
@@ -68,8 +69,8 @@ export function useSeasons() {
       if (fetchErr) throw fetchErr
 
       // Extract unique seasons
-      const uniqueSeasons = new Map()
-      data?.forEach((item: any) => {
+      const uniqueSeasons = new Map<string, Season>()
+      data?.forEach((item: ProgramCohortSeason) => {
         if (item.seasons) {
           uniqueSeasons.set(item.seasons.id, {
             id: item.seasons.id,
@@ -80,9 +81,9 @@ export function useSeasons() {
 
       filteredSeasons.value = Array.from(uniqueSeasons.values())
       return filteredSeasons.value
-    } catch (err: any) {
-      console.error('Error fetching seasons by program:', err)
-      throw new Error(err?.message || 'Failed to fetch seasons by program')
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch seasons by program'
+      throw new Error(errorMessage)
     }
   }
 
@@ -109,9 +110,9 @@ export function useSeasons() {
       ])
 
       return response
-    } catch (err: any) {
-      const errorMessage = err?.data?.statusMessage || err?.message || 'Failed to create season'
-      console.error('Error creating season:', err)
+    } catch (err: unknown) {
+      const fetchErr = err as { data?: { statusMessage?: string }; message?: string }
+      const errorMessage = fetchErr?.data?.statusMessage || fetchErr?.message || 'Failed to create season'
       throw new Error(errorMessage)
     }
   }
@@ -120,7 +121,7 @@ export function useSeasons() {
    * Get a single season by ID
    */
   function getSeasonById(id: string) {
-    return seasons.value.find((s: any) => s.id === id)
+    return seasons.value.find((s) => s.id === id)
   }
 
   return {

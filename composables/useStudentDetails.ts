@@ -1,12 +1,14 @@
 import { CACHE_KEYS } from './useCacheInvalidation'
+import type { StudentDetails, ProjectCompletion, SeasonProgress } from '~/types'
+import type { ApiResponse, ApiListResponse } from '~/types'
 
 export function useStudentDetails() {
   const nuxtApp = useNuxtApp()
 
   // Reactive state
-  const student = ref<any | null>(null)
-  const projectCompletions = ref<any[]>([])
-  const seasonProgress = ref<any[]>([])
+  const student = ref<StudentDetails | null>(null)
+  const projectCompletions = ref<ProjectCompletion[]>([])
+  const seasonProgress = ref<SeasonProgress[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
 
@@ -47,7 +49,7 @@ export function useStudentDetails() {
     loading.value = true
     error.value = null
     try {
-      const res = await $fetch<{ data: any }>(`/api/students/${studentId}`)
+      const res = await $fetch<ApiResponse<StudentDetails>>(`/api/students/${studentId}`)
       if (!res?.data) throw new Error('Failed to fetch student details')
 
       student.value = res.data
@@ -81,7 +83,7 @@ export function useStudentDetails() {
     loading.value = true
     error.value = null
     try {
-      const res = await $fetch(`/api/students/${studentId}/project-completions`)
+      const res = await $fetch<ApiListResponse<ProjectCompletion>>(`/api/students/${studentId}/project-completions`)
       if (!res?.data) throw new Error('Failed to fetch project completions')
 
       projectCompletions.value = res.data
@@ -115,7 +117,7 @@ export function useStudentDetails() {
     loading.value = true
     error.value = null
     try {
-      const res = await $fetch(`/api/students/${studentId}/season-progress`)
+      const res = await $fetch<ApiListResponse<SeasonProgress>>(`/api/students/${studentId}/season-progress`)
       if (!res?.data) throw new Error('Failed to fetch season progress')
 
       seasonProgress.value = res.data

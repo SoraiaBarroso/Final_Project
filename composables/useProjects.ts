@@ -1,14 +1,16 @@
+import type { Project, DropdownOption } from '~/types'
+
 export function useProjects() {
   const supabase = useSupabaseClient()
-  const projects = ref<any[]>([])
+  const projects = ref<Project[]>([])
   const loading = ref(false)
   const error = ref<string | null>(null)
 
   /**
    * Computed property to get projects as dropdown options
    */
-  const projectOptions = computed(() =>
-    projects.value.map(p => ({
+  const projectOptions = computed<DropdownOption[]>(() =>
+    projects.value.map((p) => ({
       label: p.name,
       value: p.id
     }))
@@ -30,9 +32,9 @@ export function useProjects() {
 
       projects.value = data || []
       return data
-    } catch (err: any) {
-      error.value = err?.message || 'Failed to fetch projects'
-      console.error('Error fetching projects:', err)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch projects'
+      error.value = errorMessage
       throw err
     } finally {
       loading.value = false

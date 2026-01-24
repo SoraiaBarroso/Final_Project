@@ -31,7 +31,6 @@ const { data: attendanceData, dataByCohort, error: attendanceError, loading: att
 onMounted(async () => {
   await fetchAttendance()
   await fetchAttendanceByCohort()
-  console.log('Attendance data by cohort:', dataByCohort.value)
   const metrics = attendanceData.value ?? []
   for (const m of metrics) {
     if (m.metric === 'overall') attendanceOverall.value = m.percentage
@@ -47,7 +46,6 @@ onMounted(async () => {
     if (m.metric === 'student_count') studentCount.value = m.count
   }
   isDataFetched.value = true
-  console.log('Fetched attendance metrics:', SumWorkshops, SumMentorings, SumStandups, SumWorkshopAttended, SumMentoringAttended, SumStandupAttended, attendanceOverall, attendanceWorkshop, attendanceMentoring, attendanceStandup)
 })
 </script>
 
@@ -55,7 +53,7 @@ onMounted(async () => {
     <div class="grid grid-cols-1 grid-rows-2 gap-4 sm:gap-6 md:grid-cols-2 md:grid-rows-2 lg:grid-cols-2 lg:grid-rows-2 lg:gap-4 xl:grid-cols-4 xl:grid-rows-1 xl:gap-px">
         <StudentStatCard
             title="Average Attendance"
-            :count="attendanceOverall + '%'"
+            :count="attendanceOverall !== null ? `${attendanceOverall}%` : null"
             icon="i-pajamas:tachometer"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none xl:rounded-l-lg"
@@ -63,7 +61,7 @@ onMounted(async () => {
 
         <StudentStatCard
             title="Workshops"
-            :count="attendanceWorkshop + '%'"
+            :count="attendanceWorkshop !== null ? `${attendanceWorkshop}%` : null"
             icon="i-pajamas:terminal"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none"
@@ -71,7 +69,7 @@ onMounted(async () => {
 
         <StudentStatCard
             title="Mentorings"
-            :count="attendanceMentoring + '%'"
+            :count="attendanceMentoring !== null ? `${attendanceMentoring}%` : null"
             icon="i-pajamas:issue-type-enhancement"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none"
@@ -79,7 +77,7 @@ onMounted(async () => {
 
         <StudentStatCard
             title="Stand-Ups"
-            :count="attendanceStandup + '%'"
+            :count="attendanceStandup !== null ? `${attendanceStandup}%` : null"
             icon="i-pajamas:image-comment-light"
             icon-color="info"
             rounded-class="rounded-lg xl:rounded-none xl:rounded-r-lg"

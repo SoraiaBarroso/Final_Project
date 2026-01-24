@@ -13,5 +13,3 @@ requests==2.31.0
 # HTML parsing
 beautifulsoup4==4.12.3
 
-# Fast HTML parser for BeautifulSoup
-lxml==5.1.0

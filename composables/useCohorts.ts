@@ -1,4 +1,5 @@
 import { CACHE_KEYS } from './useCacheInvalidation'
+import type { Cohort, Program } from '~/types'
 
 export function useCohorts() {
   const nuxtApp = useNuxtApp()
@@ -12,7 +13,7 @@ export function useCohorts() {
   })
 
   // Local filtered state (for when filters are applied)
-  const filteredCohorts = ref<any[]>([])
+  const filteredCohorts = ref<Cohort[]>([])
   const hasActiveFilter = ref(false)
 
   // Computed properties
@@ -40,8 +41,8 @@ export function useCohorts() {
     // Apply filters if provided
     if (filters?.program_id) {
       hasActiveFilter.value = true
-      filteredCohorts.value = allCohorts.filter((cohort: any) => {
-        return cohort.programs?.some((program: any) => program.id === filters.program_id)
+      filteredCohorts.value = allCohorts.filter((cohort: Cohort) => {
+        return cohort.programs?.some((program: Program) => program.id === filters.program_id)
       })
     } else {
       hasActiveFilter.value = false
@@ -68,9 +69,9 @@ export function useCohorts() {
       await refreshNuxtData(CACHE_KEYS.COHORTS)
 
       return response
-    } catch (err: any) {
-      const errorMessage = err?.data?.statusMessage || err?.message || 'Failed to create cohort'
-      console.error('Error creating cohort:', err)
+    } catch (err: unknown) {
+      const fetchErr = err as { data?: { statusMessage?: string }; message?: string }
+      const errorMessage = fetchErr?.data?.statusMessage || fetchErr?.message || 'Failed to create cohort'
       throw new Error(errorMessage)
     }
   }
@@ -92,9 +93,9 @@ export function useCohorts() {
       await refreshNuxtData(CACHE_KEYS.COHORTS)
 
       return response
-    } catch (err: any) {
-      const errorMessage = err?.data?.statusMessage || err?.message || 'Failed to update cohort status'
-      console.error('Error updating cohort status:', err)
+    } catch (err: unknown) {
+      const fetchErr = err as { data?: { statusMessage?: string }; message?: string }
+      const errorMessage = fetchErr?.data?.statusMessage || fetchErr?.message || 'Failed to update cohort status'
       throw new Error(errorMessage)
     }
   }

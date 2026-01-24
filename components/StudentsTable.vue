@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getPaginationRowModel } from "@tanstack/vue-table";
 import { resolveComponent, ref, watch } from "vue";
+import { STATUS_OPTIONS, PROGRAM_OPTIONS } from '~/constants/options'
 
 import * as z from 'zod'
 import type { FormSubmitEvent } from '@nuxt/ui'
@@ -115,7 +116,6 @@ const props = defineProps({
   },
 });
 
-console.log("StudentsTable received data:", props.data);
 const emit = defineEmits(["toggleActiveStatus", "refreshData"]);
 
 const table = useTemplateRef("table");
@@ -147,7 +147,7 @@ const selectedStudentId = ref(null)
 const selectedStudentName = ref('')
 const supabase = useSupabaseClient()
 
-const items = ref(['Active', 'Inactive', 'Frozen', 'Graduated'])
+const items = ref([...STATUS_OPTIONS])
 const value = ref('Backlog')
 
 watch(
@@ -358,7 +358,6 @@ function getRowItems(row: any) {
 }
 
 const onSelect = async (selectedRows: any[]) => {
-  console.log("Selected rows:", selectedRows.original);
   await navigateTo(`/admin/students/${selectedRows.original.id}`, {
     open: {
       target: "_blank",
@@ -435,12 +434,7 @@ const onSelect = async (selectedRows: any[]) => {
         <USelect
           size="md"
           v-model="programFilter"
-          :items="[
-            { label: 'All', value: 'all' },
-            { label: 'Software Engineering', value: 'Software Engineering' },
-            { label: 'Data Science', value: 'Data Science' },
-            { label: 'AI/ML', value: 'AI/ML' },
-          ]"
+          :items="[{ label: 'All', value: 'all' }, ...PROGRAM_OPTIONS]"
           :ui="{
             trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200',
           }"

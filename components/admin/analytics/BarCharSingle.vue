@@ -16,9 +16,6 @@ const props = defineProps({
   studentCount: { type: Number, required: true },
 });
 
-onMounted(() => {
-  console.log('Props received:', props);
-});
 const MeetingData: MeetingDataItem[] = [
   { meetingType: 'Workshop', totalMeetings: props.sumWorkshops, attendedMeetings: props.sumWorkshopAttended, attendancesPerStudent: props.studentCount > 0 ? Math.round(props.sumWorkshopAttended / props.studentCount) : 0 },
   { meetingType: 'Standup', totalMeetings: props.sumStandups, attendedMeetings: props.sumStandupAttended, attendancesPerStudent: props.studentCount > 0 ? Math.round(props.sumStandupAttended / props.studentCount) : 0 },

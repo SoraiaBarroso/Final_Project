@@ -1,11 +1,13 @@
 import { CACHE_KEYS } from './useCacheInvalidation'
+import type { Student } from '~/types'
+import type { ApiListResponse } from '~/types'
 
 export function useStudents() {
   const supabase = useSupabaseClient()
   const nuxtApp = useNuxtApp()
 
   // Use Nuxt's useFetch with caching
-  const { data: studentsData, refresh, status, error: fetchError } = useFetch<{ data: any[] }>('/api/students', {
+  const { data: studentsData, refresh, status, error: fetchError } = useFetch<ApiListResponse<Student>>('/api/students', {
     key: CACHE_KEYS.STUDENTS,
     getCachedData(key) {
       return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
@@ -15,7 +17,7 @@ export function useStudents() {
   })
 
   // Fallback to direct Supabase fetch if API doesn't exist
-  const localStudents = ref<any[]>([])
+  const localStudents = ref<Student[]>([])
   const localLoading = ref(false)
   const localError = ref<string | null>(null)
 
@@ -55,9 +57,9 @@ export function useStudents() {
       nuxtApp.payload.data[CACHE_KEYS.STUDENTS] = { data: localStudents.value }
 
       return data
-    } catch (err: any) {
-      localError.value = err?.message || 'Failed to fetch students'
-      console.error('Error fetching students:', err)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch students'
+      localError.value = errorMessage
       throw err
     } finally {
       localLoading.value = false
@@ -67,13 +69,13 @@ export function useStudents() {
   /**
    * Import students from CSV data
    */
-  async function importStudents(studentsData: any[]) {
+  async function importStudents(studentsToImport: Record<string, unknown>[]) {
     localLoading.value = true
     localError.value = null
     try {
       const response = await $fetch('/api/students/import', {
         method: 'POST',
-        body: { students: studentsData }
+        body: { students: studentsToImport }
       })
 
       // Invalidate related caches after successful import
@@ -84,9 +86,9 @@ export function useStudents() {
       ])
 
       return response
-    } catch (err: any) {
-      localError.value = err?.message || 'Failed to import students'
-      console.error('Error importing students:', err)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to import students'
+      localError.value = errorMessage
       throw err
     } finally {
       localLoading.value = false
@@ -120,14 +122,14 @@ export function useStudents() {
    * Get a single student by ID
    */
   function getStudentById(id: string) {
-    return students.value.find((s: any) => s.id === id)
+    return students.value.find((s) => s.id === id)
   }
 
   /**
    * Get students by cohort
    */
   function getStudentsByCohort(cohortName: string) {
-    return students.value.filter((s: any) => s.cohort === cohortName)
+    return students.value.filter((s) => s.cohort === cohortName)
   }
 
   return {

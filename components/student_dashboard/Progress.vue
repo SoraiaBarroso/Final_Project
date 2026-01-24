@@ -22,8 +22,6 @@ const props = defineProps({
     }
 });
 
-console.log('Seasons prop:', props.seasons);
-
 const value = computed(() => props.progress || 0);
 
 const launchConfetti = () => {
