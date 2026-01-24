@@ -15,7 +15,6 @@ export const useAuth = () => {
         const { data, error } = await supabase.auth.getUser()
 
         if (error) {
-            console.error('Error fetching user:', error)
             user.value = null
             role.value = 'guest'
             return null
@@ -37,10 +36,7 @@ export const useAuth = () => {
             } else {
                 role.value = 'user'
             }
-
-            console.log('User role determined:', role.value)
         } else {
-            console.log("No user found")
             user.value = null
             role.value = 'guest'
         }
@@ -49,11 +45,8 @@ export const useAuth = () => {
     }
 
     const signInWithGoogle = async () => {
-        console.log("Starting Google OAuth sign in...")
-
         // Get the current origin to make redirect URL dynamic
         const redirectUrl = `${window.location.origin}/auth/confirm`
-        console.log("OAuth redirect URL:", redirectUrl)
 
         const { data, error } = await supabase.auth.signInWithOAuth({
             provider: "google",
@@ -65,34 +58,22 @@ export const useAuth = () => {
         })
 
         if (error) {
-            console.error("OAuth error:", error)
             return { data: null, error }
         }
 
-        console.log("OAuth initiated successfully, redirecting to Google...")
         return { data, error: null }
     }
 
     const signOut = async () => {
-        console.log("Signing out...")
         const { error } = await supabase.auth.signOut()
 
-        if (error) {
-            console.error('Error signing out:', error)
-        } else {
+        if (!error) {
             user.value = null
             role.value = 'guest'
-            console.log("User signed out successfully")
         }
 
         return { error }
     }
-
-    // Initialize user state when composable is first used
-    // onMounted(async () => {
-    //     await getUser()
-    //     console.log("Initial user state set:", user || 'null')
-    // })
 
     // Watch for changes in the supabase user state and sync with our local state
     watch(supabaseUser, (newUser) => {

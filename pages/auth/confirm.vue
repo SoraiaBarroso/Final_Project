@@ -8,7 +8,6 @@
   const cookieName = useRuntimeConfig().public.supabase.cookieName;
 
   supabase.auth.onAuthStateChange((event, session) => {
-    console.log("Auth state changed:", event, session);
     if (session && session.provider_token) {
       window.localStorage.setItem("oauth_provider_token", session.provider_token);
     }
@@ -25,33 +24,25 @@
     user,
     async () => {
       if (user.value) {
-        console.log("User detected in confirm page:", user.value.email);
-
         try {
           // Check user role (admin table determines if user is admin)
           const response = await $fetch('/api/auth/ensure-profile', {
             method: 'POST'
           });
 
-          console.log("Role check complete:", response);
-
           if (!response.success) {
-            console.error('Error checking role:', response.error);
             return navigateTo('/?error=auth');
           }
 
           useCookie(`${cookieName}-redirect-path`).value = null;
-          console.log("User role:", response.role);
+
           // Redirect based on role (admin or student)
           if (response.role === 'admin') {
-            console.log("Redirecting to admin dashboard");
             return navigateTo("/admin/dashboard");
           } else {
-            console.log("Redirecting to student dashboard");
             return navigateTo("/students/dashboard");
           }
         } catch (err) {
-          console.error('Failed to check role:', err);
           return navigateTo('/?error=auth');
         }
       }

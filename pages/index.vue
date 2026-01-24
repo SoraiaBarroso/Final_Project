@@ -7,7 +7,7 @@
   
   import { useAuth } from "../composables/useAuth";
 
-  const { user, role, signInWithGoogle } = useAuth()
+  const { signInWithGoogle } = useAuth()
 
   const colorMode = useColorMode()
   colorMode.preference = 'light'
@@ -16,9 +16,6 @@
   const isErrorVisible = ref(false);
 
   supabase.auth.onAuthStateChange((event, session) => {
-    console.log("Auth state changed:", event, session);
-    console.log("Current user from useAuth:", user.value?.email || 'null');
-    
     if (session && session.provider_token) {
       window.localStorage.setItem("oauth_provider_token", session.provider_token);
     }
@@ -83,15 +80,6 @@
       <UIcon name="i-lucide-user" class="size-8" />
       <h1 class="text-highlighted text-xl font-semibold text-pretty">Login</h1>
       <p class="text-muted text-base text-pretty">Enter your credentials to access your account.</p>
-      
-      <!-- Debug: Show current user state -->
-      <div v-if="user" class="text-sm text-green-600 bg-green-50 p-2 rounded">
-        ✅ Logged in as: {{ user.email }}<br>
-        🏷️ Role: {{ role }}
-      </div>
-      <div v-else class="text-sm text-gray-600 bg-gray-50 p-2 rounded">
-        👤 Not logged in (Role: {{ role }})
-      </div>
     </div>
     <div class="flex w-[35%] items-center justify-center">
       <UButton
