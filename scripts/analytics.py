@@ -9,7 +9,7 @@ import sys
 from datetime import datetime
 
 # Import our utilities
-from utils import get_supabase_client, print_step
+from utils import get_supabase_client, print_step, safe_print
 
 class ProgressAnalytics:
     """Handles progress snapshots and analytics generation"""
@@ -34,7 +34,7 @@ class ProgressAnalytics:
                 days_since_last = (datetime.now(latest_date.tzinfo) - latest_date).days
 
                 if days_since_last < 7:
-                    print(f"ℹ️  Snapshot already created {days_since_last} day(s) ago. Skipping.")
+                    safe_print(f"[INFO] Snapshot already created {days_since_last} day(s) ago. Skipping.")
                     print(f"   Next snapshot will be created in {7 - days_since_last} day(s).")
                     return True  # Not an error, just skipping
 
@@ -66,7 +66,7 @@ class ProgressAnalytics:
             # Insert snapshot
             result = self.supabase.table('progress_snapshots').insert(snapshot).execute()
             
-            print(f"✓ Created progress snapshot:")
+            safe_print(f"[OK] Created progress snapshot:")
             print(f"  Total Students: {total_students}")
             print(f"  On Track: {on_track} ({(on_track/total_students*100):.1f}%)")
             print(f"  At Risk: {at_risk} ({(at_risk/total_students*100):.1f}%)")
@@ -166,16 +166,16 @@ class ProgressAnalytics:
                     season_distribution[season_name] = season_distribution.get(season_name, 0) + 1
             
             # Print detailed report
-            print(f"\n📊 DETAILED ANALYTICS REPORT")
+            safe_print(f"\n[STATS] DETAILED ANALYTICS REPORT")
             print(f"Generated at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
             print("=" * 50)
             
-            print(f"\n👥 STUDENT OVERVIEW")
+            safe_print(f"\n[INFO] STUDENT OVERVIEW")
             print(f"Total Students: {total_students}")
             print(f"Active Students (with login): {active_students} ({(active_students/total_students*100):.1f}%)")
             print(f"Students with Points: {students_with_points} ({(students_with_points/total_students*100):.1f}%)")
             
-            print(f"\n📚 CURRENT SEASON DISTRIBUTION")
+            safe_print(f"\n[INFO] CURRENT SEASON DISTRIBUTION")
             for season, count in sorted(season_distribution.items()):
                 percentage = (count / total_students * 100) if total_students > 0 else 0
                 print(f"  {season}: {count} ({percentage:.1f}%)")
@@ -244,7 +244,7 @@ def main():
             sys.exit(1)
     
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        safe_print(f"\n[ERROR] Error: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

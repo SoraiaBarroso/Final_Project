@@ -11,7 +11,7 @@ import os
 from datetime import datetime
 
 # Import our utilities
-from utils import print_step
+from utils import print_step, safe_print
 
 class DataPipelineOrchestrator:
     """Orchestrates the complete data processing pipeline"""
@@ -26,7 +26,7 @@ class DataPipelineOrchestrator:
         script_path = os.path.join(self.scripts_dir, script_name)
         
         if not os.path.exists(script_path):
-            print(f"❌ Script not found: {script_name}")
+            safe_print(f"[ERROR] Script not found: {script_name}")
             return False
         
         try:
@@ -43,14 +43,14 @@ class DataPipelineOrchestrator:
             return True
             
         except subprocess.CalledProcessError as e:
-            print(f"❌ Script failed with exit code {e.returncode}")
+            safe_print(f"[ERROR] Script failed with exit code {e.returncode}")
             if e.stdout:
                 print(f"Output: {e.stdout}")
             if e.stderr:
                 print(f"Error: {e.stderr}")
             return False
         except Exception as e:
-            print(f"❌ Unexpected error: {e}")
+            safe_print(f"[ERROR] Unexpected error: {e}")
             return False
     
     def run_full_pipeline(self, scrape_new_data=False):
@@ -72,7 +72,7 @@ class DataPipelineOrchestrator:
         operations.append(("Points Assignment", "update_points_assigned.py", []))
 
         # 4. Analytics
-        operations.append(("Analytics Generation", "analytics.py", ["--all"]))
+        operations.append(("Analytics Generation", "analytics.py", ["--all", "--service-role"]))
         
         self.total_operations = len(operations)
         
@@ -80,10 +80,10 @@ class DataPipelineOrchestrator:
             print_step(operation_name.upper(), f"Running {script}")
             
             if self.run_script(script, args):
-                print(f"✅ {operation_name} completed successfully")
+                safe_print(f"[OK] {operation_name} completed successfully")
                 self.success_count += 1
             else:
-                print(f"❌ {operation_name} failed")
+                safe_print(f"[ERROR] {operation_name} failed")
         
         # Summary
         if self.success_count == self.total_operations:
@@ -100,10 +100,10 @@ class DataPipelineOrchestrator:
         args = ["--all"] if scrape else ["--students", "--projects", "--progress"]
         
         if self.run_script("data_processor.py", args):
-            print("✅ Data processing completed successfully")
+            safe_print("[OK] Data processing completed successfully")
             return True
         else:
-            print("❌ Data processing failed")
+            safe_print("[ERROR] Data processing failed")
             return False
     
     def run_management_only(self):
@@ -111,21 +111,21 @@ class DataPipelineOrchestrator:
         print_step("MANAGEMENT PIPELINE", "Running student management operations only")
         
         if self.run_script("student_management.py", ["--all"]):
-            print("✅ Student management completed successfully")
+            safe_print("[OK] Student management completed successfully")
             return True
         else:
-            print("❌ Student management failed")
+            safe_print("[ERROR] Student management failed")
             return False
     
     def run_analytics_only(self):
         """Run only analytics generation"""
         print_step("ANALYTICS PIPELINE", "Running analytics generation only")
 
-        if self.run_script("analytics.py", ["--all"]):
-            print("✅ Analytics generation completed successfully")
+        if self.run_script("analytics.py", ["--all", "--service-role"]):
+            safe_print("[OK] Analytics generation completed successfully")
             return True
         else:
-            print("❌ Analytics generation failed")
+            safe_print("[ERROR] Analytics generation failed")
             return False
 
     def run_points_only(self):
@@ -133,10 +133,10 @@ class DataPipelineOrchestrator:
         print_step("POINTS PIPELINE", "Running points assignment update only")
 
         if self.run_script("update_points_assigned.py", []):
-            print("✅ Points assignment update completed successfully")
+            safe_print("[OK] Points assignment update completed successfully")
             return True
         else:
-            print("❌ Points assignment update failed")
+            safe_print("[ERROR] Points assignment update failed")
             return False
 
     def run_attendance_only(self):
@@ -144,10 +144,10 @@ class DataPipelineOrchestrator:
         print_step("ATTENDANCE PIPELINE", "Running attendance sync from Google Sheets")
 
         if self.run_script("update_attendance.py", []):
-            print("✅ Attendance sync completed successfully")
+            safe_print("[OK] Attendance sync completed successfully")
             return True
         else:
-            print("❌ Attendance sync failed")
+            safe_print("[ERROR] Attendance sync failed")
             return False
 
 def main():
@@ -198,7 +198,7 @@ Examples:
         return
     
     if args.scrape and not (args.full or args.data):
-        print("❌ --scrape can only be used with --full or --data")
+        safe_print("[ERROR] --scrape can only be used with --full or --data")
         sys.exit(1)
     
     # Initialize orchestrator
@@ -234,17 +234,17 @@ Examples:
         
         # Exit with appropriate code
         if success:
-            print(f"\n🎉 All operations completed successfully at {datetime.now().strftime('%H:%M:%S')}")
+            safe_print(f"\n[SUCCESS] All operations completed successfully at {datetime.now().strftime('%H:%M:%S')}")
             sys.exit(0)
         else:
-            print(f"\n⚠️ Some operations failed. Check logs above.")
+            safe_print(f"\n[WARN] Some operations failed. Check logs above.")
             sys.exit(1)
-    
+
     except KeyboardInterrupt:
-        print("\n🛑 Pipeline interrupted by user")
+        safe_print("\n[STOPPED] Pipeline interrupted by user")
         sys.exit(130)
     except Exception as e:
-        print(f"\n❌ Pipeline error: {e}")
+        safe_print(f"\n[ERROR] Pipeline error: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ Calculates and updates points_assigned for students based on attendance
 Run with: python update_points_assigned.py
 """
 
-from utils import get_supabase_client, print_step
+from utils import get_supabase_client, print_step, safe_print
 
 class PointsAssignmentManager:
     """Handles calculation and updating of points_assigned based on attendance"""
@@ -63,13 +63,13 @@ class PointsAssignmentManager:
                         .update({'points_assigned': points_assigned}) \
                         .eq('id', student_id).execute()
 
-                    print(f"✓ {username}: Workshops({workshops}×{self.WORKSHOP_POINTS}) + "
-                          f"Mentoring({mentoring}×{self.MENTORING_POINTS}) + "
-                          f"Standups({standups}×{self.STANDUP_POINTS}) = {points_assigned} points")
+                    safe_print(f"[OK] {username}: Workshops({workshops}x{self.WORKSHOP_POINTS}) + "
+                          f"Mentoring({mentoring}x{self.MENTORING_POINTS}) + "
+                          f"Standups({standups}x{self.STANDUP_POINTS}) = {points_assigned} points")
                     updated_count += 1
 
                 except Exception as e:
-                    print(f"✗ Error updating student {username} ({student_id}): {e}")
+                    safe_print(f"[X] Error updating student {username} ({student_id}): {e}")
                     failed_count += 1
                     continue
 
@@ -187,15 +187,15 @@ def main():
         # Show statistics
         if success:
             manager.show_points_statistics()
-            print("\n🎉 Points assignment update completed successfully!")
+            safe_print("\n[SUCCESS] Points assignment update completed successfully!")
         else:
-            print("\n⚠️ Points assignment update failed. Check the logs above.")
+            safe_print("\n[WARN] Points assignment update failed. Check the logs above.")
             return 1
 
         return 0
 
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        safe_print(f"\n[ERROR] Error: {e}")
         return 1
 
 if __name__ == "__main__":

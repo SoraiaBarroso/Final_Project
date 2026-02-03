@@ -302,10 +302,41 @@ def safe_update(supabase_client, table_name, records, id_field='id'):
         print(f"Error during update operation on {table_name}: {e}")
         return False
 
+def safe_print(message):
+    """Print message with fallback for Windows console encoding issues"""
+    try:
+        print(message)
+    except UnicodeEncodeError:
+        # Replace common Unicode characters with ASCII equivalents
+        replacements = {
+            '✓': '[OK]',
+            '✗': '[X]',
+            '✘': '[X]',
+            '❌': '[ERROR]',
+            '✅': '[OK]',
+            '⚠️': '[WARN]',
+            '⚠': '[WARN]',
+            '📋': '[INFO]',
+            '📊': '[STATS]',
+            '📚': '[INFO]',
+            '👥': '[INFO]',
+            '🔄': '[RETRY]',
+            '🎉': '[SUCCESS]',
+            '🔍': '[SEARCH]',
+            '📧': '[EMAIL]',
+            'ℹ️': '[INFO]',
+            '→': '->',
+        }
+        safe_message = message
+        for unicode_char, ascii_char in replacements.items():
+            safe_message = safe_message.replace(unicode_char, ascii_char)
+        # Final fallback: encode with errors='replace'
+        print(safe_message.encode('ascii', errors='replace').decode('ascii'))
+
 def print_step(step_name, description=""):
     """Print formatted step information"""
-    print(f"\n{'='*60}")
-    print(f"STEP: {step_name}")
+    safe_print(f"\n{'='*60}")
+    safe_print(f"STEP: {step_name}")
     if description:
-        print(f"Description: {description}")
-    print('='*60)
+        safe_print(f"Description: {description}")
+    safe_print('='*60)

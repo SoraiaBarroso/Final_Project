@@ -18,7 +18,7 @@ from bs4 import BeautifulSoup
 from utils import (
     get_supabase_client, map_season_name_to_db, parse_relative_time_to_timestamp,
     load_scraped_data, get_student_id_map, get_project_id_map, get_season_id_map,
-    safe_upsert, safe_update, print_step
+    safe_upsert, safe_update, print_step, safe_print
 )
 
 class QwasarScraper:
@@ -73,7 +73,7 @@ class QwasarScraper:
             if not appcas_session:
                 raise Exception("Could not get session cookie")
             
-            print(f"✓ Successfully extracted authentication tokens")
+            safe_print("[OK] Successfully extracted authentication tokens")
             return auth_token.group(1), lt_value, appcas_session
             
         except requests.RequestException as e:
@@ -90,14 +90,14 @@ class QwasarScraper:
         try:
             cookies = self.get_tokens()
             if cookies and cookies.get('user.id') and cookies.get('_session_id'):
-                print("✓ Authentication successful")
+                safe_print("[OK] Authentication successful")
                 self.session_cookies = cookies
                 return True
             else:
                 raise Exception("Failed to obtain valid session cookies")
                 
         except Exception as e:
-            print(f"❌ Authentication error: {e}")
+            safe_print(f"[ERROR] Authentication error: {e}")
             raise Exception(f"Authentication failed: {e}")
     
     def get_tokens(self):
@@ -171,7 +171,7 @@ class QwasarScraper:
     def get_student_usernames(self, limit=None, exclude_inactive=True):
         """Fetch student usernames from Supabase database"""
         try:
-            print("📋 Fetching student usernames from database...")
+            safe_print("[INFO] Fetching student usernames from database...")
 
             # Build query - get username and account_status
             query = self.supabase.from_('students').select('username, account_status')
@@ -194,7 +194,7 @@ class QwasarScraper:
                 # Remove any None or empty usernames
                 usernames = [u for u in usernames if u]
 
-                print(f"✓ Found {len(usernames)} student usernames in database")
+                safe_print(f"[OK] Found {len(usernames)} student usernames in database")
 
                 # Log first few usernames for verification
                 if usernames:
@@ -203,11 +203,11 @@ class QwasarScraper:
 
                 return usernames
             else:
-                print("⚠️  No students found in database")
+                safe_print("[WARN] No students found in database")
                 return []
 
         except Exception as e:
-            print(f"❌ Error fetching student usernames: {e}")
+            safe_print(f"[ERROR] Error fetching student usernames: {e}")
             import traceback
             traceback.print_exc()
             return []
@@ -556,19 +556,19 @@ class QwasarScraper:
                 "total_students": len(scraped_data) - 1  # Exclude metadata entry
             })
             
-            print(f"\n✓ Successfully scraped data for {len(scraped_data) - 1} students")
+            safe_print(f"\n[OK] Successfully scraped data for {len(scraped_data) - 1} students")
             return scraped_data
                 
         except Exception as e:
-            print(f"✗ Scraping failed: {e}")
+            safe_print(f"[X] Scraping failed: {e}")
             import traceback
             traceback.print_exc()
-            print("🔄 Attempting to fall back to existing data...")
+            safe_print("[RETRY] Attempting to fall back to existing data...")
             
             # Try to use existing data as fallback
             existing_data = load_scraped_data()
             if existing_data:
-                print(f"✓ Using existing data as fallback ({len(existing_data)} records)")
+                safe_print(f"[OK] Using existing data as fallback ({len(existing_data)} records)")
                 return existing_data
             else:
                 raise Exception(f"Scraping failed and no existing data available: {e}")
@@ -791,7 +791,7 @@ class StudentDataProcessor:
         if records_to_upsert:
             safe_upsert(self.supabase, 'student_season_progress', records_to_upsert, 
                        on_conflict="student_id, season_id")
-            print(f"✓ Updated {len(records_to_upsert)} season progress records")
+            safe_print(f"[OK] Updated {len(records_to_upsert)} season progress records")
         else:
             print("No season progress records to update")
     
@@ -826,9 +826,9 @@ class StudentDataProcessor:
                 for record_id in incorrect_records:
                     self.supabase.from_('student_season_progress').delete().eq('id', record_id).execute()
                 
-                print(f"✓ Removed {len(incorrect_records)} incorrect season progress records")
+                safe_print(f"[OK] Removed {len(incorrect_records)} incorrect season progress records")
             else:
-                print("✓ No incorrect season progress records found")
+                safe_print("[OK] No incorrect season progress records found")
                 
         except Exception as e:
             print(f"Error during cleanup: {e}")
@@ -905,7 +905,7 @@ class ProjectCompletionProcessor:
         if records_to_upsert:
             safe_upsert(self.supabase, 'student_project_completion', records_to_upsert,
                        on_conflict="student_id, project_id")
-            print(f"✓ Updated {len(records_to_upsert)} project completion records")
+            safe_print(f"[OK] Updated {len(records_to_upsert)} project completion records")
         else:
             print("No project completion records to update")
 
@@ -929,8 +929,8 @@ def main():
         return
     
     try:
-        # Get Supabase client
-        supabase = get_supabase_client()
+        # Get Supabase client (use service role to bypass RLS)
+        supabase = get_supabase_client(service_role=True)
         
         # Load or scrape data
         if args.scrape or args.all:
@@ -946,7 +946,7 @@ def main():
             
             with open(json_path, 'w', encoding='utf-8') as f:
                 json.dump(scraped_data, f, indent=2, ensure_ascii=False)
-            print(f"✓ Saved scraped data to {json_path}")
+            safe_print(f"[OK] Saved scraped data to {json_path}")
         else:
             scraped_data = load_scraped_data()
         

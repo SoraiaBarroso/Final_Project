@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 
 # Import our utilities
-from utils import get_supabase_client, print_step
+from utils import get_supabase_client, print_step, safe_print
 
 class StudentSeasonManager:
     """Handles student season assignment and management"""
@@ -49,20 +49,38 @@ class StudentSeasonManager:
                 pcs_response = self.supabase.from_('program_cohort_seasons').select('season_id, start_date, end_date') \
                     .eq('cohort_id', cohort_id).eq('program_id', program_id).execute()
                 pcs_data = pcs_response.data
-                
+
                 expected_season_id = None
+                all_seasons_completed = False
+
                 for row in pcs_data:
                     if row['start_date'] <= today <= row['end_date']:
                         expected_season_id = row['season_id']
                         break
-                
+
+                # If no current season found, check if all seasons are completed (past end_date)
+                if not expected_season_id and pcs_data:
+                    # Check if today is past all end_dates
+                    all_past = all(row['end_date'] < today for row in pcs_data)
+                    if all_past:
+                        all_seasons_completed = True
+                        # Get the Final Project season for this program
+                        final_project_response = self.supabase.from_('seasons') \
+                            .select('id') \
+                            .eq('program_id', program_id) \
+                            .eq('name', 'Final Project') \
+                            .execute()
+                        if final_project_response.data:
+                            expected_season_id = final_project_response.data[0]['id']
+
                 if expected_season_id:
                     # Update the student's expected_season_id
                     update_response = self.supabase.from_('students') \
                         .update({'expected_season_id': expected_season_id}) \
                         .eq('id', student_id).execute()
-                    
-                    print(f"✓ Updated student {student_id} with expected_season_id {expected_season_id}")
+
+                    status_msg = " (all seasons completed → Final Project)" if all_seasons_completed else ""
+                    safe_print(f"[OK] Updated student {student_id} with expected_season_id {expected_season_id}{status_msg}")
                     updated_count += 1
                 else:
                     print(f"No expected season found for student {student_id} (cohort: {cohort_id}, program: {program_id})")
@@ -71,7 +89,7 @@ class StudentSeasonManager:
                 print(f"Error processing student {student_id}: {e}")
                 continue
         
-        print(f"✓ Updated expected seasons for {updated_count} students")
+        safe_print(f"[OK] Updated expected seasons for {updated_count} students")
         return True
 
 class StudentStatusManager:
@@ -91,7 +109,7 @@ class StudentStatusManager:
             response = self.supabase.rpc('update_student_status_based_on_season_progress').execute()
 
             if hasattr(response, 'data') and response.data is not None:
-                print("✓ Student statuses updated successfully by PostgreSQL function")
+                safe_print("[OK] Student statuses updated successfully by PostgreSQL function")
                 if response.data:
                     print(f"Response data: {response.data}")
             else:
@@ -123,7 +141,7 @@ class StudentStatusManager:
             unknown_students = unknown_students_response.data
 
             if not unknown_students:
-                print("✓ No students with 'Unknown' status found!")
+                safe_print("[OK] No students with 'Unknown' status found!")
             else:
                 print(f"Found {len(unknown_students)} students with 'Unknown' status\n")
 
@@ -294,13 +312,13 @@ def main():
                     success = False
         
         if success:
-            print("\n🎉 All operations completed successfully!")
+            safe_print("\n[SUCCESS] All operations completed successfully!")
         else:
-            print("\n⚠️ Some operations failed. Check the logs above.")
+            safe_print("\n[WARN] Some operations failed. Check the logs above.")
             sys.exit(1)
     
     except Exception as e:
-        print(f"\n❌ Error: {e}")
+        safe_print(f"\n[ERROR] Error: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
