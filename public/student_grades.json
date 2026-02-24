@@ -1,5 +1,75 @@
 [
   {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/lafaille_m/vrac/profile_picture_lafaille_m_15306_profile_picture_2024_04_02_21_13.jpg",
+    "last_login": "June 22, 2024  3:37am",
+    "ongoing_projects": [
+      "Js Quest07"
+    ],
+    "completed_projects": [
+      "Js Quest01",
+      "Js Quest03",
+      "Js Quest05",
+      "Js Quest06",
+      "Quest00",
+      "Quest00",
+      "Js Quest04",
+      "Js Quest02"
+    ],
+    "exercises_completed": "37",
+    "points": "665",
+    "season_progress": {
+      "Onboarding": "3%",
+      "Preseason Web": "32%"
+    },
+    "name": "lafaille_m"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVvxpTw8PAUdw+5AAAAo0lEQVR4nO3awRFAQAwFUFSgA6XQGTpTCh1QAac9GJMLDsu8nP+bzR4zSbXfqLUq7hRFURRFURRFURRFURRFURSVtxrLqOpMOqQoiqIoiqIoiqKoJ6qPT6Iy6ZCiKIqiKIqiKIr6n7KHpSiKoiiKoiiKojJXS5pUhzC3pUh3fasN97DzWx1SFEVRFEVRFEVR1BPVpEl1CnPnyEf+RVEURVEvqANUNIIFFAi8jAAAAABJRU5ErkJggg==",
+    "last_login": "February 23, 2026  7:40pm",
+    "ongoing_projects": [
+      "Ds Quest01",
+      "My Nba Game Analysis",
+      "My Printf"
+    ],
+    "completed_projects": [
+      "My Cat",
+      "My Levenshtein",
+      "Quest04",
+      "Quest01",
+      "My First Scraper",
+      "Quest00",
+      "Quest00",
+      "My Imdb Api",
+      "Quest05",
+      "Quest02",
+      "Python Quest06",
+      "Python Quest02",
+      "Quest01",
+      "Python Quest01",
+      "Quest03",
+      "My Mastermind",
+      "Ds Quest00",
+      "My Select Query",
+      "My Square",
+      "My Mr Clean",
+      "Python Quest04",
+      "Quest04",
+      "My Ngram",
+      "Python Quest03",
+      "My Roman Numerals Converter",
+      "Python Quest05"
+    ],
+    "exercises_completed": "83",
+    "points": "2785",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "78%",
+      "Season 02 Data Science": "24%"
+    },
+    "name": "ribberin_k"
+  },
+  {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/markov_a/vrac/profile_picture_markov_a_10463_profile_picture_2022_09_24_15_17.jpg",
     "last_login": "January 23, 2026  2:17pm",
     "ongoing_projects": [
@@ -65,7 +135,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAy0lEQVR4nO3bMQrCQBAFUBMs7PQGHkWPFm+Wo+gNtBSE2DiCxShsNkLIm3L5L7NbDptth4K6tquSoiiKoqilqlPzqli4x8Kuei+KoiiKoiiKoiiKKlCXmFS7NHeLyHFkL4qiKIqiKIqiKIqqq2Ji3XxR+/jxqUu/vo1IX32HFEVRFEVRFEVR1DLVyHvYQ/qs51xrhxRFURRFURRFURSVqCEm1vX0vSiKoiiKoiiKoijq/6qJ69fH9L0oiqJ+qPd7hz7NfUZmci5qNuoJXVSGBXKeQSIAAAAASUVORK5CYII=",
-    "last_login": "February 20, 2026  1:58pm",
+    "last_login": "February 23, 2026 11:55am",
     "ongoing_projects": [
       "My Printf"
     ],
@@ -92,7 +162,7 @@
       "Quest00"
     ],
     "exercises_completed": "77",
-    "points": "4395",
+    "points": "4455",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -101,59 +171,73 @@
     "name": "bennie_s"
   },
   {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/lafaille_m/vrac/profile_picture_lafaille_m_15306_profile_picture_2024_04_02_21_13.jpg",
-    "last_login": "June 22, 2024  3:37am",
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/santos_j/vrac/profile_picture_santos_j_6335_profile_picture_2021_11_24_20_23.jpg",
+    "last_login": "March 14, 2025  1:27pm",
     "ongoing_projects": [
-      "Js Quest07"
+      "My Bc",
+      "My Curl",
+      "My Mastermind"
     ],
     "completed_projects": [
-      "Js Quest01",
-      "Js Quest03",
-      "Js Quest05",
-      "Js Quest06",
-      "Quest00",
-      "Quest00",
-      "Js Quest04",
-      "Js Quest02"
-    ],
-    "exercises_completed": "37",
-    "points": "665",
-    "season_progress": {
-      "Onboarding": "3%",
-      "Preseason Web": "32%"
-    },
-    "name": "lafaille_m"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVxQsXw8PAafBLHAAAArUlEQVR4nO3asQ2DQBAEQEwDlIA7gdIoDTqBDkwFECAcGJ1BjyUsMRvf6Df+u3xKyCvPUkJRFEVRN1PD43jqSxpSFEVRFEVRFEVR1BlVrp/GTThXrCPtybcoiqIoiqIoiqIoalHvPWwTzo1f9rBVeBLV/6ohRVEURVEURVEURX2oLjwhfv5JQ4qiKIqiKIqiKIpKUGW4ft2mvaQhRVEURVEURVEURVEURVEUtZMZifCUBVdc4uQAAAAASUVORK5CYII=",
-    "last_login": "February 12, 2026  2:05pm",
-    "ongoing_projects": [
-      "Quest01"
-    ],
-    "completed_projects": [
-      "Python Quest04",
-      "Python Quest06",
-      "Python Quest01",
-      "Quest00",
-      "Python Quest05",
-      "My Cat",
-      "Python Quest03",
-      "Python Quest03",
-      "Python Quest03",
-      "My Levenshtein",
       "My Roman Numerals Converter",
-      "Python Quest02",
-      "My First Scraper",
-      "My Imdb Api"
+      "Js Quest03",
+      "My Select Query",
+      "My Printf",
+      "My Levenshtein",
+      "Js Quest01",
+      "Js Quest07",
+      "Js Quest02",
+      "Ruby Quest06",
+      "My Css Is Easy I",
+      "Quest00",
+      "My Allocine",
+      "My Bouncing Box",
+      "My Moving Box Realtime",
+      "My Ngram",
+      "Quest04",
+      "Quest01",
+      "Quest09",
+      "Quest03",
+      "My Cat",
+      "My Spaceship",
+      "Quest00",
+      "My First Backend",
+      "Js Quest05",
+      "Quest05",
+      "Quest01",
+      "My Css Is Easy Ii",
+      "Ruby Quest03",
+      "Ruby Quest04",
+      "Quest08",
+      "Quest07",
+      "Quest01",
+      "Quest06",
+      "Quest03",
+      "My Christmas Tree",
+      "Js Quest01",
+      "Js Quest04",
+      "My Blockchain",
+      "My Square",
+      "Quest02",
+      "Ruby Quest02",
+      "Ruby Quest01",
+      "Js Quest06",
+      "My Readline",
+      "My Sqlite",
+      "My Ls",
+      "Quest03",
+      "Ruby Quest05"
     ],
-    "exercises_completed": "38",
-    "points": "1240",
+    "exercises_completed": "149",
+    "points": "530",
     "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "89%",
-      "Season 01 Arc 01": "13%"
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "81%",
+      "Season 01 Arc 02": "85%",
+      "Season 02 Fullstack": "75%",
+      "Season 02 Software Engineer": "55%"
     },
-    "name": "lagoa_g"
+    "name": "santos_j"
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/malac_e/vrac/profile_picture_malac_e_13212_profile_picture_2023_03_29_13_09.jpeg",
@@ -198,6 +282,256 @@
       "Season 02 Data Science": "24%"
     },
     "name": "malac_e"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/morales_g/vrac/profile_picture_morales_g_16476_profile_picture_2025_09_18_17_42.jpg",
+    "last_login": "February 23, 2026  7:21pm",
+    "ongoing_projects": [
+      "My Square"
+    ],
+    "completed_projects": [
+      "Python Quest02",
+      "My First Scraper",
+      "Quest00",
+      "Quest04",
+      "Python Quest04",
+      "Quest01",
+      "My Cat",
+      "Python Quest01",
+      "Python Quest02",
+      "My Roman Numerals Converter",
+      "Python Quest06",
+      "My Levenshtein",
+      "My Imdb Api",
+      "Python Quest03",
+      "Python Quest05",
+      "Quest03",
+      "Quest02"
+    ],
+    "exercises_completed": "71",
+    "points": "4755",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "36%"
+    },
+    "name": "morales_g"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVxQsXw8PAafBLHAAAArUlEQVR4nO3asQ2DQBAEQEwDlIA7gdIoDTqBDkwFECAcGJ1BjyUsMRvf6Df+u3xKyCvPUkJRFEVRN1PD43jqSxpSFEVRFEVRFEVR1BlVrp/GTThXrCPtybcoiqIoiqIoiqIoalHvPWwTzo1f9rBVeBLV/6ohRVEURVEURVEURX2oLjwhfv5JQ4qiKIqiKIqiKIpKUGW4ft2mvaQhRVEURVEURVEURVEURVEUtZMZifCUBVdc4uQAAAAASUVORK5CYII=",
+    "last_login": "February 23, 2026 10:53pm",
+    "ongoing_projects": [
+      "Quest02"
+    ],
+    "completed_projects": [
+      "Python Quest04",
+      "Python Quest06",
+      "Quest01",
+      "Python Quest01",
+      "Quest00",
+      "Python Quest05",
+      "My Cat",
+      "Python Quest03",
+      "Python Quest03",
+      "Python Quest03",
+      "My Levenshtein",
+      "My Roman Numerals Converter",
+      "Python Quest02",
+      "My First Scraper",
+      "My Imdb Api"
+    ],
+    "exercises_completed": "46",
+    "points": "1330",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "92%",
+      "Season 01 Arc 01": "17%"
+    },
+    "name": "lagoa_g"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEWNbMzw8PB71RVKAAAAnUlEQVR4nO3aQQqAIBAF0Izu0VU6elfpBh0gsI0uolwkRghvlvIfo8vBGWNF7eNQUxRFURRFURRFURRFURRFUVQfKoZU0/e9KIqiKIqiKIqiKOqF2vLIuhRz18hzr5A3oY7mN6QoiqIoiqIoiqKogvIPS1EURVEURVEURVEURVEURVEURVEU9YOa8+rwmk7vu8TXSCfvoiiKoqgG6gRMxWAFOyfzlAAAAABJRU5ErkJggg==",
+    "last_login": "February 17, 2026  7:45pm",
+    "ongoing_projects": [
+      "Quest01",
+      "Quest02",
+      "Quest04"
+    ],
+    "completed_projects": [
+      "My Spaceship",
+      "My Moving Box Realtime",
+      "Js Quest02",
+      "Js Quest01",
+      "Quest02",
+      "Quest03",
+      "My Bouncing Box",
+      "Js Quest07",
+      "Js Quest03",
+      "My Mastermind",
+      "My Levenshtein",
+      "Quest01",
+      "My First Backend",
+      "Js Quest06",
+      "Quest00",
+      "My Css Is Easy I",
+      "Js Quest05",
+      "Js Quest04",
+      "Quest02"
+    ],
+    "exercises_completed": "80",
+    "points": "205",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Web": "95%",
+      "Season 01 Arc 01": "47%"
+    },
+    "name": "virmausk_u"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/monteiro_b/vrac/profile_picture_monteiro_b_16660_profile_picture_2025_10_04_20_33.png",
+    "last_login": "February 23, 2026 10:37pm",
+    "ongoing_projects": [
+      "My Imdb Api",
+      "Quest03",
+      "Quest04"
+    ],
+    "completed_projects": [
+      "Python Quest03",
+      "Python Quest02",
+      "Python Quest01",
+      "Quest01",
+      "Quest00",
+      "My Roman Numerals Converter",
+      "My First Scraper",
+      "Python Quest04",
+      "Quest00",
+      "Python Quest05",
+      "Python Quest06",
+      "My Cat",
+      "My Levenshtein",
+      "Quest01",
+      "Quest02"
+    ],
+    "exercises_completed": "63",
+    "points": "2575",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Data": "84%",
+      "Season 01 Arc 01": "27%"
+    },
+    "name": "monteiro_b"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAAv0lEQVR4nO3bsQ3CMBAFUIiQKDMCjMJmYTQYxRukDAUKKbhIYKVJkJyId+U/P9mtrXPVz6i22s0piqIoivozlfbfFe1H1rkUOSFFURRFURRFURRFLVGn7PU42sescytyQoqiKIqiKIqiKIqiKIqiKIqiKIqiqFIqfQwKD9VHcIh1ySwxRVEURVEURVEUtSp1f19Ux/QZV9dzrsZZ4mvEEXQR1GaJKYqiKIqiKIqiqFWpZvI/bPvzvSiKoihqG+oFKKCOBauLg9IAAAAASUVORK5CYII=",
+    "last_login": "February 19, 2026  7:04pm",
+    "ongoing_projects": [
+      "My Nba Game Analysis",
+      "My Select Query"
+    ],
+    "completed_projects": [
+      "Python Quest06",
+      "My Levenshtein",
+      "My Ngram",
+      "My Square",
+      "My Cat",
+      "Python Quest02",
+      "My First Scraper",
+      "Quest05",
+      "Quest04",
+      "Python Quest04",
+      "Quest03",
+      "Python Quest01",
+      "Quest00",
+      "Quest01",
+      "Python Quest05",
+      "Python Quest03",
+      "Quest02",
+      "My Printf",
+      "My Imdb Api",
+      "My Mastermind",
+      "My Roman Numerals Converter"
+    ],
+    "exercises_completed": "85",
+    "points": "1720",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Data": "100%",
+      "Preseason Web": "31%",
+      "Season 01 Arc 01": "100%",
+      "Season 02 Data Science": "16%"
+    },
+    "name": "barrient_p"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAmklEQVR4nO3cQQ5AMBAFUMQ9OIqjcxQ3cAGpjUpILDSkxPvLZl6mXf5Nq5CQqSpSQlEURVEURVEURVEURVEURb1SjeWa7nRuP/KRd1EURVEURVEURVE/UCE21vr5XRRFURRFURRFURSVooa1um6ncyyz7e27KIqiKIqiKIqiKIqiKIqiKIqiKIqiqINqLvyz2Ge5IUVRFEVlUwtgvWkFprV6YAAAAABJRU5ErkJggg==",
+    "last_login": "December 26, 2025  7:48pm",
+    "ongoing_projects": [
+      "My Imdb Api",
+      "My Mr Clean",
+      "My Select Query",
+      "Quest05"
+    ],
+    "completed_projects": [
+      "My First Scraper Ds",
+      "Quest00",
+      "Quest00",
+      "Python Quest01",
+      "My Ngram",
+      "Python Quest04",
+      "Quest04",
+      "Python Quest01",
+      "Python Quest06",
+      "Quest03",
+      "My Roman Numerals Converter",
+      "Python Quest01",
+      "My Levenshtein",
+      "Python Quest03",
+      "My Printf",
+      "Quest00",
+      "My Mastermind",
+      "Python Quest04",
+      "My Square",
+      "Python Quest02",
+      "My Cat",
+      "Python Quest03",
+      "Quest00",
+      "Quest02",
+      "Python Quest02",
+      "Quest00",
+      "Python Quest03",
+      "Python Quest05",
+      "Python Quest03",
+      "Quest01",
+      "Quest00",
+      "Python Quest01"
+    ],
+    "exercises_completed": "72",
+    "points": "790",
+    "season_progress": {
+      "Onboarding": "3%",
+      "Preseason Data": "76%",
+      "Season 01 Arc 01": "92%",
+      "Season 02 Data Science": "17%"
+    },
+    "name": "anan_i"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAwUlEQVR4nO3csQ3CMBAFUIgoKNnAqzAabMYq3oB0NFFockhBQQqOHAS8X1p+Ord3J7npC3JtNiWhKIqiqH9X/XbIrn4tiqIoiqIoiqIoiipR56F1fZx20cwe5tSKKfKt3gspiqIoiqIoiqIo6inRuu5XqEVRFEVRFEVRFEVR81WOlvX08l4bV44La1EURVEURVEURVHU+iq98UfF5SMvpCiKoiiKoiiKon5P5dGSdTLZHpaiqO9SaTREm0wyZ6MqqjsoA4YFe0ApRwAAAABJRU5ErkJggg==",
+    "last_login": "October 23, 2025 11:41am",
+    "ongoing_projects": [
+      "Python Quest01",
+      "Python Quest02"
+    ],
+    "completed_projects": [
+      "Quest00"
+    ],
+    "exercises_completed": "5",
+    "points": "270",
+    "season_progress": {
+      "Onboarding": "7%",
+      "Preseason Data": "16%"
+    },
+    "name": "vetsos_a"
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/araujo-c_d/vrac/profile_picture_araujo-c_d_16080_profile_picture_2025_03_26_18_44.jpg",
@@ -249,7 +583,7 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/cepulis_a/vrac/profile_picture_cepulis_a_16582_profile_picture_2025_09_25_12_21.png",
-    "last_login": "February 19, 2026  1:05pm",
+    "last_login": "February 23, 2026 11:23am",
     "ongoing_projects": [
       "Quest04"
     ],
@@ -276,7 +610,7 @@
       "My Moving Box Realtime"
     ],
     "exercises_completed": "82",
-    "points": "1010",
+    "points": "1025",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Web": "100%",
@@ -371,72 +705,6 @@
     "name": "urbonavi_d"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXOTV7w8PAZ8UITAAAAuklEQVR4nO3awQ3CMAwAQFIYgA0YBTZDbNZR2g0YoKV8YiQelaooQIHz0/LJztNymqkgrs2mJCiKoijq39WUcuxe34uiKIqiKIqiKIqiStQlr66P7BjL7L56L4qiKIqiKIqiKIp6vzrPf4layYQURVEURVEURVHUz6g+LY/TRyakKIqiKIqiKIqiqCrqmK+ut0hs4w7bVe9FURRFURRFURRFUQXqEJtqm7MpEkPUPZd8ybsoiqIoqoK6A2j3ggUdBop4AAAAAElFTkSuQmCC",
-    "last_login": "January 20, 2026 10:26am",
-    "ongoing_projects": [
-      "Python Quest01",
-      "Python Quest02",
-      "Quest00"
-    ],
-    "completed_projects": [],
-    "exercises_completed": "2",
-    "points": "300",
-    "season_progress": {
-      "Onboarding": "3%",
-      "Preseason Data": "0%"
-    },
-    "name": "moyo_n"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVvxpTw8PAUdw+5AAAAiklEQVR4nO3bMQqAMAwFUNtewBuLN/YAUl2sW5cSoeD7Y+Dxs2ZIvgZy5GUkFEVRFPVXtade1kk2pCiKoiiKoiiKoiiKoiiKoiiKoiiKoiiKoiiKoiiKoihqHrU9Tzy1Dcr71hPeRVEURVEURVEURVERKrXT9fy+i6IoiqIoiqIoiqIoiqIoiopQNymPUwUYdStpAAAAAElFTkSuQmCC",
-    "last_login": "February 20, 2026  4:01pm",
-    "ongoing_projects": [
-      "My Ls"
-    ],
-    "completed_projects": [
-      "My Moving Box Realtime",
-      "My Css Is Easy I",
-      "My Square",
-      "Js Quest04",
-      "My Christmas Tree",
-      "My Ngram",
-      "Quest05",
-      "My Cat",
-      "Js Quest02",
-      "Quest03",
-      "Quest07",
-      "Quest09",
-      "My Bouncing Box",
-      "Quest00",
-      "Js Quest01",
-      "Quest01",
-      "Js Quest02",
-      "Quest05",
-      "My Spaceship",
-      "Js Quest05",
-      "My First Backend",
-      "Js Quest03",
-      "Quest02",
-      "Quest08",
-      "Quest06",
-      "Js Quest06",
-      "My Printf",
-      "My Levenshtein",
-      "Js Quest07",
-      "My Mastermind",
-      "Quest04"
-    ],
-    "exercises_completed": "111",
-    "points": "460",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "31%"
-    },
-    "name": "jurkaiti_r"
-  },
-  {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEV/22vw8PBR1FjgAAAAkklEQVR4nO3aMQqAMBAEQBMbS38s/thWELXJWUtIQHC2XBgubY7LV0W2PNSEoiiKov6q1lQSxR7F3HwWRVEURVEURVEURTVR8XWd3qilLI/PKMZnndzvhRRFURRFURRFURRFURRFURRFURRFURRFURRFURRFURRFfUalOCE++s+iKIqiKIqiKIqiKIqiKIqiWqgbr5ZUBXomv8gAAAAASUVORK5CYII=",
     "last_login": "February 18, 2026  5:04pm",
     "ongoing_projects": [
@@ -484,6 +752,122 @@
       "Season 02 Data Science": "21%"
     },
     "name": "amein_a"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXOTV7w8PAZ8UITAAAAuklEQVR4nO3awQ3CMAwAQFIYgA0YBTZDbNZR2g0YoKV8YiQelaooQIHz0/LJztNymqkgrs2mJCiKoijq39WUcuxe34uiKIqiKIqiKIqiStQlr66P7BjL7L56L4qiKIqiKIqiKIp6vzrPf4layYQURVEURVEURVHUz6g+LY/TRyakKIqiKIqiKIqiqCrqmK+ut0hs4w7bVe9FURRFURRFURRFUQXqEJtqm7MpEkPUPZd8ybsoiqIoqoK6A2j3ggUdBop4AAAAAElFTkSuQmCC",
+    "last_login": "January 20, 2026 10:26am",
+    "ongoing_projects": [
+      "Python Quest01",
+      "Python Quest02",
+      "Quest00"
+    ],
+    "completed_projects": [],
+    "exercises_completed": "2",
+    "points": "300",
+    "season_progress": {
+      "Onboarding": "3%",
+      "Preseason Data": "0%"
+    },
+    "name": "moyo_n"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVvxpTw8PAUdw+5AAAAiklEQVR4nO3bMQqAMAwFUNtewBuLN/YAUl2sW5cSoeD7Y+Dxs2ZIvgZy5GUkFEVRFPVXtade1kk2pCiKoiiKoiiKoiiKoiiKoiiKoiiKoiiKoiiKoiiKoihqHrU9Tzy1Dcr71hPeRVEURVEURVEURVERKrXT9fy+i6IoiqIoiqIoiqIoiqIoiopQNymPUwUYdStpAAAAAElFTkSuQmCC",
+    "last_login": "February 23, 2026 11:19am",
+    "ongoing_projects": [
+      "My Ls"
+    ],
+    "completed_projects": [
+      "My Moving Box Realtime",
+      "My Css Is Easy I",
+      "My Square",
+      "Js Quest04",
+      "My Christmas Tree",
+      "My Ngram",
+      "Quest05",
+      "My Cat",
+      "Js Quest02",
+      "Quest03",
+      "Quest07",
+      "Quest09",
+      "My Bouncing Box",
+      "Quest00",
+      "Js Quest01",
+      "Quest01",
+      "Js Quest02",
+      "Quest05",
+      "My Spaceship",
+      "Js Quest05",
+      "My First Backend",
+      "Js Quest03",
+      "Quest02",
+      "Quest08",
+      "Quest06",
+      "Js Quest06",
+      "My Printf",
+      "My Levenshtein",
+      "Js Quest07",
+      "My Mastermind",
+      "Quest04"
+    ],
+    "exercises_completed": "111",
+    "points": "475",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "31%"
+    },
+    "name": "jurkaiti_r"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAApUlEQVR4nO3csQ5AMBAAUCw+g0/x6fUp/sBqYuAGEQtCGu/Gu3tpb2zTtJovxFgVV4KiKIqifqaGcovutG/fkslcFEVRFEVRFEVRFLWqJi6N02nfviWTuSiKoiiKoiiKoiiKoiiKoiiKoiiKou4rb4kpiqIoiqIoiqKo7FQfJ9VITJFoH1+LoiiKoiiKoiiKol5TzeE3xSjXh0r6ZIcURVEU9ZlaAH/GcwW9j8VuAAAAAElFTkSuQmCC",
+    "last_login": "February 19, 2026  1:04pm",
+    "ongoing_projects": [
+      "My Nba Game Analysis",
+      "My Blockchain",
+      "My Ls"
+    ],
+    "completed_projects": [
+      "Quest08",
+      "Quest07",
+      "Python Quest06",
+      "Quest05",
+      "My Ngram",
+      "My First Scraper",
+      "Quest03",
+      "Quest01",
+      "My Roman Numerals Converter",
+      "Python Quest02",
+      "My Select Query",
+      "Python Quest01",
+      "Quest02",
+      "Quest06",
+      "Python Quest04",
+      "Python Quest03",
+      "My Cat",
+      "My Mastermind",
+      "My Levenshtein",
+      "My Square",
+      "My Printf",
+      "My Christmas Tree",
+      "Quest04",
+      "Python Quest05",
+      "My Readline",
+      "My Imdb Api",
+      "Quest09",
+      "Quest00",
+      "My Ls"
+    ],
+    "exercises_completed": "109",
+    "points": "105",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "98%",
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "66%",
+      "Season 02 Data Science": "28%"
+    },
+    "name": "hopp_h"
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/parra-ci_e/vrac/profile_picture_parra-ci_e_10452_profile_picture_2022_09_23_07_09.jpeg",
@@ -632,7 +1016,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAA1UlEQVR4nO3aPQ6CQBAGUMXGziPgTfRoHE1vgjfA0sKfhiHBFWMIhQtvyi/zyG45OxTPEdUUqzFFURRFUQtTl3Vbx8G+fksm96IoiqIoiqIoiqJmrM4xqUZwi2CfqjIejavBr++i5TTVCSmKoiiKoiiKoqiFq27JWkUcwTaC65c97KEdVB8RbGJ0rac6IUVRFEVRFEVRFEW9qdjDdundHpaiKIqiKIqiKIr6K5XuYZP6ZQ+bVj3VCSmKoiiKoiiKoiiKoihqrqrs/QjysfotmdyLyka9AHL7owUzxBfHAAAAAElFTkSuQmCC",
-    "last_login": "February 22, 2026  6:11pm",
+    "last_login": "February 23, 2026  8:24pm",
     "ongoing_projects": [
       "My Nba Game Analysis"
     ],
@@ -683,7 +1067,7 @@
       "My Roman Numerals Converter"
     ],
     "exercises_completed": "83",
-    "points": "7005",
+    "points": "7040",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -694,7 +1078,7 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/hilbolli_i/vrac/profile_picture_hilbolli_i_14322_profile_picture_2023_09_26_06_29.jpeg",
-    "last_login": "February 21, 2026 11:31am",
+    "last_login": "February 23, 2026  3:35pm",
     "ongoing_projects": [
       "Drive Me Crazy"
     ],
@@ -752,7 +1136,7 @@
       "My Convex Optimization"
     ],
     "exercises_completed": "139",
-    "points": "6283",
+    "points": "6318",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -761,155 +1145,6 @@
       "Season 03 Data Science": "0%"
     },
     "name": "hilbolli_i"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVvxpTw8PAUdw+5AAAAo0lEQVR4nO3awRFAQAwFUFSgA6XQGTpTCh1QAac9GJMLDsu8nP+bzR4zSbXfqLUq7hRFURRFURRFURRFURRFURSVtxrLqOpMOqQoiqIoiqIoiqKoJ6qPT6Iy6ZCiKIqiKIqiKIr6n7KHpSiKoiiKoiiKojJXS5pUhzC3pUh3fasN97DzWx1SFEVRFEVRFEVR1BPVpEl1CnPnyEf+RVEURVEvqANUNIIFFAi8jAAAAABJRU5ErkJggg==",
-    "last_login": "February 19, 2026 12:42pm",
-    "ongoing_projects": [
-      "Ds Quest01",
-      "My Nba Game Analysis",
-      "My Printf"
-    ],
-    "completed_projects": [
-      "My Cat",
-      "My Levenshtein",
-      "Quest04",
-      "Quest01",
-      "My First Scraper",
-      "Quest00",
-      "Quest00",
-      "My Imdb Api",
-      "Quest05",
-      "Quest02",
-      "Python Quest06",
-      "Python Quest02",
-      "Quest01",
-      "Python Quest01",
-      "Quest03",
-      "My Mastermind",
-      "Ds Quest00",
-      "My Select Query",
-      "My Square",
-      "My Mr Clean",
-      "Python Quest04",
-      "Quest04",
-      "My Ngram",
-      "Python Quest03",
-      "My Roman Numerals Converter",
-      "Python Quest05"
-    ],
-    "exercises_completed": "83",
-    "points": "2770",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "78%",
-      "Season 02 Data Science": "24%"
-    },
-    "name": "ribberin_k"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/santos_j/vrac/profile_picture_santos_j_6335_profile_picture_2021_11_24_20_23.jpg",
-    "last_login": "March 14, 2025  1:27pm",
-    "ongoing_projects": [
-      "My Bc",
-      "My Curl",
-      "My Mastermind"
-    ],
-    "completed_projects": [
-      "My Roman Numerals Converter",
-      "Js Quest03",
-      "My Select Query",
-      "My Printf",
-      "My Levenshtein",
-      "Js Quest01",
-      "Js Quest07",
-      "Js Quest02",
-      "Ruby Quest06",
-      "My Css Is Easy I",
-      "Quest00",
-      "My Allocine",
-      "My Bouncing Box",
-      "My Moving Box Realtime",
-      "My Ngram",
-      "Quest04",
-      "Quest01",
-      "Quest09",
-      "Quest03",
-      "My Cat",
-      "My Spaceship",
-      "Quest00",
-      "My First Backend",
-      "Js Quest05",
-      "Quest05",
-      "Quest01",
-      "My Css Is Easy Ii",
-      "Ruby Quest03",
-      "Ruby Quest04",
-      "Quest08",
-      "Quest07",
-      "Quest01",
-      "Quest06",
-      "Quest03",
-      "My Christmas Tree",
-      "Js Quest01",
-      "Js Quest04",
-      "My Blockchain",
-      "My Square",
-      "Quest02",
-      "Ruby Quest02",
-      "Ruby Quest01",
-      "Js Quest06",
-      "My Readline",
-      "My Sqlite",
-      "My Ls",
-      "Quest03",
-      "Ruby Quest05"
-    ],
-    "exercises_completed": "149",
-    "points": "530",
-    "season_progress": {
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "81%",
-      "Season 01 Arc 02": "85%",
-      "Season 02 Fullstack": "75%",
-      "Season 02 Software Engineer": "55%"
-    },
-    "name": "santos_j"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/morales_g/vrac/profile_picture_morales_g_16476_profile_picture_2025_09_18_17_42.jpg",
-    "last_login": "February 20, 2026  7:02pm",
-    "ongoing_projects": [
-      "My Square"
-    ],
-    "completed_projects": [
-      "Python Quest02",
-      "My First Scraper",
-      "Quest00",
-      "Quest04",
-      "Python Quest04",
-      "Quest01",
-      "My Cat",
-      "Python Quest01",
-      "Python Quest02",
-      "My Roman Numerals Converter",
-      "Python Quest06",
-      "My Levenshtein",
-      "My Imdb Api",
-      "Python Quest03",
-      "Python Quest05",
-      "Quest03",
-      "Quest02"
-    ],
-    "exercises_completed": "71",
-    "points": "4740",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "36%"
-    },
-    "name": "morales_g"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXOTV7w8PAZ8UITAAAAx0lEQVR4nO3awQ2CQBAFUMUCtAPsBEvDzrQT7EALQD3ImCDuBTdG5M1x819mOM6yxW1EnYvFmKIoiqKouar9MlWbH5mQoiiKoiiKoiiKmrk6xaZaJ3OXiOyGvaru8vgaB6u4Tm5yTUhRFEVRFEVRFEVRL+rYLarP0zZW1232XhRFURRFURRFURT1NVXG39Y6mVtH5PBhL4qiKIqiKIqiKIp6qExviYfV5JqQoiiKoiiKoiiKoiiKov5Vlb2HIG+rH5nId1GTUXehXY4F91denwAAAABJRU5ErkJggg==",
@@ -1033,78 +1268,6 @@
     "name": "mailov_r"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEWNbMzw8PB71RVKAAAAnUlEQVR4nO3aQQqAIBAF0Izu0VU6elfpBh0gsI0uolwkRghvlvIfo8vBGWNF7eNQUxRFURRFURRFURRFURRFUVQfKoZU0/e9KIqiKIqiKIqiKOqF2vLIuhRz18hzr5A3oY7mN6QoiqIoiqIoiqKogvIPS1EURVEURVEURVEURVEURVEURVEU9YOa8+rwmk7vu8TXSCfvoiiKoqgG6gRMxWAFOyfzlAAAAABJRU5ErkJggg==",
-    "last_login": "February 17, 2026  7:45pm",
-    "ongoing_projects": [
-      "Quest01",
-      "Quest02",
-      "Quest04"
-    ],
-    "completed_projects": [
-      "My Spaceship",
-      "My Moving Box Realtime",
-      "Js Quest02",
-      "Js Quest01",
-      "Quest02",
-      "Quest03",
-      "My Bouncing Box",
-      "Js Quest07",
-      "Js Quest03",
-      "My Mastermind",
-      "My Levenshtein",
-      "Quest01",
-      "My First Backend",
-      "Js Quest06",
-      "Quest00",
-      "My Css Is Easy I",
-      "Js Quest05",
-      "Js Quest04",
-      "Quest02"
-    ],
-    "exercises_completed": "80",
-    "points": "205",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Web": "95%",
-      "Season 01 Arc 01": "47%"
-    },
-    "name": "virmausk_u"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/monteiro_b/vrac/profile_picture_monteiro_b_16660_profile_picture_2025_10_04_20_33.png",
-    "last_login": "February 18, 2026  6:49pm",
-    "ongoing_projects": [
-      "My Imdb Api",
-      "Quest03",
-      "Quest04"
-    ],
-    "completed_projects": [
-      "Python Quest03",
-      "Python Quest02",
-      "Python Quest01",
-      "Quest01",
-      "Quest00",
-      "My Roman Numerals Converter",
-      "My First Scraper",
-      "Python Quest04",
-      "Quest00",
-      "Python Quest05",
-      "Python Quest06",
-      "My Cat",
-      "My Levenshtein",
-      "Quest01",
-      "Quest02"
-    ],
-    "exercises_completed": "60",
-    "points": "2560",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Data": "84%",
-      "Season 01 Arc 01": "25%"
-    },
-    "name": "monteiro_b"
-  },
-  {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAArklEQVR4nO3cMQqEQAwAwNPG0id4T/FpPk2f4g+0tLprjCDLIogg4qRMMku23rDl70RM5edMUBRFUdTL1Fis0Wb79i0PuRdFURRFURRFURRFURRFURRFURRFUdTtaojX1kgskfimqonFpy57eh0t/VUTUhRFURRFURRFUS9X26Jwl+2b7RJTFEVRFEVRFEVRz1VN8hNFlKuk0t8yIUVRFEVRFEVRFEVRFEVRFHUQf9RecwXGtbf0AAAAAElFTkSuQmCC",
     "last_login": "February 20, 2026  1:24pm",
     "ongoing_projects": [
@@ -1168,209 +1331,67 @@
     "name": "wong_s"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAAv0lEQVR4nO3bsQ3CMBAFUIiQKDMCjMJmYTQYxRukDAUKKbhIYKVJkJyId+U/P9mtrXPVz6i22s0piqIoivozlfbfFe1H1rkUOSFFURRFURRFURRFLVGn7PU42sescytyQoqiKIqiKIqiKIqiKIqiKIqiKIqiqFIqfQwKD9VHcIh1ySwxRVEURVEURVEUtSp1f19Ux/QZV9dzrsZZ4mvEEXQR1GaJKYqiKIqiKIqiqFWpZvI/bPvzvSiKoihqG+oFKKCOBauLg9IAAAAASUVORK5CYII=",
-    "last_login": "February 19, 2026  7:04pm",
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/sardinat_a/vrac/profile_picture_sardinat_a_10676_profile_picture_2022_09_30_13_10.jpg",
+    "last_login": "February 13, 2026  8:00am",
     "ongoing_projects": [
-      "My Nba Game Analysis",
-      "My Select Query"
+      "My Libasm",
+      "My Mouse",
+      "My Zsh"
     ],
     "completed_projects": [
-      "Python Quest06",
-      "My Levenshtein",
-      "My Ngram",
-      "My Square",
-      "My Cat",
-      "Python Quest02",
-      "My First Scraper",
-      "Quest05",
-      "Quest04",
-      "Python Quest04",
-      "Quest03",
-      "Python Quest01",
-      "Quest00",
-      "Quest01",
-      "Python Quest05",
-      "Python Quest03",
-      "Quest02",
-      "My Printf",
-      "My Imdb Api",
-      "My Mastermind",
-      "My Roman Numerals Converter"
-    ],
-    "exercises_completed": "85",
-    "points": "1720",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Data": "100%",
-      "Preseason Web": "31%",
-      "Season 01 Arc 01": "100%",
-      "Season 02 Data Science": "16%"
-    },
-    "name": "barrient_p"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAmklEQVR4nO3cQQ5AMBAFUMQ9OIqjcxQ3cAGpjUpILDSkxPvLZl6mXf5Nq5CQqSpSQlEURVEURVEURVEURVEURb1SjeWa7nRuP/KRd1EURVEURVEURVE/UCE21vr5XRRFURRFURRFURSVooa1um6ncyyz7e27KIqiKIqiKIqiKIqiKIqiKIqiKIqiqINqLvyz2Ge5IUVRFEVlUwtgvWkFprV6YAAAAABJRU5ErkJggg==",
-    "last_login": "December 26, 2025  7:48pm",
-    "ongoing_projects": [
-      "My Imdb Api",
-      "My Mr Clean",
-      "My Select Query",
-      "Quest05"
-    ],
-    "completed_projects": [
-      "My First Scraper Ds",
-      "Quest00",
-      "Quest00",
-      "Python Quest01",
-      "My Ngram",
-      "Python Quest04",
-      "Quest04",
-      "Python Quest01",
-      "Python Quest06",
-      "Quest03",
-      "My Roman Numerals Converter",
-      "Python Quest01",
-      "My Levenshtein",
-      "Python Quest03",
-      "My Printf",
-      "Quest00",
-      "My Mastermind",
-      "Python Quest04",
-      "My Square",
-      "Python Quest02",
-      "My Cat",
-      "Python Quest03",
-      "Quest00",
-      "Quest02",
-      "Python Quest02",
-      "Quest00",
-      "Python Quest03",
-      "Python Quest05",
-      "Python Quest03",
-      "Quest01",
-      "Quest00",
-      "Python Quest01"
-    ],
-    "exercises_completed": "72",
-    "points": "790",
-    "season_progress": {
-      "Onboarding": "3%",
-      "Preseason Data": "76%",
-      "Season 01 Arc 01": "92%",
-      "Season 02 Data Science": "17%"
-    },
-    "name": "anan_i"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAwUlEQVR4nO3csQ3CMBAFUIgoKNnAqzAabMYq3oB0NFFockhBQQqOHAS8X1p+Ord3J7npC3JtNiWhKIqiqH9X/XbIrn4tiqIoiqIoiqIoiipR56F1fZx20cwe5tSKKfKt3gspiqIoiqIoiqIo6inRuu5XqEVRFEVRFEVRFEVR81WOlvX08l4bV44La1EURVEURVEURVHU+iq98UfF5SMvpCiKoiiKoiiKon5P5dGSdTLZHpaiqO9SaTREm0wyZ6MqqjsoA4YFe0ApRwAAAABJRU5ErkJggg==",
-    "last_login": "October 23, 2025 11:41am",
-    "ongoing_projects": [
-      "Python Quest01",
-      "Python Quest02"
-    ],
-    "completed_projects": [
-      "Quest00"
-    ],
-    "exercises_completed": "5",
-    "points": "270",
-    "season_progress": {
-      "Onboarding": "7%",
-      "Preseason Data": "16%"
-    },
-    "name": "vetsos_a"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/blanc_la/vrac/profile_picture_blanc_la_12018_profile_picture_2022_11_15_15_25.jpg",
-    "last_login": "February 22, 2026  8:56pm",
-    "ongoing_projects": [
-      "My Blockchain",
       "My Moving Box Realtime",
-      "Ruby Quest02"
-    ],
-    "completed_projects": [
-      "My Bouncing Box",
-      "Quest01",
-      "Quest09",
-      "Quest03",
-      "Js Quest06",
-      "My Square",
-      "Js Quest01",
-      "Quest09",
       "Quest05",
-      "My Levenshtein",
       "My Tar",
-      "Js Quest07",
-      "Quest06",
+      "Js Quest04",
+      "Ruby Quest03",
+      "My Bouncing Box",
+      "My Ls",
+      "Ruby Quest06",
+      "Quest01",
+      "Js Quest02",
+      "My Spaceship",
+      "Quest02",
+      "Ruby Quest02",
+      "My Printf",
       "My Readline",
       "Quest08",
-      "Quest07",
-      "My Ls",
-      "My Mastermind",
-      "Quest02",
-      "My Ngram",
-      "Js Quest05",
       "Quest04",
-      "My Css Is Easy I",
-      "Js Quest02",
-      "Js Quest04",
-      "My Printf",
-      "Ruby Quest01",
-      "My Spaceship",
-      "My Christmas Tree",
-      "My First Backend",
-      "My Cat",
       "Quest00",
+      "My Christmas Tree",
+      "Js Quest01",
+      "Quest00",
+      "Js Quest06",
+      "My Square",
+      "My Css Is Easy I",
+      "Js Quest07",
+      "My Allocine",
+      "My Bc",
+      "Quest07",
+      "Quest03",
+      "My Blockchain",
+      "Ruby Quest04",
+      "Quest06",
+      "Js Quest05",
+      "My Levenshtein",
+      "My Ngram",
+      "My Roman Numerals Converter",
+      "Quest09",
+      "My Cat",
+      "My First Backend",
+      "My Mastermind",
+      "Ruby Quest05",
+      "Ruby Quest01",
       "Js Quest03"
     ],
-    "exercises_completed": "128",
-    "points": "1215",
+    "exercises_completed": "136",
+    "points": "1488",
     "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Web": "96%",
-      "Season 01 Arc 01": "98%",
-      "Season 01 Arc 02": "85%",
-      "Season 02 Software Engineer": "27%"
-    },
-    "name": "blanc_la"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAAxUlEQVR4nO3bsQ3CMBAFUBwhUTJCGCWbwWhhlGxAGwkpNFwBxgVJkBG8a++e/VvbcjPNqEuzmVMURVEU9e9qSvfafn4viqIoiqIoiqIoinpDDXFk7YpzjyOv90pxi3xdPSFFURRFURRFURRFPalzKtUhV20cWU/F1fcx0q+VkKIoiqIoiqIoiqKWqGP5W8+XJKQoiqIoiqIoiqJ+Rg3Zs2u0x6zTVUlIURRFURRFURRFUUtUmz27RnuXdfoqCSmKoiiqmroBNuqWBbcTsGIAAAAASUVORK5CYII=",
-    "last_login": "February 22, 2026  8:36pm",
-    "ongoing_projects": [],
-    "completed_projects": [
-      "Js Quest01",
-      "My Spaceship",
-      "My First Backend",
-      "Quest00",
-      "My Moving Box Realtime",
-      "Js Quest02",
-      "Quest05",
-      "My Cat",
-      "Quest02",
-      "Js Quest03",
-      "Quest00",
-      "Js Quest05",
-      "Js Quest07",
-      "My Levenshtein",
-      "Js Quest04",
-      "My Square",
-      "Js Quest06",
-      "Quest01",
-      "My Ngram",
-      "My Bouncing Box",
-      "Quest04",
-      "Quest03",
-      "Js Quest03",
-      "My Css Is Easy I"
-    ],
-    "exercises_completed": "86",
-    "points": "90",
-    "season_progress": {
-      "Onboarding": "100%",
       "Preseason Web": "100%",
-      "Season 01 Arc 01": "58%"
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "100%",
+      "Season 02 Software Engineer": "43%"
     },
-    "name": "kovalenk_i"
+    "name": "sardinat_a"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXTh6Lw8PDJrAozAAAAoUlEQVR4nO3cywmAMBAFQBULsANbsTOxM1uxAxuQeFFvgsZPBOcdA8O+6yaQIkRkLLKYUBRFUdTP1JAfT5OkIUVRFEVRFEVRFEVdUfWJe+U+SUOKoiiKoiiKoijqByqsr67l87MoiqIoiqIoiqIoKkZ1y+q6nU7rMlvdPouiKIqiKIqiKIqiKIqiKIqiKIqiKIraU+3+94ofaUhRFEVRb6sZENWCBcR0kCsAAAAASUVORK5CYII=",
@@ -1532,186 +1553,65 @@
     "name": "almeida_l"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAApUlEQVR4nO3csQ5AMBAAUCw+g0/x6fUp/sBqYuAGEQtCGu/Gu3tpb2zTtJovxFgVV4KiKIqifqaGcovutG/fkslcFEVRFEVRFEVRFLWqJi6N02nfviWTuSiKoiiKoiiKoiiKoiiKoiiKoiiKou4rb4kpiqIoiqIoiqKo7FQfJ9VITJFoH1+LoiiKoiiKoiiKol5TzeE3xSjXh0r6ZIcURVEU9ZlaAH/GcwW9j8VuAAAAAElFTkSuQmCC",
-    "last_login": "February 19, 2026  1:04pm",
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/blanc_la/vrac/profile_picture_blanc_la_12018_profile_picture_2022_11_15_15_25.jpg",
+    "last_login": "February 23, 2026 10:58pm",
     "ongoing_projects": [
-      "My Nba Game Analysis",
       "My Blockchain",
-      "My Ls"
-    ],
-    "completed_projects": [
-      "Quest08",
-      "Quest07",
-      "Python Quest06",
-      "Quest05",
-      "My Ngram",
-      "My First Scraper",
-      "Quest03",
-      "Quest01",
-      "My Roman Numerals Converter",
-      "Python Quest02",
-      "My Select Query",
-      "Python Quest01",
-      "Quest02",
-      "Quest06",
-      "Python Quest04",
-      "Python Quest03",
-      "My Cat",
-      "My Mastermind",
-      "My Levenshtein",
-      "My Square",
-      "My Printf",
-      "My Christmas Tree",
-      "Quest04",
-      "Python Quest05",
-      "My Readline",
-      "My Imdb Api",
-      "Quest09",
-      "Quest00",
-      "My Ls"
-    ],
-    "exercises_completed": "109",
-    "points": "105",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "98%",
-      "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "66%",
-      "Season 02 Data Science": "28%"
-    },
-    "name": "hopp_h"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/sardinat_a/vrac/profile_picture_sardinat_a_10676_profile_picture_2022_09_30_13_10.jpg",
-    "last_login": "February 13, 2026  8:00am",
-    "ongoing_projects": [
-      "My Libasm",
-      "My Mouse",
-      "My Zsh"
-    ],
-    "completed_projects": [
       "My Moving Box Realtime",
-      "Quest05",
-      "My Tar",
-      "Js Quest04",
+      "Ruby Quest05"
+    ],
+    "completed_projects": [
       "Ruby Quest03",
       "My Bouncing Box",
-      "My Ls",
-      "Ruby Quest06",
       "Quest01",
-      "Js Quest02",
-      "My Spaceship",
-      "Quest02",
-      "Ruby Quest02",
-      "My Printf",
-      "My Readline",
-      "Quest08",
-      "Quest04",
-      "Quest00",
-      "My Christmas Tree",
-      "Js Quest01",
-      "Quest00",
+      "Quest09",
+      "Quest03",
       "Js Quest06",
       "My Square",
-      "My Css Is Easy I",
-      "Js Quest07",
-      "My Allocine",
-      "My Bc",
-      "Quest07",
-      "Quest03",
-      "My Blockchain",
-      "Ruby Quest04",
-      "Quest06",
-      "Js Quest05",
-      "My Levenshtein",
-      "My Ngram",
-      "My Roman Numerals Converter",
+      "Js Quest01",
       "Quest09",
-      "My Cat",
-      "My First Backend",
-      "My Mastermind",
-      "Ruby Quest05",
-      "Ruby Quest01",
-      "Js Quest03"
-    ],
-    "exercises_completed": "136",
-    "points": "1488",
-    "season_progress": {
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "100%",
-      "Season 02 Software Engineer": "43%"
-    },
-    "name": "sardinat_a"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/tofan_c/vrac/profile_picture_tofan_c_16063_profile_picture_2025_03_25_11_45.jpg",
-    "last_login": "February 17, 2026  2:59pm",
-    "ongoing_projects": [],
-    "completed_projects": [
       "Quest05",
-      "Python Quest05",
-      "My Bouncing Box",
-      "Quest01",
-      "My Css Is Easy I",
-      "Ruby Quest02",
-      "Js Quest04",
-      "Quest02",
-      "My Blockchain",
-      "My Mastermind",
-      "Js Quest07",
+      "My Levenshtein",
       "My Tar",
       "Js Quest07",
-      "Quest08",
-      "Js Quest06",
-      "My Levenshtein",
-      "Quest07",
-      "Python Quest04",
-      "Js Quest05",
-      "My Roman Numerals Converter",
-      "My Square",
-      "My Spaceship",
       "Quest06",
       "My Readline",
-      "My Christmas Tree",
-      "My Ngram",
-      "Js Quest07",
-      "Js Quest01",
-      "Ruby Quest01",
-      "My Cat",
-      "Js Quest03",
-      "My Moving Box Realtime",
-      "Python Quest02",
-      "Quest05",
-      "Python Quest01",
-      "Python Quest06",
-      "Js Quest06",
-      "Js Quest02",
-      "Quest09",
-      "Python Quest03",
-      "My Printf",
-      "My First Backend",
-      "Quest04",
-      "Quest03",
+      "Quest08",
+      "Ruby Quest04",
+      "Quest07",
       "My Ls",
-      "Quest01",
-      "Quest00"
+      "My Mastermind",
+      "Quest02",
+      "Ruby Quest02",
+      "My Ngram",
+      "Js Quest05",
+      "Quest04",
+      "My Css Is Easy I",
+      "Js Quest02",
+      "Js Quest04",
+      "My Printf",
+      "Ruby Quest01",
+      "My Spaceship",
+      "My Christmas Tree",
+      "My First Backend",
+      "My Cat",
+      "Quest00",
+      "Js Quest03"
     ],
-    "exercises_completed": "118",
-    "points": "755",
+    "exercises_completed": "128",
+    "points": "1475",
     "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "68%",
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "100%",
-      "Season 02 Software Engineer": "34%"
+      "Onboarding": "100%",
+      "Preseason Web": "96%",
+      "Season 01 Arc 01": "98%",
+      "Season 01 Arc 02": "85%",
+      "Season 02 Software Engineer": "30%"
     },
-    "name": "tofan_c"
+    "name": "blanc_la"
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/abdulla_ma/vrac/profile_picture_abdulla_ma_16064_profile_picture_2025_03_25_14_02.jpg",
-    "last_login": "February 22, 2026 11:00pm",
+    "last_login": "February 23, 2026  6:58pm",
     "ongoing_projects": [],
     "completed_projects": [
       "My Levenshtein",
@@ -1745,7 +1645,7 @@
       "My Printf"
     ],
     "exercises_completed": "114",
-    "points": "3491",
+    "points": "3506",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -1821,170 +1721,6 @@
     "name": "geldenhu_w"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEV/22vw8PBR1FjgAAAAvElEQVR4nO3aMQrCQBAFUBMEj6E30aPrTfQGlqaQWLhfSGGzBHXjm/Izj2GbwJDpx4q69quaoiiKoqg/U5eu1KGkY4J1+qYtjbyLoiiKoiiKoiiKWrA6lUX1ld6zuu5mn0VRFEVRFEVRFEVRX1S5hLp9YBZFURRFURRFURRFVah9dtcEmwTn2WdRFEVRFEVRFEVR1LNyS9wlGNwSUxRFURRFURRFUUtS/sNSFPWDapsv0fFt37SlkXdRzagHIgF8BaB3QVMAAAAASUVORK5CYII=",
-    "last_login": "February 19, 2026 11:26pm",
-    "ongoing_projects": [
-      "My Printf"
-    ],
-    "completed_projects": [
-      "My Spaceship",
-      "Quest02",
-      "My Ngram",
-      "My Bouncing Box",
-      "Quest00",
-      "Js Quest06",
-      "Js Quest05",
-      "My First Backend",
-      "My Moving Box Realtime",
-      "Quest01",
-      "Quest04",
-      "My Cat",
-      "My Css Is Easy I",
-      "Js Quest01",
-      "Js Quest07",
-      "Js Quest02",
-      "Quest03",
-      "Js Quest03",
-      "My Square",
-      "My Mastermind",
-      "Quest05",
-      "Js Quest04",
-      "My Levenshtein"
-    ],
-    "exercises_completed": "88",
-    "points": "610",
-    "season_progress": {
-      "Preseason Web": "95%",
-      "Season 01 Arc 01": "76%"
-    },
-    "name": "christop_r"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXOTV7w8PAZ8UITAAAApklEQVR4nO3byw1AQBQFUFSgA6VQGp0phQ6ogJ1kEiOIxO/c9TvJnfW8l00nMmTJmVAURVEURVEURVEURVEURVGPVH26P9UtDSmKoiiKoiiKoiiKoiiKoiiKoiiKov6gigP3Pe0tDSmKoiiKoiiKoqgPqya6Qpw/pCFFURRFURRFURT1c7Xcw9bRuXHjHraMfr92VzWkKIo6qopgEWQ14chL3kW9Rs0DGpQFf+36IgAAAABJRU5ErkJggg==",
-    "last_login": "February 10, 2026  6:50pm",
-    "ongoing_projects": [
-      "Quest04"
-    ],
-    "completed_projects": [
-      "Js Quest01",
-      "Js Quest04",
-      "Js Quest01",
-      "Quest01",
-      "Quest03",
-      "Js Quest06",
-      "Quest00",
-      "My Moving Box Realtime",
-      "My Levenshtein",
-      "My Bouncing Box",
-      "Js Quest03",
-      "Quest02",
-      "My First Backend",
-      "Js Quest05",
-      "My Spaceship",
-      "Js Quest02",
-      "Js Quest03",
-      "My Css Is Easy I",
-      "Quest03",
-      "Js Quest07"
-    ],
-    "exercises_completed": "63",
-    "points": "390",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Web": "95%",
-      "Season 01 Arc 01": "25%"
-    },
-    "name": "montvill_d"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/samodid_y/vrac/profile_picture_samodid_y_15299_profile_picture_2024_03_28_01_23.JPG",
-    "last_login": "February 20, 2026  8:16am",
-    "ongoing_projects": [
-      "Coleridge Initiative"
-    ],
-    "completed_projects": [
-      "My Mr Clean",
-      "Ruby Quest01",
-      "Js Quest01",
-      "Js Quest05",
-      "Python Quest05",
-      "My Ngram",
-      "Quest04",
-      "Js Quest02",
-      "Ruby Quest03",
-      "My Tar",
-      "Js Quest06",
-      "My Css Is Easy I",
-      "Python Quest03",
-      "My Moving Box Realtime",
-      "Quest02",
-      "My Levenshtein",
-      "Js Quest03",
-      "My Ls",
-      "Quest07",
-      "My Allocine",
-      "Ds Quest01",
-      "My Imdb Api",
-      "My Mastermind",
-      "Js Quest07",
-      "Drive Me Crazy",
-      "Quest06",
-      "Ds Quest02",
-      "Js Quest04",
-      "My Christmas Tree",
-      "My Select Query",
-      "Quest05",
-      "My Convex Optimization",
-      "My First Scraper Ds",
-      "My Nba Game Analysis",
-      "Ruby Quest05",
-      "My Square",
-      "Python Quest02",
-      "My Readline",
-      "My First Backend",
-      "My M And A",
-      "Quest09",
-      "My First Scraper",
-      "My Linear Regression",
-      "My Printf",
-      "My Roman Numerals Converter",
-      "My Ds Babel",
-      "Ds Quest03",
-      "Ds Quest00",
-      "My Open The Iris",
-      "Python Quest01",
-      "My Spaceship",
-      "My Moving Box Realtime",
-      "Quest03",
-      "My Bouncing Box",
-      "Quest00",
-      "Quest01",
-      "Python Quest06",
-      "My Cat",
-      "My Tu Verras",
-      "Python Quest04",
-      "A Fool Fraud",
-      "Ruby Quest06",
-      "Ruby Quest02",
-      "Ds Quest04",
-      "Ruby Quest04",
-      "Quest08"
-    ],
-    "exercises_completed": "164",
-    "points": "7909",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "83%",
-      "Season 02 Data Science": "79%",
-      "Season 02 Software Engineer": "34%",
-      "Preseason Data": "98%",
-      "Season 03 Data Science": "67%"
-    },
-    "name": "samodid_y"
-  },
-  {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVymc3w8PCneQbOAAAAt0lEQVR4nO3cMQ6DMAwAQGDpyg94Cv0Z5Wc8pf0B3bqVoXIlhLKkEaLiPEY+2RkdWWneGTE3VU5QFEVR1FnVWKeiPUiHFEVRFEVRFEVRFFVExSvya4daFEVRFEVRFEVRFJWhhphd4+DyXYkqXouiKIqiKIqiKIqiPmGXmKIoiqIoiqIoijq4esSkekvmPSPluq3VJ7+muJfqkKIoiqIoiqIoiqJ+UV1MqlMyb53yJ/eiKIqiqAJqASJuggW5D/V+AAAAAElFTkSuQmCC",
     "last_login": "February 16, 2026  7:39am",
     "ongoing_projects": [],
@@ -2040,6 +1776,87 @@
       "Preseason Web": "32%"
     },
     "name": "dagdelen_b"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAAxUlEQVR4nO3bsQ3CMBAFUBwhUTJCGCWbwWhhlGxAGwkpNFwBxgVJkBG8a++e/VvbcjPNqEuzmVMURVEU9e9qSvfafn4viqIoiqIoiqIoinpDDXFk7YpzjyOv90pxi3xdPSFFURRFURRFURRFPalzKtUhV20cWU/F1fcx0q+VkKIoiqIoiqIoiqKWqGP5W8+XJKQoiqIoiqIoiqJ+Rg3Zs2u0x6zTVUlIURRFURRFURRFUUtUmz27RnuXdfoqCSmKoiiqmroBNuqWBbcTsGIAAAAASUVORK5CYII=",
+    "last_login": "February 22, 2026  8:36pm",
+    "ongoing_projects": [],
+    "completed_projects": [
+      "Js Quest01",
+      "My Spaceship",
+      "My First Backend",
+      "Quest00",
+      "My Moving Box Realtime",
+      "Js Quest02",
+      "Quest05",
+      "My Cat",
+      "Quest02",
+      "Js Quest03",
+      "Quest00",
+      "Js Quest05",
+      "Js Quest07",
+      "My Levenshtein",
+      "Js Quest04",
+      "My Square",
+      "Js Quest06",
+      "Quest01",
+      "My Ngram",
+      "My Bouncing Box",
+      "Quest04",
+      "Quest03",
+      "Js Quest03",
+      "My Css Is Easy I"
+    ],
+    "exercises_completed": "86",
+    "points": "90",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "58%"
+    },
+    "name": "kovalenk_i"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEV/22vw8PBR1FjgAAAAvElEQVR4nO3aMQrCQBAFUBMEj6E30aPrTfQGlqaQWLhfSGGzBHXjm/Izj2GbwJDpx4q69quaoiiKoqg/U5eu1KGkY4J1+qYtjbyLoiiKoiiKoiiKWrA6lUX1ld6zuu5mn0VRFEVRFEVRFEVRX1S5hLp9YBZFURRFURRFURRFVah9dtcEmwTn2WdRFEVRFEVRFEVR1LNyS9wlGNwSUxRFURRFURRFUUtS/sNSFPWDapsv0fFt37SlkXdRzagHIgF8BaB3QVMAAAAASUVORK5CYII=",
+    "last_login": "February 23, 2026 11:21pm",
+    "ongoing_projects": [
+      "My Printf",
+      "Quest07"
+    ],
+    "completed_projects": [
+      "My Spaceship",
+      "Quest02",
+      "My Ngram",
+      "My Bouncing Box",
+      "Quest00",
+      "Js Quest06",
+      "Js Quest05",
+      "My First Backend",
+      "My Moving Box Realtime",
+      "Quest01",
+      "Quest04",
+      "My Cat",
+      "My Css Is Easy I",
+      "Js Quest01",
+      "Js Quest07",
+      "Js Quest02",
+      "Quest03",
+      "Js Quest03",
+      "My Square",
+      "My Mastermind",
+      "Quest05",
+      "Js Quest04",
+      "Quest06",
+      "My Levenshtein"
+    ],
+    "exercises_completed": "98",
+    "points": "100",
+    "season_progress": {
+      "Preseason Web": "98%",
+      "Season 01 Arc 01": "78%",
+      "Season 01 Arc 02": "20%"
+    },
+    "name": "christop_r"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXAVlLw8PB+HTpIAAAArUlEQVR4nO3csQ3CMBAFUHBFmQ0yCowWNssoZANSUkGTKygsJGMhHL8rT//p7MaSZcnpWVD3dCgpiqIoiupVXY9bReMRjaH6LIqiKIqiKIqiKIqqouLqevrBLIqiKIqiKIqiKIqiKIqiKIqiKIqiqP2pJZ5dp2xujcjly1kURVEURVEURVEURVEURVEURVEURVHUR3XOfq94+5MVUhTVoRrjJJqzufdII/uimlEvV+NoBXBAWeIAAAAASUVORK5CYII=",
@@ -2123,82 +1940,6 @@
       "Season 01 Arc 01": "39%"
     },
     "name": "lorencs_r"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXTh6Lw8PDJrAozAAAAr0lEQVR4nO3aMQ7CMAwAQJqFkSfkKfC0PI2nwA/akQkGZCTahqGtVKScR9uneI3s9FwQfTosCYqiKIqiKIqiKIqiKIqiKOov1b0bR5Qfk8pllwkpiqIoiqIoiqIoao3KcfhUqn2naLmufIuiKIqiKIqiKIqi3uqzhy3VvuHHHvYcP9VIHCNx22pCiqIoiqIoiqIoiqIoiqIoiqIoiqKoFlT+OhSejeyWmKIoimpUvQBZwXEFI9MFDwAAAABJRU5ErkJggg==",
-    "last_login": "February 19, 2026  9:03am",
-    "ongoing_projects": [
-      "My Nba Game Analysis",
-      "My Printf"
-    ],
-    "completed_projects": [
-      "Quest00",
-      "Quest05",
-      "Python Quest04",
-      "My Roman Numerals Converter",
-      "My First Scraper",
-      "Quest03",
-      "My Imdb Api",
-      "Quest04",
-      "Quest01",
-      "Quest02",
-      "My Cat",
-      "My Ngram",
-      "Python Quest02",
-      "My Mastermind",
-      "My Levenshtein",
-      "Python Quest01",
-      "Python Quest03",
-      "Python Quest06",
-      "Python Quest05",
-      "My Select Query",
-      "My Mr Clean",
-      "My Square"
-    ],
-    "exercises_completed": "87",
-    "points": "460",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "82%",
-      "Season 02 Data Science": "27%"
-    },
-    "name": "pattes_p"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/forba_b/vrac/profile_picture_forba_b_16532_profile_picture_2025_09_23_10_53.jpeg",
-    "last_login": "February 19, 2026  1:20pm",
-    "ongoing_projects": [
-      "Quest03",
-      "Quest04"
-    ],
-    "completed_projects": [
-      "Python Quest03",
-      "Python Quest02",
-      "My Roman Numerals Converter",
-      "My Levenshtein",
-      "Python Quest01",
-      "My First Scraper",
-      "Python Quest05",
-      "Python Quest06",
-      "Quest02",
-      "Quest01",
-      "My Cat",
-      "Quest01",
-      "Quest00",
-      "My Imdb Api",
-      "Quest01",
-      "Python Quest04"
-    ],
-    "exercises_completed": "54",
-    "points": "1815",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Web": "27%",
-      "Preseason Data": "90%",
-      "Season 01 Arc 01": "22%"
-    },
-    "name": "forba_b"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXAVlLw8PB+HTpIAAAAzUlEQVR4nO3cSw4BQRQFUJ8BM3bATtiZtjN2wg6YMfAZ6NsTkUh3hYjzhjd1cnv6Uqke3FrMYdBrMxRFURT1r2rdryfBOcG0eBdFURRFURRFURRFFVFZXccf6KIoiqIoiqIoiqKo99U+K2v18twxR5YduyiKoiiKoiiKoijqi2pRP+K5JhjmWc+ueBdFURRFURRFURRFPWZbX7Y26SXXr/NnNcumWiVOcEowSbIp9YUURVEURVEURVEU1UWtsqkmGDW/VyzeRVEURVG/oe4igHsFFu9uFgAAAABJRU5ErkJggg==",
@@ -2347,6 +2088,272 @@
     "name": "nechtan_d"
   },
   {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXOTV7w8PAZ8UITAAAApklEQVR4nO3byw1AQBQFUFSgA6VQGp0phQ6ogJ1kEiOIxO/c9TvJnfW8l00nMmTJmVAURVEURVEURVEURVEURVGPVH26P9UtDSmKoiiKoiiKoiiKoiiKoiiKoiiKov6gigP3Pe0tDSmKoiiKoiiKoqgPqya6Qpw/pCFFURRFURRFURT1c7Xcw9bRuXHjHraMfr92VzWkKIo6qopgEWQ14chL3kW9Rs0DGpQFf+36IgAAAABJRU5ErkJggg==",
+    "last_login": "February 10, 2026  6:50pm",
+    "ongoing_projects": [
+      "Quest04"
+    ],
+    "completed_projects": [
+      "Js Quest01",
+      "Js Quest04",
+      "Js Quest01",
+      "Quest01",
+      "Quest03",
+      "Js Quest06",
+      "Quest00",
+      "My Moving Box Realtime",
+      "My Levenshtein",
+      "My Bouncing Box",
+      "Js Quest03",
+      "Quest02",
+      "My First Backend",
+      "Js Quest05",
+      "My Spaceship",
+      "Js Quest02",
+      "Js Quest03",
+      "My Css Is Easy I",
+      "Quest03",
+      "Js Quest07"
+    ],
+    "exercises_completed": "63",
+    "points": "390",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Web": "95%",
+      "Season 01 Arc 01": "25%"
+    },
+    "name": "montvill_d"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/samodid_y/vrac/profile_picture_samodid_y_15299_profile_picture_2024_03_28_01_23.JPG",
+    "last_login": "February 20, 2026  8:16am",
+    "ongoing_projects": [
+      "Coleridge Initiative"
+    ],
+    "completed_projects": [
+      "My Mr Clean",
+      "Ruby Quest01",
+      "Js Quest01",
+      "Js Quest05",
+      "Python Quest05",
+      "My Ngram",
+      "Quest04",
+      "Js Quest02",
+      "Ruby Quest03",
+      "My Tar",
+      "Js Quest06",
+      "My Css Is Easy I",
+      "Python Quest03",
+      "My Moving Box Realtime",
+      "Quest02",
+      "My Levenshtein",
+      "Js Quest03",
+      "My Ls",
+      "Quest07",
+      "My Allocine",
+      "Ds Quest01",
+      "My Imdb Api",
+      "My Mastermind",
+      "Js Quest07",
+      "Drive Me Crazy",
+      "Quest06",
+      "Ds Quest02",
+      "Js Quest04",
+      "My Christmas Tree",
+      "My Select Query",
+      "Quest05",
+      "My Convex Optimization",
+      "My First Scraper Ds",
+      "My Nba Game Analysis",
+      "Ruby Quest05",
+      "My Square",
+      "Python Quest02",
+      "My Readline",
+      "My First Backend",
+      "My M And A",
+      "Quest09",
+      "My First Scraper",
+      "My Linear Regression",
+      "My Printf",
+      "My Roman Numerals Converter",
+      "My Ds Babel",
+      "Ds Quest03",
+      "Ds Quest00",
+      "My Open The Iris",
+      "Python Quest01",
+      "My Spaceship",
+      "My Moving Box Realtime",
+      "Quest03",
+      "My Bouncing Box",
+      "Quest00",
+      "Quest01",
+      "Python Quest06",
+      "My Cat",
+      "My Tu Verras",
+      "Python Quest04",
+      "A Fool Fraud",
+      "Ruby Quest06",
+      "Ruby Quest02",
+      "Ds Quest04",
+      "Ruby Quest04",
+      "Quest08"
+    ],
+    "exercises_completed": "164",
+    "points": "7909",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "83%",
+      "Season 02 Data Science": "79%",
+      "Season 02 Software Engineer": "34%",
+      "Preseason Data": "98%",
+      "Season 03 Data Science": "67%"
+    },
+    "name": "samodid_y"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/tofan_c/vrac/profile_picture_tofan_c_16063_profile_picture_2025_03_25_11_45.jpg",
+    "last_login": "February 17, 2026  2:59pm",
+    "ongoing_projects": [],
+    "completed_projects": [
+      "Quest05",
+      "Python Quest05",
+      "My Bouncing Box",
+      "Quest01",
+      "My Css Is Easy I",
+      "Ruby Quest02",
+      "Js Quest04",
+      "Quest02",
+      "My Blockchain",
+      "My Mastermind",
+      "Js Quest07",
+      "My Tar",
+      "Js Quest07",
+      "Quest08",
+      "Js Quest06",
+      "My Levenshtein",
+      "Quest07",
+      "Python Quest04",
+      "Js Quest05",
+      "My Roman Numerals Converter",
+      "My Square",
+      "My Spaceship",
+      "Quest06",
+      "My Readline",
+      "My Christmas Tree",
+      "My Ngram",
+      "Js Quest07",
+      "Js Quest01",
+      "Ruby Quest01",
+      "My Cat",
+      "Js Quest03",
+      "My Moving Box Realtime",
+      "Python Quest02",
+      "Quest05",
+      "Python Quest01",
+      "Python Quest06",
+      "Js Quest06",
+      "Js Quest02",
+      "Quest09",
+      "Python Quest03",
+      "My Printf",
+      "My First Backend",
+      "Quest04",
+      "Quest03",
+      "My Ls",
+      "Quest01",
+      "Quest00"
+    ],
+    "exercises_completed": "118",
+    "points": "755",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "68%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "100%",
+      "Season 02 Software Engineer": "34%"
+    },
+    "name": "tofan_c"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXTh6Lw8PDJrAozAAAAr0lEQVR4nO3aMQ7CMAwAQJqFkSfkKfC0PI2nwA/akQkGZCTahqGtVKScR9uneI3s9FwQfTosCYqiKIqiKIqiKIqiKIqiKOov1b0bR5Qfk8pllwkpiqIoiqIoiqIoao3KcfhUqn2naLmufIuiKIqiKIqiKIqi3uqzhy3VvuHHHvYcP9VIHCNx22pCiqIoiqIoiqIoiqIoiqIoiqIoiqKoFlT+OhSejeyWmKIoimpUvQBZwXEFI9MFDwAAAABJRU5ErkJggg==",
+    "last_login": "February 23, 2026  7:43pm",
+    "ongoing_projects": [
+      "My Nba Game Analysis",
+      "My Printf"
+    ],
+    "completed_projects": [
+      "Quest00",
+      "Quest05",
+      "Python Quest04",
+      "My Roman Numerals Converter",
+      "My First Scraper",
+      "Quest03",
+      "My Imdb Api",
+      "Quest04",
+      "Quest01",
+      "Quest02",
+      "My Cat",
+      "My Ngram",
+      "Python Quest02",
+      "My Mastermind",
+      "My Levenshtein",
+      "Python Quest01",
+      "Python Quest03",
+      "Python Quest06",
+      "Python Quest05",
+      "My Select Query",
+      "My Mr Clean",
+      "My Square"
+    ],
+    "exercises_completed": "88",
+    "points": "475",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "82%",
+      "Season 02 Data Science": "28%"
+    },
+    "name": "pattes_p"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/forba_b/vrac/profile_picture_forba_b_16532_profile_picture_2025_09_23_10_53.jpeg",
+    "last_login": "February 19, 2026  1:20pm",
+    "ongoing_projects": [
+      "Quest03",
+      "Quest04"
+    ],
+    "completed_projects": [
+      "Python Quest03",
+      "Python Quest02",
+      "My Roman Numerals Converter",
+      "My Levenshtein",
+      "Python Quest01",
+      "My First Scraper",
+      "Python Quest05",
+      "Python Quest06",
+      "Quest02",
+      "Quest01",
+      "My Cat",
+      "Quest01",
+      "Quest00",
+      "My Imdb Api",
+      "Quest01",
+      "Python Quest04"
+    ],
+    "exercises_completed": "54",
+    "points": "1815",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Web": "27%",
+      "Preseason Data": "90%",
+      "Season 01 Arc 01": "22%"
+    },
+    "name": "forba_b"
+  },
+  {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/markelis_i/vrac/profile_picture_markelis_i_6290_profile_picture_2021_11_22_21_39.jpg",
     "last_login": "July 15, 2025  6:11pm",
     "ongoing_projects": [
@@ -2401,6 +2408,110 @@
       "Season 03 Data Science": "0%"
     },
     "name": "markelis_i"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/hoang_k/vrac/profile_picture_hoang_k_15300_profile_picture_2024_03_28_08_26.jpg",
+    "last_login": "February 24, 2026  4:40am",
+    "ongoing_projects": [
+      "Drive Me Crazy"
+    ],
+    "completed_projects": [
+      "My M And A",
+      "Ds Quest02",
+      "My Square",
+      "Python Quest01",
+      "My Tu Verras",
+      "My Select Query",
+      "My Ngram",
+      "My First Scraper",
+      "My Roman Numerals Converter",
+      "Ds Quest00",
+      "My Cat",
+      "My Linear Regression",
+      "Quest01",
+      "My First Scraper Ds",
+      "Ds Quest01",
+      "My Convex Optimization",
+      "Ds Quest03",
+      "Quest03",
+      "Python Quest02",
+      "My Nba Game Analysis",
+      "My Levenshtein",
+      "My Ds Babel",
+      "My Imdb Api",
+      "Quest04",
+      "My Allocine",
+      "My Mastermind",
+      "Python Quest06",
+      "My Vivino",
+      "My Open The Iris",
+      "My Mr Clean",
+      "Quest05",
+      "Python Quest04",
+      "Python Quest05",
+      "Quest00",
+      "Quest02",
+      "My Tu Verras",
+      "My Mobapp Studio",
+      "My Printf",
+      "Python Quest03",
+      "Ds Quest04",
+      "Quest00"
+    ],
+    "exercises_completed": "148",
+    "points": "4347",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 02 Data Science": "97%",
+      "Season 03 Data Science": "0%"
+    },
+    "name": "hoang_k"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/danylova_h/vrac/profile_picture_danylova_h_13209_profile_picture_2023_03_27_17_37.jpg",
+    "last_login": "May 11, 2025 12:37pm",
+    "ongoing_projects": [
+      "My Nba Game Analysis",
+      "My Mr Clean",
+      "My Printf"
+    ],
+    "completed_projects": [
+      "Python Quest03",
+      "My First Scraper Ds",
+      "My Levenshtein",
+      "My Mastermind",
+      "Quest04",
+      "Python Quest06",
+      "Python Quest04",
+      "My Cat",
+      "My Imdb Api",
+      "Quest05",
+      "Quest03",
+      "Quest01",
+      "Quest00",
+      "My Select Query",
+      "My Square",
+      "Quest02",
+      "Python Quest01",
+      "Quest04",
+      "Quest05",
+      "Quest03",
+      "Python Quest05",
+      "Python Quest02",
+      "My Roman Numerals Converter",
+      "My Ngram"
+    ],
+    "exercises_completed": "76",
+    "points": "2385",
+    "season_progress": {
+      "Onboarding": "3%",
+      "Preseason Data": "77%",
+      "Season 01 Arc 01": "76%",
+      "Season 02 Data Science": "23%"
+    },
+    "name": "danylova_h"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEV/22vw8PBR1FjgAAAAsklEQVR4nO3cMQ7CMAwAQBIWxv6Ar/AzxM/4Cj/oWqkCFsISZSC0TaWcx1gne7VlJb4qYoyHmqAoiqKoXtUtlGLYSYcURVEURVEURVEU9Y+6fpbHz/Rw/K6TF69FURRFURRFURRFUUuokEbXef1aFEVRFEVRFEVRVKfqkZ0Op/SUZS5NOqQoiqIoiqIoiqKokkoT62mDWhRFURRFURRFURS1tjr/8M/ivUmHFEVRFNVMvQGX9YEFeHkyYgAAAABJRU5ErkJggg==",
@@ -2466,50 +2577,6 @@
       "Season 02 Software Engineer": "28%"
     },
     "name": "davies_s"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/danylova_h/vrac/profile_picture_danylova_h_13209_profile_picture_2023_03_27_17_37.jpg",
-    "last_login": "May 11, 2025 12:37pm",
-    "ongoing_projects": [
-      "My Nba Game Analysis",
-      "My Mr Clean",
-      "My Printf"
-    ],
-    "completed_projects": [
-      "Python Quest03",
-      "My First Scraper Ds",
-      "My Levenshtein",
-      "My Mastermind",
-      "Quest04",
-      "Python Quest06",
-      "Python Quest04",
-      "My Cat",
-      "My Imdb Api",
-      "Quest05",
-      "Quest03",
-      "Quest01",
-      "Quest00",
-      "My Select Query",
-      "My Square",
-      "Quest02",
-      "Python Quest01",
-      "Quest04",
-      "Quest05",
-      "Quest03",
-      "Python Quest05",
-      "Python Quest02",
-      "My Roman Numerals Converter",
-      "My Ngram"
-    ],
-    "exercises_completed": "76",
-    "points": "2385",
-    "season_progress": {
-      "Onboarding": "3%",
-      "Preseason Data": "77%",
-      "Season 01 Arc 01": "76%",
-      "Season 02 Data Science": "23%"
-    },
-    "name": "danylova_h"
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/mungufen_j/vrac/profile_picture_mungufen_j_16499_profile_picture_2025_09_19_14_08.jpeg",
@@ -2612,196 +2679,6 @@
       "Season 02 Software Engineer": "33%"
     },
     "name": "lomidze_t"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/hoang_k/vrac/profile_picture_hoang_k_15300_profile_picture_2024_03_28_08_26.jpg",
-    "last_login": "February 23, 2026  3:49am",
-    "ongoing_projects": [
-      "Drive Me Crazy"
-    ],
-    "completed_projects": [
-      "My M And A",
-      "Ds Quest02",
-      "My Square",
-      "Python Quest01",
-      "My Tu Verras",
-      "My Select Query",
-      "My Ngram",
-      "My First Scraper",
-      "My Roman Numerals Converter",
-      "Ds Quest00",
-      "My Cat",
-      "My Linear Regression",
-      "Quest01",
-      "My First Scraper Ds",
-      "Ds Quest01",
-      "My Convex Optimization",
-      "Ds Quest03",
-      "Quest03",
-      "Python Quest02",
-      "My Nba Game Analysis",
-      "My Levenshtein",
-      "My Ds Babel",
-      "My Imdb Api",
-      "Quest04",
-      "My Allocine",
-      "My Mastermind",
-      "Python Quest06",
-      "My Vivino",
-      "My Open The Iris",
-      "My Mr Clean",
-      "Quest05",
-      "Python Quest04",
-      "Python Quest05",
-      "Quest00",
-      "Quest02",
-      "My Tu Verras",
-      "My Mobapp Studio",
-      "My Printf",
-      "Python Quest03",
-      "Ds Quest04",
-      "Quest00"
-    ],
-    "exercises_completed": "148",
-    "points": "4332",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 02 Data Science": "97%",
-      "Season 03 Data Science": "0%"
-    },
-    "name": "hoang_k"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/castro-d_i/vrac/profile_picture_castro-d_i_16077_profile_picture_2025_03_26_17_33.jpg",
-    "last_login": "February 19, 2026 12:26pm",
-    "ongoing_projects": [],
-    "completed_projects": [
-      "My Ngram",
-      "Js Quest05",
-      "Js Quest06",
-      "Quest06",
-      "Quest09",
-      "Js Quest07",
-      "My Square",
-      "Js Quest05",
-      "Js Quest01",
-      "Js Quest06",
-      "Quest08",
-      "My Blockchain",
-      "Quest05",
-      "Js Quest07",
-      "Ruby Quest06",
-      "My Moving Box Realtime",
-      "My Bouncing Box",
-      "Quest03",
-      "Js Quest04",
-      "My Levenshtein",
-      "Ruby Quest04",
-      "Quest00",
-      "Js Quest07",
-      "My Tar",
-      "My Mastermind",
-      "Js Quest06",
-      "My Css Is Easy I",
-      "My Spaceship",
-      "Ruby Quest05",
-      "Quest07",
-      "My Ls",
-      "Js Quest01",
-      "Js Quest04",
-      "My Roman Numerals Converter",
-      "Js Quest05",
-      "Js Quest06",
-      "Ruby Quest01",
-      "Quest04",
-      "Quest01",
-      "My Mastermind",
-      "My Readline",
-      "Ruby Quest03",
-      "Quest02",
-      "My Christmas Tree",
-      "My First Backend",
-      "Js Quest02",
-      "Js Quest03",
-      "Ruby Quest02",
-      "My Printf",
-      "My Cat"
-    ],
-    "exercises_completed": "137",
-    "points": "3125",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "100%",
-      "Season 02 Software Engineer": "39%"
-    },
-    "name": "castro-d_i"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/dudas_j/vrac/profile_picture_dudas_j_10451_profile_picture_2022_09_23_06_28.jpg",
-    "last_login": "September 23, 2024  7:34am",
-    "ongoing_projects": [],
-    "completed_projects": [
-      "Classically Punk",
-      "Quest04",
-      "Visa For Lisa",
-      "Ds Quest02",
-      "Python Quest04",
-      "My Roman Numerals Converter",
-      "Python Quest05",
-      "My Open The Iris",
-      "My Cat",
-      "My Mastermind",
-      "Python Quest01",
-      "My Convex Optimization",
-      "My Square",
-      "My Levenshtein",
-      "A Fool Fraud",
-      "My Nba Game Analysis",
-      "My Mr Clean",
-      "Python Quest02",
-      "Ds Quest04",
-      "My Allocine",
-      "My Vivino",
-      "My Mastermind",
-      "Atari Games",
-      "My M And A",
-      "My Ds Babel",
-      "Drive Me Crazy",
-      "Quest00",
-      "Coleridge Initiative",
-      "Python Quest03",
-      "My Ngram",
-      "Quest03",
-      "My Linear Regression",
-      "My Mobapp Studio",
-      "My First Scraper Ds",
-      "Python Quest06",
-      "My Paypal",
-      "My Printf",
-      "My Imdb Api",
-      "Quest02",
-      "My Select Query",
-      "Quest05",
-      "Quest01",
-      "Ds Quest00",
-      "My Tu Verras",
-      "Ds Quest03",
-      "Ds Quest01"
-    ],
-    "exercises_completed": "152",
-    "points": "2058",
-    "season_progress": {
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 02 Data Science": "100%",
-      "Season 03 Data Science": "100%",
-      "Season 03 Machine Learning": "100%"
-    },
-    "name": "dudas_j"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAlUlEQVR4nO3aMQqAMAwFUO3iMTyKHt2j6A1cnXTKUMWlFKzw/pjk0WYsNJ0F2VNXEoqiKIqiKIqiKIqiKIqiKKpJtfX3RPt4dOZPbkhRFEVRFEVRFEVRVdQUP6CiMERhrX4WRVEURVEURVEURRWoMV6qy+tcPvKTvSiKoiiKoiiKoiiKoiiKoiiKoiiKoiiKoiiKak5dvkxdBSf3uxMAAAAASUVORK5CYII=",
@@ -3021,7 +2898,7 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/salem_m/vrac/profile_picture_salem_m_16071_profile_picture_2025_03_25_16_50.jpg",
-    "last_login": "February 20, 2026 10:05am",
+    "last_login": "February 23, 2026 12:49pm",
     "ongoing_projects": [
       "My Blockchain",
       "My Tar",
@@ -3080,7 +2957,7 @@
       "Quest01"
     ],
     "exercises_completed": "106",
-    "points": "245",
+    "points": "280",
     "season_progress": {
       "Onboarding": "3%",
       "Preseason Web": "85%",
@@ -3090,35 +2967,134 @@
     "name": "salem_m"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEWNbMzw8PB71RVKAAAAzUlEQVR4nO3bQQ6CQAwAQCUmHn3C+hSfxtPwKf5Ab1zMeqEkuJIYJDHA9NjtkO6xNFvlCXGvdlOCoiiKojambvsuLl02R+IQdcOShdyLoiiKoiiKoiiKWrG6doNqn33G6HouVYqfxvXo109R0szVIUVRFEVRFEVRFLVx1S9Z69G6xzd72JhY29k7pCiKoiiKoiiKoqhfVMrvEcfH4qT5S4cURVEURVEURVHU+lTxHrYM72EpiqIoiqIoiqKoBas0WLJ+jGQPS1EURW1UvQAkD5EFETFhjAAAAABJRU5ErkJggg==",
-    "last_login": "February 19, 2026 12:24pm",
-    "ongoing_projects": [
-      "My First Scraper",
-      "Quest03"
-    ],
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/castro-d_i/vrac/profile_picture_castro-d_i_16077_profile_picture_2025_03_26_17_33.jpg",
+    "last_login": "February 19, 2026 12:26pm",
+    "ongoing_projects": [],
     "completed_projects": [
-      "Python Quest06",
-      "My Cat",
-      "Quest00",
-      "Python Quest02",
-      "Python Quest01",
-      "Quest02",
-      "Python Quest03",
-      "My Imdb Api",
-      "My Roman Numerals Converter",
+      "My Ngram",
+      "Js Quest05",
+      "Js Quest06",
+      "Quest06",
+      "Quest09",
+      "Js Quest07",
+      "My Square",
+      "Js Quest05",
+      "Js Quest01",
+      "Js Quest06",
+      "Quest08",
+      "My Blockchain",
+      "Quest05",
+      "Js Quest07",
+      "Ruby Quest06",
+      "My Moving Box Realtime",
+      "My Bouncing Box",
+      "Quest03",
+      "Js Quest04",
       "My Levenshtein",
+      "Ruby Quest04",
+      "Quest00",
+      "Js Quest07",
+      "My Tar",
+      "My Mastermind",
+      "Js Quest06",
+      "My Css Is Easy I",
+      "My Spaceship",
+      "Ruby Quest05",
+      "Quest07",
+      "My Ls",
+      "Js Quest01",
+      "Js Quest04",
+      "My Roman Numerals Converter",
+      "Js Quest05",
+      "Js Quest06",
+      "Ruby Quest01",
+      "Quest04",
       "Quest01",
-      "Python Quest05",
-      "Python Quest04"
+      "My Mastermind",
+      "My Readline",
+      "Ruby Quest03",
+      "Quest02",
+      "My Christmas Tree",
+      "My First Backend",
+      "Js Quest02",
+      "Js Quest03",
+      "Ruby Quest02",
+      "My Printf",
+      "My Cat"
     ],
-    "exercises_completed": "59",
-    "points": "1470",
+    "exercises_completed": "137",
+    "points": "3125",
     "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "78%",
-      "Season 01 Arc 01": "27%"
+      "Onboarding": "100%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "100%",
+      "Season 02 Software Engineer": "39%"
     },
-    "name": "gimbutis_a"
+    "name": "castro-d_i"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/dudas_j/vrac/profile_picture_dudas_j_10451_profile_picture_2022_09_23_06_28.jpg",
+    "last_login": "September 23, 2024  7:34am",
+    "ongoing_projects": [],
+    "completed_projects": [
+      "Classically Punk",
+      "Quest04",
+      "Visa For Lisa",
+      "Ds Quest02",
+      "Python Quest04",
+      "My Roman Numerals Converter",
+      "Python Quest05",
+      "My Open The Iris",
+      "My Cat",
+      "My Mastermind",
+      "Python Quest01",
+      "My Convex Optimization",
+      "My Square",
+      "My Levenshtein",
+      "A Fool Fraud",
+      "My Nba Game Analysis",
+      "My Mr Clean",
+      "Python Quest02",
+      "Ds Quest04",
+      "My Allocine",
+      "My Vivino",
+      "My Mastermind",
+      "Atari Games",
+      "My M And A",
+      "My Ds Babel",
+      "Drive Me Crazy",
+      "Quest00",
+      "Coleridge Initiative",
+      "Python Quest03",
+      "My Ngram",
+      "Quest03",
+      "My Linear Regression",
+      "My Mobapp Studio",
+      "My First Scraper Ds",
+      "Python Quest06",
+      "My Paypal",
+      "My Printf",
+      "My Imdb Api",
+      "Quest02",
+      "My Select Query",
+      "Quest05",
+      "Quest01",
+      "Ds Quest00",
+      "My Tu Verras",
+      "Ds Quest03",
+      "Ds Quest01"
+    ],
+    "exercises_completed": "152",
+    "points": "2058",
+    "season_progress": {
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 02 Data Science": "100%",
+      "Season 03 Data Science": "100%",
+      "Season 03 Machine Learning": "100%"
+    },
+    "name": "dudas_j"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVxQsXw8PAafBLHAAAAtUlEQVR4nO3aOQ6FMAwFQJaGW+QqHP1fJTegRUJAlYLPIgRikZjXWqO4je1iOJCmyI6EoiiKoj6mYr4/9SMdUhRFURRFURRFUdQZFf6Hx30ql7O58u+RDimKoiiKoiiKoihqReXpx9pd/xZFURRFURRFURT1UTW/JU7l1i0xRVEURVEURVEU9XKVfqzVhnJLTFEURVEURVEURd2v4mTJupi4Yw/rlpiiqBepMBmiLSaYs1EXqhGeHKcF7UgWmwAAAABJRU5ErkJggg==",
@@ -3138,7 +3114,7 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/kostadin_k/vrac/profile_picture_kostadin_k_15297_profile_picture_2024_03_27_21_08.JPG",
-    "last_login": "February  5, 2026  6:12pm",
+    "last_login": "February 23, 2026  7:41am",
     "ongoing_projects": [
       "Quest08",
       "Quest09"
@@ -3172,7 +3148,7 @@
       "My Ngram"
     ],
     "exercises_completed": "107",
-    "points": "560",
+    "points": "575",
     "season_progress": {
       "Onboarding": "3%",
       "Preseason Web": "100%",
@@ -3309,6 +3285,129 @@
     "name": "pezzini_s"
   },
   {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXJulTw8PCRXR6CAAAA2klEQVR4nO3bsQ2CUBAGYFF73QA30c3EzXQT2UB7FSk4EyRYADEo35WX/4OjvJfHvOhQl/msS1EURVHUVNUhaav1SCakKIqiKIqiKIqiJq7y2FSz1tw1Irvmu7bV4fEjGos4Tj4PNSFFURRFURRFURRFvalTtai+uvdYXTdNlcammrU+fRWR41ATUhRFURRFURRFUVQftW//rWckE1IURVEURVEURVF/o/LaReGyimgsI5d/uEv8hQkpiqIoiqIoiqIoqo9KaxeFy0qicYtcPfIj30VRFEVRA6gnZzWYBa0GVqQAAAAASUVORK5CYII=",
+    "last_login": "January 26, 2026  2:47pm",
+    "ongoing_projects": [
+      "My Nba Game Analysis",
+      "My Mr Clean",
+      "Python Quest04"
+    ],
+    "completed_projects": [
+      "Python Quest05",
+      "My First Scraper",
+      "Python Quest06",
+      "My Mastermind",
+      "Python Quest01",
+      "My Imdb Api",
+      "Python Quest04",
+      "Python Quest03",
+      "My Square",
+      "Quest00",
+      "Quest04",
+      "My Levenshtein",
+      "Quest01",
+      "Python Quest05",
+      "My Cat",
+      "My Select Query",
+      "Quest00",
+      "Python Quest02",
+      "My Printf",
+      "Quest02",
+      "My Ngram",
+      "Python Quest01",
+      "Quest05",
+      "Quest03",
+      "My Roman Numerals Converter"
+    ],
+    "exercises_completed": "74",
+    "points": "3110",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "92%",
+      "Season 01 Arc 01": "95%",
+      "Season 01 Arc 02": "16%",
+      "Season 02 Data Science": "18%"
+    },
+    "name": "van-den-_m"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAq0lEQVR4nO3csQ3CMBAFUJwMQjaB0cMmsEEGQIQmV7iwkIwRtvR+ad3T+RpLbm7aK7JNp5pQFEVRFEVRFEVRFEVRFEVRXapHOnIt1uUlg8xFURRFURRFURRFURRFURRFURRFURT1d3VLpSyd3JCiKIqiKIqiKIqivlGXYxHFKw7mWE1xb96LoiiKoiiKoiiKolqoFF/X5+97URRFfVDneJLWYl1eMshc1DDqDVOcZwWtlP0GAAAAAElFTkSuQmCC",
+    "last_login": "October 22, 2025  7:10pm",
+    "ongoing_projects": [
+      "Python Quest04",
+      "Quest00"
+    ],
+    "completed_projects": [
+      "Python Quest02",
+      "Python Quest02",
+      "Python Quest03",
+      "Python Quest01",
+      "Quest00"
+    ],
+    "exercises_completed": "23",
+    "points": "455",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "26%"
+    },
+    "name": "musa_s"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXJulTw8PCRXR6CAAAAuElEQVR4nO3cOxKCMBQFUIINuwhLcem4FHZASeGohaRAgQLB4XNum5xJUmbyXvLnjDR5NicURVEUdTJVhy7X0Xn9KTs5F0VRFEVRFEVRFHVgdQtjKTeyQ4qiKIqiKIqiKIpaRKVKqPYPa1EURVEURVEURVHUO+n5tZhQ8bOJ55GGL1/9PdXiO6QoiqIoiqIoiqKoH1RIN9b7+mtRFEVRFEVRFEVRJ1X+dKIo6ngq9gpBBhPVilArqhdR04QFmL1a6wAAAABJRU5ErkJggg==",
+    "last_login": "February 17, 2026  7:23pm",
+    "ongoing_projects": [],
+    "completed_projects": [
+      "My First Backend",
+      "My Spaceship",
+      "My Cat",
+      "My Blockchain",
+      "Js Quest01",
+      "Js Quest05",
+      "Js Quest02",
+      "Quest09",
+      "My Ngram",
+      "My Levenshtein",
+      "Quest05",
+      "My Bouncing Box",
+      "Js Quest03",
+      "Quest05",
+      "Quest06",
+      "Quest05",
+      "My Readline",
+      "My Square",
+      "Quest07",
+      "Quest00",
+      "Js Quest06",
+      "Quest05",
+      "Quest02",
+      "My Christmas Tree",
+      "My Moving Box Realtime",
+      "Quest03",
+      "My Css Is Easy I",
+      "Quest04",
+      "My Printf",
+      "My Tar",
+      "Quest01",
+      "My Ls",
+      "Quest09",
+      "Js Quest07",
+      "Js Quest04",
+      "Quest02",
+      "Quest08",
+      "My Mastermind"
+    ],
+    "exercises_completed": "123",
+    "points": "466",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "100%",
+      "Season 02 Software Engineer": "23%"
+    },
+    "name": "doynov_v"
+  },
+  {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/rajkovic_t/vrac/profile_picture_rajkovic_t_16095_profile_picture_2025_03_31_13_59.jpg",
     "last_login": "February 21, 2026 10:45pm",
     "ongoing_projects": [
@@ -3397,59 +3496,189 @@
     "name": "andreas_a"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXJulTw8PCRXR6CAAAAuElEQVR4nO3cOxKCMBQFUIINuwhLcem4FHZASeGohaRAgQLB4XNum5xJUmbyXvLnjDR5NicURVEUdTJVhy7X0Xn9KTs5F0VRFEVRFEVRFHVgdQtjKTeyQ4qiKIqiKIqiKIpaRKVKqPYPa1EURVEURVEURVHUO+n5tZhQ8bOJ55GGL1/9PdXiO6QoiqIoiqIoiqKoH1RIN9b7+mtRFEVRFEVRFEVRJ1X+dKIo6ngq9gpBBhPVilArqhdR04QFmL1a6wAAAABJRU5ErkJggg==",
-    "last_login": "February 17, 2026  7:23pm",
-    "ongoing_projects": [],
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEWNbMzw8PB71RVKAAAAzUlEQVR4nO3bQQ6CQAwAQCUmHn3C+hSfxtPwKf5Ab1zMeqEkuJIYJDHA9NjtkO6xNFvlCXGvdlOCoiiKojambvsuLl02R+IQdcOShdyLoiiKoiiKoiiKWrG6doNqn33G6HouVYqfxvXo109R0szVIUVRFEVRFEVRFLVx1S9Z69G6xzd72JhY29k7pCiKoiiKoiiKoqhfVMrvEcfH4qT5S4cURVEURVEURVHU+lTxHrYM72EpiqIoiqIoiqKoBas0WLJ+jGQPS1EURW1UvQAkD5EFETFhjAAAAABJRU5ErkJggg==",
+    "last_login": "February 19, 2026 12:24pm",
+    "ongoing_projects": [
+      "My First Scraper",
+      "Quest03"
+    ],
     "completed_projects": [
-      "My First Backend",
-      "My Spaceship",
+      "Python Quest06",
       "My Cat",
+      "Quest00",
+      "Python Quest02",
+      "Python Quest01",
+      "Quest02",
+      "Python Quest03",
+      "My Imdb Api",
+      "My Roman Numerals Converter",
+      "My Levenshtein",
+      "Quest01",
+      "Python Quest05",
+      "Python Quest04"
+    ],
+    "exercises_completed": "59",
+    "points": "1470",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "78%",
+      "Season 01 Arc 01": "27%"
+    },
+    "name": "gimbutis_a"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/morgan_r/vrac/profile_picture_morgan_r_3018_profile_picture_2021_02_26_12_52.jpg",
+    "last_login": "October  7, 2025  2:10pm",
+    "ongoing_projects": [
       "My Blockchain",
-      "Js Quest01",
-      "Js Quest05",
-      "Js Quest02",
+      "My Tar"
+    ],
+    "completed_projects": [
+      "My Moving Box Realtime",
+      "My Mastermind",
+      "Quest04",
       "Quest09",
+      "My Printf",
       "My Ngram",
       "My Levenshtein",
-      "Quest05",
-      "My Bouncing Box",
-      "Js Quest03",
-      "Quest05",
-      "Quest06",
-      "Quest05",
-      "My Readline",
-      "My Square",
-      "Quest07",
-      "Quest00",
-      "Js Quest06",
-      "Quest05",
-      "Quest02",
-      "My Christmas Tree",
-      "My Moving Box Realtime",
-      "Quest03",
-      "My Css Is Easy I",
-      "Quest04",
-      "My Printf",
-      "My Tar",
-      "Quest01",
       "My Ls",
-      "Quest09",
-      "Js Quest07",
-      "Js Quest04",
+      "My Readline",
+      "Js Quest05",
+      "Quest07",
+      "My Css Is Easy I",
+      "Quest01",
+      "Quest01",
+      "Quest01",
+      "My First Backend",
+      "Quest06",
+      "Js Quest01",
+      "Quest03",
+      "My Bouncing Box",
+      "My Square",
+      "My Christmas Tree",
+      "Js Quest02",
       "Quest02",
+      "Js Quest07",
+      "Quest00",
+      "My Spaceship",
+      "Quest03",
+      "My Cat",
       "Quest08",
-      "My Mastermind"
+      "Quest00",
+      "Quest05",
+      "Js Quest03",
+      "Js Quest04",
+      "Js Quest06"
     ],
-    "exercises_completed": "123",
-    "points": "466",
+    "exercises_completed": "117",
+    "points": "3175",
+    "season_progress": {
+      "Season 01 Arc 01": "100%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 02": "64%"
+    },
+    "name": "morgan_r"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVymc3w8PCneQbOAAAAoklEQVR4nO3auw5AQBAFUI+C0h+LP1ZqPApGJxFBxJ5bTnKy0+7uLeYL6YvsSiiKoigqVdXlR2k+siFFURRFURRFURRF3aLiFXl44SyKoiiKoiiKoiiKWhPfr/UZ1W5X1ykG5V6Jem5DiqIoiqIoiqIoKnEVXeJ9OuoSUxRFURRFURRFUb9UusQURVEURVEURVHUx1V0iecYVLrEFEVRVOpqAW6obwVaZ/bdAAAAAElFTkSuQmCC",
+    "last_login": "February 19, 2026 12:24pm",
+    "ongoing_projects": [
+      "Quest04"
+    ],
+    "completed_projects": [
+      "My Levenshtein",
+      "Quest03",
+      "Quest02",
+      "Quest01",
+      "Quest01",
+      "My Roman Numerals Converter",
+      "Python Quest04",
+      "Python Quest06",
+      "My Imdb Api",
+      "Python Quest03",
+      "Quest00",
+      "Python Quest03",
+      "Python Quest05",
+      "My First Scraper",
+      "My Cat",
+      "Python Quest01",
+      "Python Quest02",
+      "Quest01"
+    ],
+    "exercises_completed": "70",
+    "points": "1940",
     "season_progress": {
       "Onboarding": "100%",
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "100%",
-      "Season 02 Software Engineer": "23%"
+      "Preseason Web": "31%",
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "34%"
     },
-    "name": "doynov_v"
+    "name": "moretti_c"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVymc3w8PCneQbOAAAAyklEQVR4nO3aSwrCQAwA0LYILj1CvYkerUfTm9gb1KUgVDcpFBmRMvXXl2XIm0mX06TqJ0RXFVOCoiiKoham2vL12H+kQ4qiKIqiKIqiKIrKonbJ38mnL+mQoiiKoiiKoiiK+j91jGlrJC6R2D6qOl6qTfL0TZQccnVIURRFURRFURRFLVwNu8RNsu78ZJd4mMNGYm0OS1EURVEURVEURb1L9fFiXc1/F0VRFEVRFEVRFEXNrurRovA9ykhco25c8iPfRVEURVEZ1A2nbJYFQt0WMQAAAABJRU5ErkJggg==",
+    "last_login": "January  8, 2026  8:11pm",
+    "ongoing_projects": [
+      "My Nba Game Analysis",
+      "My Ls",
+      "My Readline"
+    ],
+    "completed_projects": [
+      "Quest03",
+      "Quest07",
+      "My Select Query",
+      "Quest03",
+      "Quest02",
+      "Python Quest03",
+      "Python Quest02",
+      "Quest03",
+      "My Roman Numerals Converter",
+      "Quest05",
+      "Quest01",
+      "Quest03",
+      "My Imdb Api",
+      "Quest01",
+      "Quest07",
+      "Quest07",
+      "Python Quest06",
+      "Quest07",
+      "Python Quest01",
+      "Python Quest05",
+      "My First Scraper",
+      "Python Quest01",
+      "My Printf",
+      "Quest08",
+      "Python Quest01",
+      "My Christmas Tree",
+      "Python Quest04",
+      "Quest07",
+      "Quest02",
+      "Python Quest02",
+      "My Cat",
+      "Quest07",
+      "My Ngram",
+      "My Square",
+      "Quest00",
+      "My Mastermind",
+      "Quest07",
+      "My First Scraper",
+      "Quest04",
+      "Quest09",
+      "Python Quest05",
+      "Quest06",
+      "My Levenshtein",
+      "Quest03"
+    ],
+    "exercises_completed": "89",
+    "points": "290",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "42%",
+      "Season 02 Data Science": "21%"
+    },
+    "name": "rietveld_w"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXEbKjw8PDnxi66AAAAvElEQVR4nO3bsQ2DMBAFUEJDmREYBUZjNEYhGyRdOijgLFE4igCJoLxfnu5Jdom/KMcNeZbFllAURVHUn6nHbUmb3VuvXOReFEVRFEVRFEVRFDWrOh6N++zeeuUi96IoiqIoiqIoiqJ+WaWS9Yu0p5yQoiiKoiiKoiiKovaoVLJ2MY7BOwZ3PSxFURRFURRFURR1rEo9bJfde33oYZv4Uo1BFYPhqBNSFEVRFEVRFEVR1B7lf1iKoiiKymYCFo2NBT3PtJwAAAAASUVORK5CYII=",
@@ -3500,52 +3729,6 @@
       "Season 01 Arc 02": "27%"
     },
     "name": "kaheel_h"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXJulTw8PCRXR6CAAAA2klEQVR4nO3bsQ2CUBAGYFF73QA30c3EzXQT2UB7FSk4EyRYADEo35WX/4OjvJfHvOhQl/msS1EURVHUVNUhaav1SCakKIqiKIqiKIqiJq7y2FSz1tw1Irvmu7bV4fEjGos4Tj4PNSFFURRFURRFURRFvalTtai+uvdYXTdNlcammrU+fRWR41ATUhRFURRFURRFUVQftW//rWckE1IURVEURVEURVF/o/LaReGyimgsI5d/uEv8hQkpiqIoiqIoiqIoqo9KaxeFy0qicYtcPfIj30VRFEVRA6gnZzWYBa0GVqQAAAAASUVORK5CYII=",
-    "last_login": "January 26, 2026  2:47pm",
-    "ongoing_projects": [
-      "My Nba Game Analysis",
-      "My Mr Clean",
-      "Python Quest04"
-    ],
-    "completed_projects": [
-      "Python Quest05",
-      "My First Scraper",
-      "Python Quest06",
-      "My Mastermind",
-      "Python Quest01",
-      "My Imdb Api",
-      "Python Quest04",
-      "Python Quest03",
-      "My Square",
-      "Quest00",
-      "Quest04",
-      "My Levenshtein",
-      "Quest01",
-      "Python Quest05",
-      "My Cat",
-      "My Select Query",
-      "Quest00",
-      "Python Quest02",
-      "My Printf",
-      "Quest02",
-      "My Ngram",
-      "Python Quest01",
-      "Quest05",
-      "Quest03",
-      "My Roman Numerals Converter"
-    ],
-    "exercises_completed": "74",
-    "points": "3110",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "92%",
-      "Season 01 Arc 01": "95%",
-      "Season 01 Arc 02": "16%",
-      "Season 02 Data Science": "18%"
-    },
-    "name": "van-den-_m"
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/pakhaliu_y/vrac/profile_picture_pakhaliu_y_10569_profile_picture_2022_09_26_18_50.jpeg",
@@ -3740,34 +3923,12 @@
     "name": "coomber_e"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAq0lEQVR4nO3csQ3CMBAFUJwMQjaB0cMmsEEGQIQmV7iwkIwRtvR+ad3T+RpLbm7aK7JNp5pQFEVRFEVRFEVRFEVRFEVRXapHOnIt1uUlg8xFURRFURRFURRFURRFURRFURRFURT1d3VLpSyd3JCiKIqiKIqiKIqivlGXYxHFKw7mWE1xb96LoiiKoiiKoiiKolqoFF/X5+97URRFfVDneJLWYl1eMshc1DDqDVOcZwWtlP0GAAAAAElFTkSuQmCC",
-    "last_login": "October 22, 2025  7:10pm",
-    "ongoing_projects": [
-      "Python Quest04",
-      "Quest00"
-    ],
-    "completed_projects": [
-      "Python Quest02",
-      "Python Quest02",
-      "Python Quest03",
-      "Python Quest01",
-      "Quest00"
-    ],
-    "exercises_completed": "23",
-    "points": "455",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "26%"
-    },
-    "name": "musa_s"
-  },
-  {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAyUlEQVR4nO3cuw3CMBQFUBIhUTKC2QRGy2hhE9gAOhoUGr9IkQiCfIqE88qne2S79EcumwF1KzdDiqIoiqL+TF2LXKfcbaKxjVw3spB1URRFURRFURRFUStW57xRbbvP2LoevhkrTpEf882QoiiKoiiKoiiKoiiKoiiKoiiKoihqxSrFtWvVm9tHpB45FkVRFEVRFEVRFEVRFEVRFEVRFEVR1LJU+2FT1Zu7f/jT6Ri3rdHYReMy1QwpiqJ+VanzEORtJW9FqBnVC2eifQW6srZpAAAAAElFTkSuQmCC",
-    "last_login": "February  9, 2026  8:50pm",
+    "last_login": "February 23, 2026  7:16pm",
     "ongoing_projects": [
       "My Christmas Tree",
       "My Ls",
-      "Quest08"
+      "Quest09"
     ],
     "completed_projects": [
       "Js Quest02",
@@ -3792,19 +3953,20 @@
       "Quest06",
       "Quest04",
       "My Bouncing Box",
+      "Quest08",
       "Js Quest06",
       "My Css Is Easy I",
       "My Spaceship",
       "Quest05",
       "My Levenshtein"
     ],
-    "exercises_completed": "102",
-    "points": "530",
+    "exercises_completed": "104",
+    "points": "640",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Web": "100%",
       "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "23%"
+      "Season 01 Arc 02": "27%"
     },
     "name": "ilenloa_s"
   },
@@ -3825,126 +3987,8 @@
     "name": "tavares_c"
   },
   {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/morgan_r/vrac/profile_picture_morgan_r_3018_profile_picture_2021_02_26_12_52.jpg",
-    "last_login": "October  7, 2025  2:10pm",
-    "ongoing_projects": [
-      "My Blockchain",
-      "My Tar"
-    ],
-    "completed_projects": [
-      "My Moving Box Realtime",
-      "My Mastermind",
-      "Quest04",
-      "Quest09",
-      "My Printf",
-      "My Ngram",
-      "My Levenshtein",
-      "My Ls",
-      "My Readline",
-      "Js Quest05",
-      "Quest07",
-      "My Css Is Easy I",
-      "Quest01",
-      "Quest01",
-      "Quest01",
-      "My First Backend",
-      "Quest06",
-      "Js Quest01",
-      "Quest03",
-      "My Bouncing Box",
-      "My Square",
-      "My Christmas Tree",
-      "Js Quest02",
-      "Quest02",
-      "Js Quest07",
-      "Quest00",
-      "My Spaceship",
-      "Quest03",
-      "My Cat",
-      "Quest08",
-      "Quest00",
-      "Quest05",
-      "Js Quest03",
-      "Js Quest04",
-      "Js Quest06"
-    ],
-    "exercises_completed": "117",
-    "points": "3175",
-    "season_progress": {
-      "Season 01 Arc 01": "100%",
-      "Preseason Web": "100%",
-      "Season 01 Arc 02": "64%"
-    },
-    "name": "morgan_r"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVymc3w8PCneQbOAAAAyklEQVR4nO3aSwrCQAwA0LYILj1CvYkerUfTm9gb1KUgVDcpFBmRMvXXl2XIm0mX06TqJ0RXFVOCoiiKoham2vL12H+kQ4qiKIqiKIqiKIrKonbJ38mnL+mQoiiKoiiKoiiK+j91jGlrJC6R2D6qOl6qTfL0TZQccnVIURRFURRFURRFLVwNu8RNsu78ZJd4mMNGYm0OS1EURVEURVEURb1L9fFiXc1/F0VRFEVRFEVRFEXNrurRovA9ykhco25c8iPfRVEURVEZ1A2nbJYFQt0WMQAAAABJRU5ErkJggg==",
-    "last_login": "January  8, 2026  8:11pm",
-    "ongoing_projects": [
-      "My Nba Game Analysis",
-      "My Ls",
-      "My Readline"
-    ],
-    "completed_projects": [
-      "Quest03",
-      "Quest07",
-      "My Select Query",
-      "Quest03",
-      "Quest02",
-      "Python Quest03",
-      "Python Quest02",
-      "Quest03",
-      "My Roman Numerals Converter",
-      "Quest05",
-      "Quest01",
-      "Quest03",
-      "My Imdb Api",
-      "Quest01",
-      "Quest07",
-      "Quest07",
-      "Python Quest06",
-      "Quest07",
-      "Python Quest01",
-      "Python Quest05",
-      "My First Scraper",
-      "Python Quest01",
-      "My Printf",
-      "Quest08",
-      "Python Quest01",
-      "My Christmas Tree",
-      "Python Quest04",
-      "Quest07",
-      "Quest02",
-      "Python Quest02",
-      "My Cat",
-      "Quest07",
-      "My Ngram",
-      "My Square",
-      "Quest00",
-      "My Mastermind",
-      "Quest07",
-      "My First Scraper",
-      "Quest04",
-      "Quest09",
-      "Python Quest05",
-      "Quest06",
-      "My Levenshtein",
-      "Quest03"
-    ],
-    "exercises_completed": "89",
-    "points": "290",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "42%",
-      "Season 02 Data Science": "21%"
-    },
-    "name": "rietveld_w"
-  },
-  {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/tokoly_t/vrac/profile_picture_tokoly_t_16481_profile_picture_2025_09_18_18_50.png",
-    "last_login": "February 22, 2026  6:16pm",
+    "last_login": "February 23, 2026  8:36pm",
     "ongoing_projects": [
       "Quest06"
     ],
@@ -3974,13 +4018,13 @@
       "Js Quest03",
       "Js Quest05"
     ],
-    "exercises_completed": "98",
-    "points": "3540",
+    "exercises_completed": "99",
+    "points": "3575",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Web": "100%",
       "Season 01 Arc 01": "100%",
-      "Season 01 Arc 02": "16%"
+      "Season 01 Arc 02": "18%"
     },
     "name": "tokoly_t"
   },
@@ -4014,363 +4058,6 @@
       "Season 01 Arc 01": "19%"
     },
     "name": "pociute_k"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVymc3w8PCneQbOAAAAoklEQVR4nO3auw5AQBAFUI+C0h+LP1ZqPApGJxFBxJ5bTnKy0+7uLeYL6YvsSiiKoigqVdXlR2k+siFFURRFURRFURRF3aLiFXl44SyKoiiKoiiKoiiKWhPfr/UZ1W5X1ykG5V6Jem5DiqIoiqIoiqIoKnEVXeJ9OuoSUxRFURRFURRFUb9UusQURVEURVEURVHUx1V0iecYVLrEFEVRVOpqAW6obwVaZ/bdAAAAAElFTkSuQmCC",
-    "last_login": "February 19, 2026 12:24pm",
-    "ongoing_projects": [
-      "Quest04"
-    ],
-    "completed_projects": [
-      "My Levenshtein",
-      "Quest03",
-      "Quest02",
-      "Quest01",
-      "Quest01",
-      "My Roman Numerals Converter",
-      "Python Quest04",
-      "Python Quest06",
-      "My Imdb Api",
-      "Python Quest03",
-      "Quest00",
-      "Python Quest03",
-      "Python Quest05",
-      "My First Scraper",
-      "My Cat",
-      "Python Quest01",
-      "Python Quest02",
-      "Quest01"
-    ],
-    "exercises_completed": "70",
-    "points": "1940",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Web": "31%",
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "34%"
-    },
-    "name": "moretti_c"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXEbKjw8PDnxi66AAAA2ElEQVR4nO3cQQrCQAwAQC2CV3+gP9Gn6c/0J+0P9OZF6mVTKLWidaVYJ8eQaXaPKWGLekCci9mQoCiKoqg/U9U8xS5l60gsoq5d8iP3oiiKoiiKoiiKoiasTmlQbbK3GF03r/SKv8jX752QoiiKoiiKoiiKoj5R25hdI7GMRJm9F0VRFEVRFEVRFEW1o7tL/ECtY1I99n69XTL+vSiKoiiKoiiKoqjpqEPvLvEqey+KoiiKoiiKoiiKGqCaB5v2vXWXJ286NbvEnShznZCiKOpdZVeEGlndAfM4mgXFWoAIAAAAAElFTkSuQmCC",
-    "last_login": "December  9, 2025  5:14pm",
-    "ongoing_projects": [
-      "Quest06"
-    ],
-    "completed_projects": [
-      "Python Quest04",
-      "My Imdb Api",
-      "Quest05",
-      "My Roman Numerals Converter",
-      "My Levenshtein",
-      "Python Quest02",
-      "Quest00",
-      "My Cat",
-      "My Printf",
-      "Python Quest03",
-      "Python Quest01",
-      "My Square",
-      "Python Quest06",
-      "Quest02",
-      "Quest03",
-      "My Mastermind",
-      "My First Scraper",
-      "Quest04",
-      "Quest01",
-      "My Ngram",
-      "Python Quest05"
-    ],
-    "exercises_completed": "74",
-    "points": "1865",
-    "season_progress": {
-      "Onboarding": "3%",
-      "Preseason Data": "92%",
-      "Season 01 Arc 01": "95%",
-      "Season 01 Arc 02": "16%"
-    },
-    "name": "martine_fe"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXHc9Hw8PCV1bNRAAAAxUlEQVR4nO3csQ3CMBAFUEhDyQhmE9gMRoNNyAYpoYICXeEkNJZRiPx++Z0nO218SvcqyNBtSkJRFEVRjal+O04sPycrp0VOSFEURVEURVEURVFV1DG+Hkexi+JefS+KoiiKoiiKoiiK+uQ2uXaNHP7khBRFURRFURRFURRVoFLctl6ijuIRxT6a6yInpCiKoiiKoiiKoqiROn+dJR6q70VRFEVRFEVRFEU1rvrsh02zyR9ZyXtRFNWyStkgyGySWRHqh+oN5+GMBTHkS0MAAAAASUVORK5CYII=",
-    "last_login": "February 11, 2026  3:08pm",
-    "ongoing_projects": [
-      "Quest04"
-    ],
-    "completed_projects": [
-      "My Imdb Api",
-      "Python Quest05",
-      "My Roman Numerals Converter",
-      "Python Quest01",
-      "Python Quest06",
-      "Python Quest03",
-      "My Levenshtein",
-      "Quest03",
-      "My Cat",
-      "Python Quest04",
-      "Quest02",
-      "Quest01",
-      "Quest00",
-      "My First Scraper",
-      "Python Quest02"
-    ],
-    "exercises_completed": "63",
-    "points": "1470",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "92%",
-      "Season 01 Arc 01": "32%"
-    },
-    "name": "milvydas_t"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXJulTw8PCRXR6CAAAAvElEQVR4nO3ZQQ6CMBAFUIGNt8Cb4NH1JnoDliwUWciYaGJoCA0hvL9s+jLtpsl0yteMtOVhTiiKoihqZ+pepOe8ygkpiqIoiqIoiqIoahHVjJ/HfSxU8Z18W7wWRVEURVEURVEURb1zHYetn9VnjF9PKbWide3ynZCiKIqiKIqiKIqifhKt6zFFmcNSFEVRFEVRFEVRFEVRFEVRFEVRFEXlUUWMXx/5a1EURU2oOp6ky99931s2ci9qM2oAtP2BBcwIwtQAAAAASUVORK5CYII=",
-    "last_login": "February 20, 2026 10:08am",
-    "ongoing_projects": [
-      "Quest04"
-    ],
-    "completed_projects": [
-      "My Square",
-      "Quest01",
-      "Quest00",
-      "Python Quest04",
-      "Python Quest03",
-      "Python Quest06",
-      "Python Quest06",
-      "My Roman Numerals Converter",
-      "Python Quest04",
-      "Quest02",
-      "Python Quest05",
-      "My Imdb Api",
-      "Python Quest01",
-      "Python Quest02",
-      "My Levenshtein",
-      "Quest00",
-      "Quest03",
-      "Python Quest06",
-      "My Cat",
-      "My First Scraper"
-    ],
-    "exercises_completed": "70",
-    "points": "4865",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "36%"
-    },
-    "name": "miskinyt_d"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVHwsXw8PB5uUblAAAAs0lEQVR4nO3cvQ3CQAwGUBLYAzYJo4dNYAMGyF9zjpQiRU4H0kXP5Sc/WS7duJ0z6ttecoqiKIqiKIqiKIqiKIqiKIqqQ81NqtvvZ1EURVEURVEURVHUAfWJk/W527dtqWQviqIoiqIoiqIo6sTqlQ7VNR3jdH0Un0VRFEVRFEVRFEVR/1ddekQxRXCN1xTv4rMoiqIoiqIoiqIoKkPd41LtU9pEMETftqWSvSiKoiiqgFoAkQxpBVS2B4QAAAAASUVORK5CYII=",
-    "last_login": "February  1, 2026  5:43pm",
-    "ongoing_projects": [
-      "My Mr Clean",
-      "My Open The Iris"
-    ],
-    "completed_projects": [
-      "Quest00",
-      "Quest03",
-      "Python Quest01",
-      "My Imdb Api",
-      "My Square",
-      "Python Quest03",
-      "Python Quest02",
-      "Quest01",
-      "Ds Quest01",
-      "Python Quest02",
-      "Ds Quest03",
-      "Ds Quest00",
-      "My Mastermind",
-      "My Select Query",
-      "Quest00",
-      "My Allocine",
-      "Python Quest04",
-      "My Roman Numerals Converter",
-      "Quest04",
-      "Python Quest06",
-      "Ds Quest02",
-      "Python Quest03",
-      "Quest00",
-      "Python Quest05",
-      "Quest02",
-      "Ds Quest04",
-      "Python Quest03",
-      "My Levenshtein",
-      "My Ngram",
-      "Quest05",
-      "My Nba Game Analysis",
-      "My Cat",
-      "My First Scraper",
-      "Python Quest01",
-      "My Printf",
-      "My Ds Babel"
-    ],
-    "exercises_completed": "119",
-    "points": "2780",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 02 Data Science": "40%"
-    },
-    "name": "pashko_y"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAAt0lEQVR4nO3csQ2DMBAFUEJFlxFglGxGRktGyQa0VEmTKxxwgyILw/uldc/2lbZkt+8NmdpmSyiKoijqZOp1+eaWrUtLKumLoiiKoiiKoiiKOrB6xkk1BuYYGJaqj0vje3b2a5Q8/rVDiqIoiqIoiqIoivpJHF27AmtRFEVRFEVRFEVRVDE15p/17GSHFEVRFEVRFEVRFEVRFEVRFEVRFEVRhZU/nSiKOp7qkwf5q0lLKumLqkZ9AIyOfAW7IiHcAAAAAElFTkSuQmCC",
-    "last_login": "January 20, 2026  6:55am",
-    "ongoing_projects": [],
-    "completed_projects": [
-      "Js Quest04",
-      "Js Quest05",
-      "My Moving Box Realtime",
-      "My Spaceship",
-      "Quest01",
-      "Quest02",
-      "My Bouncing Box",
-      "Js Quest07",
-      "Js Quest01",
-      "Quest03",
-      "My Css Is Easy I",
-      "My Levenshtein",
-      "My First Backend",
-      "Js Quest02",
-      "Quest00",
-      "Js Quest06",
-      "Js Quest03"
-    ],
-    "exercises_completed": "80",
-    "points": "555",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "27%"
-    },
-    "name": "baciulis_t"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/barman_h/vrac/profile_picture_barman_h_15866_profile_picture_2024_09_24_23_59.jpeg",
-    "last_login": "February 22, 2026  8:03pm",
-    "ongoing_projects": [
-      "My Ls",
-      "My Tar"
-    ],
-    "completed_projects": [
-      "My Mr Clean",
-      "Quest01",
-      "Ds Quest04",
-      "Python Quest06",
-      "Ds Quest00",
-      "My Mastermind",
-      "My Christmas Tree",
-      "Quest07",
-      "My Tar",
-      "Quest05",
-      "Python Quest05",
-      "My Select Query",
-      "My Open The Iris",
-      "Python Quest01",
-      "My Allocine",
-      "Quest04",
-      "My First Scraper",
-      "Quest08",
-      "My Levenshtein",
-      "My Ds Babel",
-      "Python Quest01",
-      "Python Quest02",
-      "Ruby Quest03",
-      "Ds Quest03",
-      "Python Quest05",
-      "My Ngram",
-      "Quest02",
-      "My Imdb Api",
-      "Ruby Quest02",
-      "Python Quest04",
-      "My First Scraper Ds",
-      "Ds Quest02",
-      "My Printf",
-      "Ruby Quest01",
-      "Quest09",
-      "Ruby Quest05",
-      "Ruby Quest04",
-      "Quest00",
-      "My Readline",
-      "My Tu Verras",
-      "Quest03",
-      "Python Quest03",
-      "My Linear Regression",
-      "My Roman Numerals Converter",
-      "Quest06",
-      "My Nba Game Analysis",
-      "My Ngram",
-      "Ds Quest01",
-      "My Convex Optimization",
-      "My Cat",
-      "My Square"
-    ],
-    "exercises_completed": "164",
-    "points": "320",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Data": "100%",
-      "Season 01 Arc 01": "100%",
-      "Season 02 Data Science": "84%",
-      "Season 01 Arc 02": "71%",
-      "Season 02 Fullstack": "43%"
-    },
-    "name": "barman_h"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/kalinina_a/vrac/profile_picture_kalinina_a_6327_profile_picture_2021_11_23_12_57.jpg",
-    "last_login": "November 25, 2024  6:04pm",
-    "ongoing_projects": [
-      "My Ls"
-    ],
-    "completed_projects": [
-      "My Ngram",
-      "My Square",
-      "Js Quest03",
-      "Quest05",
-      "Quest02",
-      "My Christmas Tree",
-      "My Bouncing Box",
-      "Quest03",
-      "My Css Is Easy I",
-      "Js Quest07",
-      "Quest06",
-      "Quest07",
-      "Quest00",
-      "My Moving Box Realtime",
-      "Js Quest04",
-      "Js Quest02",
-      "Quest00",
-      "My First Backend",
-      "My Readline",
-      "Quest04",
-      "Quest00",
-      "Js Quest06",
-      "Js Quest05",
-      "My Levenshtein",
-      "My Spaceship",
-      "Quest05",
-      "My Cat",
-      "My Mastermind",
-      "Js Quest02",
-      "Quest00",
-      "Js Quest03",
-      "Quest09",
-      "Js Quest07",
-      "Js Quest04",
-      "Quest01",
-      "Js Quest01",
-      "Quest08"
-    ],
-    "exercises_completed": "116",
-    "points": "1855",
-    "season_progress": {
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "81%",
-      "Season 01 Arc 02": "51%"
-    },
-    "name": "kalinina_a"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVxQsXw8PAafBLHAAAAuklEQVR4nO3cPQ6CQBAGUMDGW8hN8Oh4E72BpQV/BQyFJMTgKia+r5zkZabdnc0W/Ybci2xLKIqiKOrP1C1/PeddJqQoiqIoiqIoiqKoJKqaLo+7KBziOvmavBdFURRFURRFURRFjblMy9a52sb6tUzei6IoiqIoiqIoiqJ2VLF+fXyhF0VRFEVRFEVRFEWNifXrcUWdnj+iWL4lnlMnn5CiKIqiKIqiKIqi3lB5nFibz/eiKIqiqN9WA+gzgQUgmUj9AAAAAElFTkSuQmCC",
@@ -4421,7 +4108,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAAwklEQVR4nO3cvQ2DMBAGUEKTNhtkFLIZYTNGSTYIJVWobInCiJ9IGPKuPN2TPrc+2eV3RX3KYk1RFEVR1J+p92V+PXZJSFEURVEURVEURVFb1H3BvXK7S0KKoiiKoiiKoijqxKpJrl9vmSSkKIqiKIqiKIqiqC2qTj/rySQhRVEURVEURVEUdT4V97Ch0dvDUhRFURRFURRFUVmp+KfTMznXTfzpVIW1a2hcQ+P1q4QURVFLVXyz3ybnxiMHORd1GDUA3QWnBXj8xHgAAAAASUVORK5CYII=",
-    "last_login": "February 22, 2026  4:46pm",
+    "last_login": "February 23, 2026  8:20pm",
     "ongoing_projects": [
       "My Nba Game Analysis"
     ],
@@ -4454,7 +4141,7 @@
       "My Mastermind"
     ],
     "exercises_completed": "83",
-    "points": "875",
+    "points": "890",
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Data": "100%",
@@ -4525,25 +4212,8 @@
     "name": "kirilov_n"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXHc9Hw8PCV1bNRAAAAnElEQVR4nO3csQ2AIBAFUCHu4SqO7ipu4AAm2EhBgYmGSIzv6v8IV3NHTA9qi8OToiiKoqifqTWcNVdzZeQjfVEURVEURVEURVEURVEURVEURVEURVEURVEURVEURVEUdVOlPDk8XqgpL+8s1dPLSP++KIqiKIqiKIqiKIqiKIqiKIqiKIqiXlKN/nQK+dV1b35DiqKou8qsCNVZHXPyagUNGkFNAAAAAElFTkSuQmCC",
-    "last_login": "October  8, 2025  4:02am",
-    "ongoing_projects": [],
-    "completed_projects": [
-      "Python Quest01",
-      "Python Quest02",
-      "Quest00"
-    ],
-    "exercises_completed": "17",
-    "points": "315",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Data": "21%"
-    },
-    "name": "elias-ri_f"
-  },
-  {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/zaki-_z/vrac/profile_picture_zaki-_z_15293_profile_picture_2024_03_27_13_59.png",
-    "last_login": "February  4, 2026  7:43pm",
+    "last_login": "February 23, 2026 11:29pm",
     "ongoing_projects": [
       "My Mobapp Studio",
       "My Printf",
@@ -4558,8 +4228,8 @@
       "My Nba Game Analysis",
       "Python Quest05",
       "My Imdb Api",
-      "My Open The Iris",
       "Python Quest01",
+      "My Open The Iris",
       "My Square",
       "My Convex Optimization",
       "Quest03",
@@ -4591,7 +4261,7 @@
       "My Ngram"
     ],
     "exercises_completed": "139",
-    "points": "3288",
+    "points": "3323",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -4601,46 +4271,6 @@
       "Season 03 Data Science": "0%"
     },
     "name": "zaki-_z"
-  },
-  {
-    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/jose-san_f/vrac/profile_picture_jose-san_f_16074_profile_picture_2025_03_25_17_58.png",
-    "last_login": "February 17, 2026  8:54pm",
-    "ongoing_projects": [
-      "My Mastermind",
-      "My Printf"
-    ],
-    "completed_projects": [
-      "Js Quest03",
-      "My Spaceship",
-      "Js Quest01",
-      "My Bouncing Box",
-      "Js Quest04",
-      "Js Quest05",
-      "My First Backend",
-      "My Levenshtein",
-      "My Moving Box Realtime",
-      "Js Quest07",
-      "Quest02",
-      "Js Quest02",
-      "My Css Is Easy I",
-      "Quest05",
-      "Quest03",
-      "Js Quest06",
-      "Quest04",
-      "My Cat",
-      "Quest01",
-      "Quest00",
-      "My Square",
-      "My Ngram"
-    ],
-    "exercises_completed": "92",
-    "points": "1860",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "60%"
-    },
-    "name": "jose-san_f"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVLt3Lw8PC/7J8CAAAAxElEQVR4nO3bwQ2CQBAFUCEWYAdbipSmnVmK2wHeSZDLmhCyRkCCwvvHzbxkzjszZTshdXmYEoqiKIramYrF56lW6ZCiKIqiKIqiKIqi5qgw4l/5tkqHFEVRFEVRFEVR1PZU7A1Zu7Tp4ZjqojksRVEURVEURVEU9b8q9IasXYr00KS6YA5LURRFURRFURRFLaSu2TPY0490SFEURVEURVEURe1cvRaFL9m6x5td4nP2DPb+rQ4piqLGqsGuyDB2Ragl1ROmwrIFH/YhDAAAAABJRU5ErkJggg==",
@@ -4775,7 +4405,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEW6glLw8PCo0c12AAAAxklEQVR4nO3bQQqCQBQG4JSgbTfoKHW0ullHaW5QyyCwRf0LKYXEkvD7l4/3+ZzlOE7dDMi5XgwJRVEURc1VHapnUrimsB59FkVRFEVRFEVRFEUNUCU71X1n3yUtu9dZ23w9TmGVwmmsN6QoiqIoiqIoiqIoiqIoiqIoiqIoivpz1eTUddmjNjltPXY+vd0y/booiqIoiqIoiqIo6pEqO9bb92dRFEVRFEVRFEVRM1Wlddn1bUrPfdiPZlEURf1G+VeEmljdAT/PfQVGL4EQAAAAAElFTkSuQmCC",
-    "last_login": "February 19, 2026  8:11pm",
+    "last_login": "February 23, 2026  6:35pm",
     "ongoing_projects": [
       "My Bc",
       "My Mastermind"
@@ -4826,7 +4456,7 @@
       "Js Quest02"
     ],
     "exercises_completed": "134",
-    "points": "43",
+    "points": "78",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Web": "100%",
@@ -4838,7 +4468,7 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/douglas-_r/vrac/profile_picture_douglas-_r_16491_profile_picture_2025_09_19_08_50.JPG",
-    "last_login": "February 20, 2026 11:58am",
+    "last_login": "February 23, 2026  1:50pm",
     "ongoing_projects": [
       "My Imdb Api",
       "My Square",
@@ -4866,7 +4496,7 @@
       "Python Quest03"
     ],
     "exercises_completed": "67",
-    "points": "3895",
+    "points": "4105",
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Data": "98%",
@@ -4999,13 +4629,14 @@
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/karalevi_k/vrac/profile_picture_karalevi_k_16483_profile_picture_2025_09_18_19_33.jpg",
     "last_login": "February 22, 2026  6:54pm",
     "ongoing_projects": [
-      "My Printf"
+      "Quest06"
     ],
     "completed_projects": [
       "Quest01",
       "Quest00",
       "My Levenshtein",
       "Js Quest05",
+      "My Printf",
       "Js Quest07",
       "Quest02",
       "Quest04",
@@ -5028,11 +4659,12 @@
       "My Bouncing Box"
     ],
     "exercises_completed": "96",
-    "points": "165",
+    "points": "240",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Web": "100%",
-      "Season 01 Arc 01": "82%"
+      "Season 01 Arc 01": "100%",
+      "Season 01 Arc 02": "13%"
     },
     "name": "karalevi_k"
   },
@@ -5500,9 +5132,8 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXEbKjw8PDnxi66AAAAw0lEQVR4nO3aMQ6CQBAFUCEmlB5hPYo3k6PpUbyBJY3BZoeELBVuYoA35c++AOUsvx1XzLs9rRmKoiiKOph6NXluOR0jOMe5+ZGNfBdFURRFURRFURS1Y/XMi+qUfmJ1vZYqxaVxH3EEQwSXSB613pCiKIqiKIqiKIqiflH32FQj6KZKVPVnURRFURRFURRFUQdXRZe4HF1iiqIoiqIoiqIoasMqzYrCi5N0iSmKoiiKoiiKoqi6yn9YiqL2p9yzUX9WX7PjkQUQfNE0AAAAAElFTkSuQmCC",
-    "last_login": "February 20, 2026  9:54am",
+    "last_login": "February 23, 2026 10:48am",
     "ongoing_projects": [
-      "My Readline",
       "My Tar"
     ],
     "completed_projects": [
@@ -5535,17 +5166,89 @@
       "Quest07",
       "My Cat",
       "Js Quest01",
+      "My Readline",
       "My Levenshtein"
     ],
     "exercises_completed": "110",
-    "points": "370",
+    "points": "480",
     "season_progress": {
       "Onboarding": "97%",
       "Preseason Web": "98%",
       "Season 01 Arc 01": "96%",
-      "Season 01 Arc 02": "46%"
+      "Season 01 Arc 02": "61%"
     },
     "name": "vilnoiu_a"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXEbKjw8PDnxi66AAAA2ElEQVR4nO3cQQrCQAwAQC2CV3+gP9Gn6c/0J+0P9OZF6mVTKLWidaVYJ8eQaXaPKWGLekCci9mQoCiKoqg/U9U8xS5l60gsoq5d8iP3oiiKoiiKoiiKoiasTmlQbbK3GF03r/SKv8jX752QoiiKoiiKoiiKoj5R25hdI7GMRJm9F0VRFEVRFEVRFEW1o7tL/ECtY1I99n69XTL+vSiKoiiKoiiKoqjpqEPvLvEqey+KoiiKoiiKoiiKGqCaB5v2vXWXJ286NbvEnShznZCiKOpdZVeEGlndAfM4mgXFWoAIAAAAAElFTkSuQmCC",
+    "last_login": "December  9, 2025  5:14pm",
+    "ongoing_projects": [
+      "Quest06"
+    ],
+    "completed_projects": [
+      "Python Quest04",
+      "My Imdb Api",
+      "Quest05",
+      "My Roman Numerals Converter",
+      "My Levenshtein",
+      "Python Quest02",
+      "Quest00",
+      "My Cat",
+      "My Printf",
+      "Python Quest03",
+      "Python Quest01",
+      "My Square",
+      "Python Quest06",
+      "Quest02",
+      "Quest03",
+      "My Mastermind",
+      "My First Scraper",
+      "Quest04",
+      "Quest01",
+      "My Ngram",
+      "Python Quest05"
+    ],
+    "exercises_completed": "74",
+    "points": "1865",
+    "season_progress": {
+      "Onboarding": "3%",
+      "Preseason Data": "92%",
+      "Season 01 Arc 01": "95%",
+      "Season 01 Arc 02": "16%"
+    },
+    "name": "martine_fe"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVTWdfw8PC9OI99AAAAt0lEQVR4nO3csQ2DMBAFUEJFlxFglGxGRktGyQa0VEmTKxxwgyILw/uldc/2lbZkt+8NmdpmSyiKoijqZOp1+eaWrUtLKumLoiiKoiiKoiiKOrB6xkk1BuYYGJaqj0vje3b2a5Q8/rVDiqIoiqIoiqIoivpJHF27AmtRFEVRFEVRFEVRVDE15p/17GSHFEVRFEVRFEVRFEVRFEVRFEVRFEVRhZU/nSiKOp7qkwf5q0lLKumLqkZ9AIyOfAW7IiHcAAAAAElFTkSuQmCC",
+    "last_login": "January 20, 2026  6:55am",
+    "ongoing_projects": [],
+    "completed_projects": [
+      "Js Quest04",
+      "Js Quest05",
+      "My Moving Box Realtime",
+      "My Spaceship",
+      "Quest01",
+      "Quest02",
+      "My Bouncing Box",
+      "Js Quest07",
+      "Js Quest01",
+      "Quest03",
+      "My Css Is Easy I",
+      "My Levenshtein",
+      "My First Backend",
+      "Js Quest02",
+      "Quest00",
+      "Js Quest06",
+      "Js Quest03"
+    ],
+    "exercises_completed": "80",
+    "points": "555",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "27%"
+    },
+    "name": "baciulis_t"
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVLt3Lw8PC/7J8CAAAAqklEQVR4nO3cMQ6DMAwF0CYLHXuDXoWbod6sV+kNumYqC2agQqgohSHvj7ae7DUekj878s6XPaEoiqKoVtUjTYlCicKt+iyKoiiKoiiKoiiKOl4NcT2OQjefk6vPoiiKoiiKoiiKohpXr7RMtMtXpz9lQ4qiKIqiKIqiKIpaU/FivR4wi6IoiqIoiqIoiqL+re4//FHxPGVDiqIoiqIoiqIoiqIoiqIoaiMjIVB5BX0CO6AAAAAASUVORK5CYII=",
@@ -5781,85 +5484,6 @@
     "name": "caliskan_s"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXEbKjw8PDnxi66AAAA20lEQVR4nO3aPQ6CQBAGUEELO4+AN9GjcTS9id5AOwsVmx0Sgj8JronKm/LLvLCUs7NlM6AO5WRIURRFUdTI1L5ItU5pE8Es+rotP/JfFEVRFEVRFEVR1B+rbRpU2/QSo+uyr6q4NK4jjuAUwSKSTa4TUhRFURRFURRFUSNX7ZK1fth3tIelKIqiKIqiKIqivlPFxDp/ovp72F7Zw1IURVEURVEURVGZ1Zt72FUaVK8RTGN03eU6IUVRFEVRFEVRFEVlVUWMrufPf4uiKOqFqjoPQe5W5a0I9UF1A13ZmgWW17e2AAAAAElFTkSuQmCC",
-    "last_login": "February 19, 2026  6:32pm",
-    "ongoing_projects": [],
-    "completed_projects": [
-      "Js Quest03",
-      "My Moving Box Realtime",
-      "Quest01",
-      "Js Quest04",
-      "Quest00",
-      "Js Quest06",
-      "Js Quest01",
-      "My Mastermind",
-      "My Bouncing Box",
-      "Js Quest05",
-      "Quest05",
-      "My Ngram",
-      "Js Quest07",
-      "My Levenshtein",
-      "My Cat",
-      "My Spaceship",
-      "Quest04",
-      "Quest02",
-      "Quest03",
-      "My Square",
-      "My First Backend",
-      "My Css Is Easy I",
-      "Js Quest02"
-    ],
-    "exercises_completed": "73",
-    "points": "560",
-    "season_progress": {
-      "Onboarding": "97%",
-      "Preseason Web": "100%",
-      "Season 01 Arc 01": "82%"
-    },
-    "name": "pavliuk_v"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXJulTw8PCRXR6CAAAAq0lEQVR4nO3bsQ2DMBAFUEJDmw0YBUYjm2UU2AA6OqiuoLAUOSgx4l15+k9nN67O9ZZRc13lFEVRFEXdVb0eqXoWckKKoiiKoiiKoiiKoiiKoiiKoiiKoqhbqdiEWn8wi6IoiqIoiqIoiqIoiqIoiqIoiqIoqmQ1xa/XIZlbItJ/OYuiKIqiKIqiKIqi/qi62CGORhON8fRZFEVRH6o2XqJ3MneMXORe1GXUDkSWZwWFOMQpAAAAAElFTkSuQmCC",
-    "last_login": "May  9, 2025  4:46pm",
-    "ongoing_projects": [
-      "My Mastermind",
-      "My Ngram"
-    ],
-    "completed_projects": [
-      "My Cat",
-      "My Levenshtein",
-      "Python Quest02",
-      "Python Quest03",
-      "My Roman Numerals Converter",
-      "Quest00",
-      "My Square",
-      "Python Quest02",
-      "My First Scraper",
-      "Quest01",
-      "My First Scraper",
-      "Quest02",
-      "Python Quest05",
-      "My Imdb Api",
-      "Quest05",
-      "Python Quest01",
-      "Python Quest04",
-      "Quest04",
-      "Python Quest02",
-      "Python Quest02",
-      "Python Quest06",
-      "Quest03",
-      "Python Quest01"
-    ],
-    "exercises_completed": "62",
-    "points": "2335",
-    "season_progress": {
-      "Onboarding": "3%",
-      "Preseason Data": "94%",
-      "Season 01 Arc 01": "35%"
-    },
-    "name": "zvirblyt_m"
-  },
-  {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/aksoy_s/vrac/profile_picture_aksoy_s_11774_profile_picture_2022_11_07_10_26.JPG",
     "last_login": "April 21, 2025  9:22am",
     "ongoing_projects": [],
@@ -5942,36 +5566,320 @@
     "name": "aksoy_s"
   },
   {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXEbKjw8PDnxi66AAAAsElEQVR4nO3cvQ3CMBAGUHBDCRuwCpsBm7EKG6RNlRToXGBobEuxlPeV9j35Wv/IaanIlA41oSiKoqidqffxOzE9FzO3TTqkKIqiKIqiKIqiqBZ1jUPjx9+6c5S8GteiKIqiKIqiKIqiqC7qHjvVGDjlJ1Hd16IoiqIoiqIoiqKoT57F0+HIZZAOKYqiKIqiKIqiKKpF5XvY8muKQTqkKIqiKIqiKIqiKIqiKIqifmcF5dJ4BeXCfk4AAAAASUVORK5CYII=",
-    "last_login": "February 20, 2026  9:03pm",
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXHc9Hw8PCV1bNRAAAAxUlEQVR4nO3csQ3CMBAFUEhDyQhmE9gMRoNNyAYpoYICXeEkNJZRiPx++Z0nO218SvcqyNBtSkJRFEVRjal+O04sPycrp0VOSFEURVEURVEURVFV1DG+Hkexi+JefS+KoiiKoiiKoiiK+uQ2uXaNHP7khBRFURRFURRFURRVoFLctl6ijuIRxT6a6yInpCiKoiiKoiiKoqiROn+dJR6q70VRFEVRFEVRFEU1rvrsh02zyR9ZyXtRFNWyStkgyGySWRHqh+oN5+GMBTHkS0MAAAAASUVORK5CYII=",
+    "last_login": "February 11, 2026  3:08pm",
     "ongoing_projects": [
       "Quest04"
     ],
     "completed_projects": [
-      "Quest01",
+      "My Imdb Api",
+      "Python Quest05",
+      "My Roman Numerals Converter",
+      "Python Quest01",
+      "Python Quest06",
       "Python Quest03",
+      "My Levenshtein",
+      "Quest03",
       "My Cat",
+      "Python Quest04",
       "Quest02",
+      "Quest01",
+      "Quest00",
+      "My First Scraper",
+      "Python Quest02"
+    ],
+    "exercises_completed": "63",
+    "points": "1470",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "92%",
+      "Season 01 Arc 01": "32%"
+    },
+    "name": "milvydas_t"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXEbKjw8PDnxi66AAAA20lEQVR4nO3aPQ6CQBAGUEELO4+AN9GjcTS9id5AOwsVmx0Sgj8JronKm/LLvLCUs7NlM6AO5WRIURRFUdTI1L5ItU5pE8Es+rotP/JfFEVRFEVRFEVR1B+rbRpU2/QSo+uyr6q4NK4jjuAUwSKSTa4TUhRFURRFURRFUSNX7ZK1fth3tIelKIqiKIqiKIqivlPFxDp/ovp72F7Zw1IURVEURVEURVGZ1Zt72FUaVK8RTGN03eU6IUVRFEVRFEVRFEVlVUWMrufPf4uiKOqFqjoPQe5W5a0I9UF1A13ZmgWW17e2AAAAAElFTkSuQmCC",
+    "last_login": "February 19, 2026  6:32pm",
+    "ongoing_projects": [],
+    "completed_projects": [
+      "Js Quest03",
+      "My Moving Box Realtime",
+      "Quest01",
+      "Js Quest04",
+      "Quest00",
+      "Js Quest06",
+      "Js Quest01",
+      "My Mastermind",
+      "My Bouncing Box",
+      "Js Quest05",
+      "Quest05",
+      "My Ngram",
+      "Js Quest07",
+      "My Levenshtein",
+      "My Cat",
+      "My Spaceship",
+      "Quest04",
+      "Quest02",
+      "Quest03",
+      "My Square",
+      "My First Backend",
+      "My Css Is Easy I",
+      "Js Quest02"
+    ],
+    "exercises_completed": "73",
+    "points": "560",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "82%"
+    },
+    "name": "pavliuk_v"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXJulTw8PCRXR6CAAAAq0lEQVR4nO3bsQ2DMBAFUEJDmw0YBUYjm2UU2AA6OqiuoLAUOSgx4l15+k9nN67O9ZZRc13lFEVRFEXdVb0eqXoWckKKoiiKoiiKoiiKoiiKoiiKoiiKoqhbqdiEWn8wi6IoiqIoiqIoiqIoiqIoiqIoiqIoqmQ1xa/XIZlbItJ/OYuiKIqiKIqiKIqi/qi62CGORhON8fRZFEVRH6o2XqJ3MneMXORe1GXUDkSWZwWFOMQpAAAAAElFTkSuQmCC",
+    "last_login": "May  9, 2025  4:46pm",
+    "ongoing_projects": [
+      "My Mastermind",
+      "My Ngram"
+    ],
+    "completed_projects": [
+      "My Cat",
+      "My Levenshtein",
+      "Python Quest02",
+      "Python Quest03",
+      "My Roman Numerals Converter",
+      "Quest00",
+      "My Square",
+      "Python Quest02",
+      "My First Scraper",
+      "Quest01",
+      "My First Scraper",
+      "Quest02",
+      "Python Quest05",
+      "My Imdb Api",
+      "Quest05",
+      "Python Quest01",
+      "Python Quest04",
+      "Quest04",
+      "Python Quest02",
+      "Python Quest02",
+      "Python Quest06",
+      "Quest03",
+      "Python Quest01"
+    ],
+    "exercises_completed": "62",
+    "points": "2335",
+    "season_progress": {
+      "Onboarding": "3%",
+      "Preseason Data": "94%",
+      "Season 01 Arc 01": "35%"
+    },
+    "name": "zvirblyt_m"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXJulTw8PCRXR6CAAAAvElEQVR4nO3ZQQ6CMBAFUIGNt8Cb4NH1JnoDliwUWciYaGJoCA0hvL9s+jLtpsl0yteMtOVhTiiKoihqZ+pepOe8ygkpiqIoiqIoiqIoahHVjJ/HfSxU8Z18W7wWRVEURVEURVEURb1zHYetn9VnjF9PKbWide3ynZCiKIqiKIqiKIqifhKt6zFFmcNSFEVRFEVRFEVRFEVRFEVRFEVRFEXlUUWMXx/5a1EURU2oOp6ky99931s2ci9qM2oAtP2BBcwIwtQAAAAASUVORK5CYII=",
+    "last_login": "February 20, 2026 10:08am",
+    "ongoing_projects": [
+      "Quest04"
+    ],
+    "completed_projects": [
+      "My Square",
+      "Quest01",
+      "Quest00",
+      "Python Quest04",
+      "Python Quest03",
+      "Python Quest06",
+      "Python Quest06",
+      "My Roman Numerals Converter",
+      "Python Quest04",
+      "Quest02",
+      "Python Quest05",
+      "My Imdb Api",
       "Python Quest01",
       "Python Quest02",
       "My Levenshtein",
-      "Python Quest06",
-      "Python Quest05",
-      "My Roman Numerals Converter",
-      "My First Scraper",
-      "Quest03",
-      "Python Quest04",
       "Quest00",
-      "My Imdb Api"
+      "Quest03",
+      "Python Quest06",
+      "My Cat",
+      "My First Scraper"
     ],
-    "exercises_completed": "66",
-    "points": "2870",
+    "exercises_completed": "70",
+    "points": "4865",
     "season_progress": {
       "Onboarding": "100%",
-      "Preseason Data": "97%",
-      "Season 01 Arc 01": "34%"
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "36%"
     },
-    "name": "manyage_a"
+    "name": "miskinyt_d"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVHwsXw8PB5uUblAAAAs0lEQVR4nO3cvQ3CQAwGUBLYAzYJo4dNYAMGyF9zjpQiRU4H0kXP5Sc/WS7duJ0z6ttecoqiKIqiKIqiKIqiKIqiKIqqQ81NqtvvZ1EURVEURVEURVHUAfWJk/W527dtqWQviqIoiqIoiqIo6sTqlQ7VNR3jdH0Un0VRFEVRFEVRFEVR/1ddekQxRXCN1xTv4rMoiqIoiqIoiqIoKkPd41LtU9pEMETftqWSvSiKoiiqgFoAkQxpBVS2B4QAAAAASUVORK5CYII=",
+    "last_login": "February  1, 2026  5:43pm",
+    "ongoing_projects": [
+      "My Mr Clean",
+      "My Open The Iris"
+    ],
+    "completed_projects": [
+      "Quest00",
+      "Quest03",
+      "Python Quest01",
+      "My Imdb Api",
+      "My Square",
+      "Python Quest03",
+      "Python Quest02",
+      "Quest01",
+      "Ds Quest01",
+      "Python Quest02",
+      "Ds Quest03",
+      "Ds Quest00",
+      "My Mastermind",
+      "My Select Query",
+      "Quest00",
+      "My Allocine",
+      "Python Quest04",
+      "My Roman Numerals Converter",
+      "Quest04",
+      "Python Quest06",
+      "Ds Quest02",
+      "Python Quest03",
+      "Quest00",
+      "Python Quest05",
+      "Quest02",
+      "Ds Quest04",
+      "Python Quest03",
+      "My Levenshtein",
+      "My Ngram",
+      "Quest05",
+      "My Nba Game Analysis",
+      "My Cat",
+      "My First Scraper",
+      "Python Quest01",
+      "My Printf",
+      "My Ds Babel"
+    ],
+    "exercises_completed": "119",
+    "points": "2780",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 02 Data Science": "40%"
+    },
+    "name": "pashko_y"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/jose-san_f/vrac/profile_picture_jose-san_f_16074_profile_picture_2025_03_25_17_58.png",
+    "last_login": "February 17, 2026  8:54pm",
+    "ongoing_projects": [
+      "My Mastermind",
+      "My Printf"
+    ],
+    "completed_projects": [
+      "Js Quest03",
+      "My Spaceship",
+      "Js Quest01",
+      "My Bouncing Box",
+      "Js Quest04",
+      "Js Quest05",
+      "My First Backend",
+      "My Levenshtein",
+      "My Moving Box Realtime",
+      "Js Quest07",
+      "Quest02",
+      "Js Quest02",
+      "My Css Is Easy I",
+      "Quest05",
+      "Quest03",
+      "Js Quest06",
+      "Quest04",
+      "My Cat",
+      "Quest01",
+      "Quest00",
+      "My Square",
+      "My Ngram"
+    ],
+    "exercises_completed": "92",
+    "points": "1860",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "60%"
+    },
+    "name": "jose-san_f"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/barman_h/vrac/profile_picture_barman_h_15866_profile_picture_2024_09_24_23_59.jpeg",
+    "last_login": "February 23, 2026  5:55pm",
+    "ongoing_projects": [
+      "My Blockchain",
+      "My Ls",
+      "My Tar"
+    ],
+    "completed_projects": [
+      "My Mr Clean",
+      "Quest01",
+      "Ds Quest04",
+      "Python Quest06",
+      "Ds Quest00",
+      "My Mastermind",
+      "My Christmas Tree",
+      "Quest07",
+      "My Tar",
+      "Quest05",
+      "Python Quest05",
+      "My Select Query",
+      "My Open The Iris",
+      "Python Quest01",
+      "My Allocine",
+      "Quest04",
+      "My First Scraper",
+      "Quest08",
+      "My Levenshtein",
+      "My Ds Babel",
+      "Python Quest01",
+      "Python Quest02",
+      "Ruby Quest03",
+      "Ds Quest03",
+      "Python Quest05",
+      "My Ngram",
+      "Quest02",
+      "My Imdb Api",
+      "Ruby Quest02",
+      "Python Quest04",
+      "My First Scraper Ds",
+      "Ds Quest02",
+      "My Printf",
+      "Ruby Quest01",
+      "Quest09",
+      "Ruby Quest05",
+      "Ruby Quest04",
+      "Quest00",
+      "My Readline",
+      "My Tu Verras",
+      "Quest03",
+      "Python Quest03",
+      "My Linear Regression",
+      "My Roman Numerals Converter",
+      "Quest06",
+      "My Nba Game Analysis",
+      "My Ngram",
+      "Ds Quest01",
+      "My Convex Optimization",
+      "My Cat",
+      "My Square"
+    ],
+    "exercises_completed": "164",
+    "points": "555",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Data": "100%",
+      "Season 01 Arc 01": "100%",
+      "Season 02 Data Science": "84%",
+      "Season 01 Arc 02": "71%",
+      "Season 02 Fullstack": "43%"
+    },
+    "name": "barman_h"
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/serdechn_s/vrac/profile_picture_serdechn_s_10443_profile_picture_2022_09_22_17_23.png",
@@ -6036,8 +5944,111 @@
     "name": "mutlaq_a"
   },
   {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXEbKjw8PDnxi66AAAAsElEQVR4nO3cvQ3CMBAGUHBDCRuwCpsBm7EKG6RNlRToXGBobEuxlPeV9j35Wv/IaanIlA41oSiKoqidqffxOzE9FzO3TTqkKIqiKIqiKIqiqBZ1jUPjx9+6c5S8GteiKIqiKIqiKIqiqC7qHjvVGDjlJ1Hd16IoiqIoiqIoiqKoT57F0+HIZZAOKYqiKIqiKIqiKKpF5XvY8muKQTqkKIqiKIqiKIqiKIqiKIqifmcF5dJ4BeXCfk4AAAAASUVORK5CYII=",
+    "last_login": "February 23, 2026 10:17pm",
+    "ongoing_projects": [
+      "Quest04"
+    ],
+    "completed_projects": [
+      "Quest01",
+      "Python Quest03",
+      "My Cat",
+      "Quest02",
+      "Python Quest01",
+      "Python Quest02",
+      "My Levenshtein",
+      "Python Quest06",
+      "Python Quest05",
+      "My Roman Numerals Converter",
+      "My First Scraper",
+      "Quest03",
+      "Python Quest04",
+      "Quest00",
+      "My Imdb Api"
+    ],
+    "exercises_completed": "66",
+    "points": "2885",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Data": "97%",
+      "Season 01 Arc 01": "34%"
+    },
+    "name": "manyage_a"
+  },
+  {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXHc9Hw8PCV1bNRAAAAnElEQVR4nO3csQ2AIBAFUCHu4SqO7ipu4AAm2EhBgYmGSIzv6v8IV3NHTA9qi8OToiiKoqifqTWcNVdzZeQjfVEURVEURVEURVEURVEURVEURVEURVEURVEURVEURVEUdVOlPDk8XqgpL+8s1dPLSP++KIqiKIqiKIqiKIqiKIqiKIqiKIqiXlKN/nQK+dV1b35DiqKou8qsCNVZHXPyagUNGkFNAAAAAElFTkSuQmCC",
+    "last_login": "October  8, 2025  4:02am",
+    "ongoing_projects": [],
+    "completed_projects": [
+      "Python Quest01",
+      "Python Quest02",
+      "Quest00"
+    ],
+    "exercises_completed": "17",
+    "points": "315",
+    "season_progress": {
+      "Onboarding": "97%",
+      "Preseason Data": "21%"
+    },
+    "name": "elias-ri_f"
+  },
+  {
+    "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/kalinina_a/vrac/profile_picture_kalinina_a_6327_profile_picture_2021_11_23_12_57.jpg",
+    "last_login": "November 25, 2024  6:04pm",
+    "ongoing_projects": [
+      "My Ls"
+    ],
+    "completed_projects": [
+      "My Ngram",
+      "My Square",
+      "Js Quest03",
+      "Quest05",
+      "Quest02",
+      "My Christmas Tree",
+      "My Bouncing Box",
+      "Quest03",
+      "My Css Is Easy I",
+      "Js Quest07",
+      "Quest06",
+      "Quest07",
+      "Quest00",
+      "My Moving Box Realtime",
+      "Js Quest04",
+      "Js Quest02",
+      "Quest00",
+      "My First Backend",
+      "My Readline",
+      "Quest04",
+      "Quest00",
+      "Js Quest06",
+      "Js Quest05",
+      "My Levenshtein",
+      "My Spaceship",
+      "Quest05",
+      "My Cat",
+      "My Mastermind",
+      "Js Quest02",
+      "Quest00",
+      "Js Quest03",
+      "Quest09",
+      "Js Quest07",
+      "Js Quest04",
+      "Quest01",
+      "Js Quest01",
+      "Quest08"
+    ],
+    "exercises_completed": "116",
+    "points": "1855",
+    "season_progress": {
+      "Preseason Web": "100%",
+      "Season 01 Arc 01": "81%",
+      "Season 01 Arc 02": "51%"
+    },
+    "name": "kalinina_a"
+  },
+  {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVymc3w8PCneQbOAAAA2UlEQVR4nO3cQQ7BUBAGYC0JO0fgJtyMo3ETbmBJgtq8aUJCmrZvUf1mOZmv87r8m5eWVYu6lJM2RVEURVEjU+ci1TZ1q2jMYu59ZCDvRVEURVEURVEURf2xOqagWncfEV3XTXbFV+RrvhNSFEVRFEVRFEVR1EdFdF00UZsUXZ/RmEaYPeU7IUVRFEVRFEVRFEV1UEVE13v+XRRFURRFURRFUdTYVdwlLqJx+3GXeBWRdf/16csYOfR1QoqiKIqiKIqiKIrqonaRVKMxr3+v2PsuiqIoihqGegEiiIUFF5NBtgAAAABJRU5ErkJggg==",
-    "last_login": "February 19, 2026 12:25pm",
+    "last_login": "February 23, 2026  8:21pm",
     "ongoing_projects": [
       "Ds Quest00",
       "My Nba Game Analysis",
@@ -6069,7 +6080,7 @@
       "Python Quest02"
     ],
     "exercises_completed": "82",
-    "points": "690",
+    "points": "725",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -6167,7 +6178,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXJulTw8PCRXR6CAAAAy0lEQVR4nO3aPRLBUBiGUaLRsQN2wtJiZ7ETdkBH4afJm0IaIiNjcr7ymTlzb/vlpnh0mFMx6TIURVEUNVa1m9aTcE1Y9n4WRVEURVEURVEURXVQx2yqZXLCPOGcsm2ftak/Ht8TZvmcfOjrhhRFURRFURRFURT1ovb1otrUW1bXdVutsqmWyQmXhEVK1dcNKYqiKIqiKIqiqJEr77AURVEURVEURVHU36mP3mG/PIuiKIqiKIqiKIqifqaaf4nfmGqQG1IURVHUYOoJu/mrBShrERoAAAAASUVORK5CYII=",
-    "last_login": "February 20, 2026  9:16am",
+    "last_login": "February 23, 2026  8:12pm",
     "ongoing_projects": [],
     "completed_projects": [
       "Python Quest02",
@@ -6191,7 +6202,7 @@
       "Python Quest03"
     ],
     "exercises_completed": "76",
-    "points": "3795",
+    "points": "3830",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -6316,6 +6327,44 @@
     "name": "theron_n"
   },
   {
+    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVymc3w8PCneQbOAAAAt0lEQVR4nO3csQ3CMBAAQLAi0bIBq7AZymaswgYp00SmyUdKEYQcoxC4L19/tr982XLKBdGlQ0lQFEVR1J+px3GM62LdvGQnfVEURVEURVEURVEURVEURVEURVEURX2NynHr2rxQl3j4dF9cfV6yfV8URVEURVEURVHU76h2HF2n7BDD7PmdvWJi7T93QoqiKIqiKIqiKIpao24xu0biNH1NUX0viqIoiqIoiqIoiqIoiqIoqqZ6AqNEaQUWecsZAAAAAElFTkSuQmCC",
+    "last_login": "February 23, 2026  5:35pm",
+    "ongoing_projects": [
+      "My Imdb Api",
+      "Quest04"
+    ],
+    "completed_projects": [
+      "Python Quest06",
+      "Quest00",
+      "Quest00",
+      "Python Quest01",
+      "Python Quest05",
+      "My Cat",
+      "Python Quest03",
+      "Python Quest03",
+      "Python Quest01",
+      "Python Quest02",
+      "My Roman Numerals Converter",
+      "Quest02",
+      "Python Quest01",
+      "Python Quest02",
+      "My Levenshtein",
+      "Quest02",
+      "My First Scraper",
+      "Python Quest04",
+      "Quest01",
+      "Quest03"
+    ],
+    "exercises_completed": "67",
+    "points": "2300",
+    "season_progress": {
+      "Onboarding": "100%",
+      "Preseason Data": "84%",
+      "Season 01 Arc 01": "34%"
+    },
+    "name": "jibril_m"
+  },
+  {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/poggio_a/vrac/profile_picture_poggio_a_14315_profile_picture_2023_09_25_07_52.jpeg",
     "last_login": "January 28, 2026  9:44am",
     "ongoing_projects": [],
@@ -6395,44 +6444,6 @@
       "Season 03 Software Engineer Cpp": "100%"
     },
     "name": "poggio_a"
-  },
-  {
-    "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEVymc3w8PCneQbOAAAAt0lEQVR4nO3csQ3CMBAAQLAi0bIBq7AZymaswgYp00SmyUdKEYQcoxC4L19/tr982XLKBdGlQ0lQFEVR1J+px3GM62LdvGQnfVEURVEURVEURVEURVEURVEURVEURX2NynHr2rxQl3j4dF9cfV6yfV8URVEURVEURVHU76h2HF2n7BDD7PmdvWJi7T93QoqiKIqiKIqiKIpao24xu0biNH1NUX0viqIoiqIoiqIoiqIoiqIoqqZ6AqNEaQUWecsZAAAAAElFTkSuQmCC",
-    "last_login": "February 22, 2026  9:45am",
-    "ongoing_projects": [
-      "My Imdb Api",
-      "Quest04"
-    ],
-    "completed_projects": [
-      "Python Quest06",
-      "Quest00",
-      "Quest00",
-      "Python Quest01",
-      "Python Quest05",
-      "My Cat",
-      "Python Quest03",
-      "Python Quest03",
-      "Python Quest01",
-      "Python Quest02",
-      "My Roman Numerals Converter",
-      "Quest02",
-      "Python Quest01",
-      "Python Quest02",
-      "My Levenshtein",
-      "Quest02",
-      "My First Scraper",
-      "Python Quest04",
-      "Quest01",
-      "Quest03"
-    ],
-    "exercises_completed": "66",
-    "points": "2285",
-    "season_progress": {
-      "Onboarding": "100%",
-      "Preseason Data": "84%",
-      "Season 01 Arc 01": "34%"
-    },
-    "name": "jibril_m"
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/costa_g/vrac/profile_picture_costa_g_15298_profile_picture_2024_03_27_22_09.jpg",
@@ -6600,7 +6611,7 @@
   },
   {
     "img_url": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAaQAAAGkAQMAAABEgsN2AAAABlBMVEXOTV7w8PAZ8UITAAAAm0lEQVR4nO3awQ1AQBAFUEshSqF0pdCBAgQXe3CQsFlBvH+czMvsHieZcknIWBYpoSiKoiiKoiiKoiiKoiiKol6phnA+7SMvpCiKoiiKoiiKoqgsqtkOoOZYqOJJVJ99FkVRFEVRFEVRFEXlUCGurtP9syiKoiiKoiiKoijqgqrjytod9u1bPvIviqIoiqIoiqIoiqIoiqKoH6kVUVxlBSLl+FQAAAAASUVORK5CYII=",
-    "last_login": "February 20, 2026 12:31pm",
+    "last_login": "February 23, 2026  2:58pm",
     "ongoing_projects": [
       "My Linear Regression",
       "My Vivino"
@@ -6644,7 +6655,7 @@
       "My Square"
     ],
     "exercises_completed": "122",
-    "points": "574",
+    "points": "789",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Data": "100%",
@@ -6656,7 +6667,7 @@
   },
   {
     "img_url": "https://storage.googleapis.com/qwasar-data-lake/users/el-khour_j/vrac/profile_picture_el-khour_j_16479_profile_picture_2025_09_18_18_27.png",
-    "last_login": "February 22, 2026  3:27pm",
+    "last_login": "February 23, 2026  7:23pm",
     "ongoing_projects": [
       "Quest04"
     ],
@@ -6679,17 +6690,17 @@
       "My Spaceship",
       "My Levenshtein"
     ],
-    "exercises_completed": "77",
-    "points": "1260",
+    "exercises_completed": "79",
+    "points": "1275",
     "season_progress": {
       "Onboarding": "100%",
       "Preseason Web": "98%",
-      "Season 01 Arc 01": "27%"
+      "Season 01 Arc 01": "29%"
     },
     "name": "el-khour_j"
   },
   {
-    "last_modified": "2026-02-23 06:59:13",
+    "last_modified": "2026-02-24 06:55:17",
     "total_students": 144
   }
 ]
